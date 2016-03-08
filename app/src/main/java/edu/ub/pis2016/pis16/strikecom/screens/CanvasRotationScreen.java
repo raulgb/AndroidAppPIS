@@ -1,4 +1,4 @@
-package edu.ub.pis2016.pis16.strikecom;
+package edu.ub.pis2016.pis16.strikecom.screens;
 
 import android.graphics.Color;
 import android.util.Log;

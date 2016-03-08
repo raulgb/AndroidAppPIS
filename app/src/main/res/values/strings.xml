@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">StrikeCom</string>
+
+    <string name="play_button">Play</string>
+    <string name="options_button">Options</string>
+    <string name="exit_button">Exit</string>
 </resources>

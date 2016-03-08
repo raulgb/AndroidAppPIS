@@ -1,4 +1,4 @@
-package edu.ub.pis2016.pis16.strikecom;
+package edu.ub.pis2016.pis16.strikecom.screens;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,7 +16,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.math.WindowedMean;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.GLGraphics;
 
 
-class OpenGLTestScreen extends Screen {
+public class OpenGLTestScreen extends Screen {
 	GLGraphics glGraphics;
 	FloatBuffer vertices;
 
