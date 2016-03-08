@@ -1,4 +1,4 @@
-package edu.ub.pis2016.pis16.strikecom;
+package edu.ub.pis2016.pis16.strikecom.test;
 
 import android.app.Activity;
 import android.opengl.GLSurfaceView;

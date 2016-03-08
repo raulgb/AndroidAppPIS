@@ -1,6 +1,7 @@
 package edu.ub.pis2016.pis16.strikecom.screens;
 
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.util.Log;
 
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Game;
@@ -23,14 +24,19 @@ public class CanvasSpriteScreen extends Screen {
 	SpriteGrid grid;
 	Graphics g;
 
+	Matrix uiMatrix;
+
 	public CanvasSpriteScreen(Game game) {
 		super(game);
 
 		this.g = game.getGraphics();
+		uiMatrix = new Matrix();
+		uiMatrix.setTranslate(0, g.getHeight());
+		uiMatrix.preScale(1, -1);
 
 		camera = new OrthoCamera(1920, 1080);
 //		camera.setPosition(1920 / 2, 1080 / 2);
-		camera.setZoom(16);
+		camera.setZoom(10);
 		camera.rotateTo(0f);
 
 		strikeBase = new StrikeBase(game);
@@ -56,10 +62,22 @@ public class CanvasSpriteScreen extends Screen {
 		sum += delta * 60;
 		ease = (MathUtils.cosDeg(sum) + 1) * 0.5f;
 
+
+		//camera.setZoom(10 + ease * 2f);
+
 		strikeBase.update(delta);
 
 		for (Input.TouchEvent e : game.getInput().getTouchEvents()) {
+
+			if (e.x < g.getWidth() * 5 / 16f)
+				// sidebar.touch(e.x, e.y))
+				return;
+
+			//else
+			// controller.touch(e.x, e.y);
+
 			camera.unproject(touch.set(e.x, e.y));
+
 			switch (e.type) {
 				case Input.TouchEvent.TOUCH_DOWN:
 					orig.set(touch);
@@ -78,7 +96,8 @@ public class CanvasSpriteScreen extends Screen {
 		}
 
 
-		camera.pos.set(strikeBase.pos);
+		camera.setPosition(strikeBase.pos);
+		camera.translate(-26, 0);
 		camera.update();
 
 
@@ -98,6 +117,7 @@ public class CanvasSpriteScreen extends Screen {
 	public void present(float delta) {
 		g.clear(Color.CYAN);
 
+
 		g.setTransformation(camera.combined);
 
 		// Draw axes
@@ -109,7 +129,18 @@ public class CanvasSpriteScreen extends Screen {
 
 
 		strikeBase.draw(g);
+
+		g.setTransformation(uiMatrix);
+
+		g.drawRect(0, 0, 5f / 16f * g.getWidth(), g.getHeight(), Color.GRAY);
+
+		float minimapDim = g.getWidth() * 5 / 32f;
+		g.drawRect(0, g.getHeight() - minimapDim, minimapDim, minimapDim, Color.WHITE);
+
+
+		g.drawRect(40, 40, 500, 24 * 4f, Color.RED);
 	}
+
 
 	@Override
 	public void pause() {
