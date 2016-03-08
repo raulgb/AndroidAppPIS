@@ -4,10 +4,12 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.util.Log;
 
+import edu.ub.pis2016.pis16.strikecom.engine.android.AndroidSprite;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Game;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Graphics;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Input;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
+import edu.ub.pis2016.pis16.strikecom.engine.framework.graphics.Pixmap;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.graphics.Sprite;
 import edu.ub.pis2016.pis16.strikecom.engine.graphics.OrthoCamera;
 import edu.ub.pis2016.pis16.strikecom.engine.graphics.SpriteGrid;
@@ -19,7 +21,10 @@ import edu.ub.pis2016.pis16.strikecom.entity.StrikeBase;
 public class CanvasSpriteScreen extends Screen {
 
 	OrthoCamera camera;
+
+	Sprite terrain;
 	StrikeBase strikeBase;
+
 	Sprite[] sprites;
 	SpriteGrid grid;
 	Graphics g;
@@ -35,11 +40,15 @@ public class CanvasSpriteScreen extends Screen {
 		uiMatrix.preScale(1, -1);
 
 		camera = new OrthoCamera(1920, 1080);
-//		camera.setPosition(1920 / 2, 1080 / 2);
 		camera.setZoom(10);
 		camera.rotateTo(0f);
 
 		strikeBase = new StrikeBase(game);
+
+		Pixmap terr = g.newPixmap("terrain.jpg");
+		terr.mirrorY();
+		terrain = new AndroidSprite(terr);
+		//terrain.scaleTo(0.5f, 0.5f);
 
 //		int nSprites = 25;
 //		sprites = new Sprite[nSprites];
@@ -115,19 +124,19 @@ public class CanvasSpriteScreen extends Screen {
 
 	@Override
 	public void present(float delta) {
-		g.clear(Color.CYAN);
+		g.clear(0x00FF8F3B1B);
 
 
 		g.setTransformation(camera.combined);
 
 		// Draw axes
 //		g.drawRect(-50, -50, 100, 100, Color.BLUE);
-		g.drawRect(-100, -5, 200, 10, Color.RED);
-		g.drawRect(0, -5, 200, 10, Color.RED);
-		g.drawRect(-5, -100, 10, 200, Color.GREEN);
-		g.drawRect(-5, 0, 10, 200, Color.GREEN);
+//		g.drawRect(-100, -5, 200, 10, Color.RED);
+//		g.drawRect(0, -5, 200, 10, Color.RED);
+//		g.drawRect(-5, -100, 10, 200, Color.GREEN);
+//		g.drawRect(-5, 0, 10, 200, Color.GREEN);
 
-
+		terrain.draw(g);
 		strikeBase.draw(g);
 
 		g.setTransformation(uiMatrix);
