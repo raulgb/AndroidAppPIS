@@ -48,6 +48,7 @@ public class CanvasSpriteScreen extends Screen {
 		Pixmap terr = g.newPixmap("terrain.jpg");
 		terr.mirrorY();
 		terrain = new AndroidSprite(terr);
+		terrain.translate(-100, -100);
 		//terrain.scaleTo(0.5f, 0.5f);
 
 //		int nSprites = 25;
@@ -66,11 +67,27 @@ public class CanvasSpriteScreen extends Screen {
 
 	float ease, sum;
 
+	Vector2 rotation = new Vector2();
+	WindowedMean angleMean = new WindowedMean(10);
+
 	@Override
 	public void update(float delta) {
 		sum += delta * 60;
 		ease = (MathUtils.cosDeg(sum) + 1) * 0.5f;
 
+		// Get gyroscope rotation, 0º is up, positive is clockwise
+		rotation.set(game.getInput().getAccelY(), game.getInput().getAccelX());
+		angleMean.addValue(90 - rotation.angle());
+
+
+		// Add rotation to the strikebase angle
+		Vector2 accel = new Vector2(0.5f, 0).rotate(-angleMean.getMean() * 0.85f);
+		accel.rotate(strikeBase.getAngle());
+		strikeBase.vel.add(accel);
+		strikeBase.vel.nor().scl(14);
+
+		// Rotate camera inverse of real rotation -> keep world aligned with eyes
+		camera.rotateTo(-angleMean.getMean());
 
 		//camera.setZoom(10 + ease * 2f);
 
@@ -92,7 +109,7 @@ public class CanvasSpriteScreen extends Screen {
 					orig.set(touch);
 
 					Vector2 movDelta = new Vector2(touch.x, touch.y).sub(strikeBase.pos);
-					movDelta.nor().scl(8);
+					movDelta.nor().scl(16);
 					strikeBase.vel.set(movDelta);
 
 					break;
@@ -106,7 +123,7 @@ public class CanvasSpriteScreen extends Screen {
 
 
 		camera.setPosition(strikeBase.pos);
-		camera.translate(-26, 0);
+		//camera.translate(-26, 0);
 		camera.update();
 
 
@@ -125,7 +142,6 @@ public class CanvasSpriteScreen extends Screen {
 	@Override
 	public void present(float delta) {
 		g.clear(0x00FF8F3B1B);
-
 
 		g.setTransformation(camera.combined);
 
@@ -163,7 +179,7 @@ public class CanvasSpriteScreen extends Screen {
 
 	@Override
 	public void dispose() {
-		for (Sprite s : sprites)
-			s.dispose();
+//		for (Sprite s : sprites)
+//			s.dispose();
 	}
 }

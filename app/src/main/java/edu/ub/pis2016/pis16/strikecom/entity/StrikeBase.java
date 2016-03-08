@@ -83,4 +83,8 @@ public class StrikeBase {
 			turrets[i].draw(g);
 		}
 	}
+
+	public float getAngle() {
+		return angle;
+	}
 }
