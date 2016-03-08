@@ -22,10 +22,12 @@ public class MainMenuActivity extends AppCompatActivity {
 		btnPlay.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				Intent changeToGame = new Intent(mainMenu, Canvas2DGame.class);
+				Intent changeToGame = new Intent(mainMenu, SelectMenuActivity.class);
 				startActivity(changeToGame);
 			}
 		});
+
+
 
 	}
 }
