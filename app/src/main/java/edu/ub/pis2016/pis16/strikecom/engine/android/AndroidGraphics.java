@@ -131,7 +131,4 @@ public class AndroidGraphics implements Graphics {
 		return frameBuffer.getHeight();
 	}
 
-	public Canvas getCanvas() {
-		return canvas;
-	}
 }
