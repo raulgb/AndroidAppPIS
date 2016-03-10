@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import edu.ub.pis2016.pis16.strikecom.fragment.AndroidGameFragment;
+
 /**
  * Created by Akira on 2016-03-08.
  */
@@ -26,7 +28,7 @@ public class SelectMenuActivity extends AppCompatActivity {
 		btnStart.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				Intent changeToGame = new Intent(selectMenu, Canvas2DGame.class);
+				Intent changeToGame = new Intent(selectMenu, FragmentedGameActivity.class);
 				startActivity(changeToGame);
 			}
 		});

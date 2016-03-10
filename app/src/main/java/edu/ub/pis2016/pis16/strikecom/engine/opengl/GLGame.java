@@ -36,6 +36,7 @@ public abstract class GLGame extends Activity implements Game, GLSurfaceView.Ren
 
 	GLSurfaceView glView;
 	GLGraphics glGraphics;
+
 	Audio audio;
 	Input input;
 	FileIO fileIO;

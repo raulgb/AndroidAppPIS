@@ -17,7 +17,7 @@ public class GLGraphics {
 		return gl;
 	}
 
-	void setGL(GL10 gl) {
+	public void setGL(GL10 gl) {
 		this.gl = gl;
 	}
 
