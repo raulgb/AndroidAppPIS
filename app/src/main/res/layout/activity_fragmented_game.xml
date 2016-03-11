@@ -22,7 +22,7 @@
 
 
     <fragment
-        android:name="edu.ub.pis2016.pis16.strikecom.fragment.AndroidGameFragment"
+        android:name="edu.ub.pis2016.pis16.strikecom.fragment.GLGameFragment"
         android:id="@+id/gameview"
         android:layout_width="0dp"
         android:layout_weight="1"

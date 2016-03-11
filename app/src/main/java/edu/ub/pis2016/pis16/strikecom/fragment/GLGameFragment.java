@@ -26,7 +26,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.GLGraphics;
 
 
-public class AndroidGameFragment extends Fragment implements Game, GLSurfaceView.Renderer {
+public class GLGameFragment extends Fragment implements Game, GLSurfaceView.Renderer {
 
 	GLSurfaceView glView;
 	GLGraphics glGraphics;
