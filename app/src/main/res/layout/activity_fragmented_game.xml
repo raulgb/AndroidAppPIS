@@ -15,15 +15,16 @@
 
     <fragment
         android:name="edu.ub.pis2016.pis16.strikecom.fragment.SidebarFragment"
-        android:id="@+id/sidebar"
+        android:id="@+id/sidebarFragment"
         android:layout_width="540px"
-        android:layout_height="fill_parent">
+        android:layout_height="fill_parent"
+        tools:layout="@layout/fragment_sidebar">
     </fragment>
 
 
     <fragment
-        android:name="edu.ub.pis2016.pis16.strikecom.fragment.GLGameFragment"
-        android:id="@+id/gameview"
+        android:name="edu.ub.pis2016.pis16.strikecom.StrikeComGLGame"
+        android:id="@+id/gameFragment"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="fill_parent">

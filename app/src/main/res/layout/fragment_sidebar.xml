@@ -118,4 +118,17 @@
             android:layout_column="2"/>
     </GridLayout>
 
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Red!"
+        android:id="@+id/btnRed"
+        android:layout_marginTop="100px"/>
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Green!"
+        android:id="@+id/btnGreen"/>
+
 </LinearLayout>

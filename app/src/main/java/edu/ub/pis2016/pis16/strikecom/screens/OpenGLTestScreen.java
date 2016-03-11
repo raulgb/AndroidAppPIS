@@ -90,6 +90,11 @@ public class OpenGLTestScreen extends Screen {
 	}
 
 	@Override
+	public void resize(int width, int height) {
+
+	}
+
+	@Override
 	public void update(float deltaTime) {
 		game.getInput().getTouchEvents();
 		game.getInput().getKeyEvents();

@@ -166,6 +166,11 @@ public class CanvasSpriteScreen extends Screen {
 		g.drawRect(40, 40, 500, 24 * 4f, Color.RED);
 	}
 
+	@Override
+	public void resize(int width, int height) {
+
+	}
+
 
 	@Override
 	public void pause() {

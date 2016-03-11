@@ -11,6 +11,8 @@ public abstract class Screen implements Disposable {
 
 	public abstract void present(float deltaTime);
 
+	public abstract void resize(int width, int height);
+
 	public abstract void pause();
 
 	public abstract void resume();

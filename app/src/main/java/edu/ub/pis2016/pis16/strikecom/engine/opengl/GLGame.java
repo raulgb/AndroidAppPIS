@@ -26,7 +26,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
  * A Game implementation using OpenGL ES for drawing graphics.
  */
 public abstract class GLGame extends Activity implements Game, GLSurfaceView.Renderer {
-	enum GLGameState {
+	public enum GLGameState {
 		Initialized,
 		Running,
 		Paused,

@@ -127,6 +127,11 @@ public class CanvasRotationScreen extends Screen {
 	}
 
 	@Override
+	public void resize(int width, int height) {
+
+	}
+
+	@Override
 	public void pause() {
 		Log.i("Screen", "Paused");
 

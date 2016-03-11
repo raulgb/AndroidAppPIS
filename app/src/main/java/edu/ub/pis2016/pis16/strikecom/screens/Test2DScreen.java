@@ -1,4 +1,4 @@
-package edu.ub.pis2016.pis16.strikecom;
+package edu.ub.pis2016.pis16.strikecom.screens;
 
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -80,6 +80,11 @@ public class Test2DScreen extends Screen {
 		g.drawRect(-5, -10, 5, 5000, Color.GREEN);
 
 		strikeBase.draw(g);
+	}
+
+	@Override
+	public void resize(int width, int height) {
+
 	}
 
 	@Override
