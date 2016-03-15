@@ -50,6 +50,10 @@ public class SpriteBatch {
 		vertices.unbind();
 	}
 
+	public void drawSprite(float x, float y, TextureRegion region){
+		drawSprite(x, y, region.texture.width, region.texture.height, region);
+	}
+
 	public void drawSprite(float x, float y, float width, float height, TextureRegion region) {
 		float halfWidth = width / 2;
 		float halfHeight = height / 2;

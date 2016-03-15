@@ -42,8 +42,8 @@ public class DummyGLScreen extends Screen {
 		Log.i("SCREEN", "Resumed");
 
 		batch = new SpriteBatch(game.getGLGraphics(), 16);
-		atlas = new Texture(game, "strike_base_mk2.png");
-		strikeBaseMK2 = new TextureRegion(atlas, 0, 0, 32, 32);
+		atlas = new Texture(game, "strikebase/strikebase_atlas.png");
+		strikeBaseMK2 = new TextureRegion(atlas, 32*2, 0, 32, 32);
 	}
 
 	@Override
@@ -53,12 +53,21 @@ public class DummyGLScreen extends Screen {
 		GL10 gl = game.getGLGraphics().getGL();
 		gl.glClearColor(0.7f, 0.7f, 0.7f, 1);
 
+		float viewW = width / 8f;
+		float viewH = height / 8f;
+
+		// Setup viewport
 		gl.glViewport(0, 0, width, height);
 		gl.glMatrixMode(GL10.GL_PROJECTION);
 		gl.glLoadIdentity();
-		gl.glOrthof(0, width, 0, height, 1, -1);
+		gl.glOrthof(0, viewW, 0, viewH, 1, -1);
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
+
+		// Enable blend and texturing
+		gl.glEnable(GL10.GL_BLEND);
+		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+		gl.glEnable(GL10.GL_TEXTURE_2D);
 	}
 
 	@Override
@@ -72,7 +81,7 @@ public class DummyGLScreen extends Screen {
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
 		batch.begin(atlas);
-		batch.drawSprite(0, 0, 32, 32, strikeBaseMK2);
+		batch.drawSprite(16, 16, strikeBaseMK2);
 		batch.end();
 
 	}
