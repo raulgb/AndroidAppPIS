@@ -53,8 +53,11 @@ public class DummyGLScreen extends Screen {
 		GL10 gl = game.getGLGraphics().getGL();
 		gl.glClearColor(0.7f, 0.7f, 0.7f, 1);
 
-		gl.glViewport(0,0, width, height);
+		gl.glViewport(0, 0, width, height);
 		gl.glMatrixMode(GL10.GL_PROJECTION);
+		gl.glLoadIdentity();
+		gl.glOrthof(0, width, 0, height, 1, -1);
+		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
 	}
 
