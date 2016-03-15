@@ -27,6 +27,17 @@ public class MainMenuActivity extends AppCompatActivity {
 			}
 		});
 
+		Button btnExit = (Button)findViewById(R.id.btnExit);
+		btnExit.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				finish();
+				//System.exit(0);
+			}
+		});
+
+		Button btnOptions = (Button)findViewById(R.id.bntOptions);
+		btnOptions.setEnabled(false);
 
 
 	}

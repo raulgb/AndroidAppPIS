@@ -7,6 +7,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 /**
  * Created by Akira on 2016-03-08.
@@ -26,8 +28,18 @@ public class SelectMenuActivity extends AppCompatActivity {
 		btnStart.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				Intent changeToGame = new Intent(selectMenu, FragmentedGameActivity.class);
-				startActivity(changeToGame);
+
+				// cannot start game if a name has not been introduced
+				EditText textName = (EditText)findViewById(R.id.textName);
+				if(textName.getText().toString().isEmpty()){
+
+					Toast.makeText(getApplicationContext(), getString(R.string.enter_name_toast),
+							Toast.LENGTH_SHORT).show();
+
+				}else{
+					Intent changeToGame = new Intent(selectMenu, FragmentedGameActivity.class);
+					startActivity(changeToGame);
+				}
 			}
 		});
 

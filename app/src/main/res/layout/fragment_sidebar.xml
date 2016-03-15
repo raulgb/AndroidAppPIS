@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="540px"
-              android:layout_height="1080px"
-              android:backgroundTint="#f17274"
-              android:backgroundTintMode="src_atop">
+    android:orientation="vertical"
+    android:layout_width="540px"
+    android:layout_height="1080px"
+    android:backgroundTint="#f17274"
+    android:backgroundTintMode="src_atop">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -15,7 +15,7 @@
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:text="MINIMAP"
-            android:id="@+id/button"
+            android:id="@+id/minimap"
             android:layout_weight="0.5"/>
 
         <LinearLayout
@@ -25,47 +25,69 @@
             android:layout_weight="0.5"
             >
 
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="93 Scrap"
-                android:id="@+id/textScrap"
-                android:layout_marginLeft="35px"
-                android:layout_marginTop="50px"
-                android:textStyle="bold"
-                android:textSize="52px"/>
+                android:orientation="horizontal">
 
-            <TextView
+                <ImageView
+                    android:layout_width="@dimen/res_icon_width"
+                    android:layout_height="@dimen/res_icon_height"
+                    android:layout_marginTop="@dimen/sidebar_horizontal_margin"
+                    android:layout_marginLeft="@dimen/sidebar_vertical_margin"
+                    android:id="@+id/scrap_icon"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/resource_1"
+                    android:id="@+id/textScrap"
+                    android:layout_marginTop="@dimen/sidebar_horizontal_margin"
+                    android:layout_marginLeft="@dimen/sidebar_vertical_margin"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/res_text_size"/>
+            </LinearLayout>
+
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="169 Fuel"
-                android:id="@+id/textFuel"
-                android:layout_marginTop="40px"
-                android:layout_marginLeft="35px"
-                android:textStyle="bold"
-                android:textSize="52px"
-                android:layout_marginBottom="40px"/>
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/res_icon_width"
+                    android:layout_height="@dimen/res_icon_height"
+                    android:layout_marginTop="@dimen/sidebar_horizontal_margin"
+                    android:layout_marginLeft="@dimen/sidebar_vertical_margin"
+                    android:id="@+id/fuel_icon"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/resource_2"
+                    android:id="@+id/textFuel"
+                    android:layout_marginTop="@dimen/sidebar_horizontal_margin"
+                    android:layout_marginLeft="@dimen/sidebar_vertical_margin"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/res_text_size"/>
+            </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="40px"
-        />
 
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:columnCount="3"
-        android:rowCount="3">
+        android:rowCount="3"
+        android:layout_marginTop="@dimen/sidebar_vertical_margin">
 
         <Button
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="T1"
-            android:id="@+id/button2"
+            android:id="@+id/btnT1"
             android:layout_row="0"
             android:layout_column="0"
             android:layout_rowWeight="0.3"/>
@@ -75,7 +97,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="T2"
-            android:id="@+id/button3"
+            android:id="@+id/btnT2"
             android:layout_row="0"
             android:layout_column="1"
             android:layout_rowWeight="0.3"/>
@@ -85,7 +107,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="T3"
-            android:id="@+id/button4"
+            android:id="@+id/btnT3"
             android:layout_row="0"
             android:layout_column="2"
             android:layout_rowWeight="0.3"/>
@@ -95,7 +117,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="T4"
-            android:id="@+id/button5"
+            android:id="@+id/btnT4"
             android:layout_row="1"
             android:layout_column="0"/>
 
@@ -104,7 +126,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="T5"
-            android:id="@+id/button6"
+            android:id="@+id/btnT5"
             android:layout_row="1"
             android:layout_column="1"/>
 
@@ -113,22 +135,55 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="T6"
-            android:id="@+id/button7"
+            android:id="@+id/btnT6"
             android:layout_row="1"
             android:layout_column="2"/>
+    </GridLayout>
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="3"
+        android:rowCount="1"
+        android:layout_marginTop="@dimen/sidebar_vertical_margin">
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="U1"
+            android:id="@+id/btnU1"
+            android:layout_row="0"
+            android:layout_column="0"
+            android:layout_rowWeight="0.3"/>
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="U2"
+            android:id="@+id/btnU2"
+            android:layout_row="0"
+            android:layout_column="1"
+            android:layout_rowWeight="0.3"/>
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="U3"
+            android:id="@+id/btnU3"
+            android:layout_row="0"
+            android:layout_column="2"
+            android:layout_rowWeight="0.3"/>
+
     </GridLayout>
 
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Red!"
-        android:id="@+id/btnRed"
-        android:layout_marginTop="100px"/>
-
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Green!"
-        android:id="@+id/btnGreen"/>
+        android:text="Inventory"
+        android:id="@+id/btnInventory"
+        android:layout_marginTop="@dimen/sidebar_vertical_margin"/>
 
 </LinearLayout>
