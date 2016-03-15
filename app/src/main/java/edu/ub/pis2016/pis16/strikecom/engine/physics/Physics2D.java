@@ -12,14 +12,15 @@ public class Physics2D {
 	ArrayList<Body> bodies;
 
 	public Physics2D(Vector2 gravity){
+		bodies=new ArrayList<>(); //initialize list of bodies
 
 	}
 
-	public void update(float delta){
+	public void update(float delta){//update all bodies of the game
 
 	}
 
-	public void addBody(Body b){
+	public void addBody(Body b){//add body to physics engine
 
 	}
 
@@ -27,3 +28,8 @@ public class Physics2D {
 
 	}
 }
+/*
+* http://box2d.org/manual.pdf
+* https://github.com/erincatto/Box2D
+*
+* */
