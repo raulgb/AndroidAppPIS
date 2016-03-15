@@ -10,7 +10,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.framework.Game;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Graphics;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Input;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
-import edu.ub.pis2016.pis16.strikecom.engine.opengl.OrthoCamera;
+import edu.ub.pis2016.pis16.strikecom.engine.android.CanvasOrthoCamera;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.math.WindowedMean;
 
@@ -19,7 +19,7 @@ public class CanvasRotationScreen extends Screen {
 
 	Graphics g;
 
-	OrthoCamera orthoCam;
+	CanvasOrthoCamera orthoCam;
 	AndroidSprite sprite;
 	Random r;
 
@@ -34,7 +34,7 @@ public class CanvasRotationScreen extends Screen {
 		fpsMean = new WindowedMean(60 * 2);
 		g = game.getGraphics();
 
-		orthoCam = new OrthoCamera(1920, 1080);
+		orthoCam = new CanvasOrthoCamera(1920, 1080);
 		orthoCam.setZoom(1f);
 		orthoCam.setPosition(1920 / 2f, 1080 / 2f);
 

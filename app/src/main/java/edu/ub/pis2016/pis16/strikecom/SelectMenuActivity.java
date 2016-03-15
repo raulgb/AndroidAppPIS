@@ -31,7 +31,9 @@ public class SelectMenuActivity extends AppCompatActivity {
 
 				// cannot start gameFrag if a name has not been introduced
 				EditText textName = (EditText)findViewById(R.id.textName);
-				if(textName.getText().toString().isEmpty()){
+
+				// Disabled check
+				if(false && textName.getText().toString().isEmpty()){
 
 					Toast.makeText(getApplicationContext(), getString(R.string.enter_name_toast),
 							Toast.LENGTH_SHORT).show();

@@ -1,4 +1,4 @@
-package edu.ub.pis2016.pis16.strikecom.engine.opengl;
+package edu.ub.pis2016.pis16.strikecom.engine.android;
 
 import android.graphics.Matrix;
 
@@ -12,7 +12,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
  * <p>
  * Created by Akira on 2016-03-01.
  */
-public class OrthoCamera {
+public class CanvasOrthoCamera {
 
 	public Vector2 pos;
 	private float w, h;
@@ -28,7 +28,7 @@ public class OrthoCamera {
 	public Matrix combined;
 	private Matrix invProjectionView;
 
-	public OrthoCamera(float viewWidth, float viewHeight) {
+	public CanvasOrthoCamera(float viewWidth, float viewHeight) {
 		this.w = viewWidth;
 		this.h = viewHeight;
 		this.zoom = 1;

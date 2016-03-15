@@ -11,14 +11,14 @@ import edu.ub.pis2016.pis16.strikecom.engine.framework.Input;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.graphics.Pixmap;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.graphics.Sprite;
-import edu.ub.pis2016.pis16.strikecom.engine.opengl.OrthoCamera;
+import edu.ub.pis2016.pis16.strikecom.engine.android.CanvasOrthoCamera;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.math.WindowedMean;
 import edu.ub.pis2016.pis16.strikecom.entity.StrikeBase;
 
 public class Test2DScreen extends Screen {
 
-	OrthoCamera camera;
+	CanvasOrthoCamera camera;
 
 	Sprite terrain;
 	StrikeBase strikeBase;
@@ -31,7 +31,7 @@ public class Test2DScreen extends Screen {
 		super(game);
 
 		g = game.getGraphics();
-		camera = new OrthoCamera(g.getWidth(), g.getHeight());
+		camera = new CanvasOrthoCamera(g.getWidth(), g.getHeight());
 		camera.setZoom(16f);
 
 		uiMatrix = new Matrix();
