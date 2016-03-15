@@ -5,11 +5,11 @@
     <string name="options_button">Options</string>
     <string name="exit_button">Exit</string>
 
-    <string name="resource_1">scrap</string>
-    <string name="resource_2">fuel</string>
+    <string name="resource_1">Scrap</string>
+    <string name="resource_2">Fuel</string>
 
     <string name="enter_name_toast">Please enter a name!</string>
-    <string name="quit_alert">Quit game?</string>
+    <string name="quit_alert">Quit gameFrag?</string>
     <string name="alert_positive">Yes</string>
     <string name="alert_negative">No</string>
 </resources>

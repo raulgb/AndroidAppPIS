@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:layout_width="540px"
-    android:layout_height="1080px"
+    android:layout_width="180dp"
+    android:layout_height="fill_parent"
     android:backgroundTint="#f17274"
     android:backgroundTintMode="src_atop">
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content">
 
         <Button
@@ -44,7 +44,7 @@
                     android:layout_marginTop="@dimen/sidebar_horizontal_margin"
                     android:layout_marginLeft="@dimen/sidebar_vertical_margin"
                     android:textStyle="bold"
-                    android:textSize="@dimen/res_text_size"/>
+                    android:textSize="18dp"/>
             </LinearLayout>
 
 
@@ -67,7 +67,7 @@
                     android:layout_marginTop="@dimen/sidebar_horizontal_margin"
                     android:layout_marginLeft="@dimen/sidebar_vertical_margin"
                     android:textStyle="bold"
-                    android:textSize="@dimen/res_text_size"/>
+                    android:textSize="18dp"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -76,11 +76,12 @@
 
 
     <GridLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:columnCount="3"
         android:rowCount="3"
-        android:layout_marginTop="@dimen/sidebar_vertical_margin">
+        android:layout_marginTop="@dimen/sidebar_vertical_margin"
+        android:layout_gravity="center_horizontal">
 
         <Button
             style="?android:attr/buttonStyleSmall"
@@ -100,7 +101,8 @@
             android:id="@+id/btnT2"
             android:layout_row="0"
             android:layout_column="1"
-            android:layout_rowWeight="0.3"/>
+            android:layout_rowWeight="0.3"
+            />
 
         <Button
             style="?android:attr/buttonStyleSmall"
@@ -141,11 +143,12 @@
     </GridLayout>
 
     <GridLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:columnCount="3"
         android:rowCount="1"
-        android:layout_marginTop="@dimen/sidebar_vertical_margin">
+        android:layout_marginTop="@dimen/sidebar_vertical_margin"
+        android:layout_gravity="center_horizontal">
 
         <Button
             style="?android:attr/buttonStyleSmall"

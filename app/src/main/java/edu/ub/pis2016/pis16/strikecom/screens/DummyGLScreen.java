@@ -2,10 +2,16 @@ package edu.ub.pis2016.pis16.strikecom.screens;
 
 import android.util.Log;
 
+import java.nio.FloatBuffer;
+
 import javax.microedition.khronos.opengles.GL10;
 
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Game;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
+import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
+import edu.ub.pis2016.pis16.strikecom.engine.physics.Body;
+import edu.ub.pis2016.pis16.strikecom.engine.physics.ContactListener;
+import edu.ub.pis2016.pis16.strikecom.engine.physics.Physics2D;
 
 /**
  * Dummy OpenGL screen.
@@ -25,9 +31,13 @@ import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
  */
 public class DummyGLScreen extends Screen {
 
+
 	public DummyGLScreen(Game game) {
 		super(game);
 		Log.i("SCREEN", "Created");
+
+
+
 
 	}
 
@@ -41,6 +51,7 @@ public class DummyGLScreen extends Screen {
 
 	@Override
 	public void update(float deltaTime) {
+
 	}
 
 	@Override
@@ -48,6 +59,8 @@ public class DummyGLScreen extends Screen {
 		GL10 gl = game.getGLGraphics().getGL();
 
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+
+
 	}
 
 	@Override

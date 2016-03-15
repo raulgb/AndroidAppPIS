@@ -1,4 +1,4 @@
-package edu.ub.pis2016.pis16.strikecom.entity;
+package edu.ub.pis2016.pis16.strikecom.controller;
 
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 

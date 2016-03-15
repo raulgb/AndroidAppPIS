@@ -97,7 +97,7 @@ public abstract class GLGame extends Activity implements Game, GLSurfaceView.Ren
 	public void onDrawFrame(GL10 gl) {
 		GLGameState state = null;
 
-		// The reason we syncronize access to the game's state is that
+		// The reason we syncronize access to the gameFrag's state is that
 		// state may be changed inside the UI's onPause() method
 		synchronized (stateChanged) {
 			state = this.state;
@@ -125,7 +125,7 @@ public abstract class GLGame extends Activity implements Game, GLSurfaceView.Ren
 				break;
 
 			case Finished:
-				// App has been terminated, pause screen to save game and
+				// App has been terminated, pause screen to save gameFrag and
 				// dispose of it.
 				screen.pause();
 				screen.dispose();

@@ -29,7 +29,7 @@ public class SelectMenuActivity extends AppCompatActivity {
 			@Override
 			public void onClick(View view) {
 
-				// cannot start game if a name has not been introduced
+				// cannot start gameFrag if a name has not been introduced
 				EditText textName = (EditText)findViewById(R.id.textName);
 				if(textName.getText().toString().isEmpty()){
 

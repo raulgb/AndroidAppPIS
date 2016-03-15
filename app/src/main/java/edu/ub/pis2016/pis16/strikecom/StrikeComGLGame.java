@@ -5,7 +5,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.opengl.GLGameFragment;
 import edu.ub.pis2016.pis16.strikecom.screens.DummyGLScreen;
 
 
-/** Game class, encapsulates Fragment and Game behavior and keeps game states. */
+/** Game class, encapsulates Fragment and Game behavior and keeps gameFrag states. */
 public class StrikeComGLGame extends GLGameFragment {
 
 	/* Global Game Variables Here */

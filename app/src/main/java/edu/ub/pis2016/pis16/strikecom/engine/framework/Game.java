@@ -2,7 +2,7 @@ package edu.ub.pis2016.pis16.strikecom.engine.framework;
 
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.GLGraphics;
 
-/** Methods to allow for a game life-cycle */
+/** Methods to allow for a gameFrag life-cycle */
 public interface Game {
 	public Input getInput();
 

@@ -113,7 +113,7 @@ public abstract class GLGameFragment extends Fragment implements Game, GLSurface
 
 		// Init and set the new instance
 		screen.resume();
-		screen.update(0);
+		//screen.update(0);
 		this.screen = screen;
 	}
 
@@ -145,7 +145,7 @@ public abstract class GLGameFragment extends Fragment implements Game, GLSurface
 	public void onDrawFrame(GL10 gl10) {
 		GLGame.GLGameState state = null;
 
-		// The reason we synchronize access to the game's state is that
+		// The reason we synchronize access to the gameFrag's state is that
 		// state may be changed inside the UI's onPause() method
 		synchronized (stateChanged) {
 			state = this.state;
@@ -183,7 +183,7 @@ public abstract class GLGameFragment extends Fragment implements Game, GLSurface
 				break;
 
 			case Finished:
-				// App has been terminated, pause screen to save game and
+				// App has been terminated, pause screen to save gameFrag and
 				// dispose of it.
 				screen.pause();
 				screen.dispose();

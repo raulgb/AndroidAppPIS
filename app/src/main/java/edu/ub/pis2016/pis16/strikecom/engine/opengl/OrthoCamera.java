@@ -1,4 +1,4 @@
-package edu.ub.pis2016.pis16.strikecom.engine.graphics;
+package edu.ub.pis2016.pis16.strikecom.engine.opengl;
 
 import android.graphics.Matrix;
 

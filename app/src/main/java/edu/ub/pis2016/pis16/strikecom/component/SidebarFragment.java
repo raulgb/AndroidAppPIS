@@ -1,4 +1,4 @@
-package edu.ub.pis2016.pis16.strikecom.fragment;
+package edu.ub.pis2016.pis16.strikecom.component;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -13,7 +13,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.opengl.GLGameFragment;
 
 public class SidebarFragment extends Fragment {
 
-	public GLGameFragment game;
+	public GLGameFragment gameFrag;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -36,7 +36,7 @@ public class SidebarFragment extends Fragment {
 		return view;
 	}
 
-	public void setGame(GLGameFragment game) {
-		this.game = game;
+	public void setGameFrag(GLGameFragment gameFrag) {
+		this.gameFrag = gameFrag;
 	}
 }

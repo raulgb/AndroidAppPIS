@@ -10,7 +10,7 @@ import android.os.PowerManager;
 import android.view.View;
 
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.GLGameFragment;
-import edu.ub.pis2016.pis16.strikecom.fragment.SidebarFragment;
+import edu.ub.pis2016.pis16.strikecom.component.SidebarFragment;
 
 public class FragmentedGameActivity extends Activity {
 
@@ -34,8 +34,8 @@ public class FragmentedGameActivity extends Activity {
 		GLGameFragment gameFragment = (GLGameFragment)getFragmentManager().findFragmentById(R.id.gameFragment);
 		SidebarFragment sidebarFragment = (SidebarFragment)getFragmentManager().findFragmentById(R.id.sidebarFragment);
 
-		// Give the sidebar fragment a reference to the game fragment.
-		sidebarFragment.setGame(gameFragment);
+		// Give the sidebar fragment a reference to the gameFrag fragment.
+		sidebarFragment.setGameFrag(gameFragment);
 	}
 
 	@Override
@@ -70,7 +70,7 @@ public class FragmentedGameActivity extends Activity {
 
 	@Override
 	public void onBackPressed() {
-        //Ask the user if he/she really wants to exit game
+        //Ask the user if he/she really wants to exit gameFrag
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setIcon(android.R.drawable.ic_dialog_alert);

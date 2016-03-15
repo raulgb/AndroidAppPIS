@@ -11,8 +11,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.framework.Input;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.graphics.Pixmap;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.graphics.Sprite;
-import edu.ub.pis2016.pis16.strikecom.engine.graphics.OrthoCamera;
-import edu.ub.pis2016.pis16.strikecom.engine.graphics.SpriteGrid;
+import edu.ub.pis2016.pis16.strikecom.engine.opengl.OrthoCamera;
 import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.math.WindowedMean;
@@ -26,7 +25,6 @@ public class CanvasSpriteScreen extends Screen {
 	StrikeBase strikeBase;
 
 	Sprite[] sprites;
-	SpriteGrid grid;
 	Graphics g;
 
 	Matrix uiMatrix;
