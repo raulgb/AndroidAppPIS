@@ -6,6 +6,7 @@ import android.opengl.GLUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -13,7 +14,13 @@ import edu.ub.pis2016.pis16.strikecom.engine.framework.Disposable;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.FileIO;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Game;
 
+/** Native OpenGL texture object. Manages a Bitmap data array and uploads it to the GPU for rendering
+ * using the bind() method. Must be disposed if unused.
+ */
 public class Texture implements Disposable {
+
+	/** Managed textures */
+	public static ArrayList<Texture> managedTextures = new ArrayList<Texture>();
 
 	GLGraphics glGraphics;
 	FileIO fileIO;
@@ -29,6 +36,8 @@ public class Texture implements Disposable {
 		this.fileIO = glGame.getFileIO();
 		this.fileName = fileName;
 		load();
+
+		Texture.addManagedTexture(this);
 	}
 
 	private void load() {
@@ -79,6 +88,28 @@ public class Texture implements Disposable {
 		gl.glBindTexture(GL10.GL_TEXTURE_2D, textureId);
 		int[] textureIds = {textureId};
 		gl.glDeleteTextures(1, textureIds, 0);
+
+		Texture.removeManagedTexture(this);
+	}
+
+
+	// OpenGL context loss prevention methods
+
+	public static void addManagedTexture(Texture t){
+		managedTextures.add(t);
+	}
+
+	public static void removeManagedTexture(Texture t){
+		managedTextures.remove(t);
+	}
+
+	public static void reloadManagedTextures(){
+		for (Texture t : managedTextures)
+			t.reload();
+	}
+
+	public static void clearManagedTextures(){
+		managedTextures.clear();
 	}
 
 }
