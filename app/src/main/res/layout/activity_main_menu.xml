@@ -17,14 +17,16 @@
         android:layout_height="wrap_content"
         android:text="@string/exit_button"
         android:id="@+id/btnExit"
-        android:layout_gravity="right" />
+        android:layout_gravity="right"
+        android:layout_marginRight="35dp" />
 
     <Button
         android:id="@+id/bntOptions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/options_button"
-        android:layout_gravity="right" />
+        android:layout_gravity="right"
+        android:layout_marginRight="35dp" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -44,7 +46,9 @@
             android:layout_alignParentTop="true"
             android:text="@string/play_button"
             android:layout_weight="0.3"
-            android:textSize="30dp" />
+            android:textSize="30dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginRight="35dp" />
     </LinearLayout>
 
 </LinearLayout>

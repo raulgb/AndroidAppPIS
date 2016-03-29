@@ -99,7 +99,6 @@ public class DummyGLScreen extends Screen {
 	public void present(float deltaTime) {
 		GL10 gl = game.getGLGraphics().getGL();
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-
 		batch.begin(atlas);
 		batch.drawSprite(pos.x, pos.y, strikeBaseMK2);
 		batch.end();
