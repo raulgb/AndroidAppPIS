@@ -104,9 +104,9 @@ public class TextureAtlas {
 		Pattern patternImgFile = Pattern.compile("^(\\w+\\.\\w+)$"); // Match ****.*** (file name + extension)
 		Pattern patternRgnName = Pattern.compile("^(\\w+)$"); // Match a single word in a line, from start to end
 
-		Pattern patternXY = Pattern.compile("\\s+xy:\\s+(\\d+),\\s+(\\d+)"); // match "  xy: *, *" and capture x, y cords
-		Pattern patternWH = Pattern.compile("\\s+size:.+(\\d+),\\s(\\d+)"); // match "  size: *, *" and capture w, h size
-		Pattern patternIND = Pattern.compile("\\s+index:.+(\\d+)"); // match "  index: *" and capture index
+		Pattern patternXY = Pattern.compile("\\s+xy:\\s+(\\d+),\\s(\\d+)"); // match "  xy: *, *" and capture x, y cords
+		Pattern patternWH = Pattern.compile("\\s+size:\\s+(\\d+),\\s(\\d+)"); // match "  size: *, *" and capture w, h size
+		Pattern patternIND = Pattern.compile("\\s+index:\\s+(\\d+)"); // match "  index: *" and capture index
 
 		BufferedReader reader = null;
 		try {

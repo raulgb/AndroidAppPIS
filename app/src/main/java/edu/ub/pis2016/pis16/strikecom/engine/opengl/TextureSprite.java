@@ -81,4 +81,8 @@ public class TextureSprite {
 	}
 
 
+	public TextureRegion getRegion(){
+		return region;
+	}
+
 }

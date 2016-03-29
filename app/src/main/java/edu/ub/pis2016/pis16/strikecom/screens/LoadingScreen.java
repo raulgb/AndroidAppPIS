@@ -33,13 +33,14 @@ public class LoadingScreen extends Screen {
 
 	@Override
 	public void resume() {
-		Texture.reloadManagedTextures();
 	}
 
 	@Override
 	public void update(float deltaTime) {
-		if (Assets.isReady())
+		if (Assets.isReady()) {
+			Log.i("LoadingScreen", "Switching screens");
 			game.setScreen(new DummyGLScreen(game));
+		}
 	}
 
 	@Override

@@ -38,8 +38,6 @@ public class Assets {
 
 	private static class AssetLoaderRunnable implements Runnable {
 		Game game;
-		private static boolean ready;
-
 		public AssetLoaderRunnable(Game game) {
 			this.game = game;
 		}

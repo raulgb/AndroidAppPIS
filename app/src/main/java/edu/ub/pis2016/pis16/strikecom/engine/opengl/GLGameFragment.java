@@ -61,7 +61,7 @@ public abstract class GLGameFragment extends Fragment implements Game, GLSurface
 
 		// Create OpenGL objects
 		glView = new GLSurfaceView(getActivity());
-		glView.setEGLConfigChooser(8 , 8, 8, 8, 16, 0);
+		glView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
 		glView.setRenderer(this);
 
 		glGraphics = new GLGraphics(glView);

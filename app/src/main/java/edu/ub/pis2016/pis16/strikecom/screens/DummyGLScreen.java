@@ -9,21 +9,22 @@ import edu.ub.pis2016.pis16.strikecom.engine.framework.Input;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Texture;
+import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureSprite;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 import edu.ub.pis2016.pis16.strikecom.entity.StrikeBaseTest;
 
 /**
  * Dummy OpenGL screen.
- * <p>
+ * <p/>
  * Order of calls:
  * - Created
  * - Resumed
  * - Resized
- * <p>
+ * <p/>
  * Loop:
  * - Update
  * - Presented
- * <p>
+ * <p/>
  * On back:
  * - Paused
  * - Disposed
@@ -36,15 +37,21 @@ public class DummyGLScreen extends Screen {
 
 	StrikeBaseTest strikeBase;
 
+	TextureSprite sprite;
+
 
 	public DummyGLScreen(Game game) {
 		super(game);
 		Log.i("DUMMY_SCREEN", "Created");
 
 		strikeBase = new StrikeBaseTest("sbmk2");
-		strikeBase.setPosition(SW / 2f, SH / 2f);
+//		strikeBase.setPosition(SW / 2f, SH / 2f);
 		batch = new SpriteBatch(game.getGLGraphics(), 16);
 
+		sprite = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("sbmk2_hull", 0));
+		sprite.setScale(8, 8);
+
+		Log.i("Sprite", sprite.getRegion().toString());
 	}
 
 	@Override
@@ -79,9 +86,7 @@ public class DummyGLScreen extends Screen {
 		for (Input.TouchEvent e : game.getInput().getTouchEvents()) {
 			if (e.type != Input.TouchEvent.TOUCH_DOWN)
 				continue;
-
 			e.y = SH - e.y;
-
 			if (e.x < SW / 3f)
 				strikeBase.turnLeft();
 			else if (e.x > SW * 2 / 3f)
@@ -105,6 +110,8 @@ public class DummyGLScreen extends Screen {
 
 		batch.begin(Assets.SPRITE_ATLAS.getTexture());
 		strikeBase.draw(batch);
+
+
 		batch.end();
 	}
 
