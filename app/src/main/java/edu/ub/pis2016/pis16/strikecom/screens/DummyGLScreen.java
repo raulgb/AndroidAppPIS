@@ -117,13 +117,13 @@ public class DummyGLScreen extends Screen {
 
 	@Override
 	public void pause() {
-		Log.i("SCREEN", "Paused");
+		Log.i("DUMMY_SCREEN", "Paused");
 
 	}
 
 	@Override
 	public void dispose() {
-		Log.i("SCREEN", "Disposed");
+		Log.i("DUMMY_SCREEN", "Disposed");
 
 		Assets.disposeAll();
 	}

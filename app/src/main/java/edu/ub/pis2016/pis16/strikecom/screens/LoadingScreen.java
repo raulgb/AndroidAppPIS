@@ -33,6 +33,7 @@ public class LoadingScreen extends Screen {
 
 	@Override
 	public void resume() {
+		Texture.reloadManagedTextures();
 	}
 
 	@Override
