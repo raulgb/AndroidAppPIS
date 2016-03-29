@@ -19,7 +19,7 @@ sbmk1_hull
   index: 1
 sbmk1_hull
   rotate: false
-  xy: 32, 86
+  xy: 34, 86
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -30,73 +30,73 @@ sbmk2_hull
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
+  index: 0
+sbmk2_hull
+  rotate: false
+  xy: 34, 52
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
   index: 1
 sbmk2_hull
   rotate: false
-  xy: 32, 52
+  xy: 68, 86
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 2
-sbmk2_hull
-  rotate: false
-  xy: 64, 86
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 3
 sbmk2_threads_left
   rotate: false
-  xy: 32, 18
+  xy: 34, 18
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 0
 sbmk2_threads_left
   rotate: false
-  xy: 64, 52
+  xy: 68, 52
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 1
 sbmk2_threads_left
   rotate: false
-  xy: 96, 86
+  xy: 102, 86
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 2
 sbmk2_threads_left
   rotate: false
-  xy: 64, 18
+  xy: 68, 18
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 3
 sbmk2_threads_right
   rotate: false
-  xy: 96, 52
+  xy: 102, 52
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 0
 sbmk2_threads_right
   rotate: false
-  xy: 128, 86
+  xy: 136, 86
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 1
 sbmk2_threads_right
   rotate: false
-  xy: 96, 18
+  xy: 102, 18
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 2
 sbmk2_threads_right
   rotate: false
-  xy: 128, 52
+  xy: 136, 52
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -107,11 +107,11 @@ turret_mk1
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
-  index: 1
+  index: 0
 turret_mk1
   rotate: false
-  xy: 160, 102
+  xy: 170, 102
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
-  index: 2
+  index: 1

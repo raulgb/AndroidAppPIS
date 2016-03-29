@@ -1,5 +1,7 @@
 package edu.ub.pis2016.pis16.strikecom.engine.util;
 
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
@@ -15,10 +17,10 @@ import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureRegion;
 /**
  * A class that loads an .atlas file and adds all the regions to a HashMap using the {@code String}
  * name as key. All regions are stored into TextureRegion[] arrays. The default max page size is 8.
- * <p>
+ * <p/>
  * To quickly recover a region use {@code getRegion(String name)}, if you need a certain index use
  * {@code getRegion(String name, int index}.
- * <p>
+ * <p/>
  * <strong>Note:</strong> Only one Texture per texture Atlas.
  */
 public class TextureAtlas {
@@ -34,19 +36,18 @@ public class TextureAtlas {
 	private String path;
 
 	/**
-	 * @param game Game instance to get the FileReader.
-	 * @param path Path to the .atlas file.
+	 * @param game     Game instance to get the FileReader.
+	 * @param filepath Path to the .atlas file.
 	 */
-	public TextureAtlas(Game game, String path) {
+	public TextureAtlas(Game game, String filepath) {
 		this.game = game;
 		this.regions = new HashMap<>();
 
-		// Extract folder path from file path
-		Pattern folder = Pattern.compile("^(.*/)([^/]*)$");
-		Matcher match = folder.matcher(path);
-		this.path = match.group(1);
+		// Extract path
+		File filePath = new File(filepath);
+		path = filePath.getParent();
 
-		loadAtlasFile(path);
+		loadAtlasFile(filepath);
 	}
 
 	public Texture getTexture() {
@@ -61,6 +62,7 @@ public class TextureAtlas {
 	 * @throws IllegalArgumentException if the name does not exist
 	 */
 	public TextureRegion getRegion(String name, int index) {
+		if (index < 0) index = 0;
 		TextureRegion region;
 		if ((region = regions.get(name)[index]) == null)
 			throw new IllegalArgumentException("No region by that name");
@@ -75,6 +77,9 @@ public class TextureAtlas {
 		addRegion(name, x, y, w, h, 0);
 	}
 
+	/**
+	 * Create a new region inside the Atlas with the given name, specs, and index.
+	 */
 	public void addRegion(String name, int x, int y, int w, int h, int index) {
 		// Try to get an existing bucket, otherwise create it.
 		TextureRegion[] bucket;
@@ -86,16 +91,22 @@ public class TextureAtlas {
 		regions.put(name, bucket);
 	}
 
+	/**
+	 * Internal function to partse an .atlas file
+	 *
+	 * @param path Relative path to the file from the assets/ folder
+	 */
 	private void loadAtlasFile(String path) {
 		FileIO fio = game.getFileIO();
 		this.regions.clear();
 
 		// Regex matchers
-		Pattern patternImgFIle = Pattern.compile("^(\\w+\\.\\w)+$"); // Match ****.*** (file name + extension)
+		Pattern patternImgFile = Pattern.compile("^(\\w+\\.\\w+)$"); // Match ****.*** (file name + extension)
 		Pattern patternRgnName = Pattern.compile("^(\\w+)$"); // Match a single word in a line, from start to end
-		Pattern patternXY = Pattern.compile("\\s+xy:.+(\\d+),\\s(\\d+)"); // match "  xy: * *" and capture x, y cords
-		Pattern patternWH = Pattern.compile("\\s+size:.+(\\d+),\\s(\\d+)"); // match "  size: * *" and capture w, h size
-		Pattern patternIND = Pattern.compile("^\\s+index:.+(\\d+)"); // match "  index: *" and capture index
+
+		Pattern patternXY = Pattern.compile("\\s+xy:\\s+(\\d+),\\s+(\\d+)"); // match "  xy: *, *" and capture x, y cords
+		Pattern patternWH = Pattern.compile("\\s+size:.+(\\d+),\\s(\\d+)"); // match "  size: *, *" and capture w, h size
+		Pattern patternIND = Pattern.compile("\\s+index:.+(\\d+)"); // match "  index: *" and capture index
 
 		BufferedReader reader = null;
 		try {
@@ -105,12 +116,12 @@ public class TextureAtlas {
 
 			Matcher match;
 			String regionName = null;
-			int x = 0, y = 0, w = 0, h = 0, index;
+			int x = 0, y = 0, w = 0, h = 0, index = -1;
 
 			while ((line = reader.readLine()) != null) {
 
-				// Filename matcher
-				match = patternImgFIle.matcher(line);
+				// Image filename matcher
+				match = patternImgFile.matcher(line);
 				if (match.find()) {
 					// Check if we've already loaded a texture
 					if (texture != null)
@@ -119,8 +130,7 @@ public class TextureAtlas {
 					String imgFile = match.group(1);
 					this.texture = new Texture(game, this.path + File.separator + imgFile);
 
-					System.out.println("Texture loaded: "+imgFile);
-
+					Log.d("TextureAtlas", "Texture loaded: " + imgFile);
 					continue;
 				}
 
@@ -131,18 +141,27 @@ public class TextureAtlas {
 					regionName = match.group(1);
 
 					String[] regionSpec = new String[6];
-					for (int i = 0; i < 6; i++)
+					for (int i = 0; i < 6; i++) {
 						regionSpec[i] = reader.readLine();
+//						Log.d("TextureAtlas line", regionSpec[i]);
+					}
 
 					// Read the 2nd and 3rd line of spec, X Y coords and W H size
 					match = patternXY.matcher(regionSpec[1]);
-					x = Integer.valueOf(match.group(1));
-					y = Integer.valueOf(match.group(2));
+					while (match.find()) {
+						x = Integer.valueOf(match.group(1));
+						y = Integer.valueOf(match.group(2));
+					}
+
 					match = patternWH.matcher(regionSpec[2]);
-					w = Integer.valueOf(match.group(1));
-					h = Integer.valueOf(match.group(2));
+					while (match.find()) {
+						w = Integer.valueOf(match.group(1));
+						h = Integer.valueOf(match.group(2));
+					}
+
 					match = patternIND.matcher(regionSpec[5]);
-					index = Integer.valueOf(match.group(1));
+					while (match.find())
+						index = Integer.valueOf(match.group(1));
 
 					// Check index value
 					if (index >= 0)
@@ -150,8 +169,7 @@ public class TextureAtlas {
 					else
 						addRegion(regionName, x, y, w, h);
 
-
-					System.out.println("Region added: "+regionName);
+					Log.d("TextureAtlas REGION", getRegion(regionName, index).toString());
 				}
 			}
 

@@ -46,7 +46,7 @@ public class Assets {
 
 		@Override
 		public void run() {
-			Log.i("ASSETLOADER", "Begun loading");
+			Log.i("Assets", "Begun loading");
 
 			try {
 				// PUT ALL CODE FOR LOADING TEXTURES, IMAGES, AND OTHER THINGS HERE
@@ -54,11 +54,13 @@ public class Assets {
 				// Global sprite atlas
 				SPRITE_ATLAS = new TextureAtlas(game, "sprites/sprites.atlas");
 
-
 				Thread.sleep(500);
 				// Set flags
 				progress = 1;
 				ready = true;
+
+				Log.i("Assets", "Finished Loading");
+
 			}catch ( Exception e){
 				e.printStackTrace();
 			}
