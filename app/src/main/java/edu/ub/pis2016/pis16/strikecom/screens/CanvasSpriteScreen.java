@@ -183,6 +183,6 @@ public class CanvasSpriteScreen extends Screen {
 	@Override
 	public void dispose() {
 //		for (Sprite s : sprites)
-//			s.dispose();
+//			s.disposeAll();
 	}
 }

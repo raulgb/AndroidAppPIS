@@ -3,10 +3,12 @@ package edu.ub.pis2016.pis16.strikecom.engine.opengl;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLUtils;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -14,7 +16,8 @@ import edu.ub.pis2016.pis16.strikecom.engine.framework.Disposable;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.FileIO;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Game;
 
-/** Native OpenGL texture object. Manages a Bitmap data array and uploads it to the GPU for rendering
+/**
+ * Native OpenGL texture object. Manages a Bitmap data array and uploads it to the GPU for rendering
  * using the bind() method. Must be disposed if unused.
  */
 public class Texture implements Disposable {
@@ -31,9 +34,9 @@ public class Texture implements Disposable {
 	int width;
 	int height;
 
-	public Texture(Game glGame, String fileName) {
-		this.glGraphics = glGame.getGLGraphics();
-		this.fileIO = glGame.getFileIO();
+	public Texture(Game game, String fileName) {
+		this.glGraphics = game.getGLGraphics();
+		this.fileIO = game.getFileIO();
 		this.fileName = fileName;
 		load();
 
@@ -95,20 +98,25 @@ public class Texture implements Disposable {
 
 	// OpenGL context loss prevention methods
 
-	public static void addManagedTexture(Texture t){
+	public static void addManagedTexture(Texture t) {
 		managedTextures.add(t);
 	}
 
-	public static void removeManagedTexture(Texture t){
+	public static void removeManagedTexture(Texture t) {
 		managedTextures.remove(t);
 	}
 
-	public static void reloadManagedTextures(){
-		for (Texture t : managedTextures)
-			t.reload();
+	private static final Object reloadingTextures = new Object();
+
+	public static void reloadManagedTextures() {
+		Log.i("Texture", "Reloaded all managed textures");
+		synchronized (reloadingTextures) {
+			for (Texture t : managedTextures)
+				t.reload();
+		}
 	}
 
-	public static void clearManagedTextures(){
+	public static void clearManagedTextures() {
 		managedTextures.clear();
 	}
 

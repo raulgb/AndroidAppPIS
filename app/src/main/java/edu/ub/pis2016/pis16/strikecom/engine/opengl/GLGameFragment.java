@@ -41,6 +41,8 @@ public abstract class GLGameFragment extends Fragment implements Game, GLSurface
 	FileIO fileIO;
 	Screen screen;
 
+	int SCREEN_W, SCREEN_H;
+
 	GLGame.GLGameState state = GLGame.GLGameState.Initialized;
 
 	final Object stateChanged = new Object();
@@ -114,6 +116,7 @@ public abstract class GLGameFragment extends Fragment implements Game, GLSurface
 
 		// Init and set the new instance
 		screen.resume();
+		screen.resize(SCREEN_W, SCREEN_H);
 		//screen.update(0);
 		this.screen = screen;
 	}
@@ -185,7 +188,7 @@ public abstract class GLGameFragment extends Fragment implements Game, GLSurface
 
 			case Finished:
 				// App has been terminated, pause screen to save gameFrag and
-				// dispose of it.
+				// disposeAll of it.
 				screen.pause();
 				screen.dispose();
 				synchronized (stateChanged) {
@@ -208,6 +211,8 @@ public abstract class GLGameFragment extends Fragment implements Game, GLSurface
 
 	@Override
 	public void onSurfaceChanged(GL10 gl10, int w, int h) {
+		SCREEN_W = w;
+		SCREEN_H = h;
 		screen.resize(w, h);
 	}
 

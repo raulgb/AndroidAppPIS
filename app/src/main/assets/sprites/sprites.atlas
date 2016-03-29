@@ -1,0 +1,117 @@
+
+sprites.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+sbmk1_hull
+  rotate: false
+  xy: 0, 86
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 0
+sbmk1_hull
+  rotate: false
+  xy: 0, 52
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 1
+sbmk1_hull
+  rotate: false
+  xy: 32, 86
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 2
+sbmk2_hull
+  rotate: false
+  xy: 0, 18
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 1
+sbmk2_hull
+  rotate: false
+  xy: 32, 52
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 2
+sbmk2_hull
+  rotate: false
+  xy: 64, 86
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 3
+sbmk2_threads_left
+  rotate: false
+  xy: 32, 18
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 0
+sbmk2_threads_left
+  rotate: false
+  xy: 64, 52
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 1
+sbmk2_threads_left
+  rotate: false
+  xy: 96, 86
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 2
+sbmk2_threads_left
+  rotate: false
+  xy: 64, 18
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 3
+sbmk2_threads_right
+  rotate: false
+  xy: 96, 52
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 0
+sbmk2_threads_right
+  rotate: false
+  xy: 128, 86
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 1
+sbmk2_threads_right
+  rotate: false
+  xy: 96, 18
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 2
+sbmk2_threads_right
+  rotate: false
+  xy: 128, 52
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 3
+turret_mk1
+  rotate: false
+  xy: 0, 0
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 1
+turret_mk1
+  rotate: false
+  xy: 160, 102
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 2

@@ -6,6 +6,7 @@
 /build
 .gradle/
 *.iml
+local.properties
 
 # Crashlytics configuations and log files
 com_crashlytics_export_strings.xml

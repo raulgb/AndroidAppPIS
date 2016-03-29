@@ -1,0 +1,84 @@
+package edu.ub.pis2016.pis16.strikecom.engine.opengl;
+
+import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
+import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
+
+/**
+ * Encapsulates a region inside a more convenient container. Keeps track of drawing position, rotation
+ * and Scale.
+ */
+public class TextureSprite {
+
+	private TextureRegion region;
+
+	/** In degrees */
+	private float rotation,
+			scaleX,
+			scaleY,
+			width,
+			height;
+	private Vector2 position;
+
+
+	public TextureSprite(TextureRegion region) {
+		this.region = region;
+
+		this.width = region.width;
+		this.height = region.height;
+		this.scaleX = 1;
+		this.scaleY = 1;
+
+		this.position = new Vector2();
+	}
+
+	public void setRegion(TextureRegion region){
+		this.region = region;
+		this.width = region.width;
+		this.height = region.height;
+	}
+
+	public void draw(SpriteBatch batch, float x, float y) {
+		this.position.set(x, y);
+		draw(batch);
+	}
+
+	public void draw(SpriteBatch batch) {
+		// If not rotated, use default 0 deg method to save performance, otherwise use specialized drawing
+		if (MathUtils.isEqual(rotation, 0, 0.01f))
+			batch.drawSprite(position.x, position.y, width * scaleX, height * scaleY, region);
+		else
+			batch.drawSprite(position.x, position.y, width * scaleX, height * scaleY, rotation, region);
+
+	}
+
+	public void translate(float dx, float dy) {
+		position.add(dx, dy);
+	}
+
+	public void setPosition(float x, float y) {
+		position.set(x, y);
+	}
+
+	public void setScale(int sx, int sy){
+		this.scaleX = sx;
+		this.scaleY = sy;
+	}
+
+	public void setScaleX(float scaleX) {
+		this.scaleX = scaleX;
+	}
+
+	public void setScaleY(float scaleY) {
+		this.scaleY = scaleY;
+	}
+
+	public void setRotation(float angleDeg) {
+		this.rotation = angleDeg;
+	}
+
+	public void setPosition(Vector2 pos) {
+		this.position.set(pos);
+	}
+
+
+}

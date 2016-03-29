@@ -2,7 +2,7 @@ package edu.ub.pis2016.pis16.strikecom.engine.opengl;
 
 /**
  * A class defining a drawable region from a {@link Texture } object. Used to draw different sections of a
- * texture for animation, atlas images, and more. No need to dispose of native resources. Use freely.
+ * texture for animation, STRIKEBASE_ATLAS images, and more. No need to disposeAll of native resources. Use freely.
  */
 public class TextureRegion {
 
@@ -29,5 +29,15 @@ public class TextureRegion {
 		this.u2 = u1 + width / texture.width;
 		this.v2 = v1 + height / texture.height;
 		this.texture = texture;
+	}
+
+	@Override
+	public String toString(){
+		return new StringBuilder().append(texture.fileName)
+				.append(" p: ")
+				.append(u1 * texture.width).append(", ").append(v1 * texture.height)
+				.append(", s: ")
+				.append(width).append(", ").append(height)
+				.toString();
 	}
 }

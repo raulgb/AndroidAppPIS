@@ -9,6 +9,7 @@ import android.util.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,8 +38,13 @@ public class AndroidFileIO implements FileIO {
 		return null;
 	}
 
-	public InputStream readFile(String fileName) throws IOException {
-		return new FileInputStream(externalStoragePath + fileName);
+	public InputStream readFile(String fileName) {
+		try {
+			return new FileInputStream(externalStoragePath + fileName);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public OutputStream writeFile(String fileName) throws IOException {

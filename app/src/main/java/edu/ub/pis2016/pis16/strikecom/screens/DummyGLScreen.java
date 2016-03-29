@@ -1,6 +1,5 @@
 package edu.ub.pis2016.pis16.strikecom.screens;
 
-import android.opengl.GLU;
 import android.util.Log;
 
 import javax.microedition.khronos.opengles.GL10;
@@ -8,23 +7,23 @@ import javax.microedition.khronos.opengles.GL10;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Game;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Input;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
-import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Texture;
-import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureRegion;
+import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
+import edu.ub.pis2016.pis16.strikecom.entity.StrikeBaseTest;
 
 /**
  * Dummy OpenGL screen.
- * <p/>
+ * <p>
  * Order of calls:
  * - Created
  * - Resumed
  * - Resized
- * <p/>
+ * <p>
  * Loop:
  * - Update
  * - Presented
- * <p/>
+ * <p>
  * On back:
  * - Paused
  * - Disposed
@@ -33,76 +32,80 @@ public class DummyGLScreen extends Screen {
 
 	private int SW, SH;
 
-	Texture atlas;
-	TextureRegion strikeBaseMK2;
 	SpriteBatch batch;
 
-	Vector2 pos = new Vector2();
+	StrikeBaseTest strikeBase;
+
 
 	public DummyGLScreen(Game game) {
 		super(game);
-		Log.i("SCREEN", "Created");
+		Log.i("DUMMY_SCREEN", "Created");
+
+		strikeBase = new StrikeBaseTest("sbmk2");
+		strikeBase.setPosition(SW / 2f, SH / 2f);
+		batch = new SpriteBatch(game.getGLGraphics(), 16);
+
 	}
 
 	@Override
 	public void resume() {
-		Log.i("SCREEN", "Resumed");
+		Log.i("DUMMY_SCREEN", "Resumed");
+		Texture.reloadManagedTextures();
 
-		batch = new SpriteBatch(game.getGLGraphics(), 16);
-		atlas = new Texture(game, "strikebase/strikebase_atlas.png");
-		strikeBaseMK2 = new TextureRegion(atlas, 32 * 2, 0, 32, 32);
+		GL10 gl = game.getGLGraphics().getGL();
+		gl.glClearColor(.25f, .50f, .25f, 1f);
 	}
 
 	@Override
 	public void resize(int width, int height) {
-		Log.i("SCREEN", "Resized: " + width + "x" + height);
+		Log.i("DUMMY_SCREEN", "Resized: " + width + "x" + height);
 		SW = width;
 		SH = height;
 
 		GL10 gl = game.getGLGraphics().getGL();
-		gl.glClearColor(0.7f, 0.7f, 0.7f, 1);
 
-		float viewW = width / 8f;
-		float viewH = height / 8f;
+		float viewW = width / 1f;
+		float viewH = height / 1f;
 
 		// Setup viewport
 		gl.glViewport(0, 0, width, height);
 		gl.glMatrixMode(GL10.GL_PROJECTION);
 		gl.glLoadIdentity();
 		gl.glOrthof(0, viewW, 0, viewH, 1, -1);
-
-		gl.glMatrixMode(GL10.GL_MODELVIEW);
-		gl.glLoadIdentity();
-		gl.glScalef(8, 8, 1);
-
-		// Enable blend and texturing
-		gl.glEnable(GL10.GL_BLEND);
-		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
-		gl.glEnable(GL10.GL_TEXTURE_2D);
 	}
 
 	@Override
-	public void update(float deltaTime) {
+	public void update(float delta) {
 		for (Input.TouchEvent e : game.getInput().getTouchEvents()) {
+			if (e.type != Input.TouchEvent.TOUCH_DOWN)
+				continue;
+
 			e.y = SH - e.y;
-			e.x /= 8;
-			e.y /= 8;
 
-
-			Log.i("Touch", e.x + " " + e.y);
-			pos.set(e.x, e.y);
+			if (e.x < SW / 3f)
+				strikeBase.turnLeft();
+			else if (e.x > SW * 2 / 3f)
+				strikeBase.turnRight();
+			else {
+				if (e.y > SH / 2f)
+					strikeBase.accelerate();
+				else
+					strikeBase.brake();
+			}
 		}
 
+		strikeBase.update(delta);
 	}
 
+
 	@Override
-	public void present(float deltaTime) {
+	public void present(float delta) {
 		GL10 gl = game.getGLGraphics().getGL();
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		batch.begin(atlas);
-		batch.drawSprite(pos.x, pos.y, strikeBaseMK2);
-		batch.end();
 
+		batch.begin(Assets.SPRITE_ATLAS.getTexture());
+		strikeBase.draw(batch);
+		batch.end();
 	}
 
 	@Override
@@ -111,10 +114,10 @@ public class DummyGLScreen extends Screen {
 
 	}
 
-
 	@Override
 	public void dispose() {
 		Log.i("SCREEN", "Disposed");
 
+		Assets.disposeAll();
 	}
 }

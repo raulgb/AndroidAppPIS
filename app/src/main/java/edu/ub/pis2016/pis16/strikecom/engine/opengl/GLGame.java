@@ -126,7 +126,7 @@ public abstract class GLGame extends Activity implements Game, GLSurfaceView.Ren
 
 			case Finished:
 				// App has been terminated, pause screen to save gameFrag and
-				// dispose of it.
+				// disposeAll of it.
 				screen.pause();
 				screen.dispose();
 				synchronized (stateChanged) {

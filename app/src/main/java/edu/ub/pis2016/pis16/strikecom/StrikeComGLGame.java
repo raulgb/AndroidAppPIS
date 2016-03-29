@@ -3,6 +3,7 @@ package edu.ub.pis2016.pis16.strikecom;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.GLGameFragment;
 import edu.ub.pis2016.pis16.strikecom.screens.DummyGLScreen;
+import edu.ub.pis2016.pis16.strikecom.screens.LoadingScreen;
 
 
 /** Game class, encapsulates Fragment and Game behavior and keeps gameFrag states. */
@@ -13,6 +14,6 @@ public class StrikeComGLGame extends GLGameFragment {
 
 	@Override
 	public Screen getStartScreen() {
-		return new DummyGLScreen(this);
+		return new LoadingScreen(this);
 	}
 }
