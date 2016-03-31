@@ -17,8 +17,7 @@ public class LoadingScreen extends Screen {
 	TextureRegion iconLoading;
 	SpriteBatch batch;
 
-
-	private int WIDTH, HEIGHT;
+	private int SW, SH;
 
 	public LoadingScreen(StrikeComGLGame game) {
 		super(game);
@@ -40,6 +39,8 @@ public class LoadingScreen extends Screen {
 	public void update(float deltaTime) {
 		if (Assets.isReady()) {
 			Log.i("LoadingScreen", "Switching screens");
+
+			// PUT YOUR TESTING SCREEN HERE
 			game.setScreen(new DummyGLScreen(game));
 		}
 	}
@@ -50,15 +51,15 @@ public class LoadingScreen extends Screen {
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
 		batch.begin(texture);
-		batch.drawSprite(WIDTH / 2f, HEIGHT / 2f, iconLoading);
+		batch.drawSprite(SW / 2f, SH / 2f, iconLoading);
 		batch.end();
 	}
 
 	@Override
 	public void resize(int width, int height) {
 		Log.i("LOADING_SCREEN", "Resized: " + width + "x" + height);
-		WIDTH = width;
-		HEIGHT = height;
+		SW = width;
+		SH = height;
 
 		GL10 gl = game.getGLGraphics().getGL();
 		gl.glClearColor(0.113f, 0.113f, 0.113f, 1f);
