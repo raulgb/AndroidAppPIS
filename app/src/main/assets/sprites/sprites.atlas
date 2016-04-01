@@ -3,114 +3,128 @@ sprites.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+cursor_attack
+  rotate: false
+  xy: 0, 68
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
+cursor_move
+  rotate: false
+  xy: 0, 18
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
 sbmk1_hull
   rotate: false
-  xy: 0, 32
+  xy: 50, 84
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 0
 sbmk1_hull
   rotate: false
-  xy: 0, 0
+  xy: 50, 50
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 1
 sbmk1_hull
   rotate: false
-  xy: 32, 32
+  xy: 84, 84
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 2
 sbmk2_hull
   rotate: false
-  xy: 32, 0
+  xy: 84, 50
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 0
 sbmk2_hull
   rotate: false
-  xy: 64, 32
+  xy: 118, 84
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 1
 sbmk2_hull
   rotate: false
-  xy: 64, 0
+  xy: 118, 50
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 2
 sbmk2_threads_left
   rotate: false
-  xy: 96, 32
+  xy: 152, 84
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 0
 sbmk2_threads_left
   rotate: false
-  xy: 96, 0
+  xy: 152, 50
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 1
 sbmk2_threads_left
   rotate: false
-  xy: 128, 32
+  xy: 186, 84
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 2
 sbmk2_threads_left
   rotate: false
-  xy: 128, 0
+  xy: 220, 84
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 3
 sbmk2_threads_right
   rotate: false
-  xy: 160, 32
+  xy: 186, 50
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 0
 sbmk2_threads_right
   rotate: false
-  xy: 160, 0
+  xy: 220, 50
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 1
 sbmk2_threads_right
   rotate: false
-  xy: 192, 32
+  xy: 50, 16
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 2
 sbmk2_threads_right
   rotate: false
-  xy: 192, 0
+  xy: 84, 16
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 3
 turret_mk1
   rotate: false
-  xy: 224, 48
+  xy: 0, 0
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: 0
 turret_mk1
   rotate: false
-  xy: 240, 48
+  xy: 118, 32
   size: 16, 16
   orig: 16, 16
   offset: 0, 0

@@ -1,18 +1,40 @@
 package edu.ub.pis2016.pis16.strikecom.entity;
 
+import java.util.HashMap;
+
+import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
 
-public interface Vehicle {
+public abstract class Vehicle {
 
-	public void update(float delta);
+	private HashMap<String, Vector2> anchors;
 
-	public void draw(SpriteBatch batch);
+	public Vehicle(){
+		anchors = new HashMap<>(8);
+	}
 
-	public void turnLeft();
+	public abstract void update(float delta);
 
-	public void turnRight();
+	public abstract void draw(SpriteBatch batch);
 
-	public void accelerate();
+	public abstract void turnLeft();
 
-	public void brake();
+	public abstract void turnRight();
+
+	public abstract void accelerate();
+
+	public abstract void brake();
+
+	public abstract Vector2 getPosition();
+
+	public abstract float getRotation();
+
+	/** Returns a Vector2 anchor for usage with anchored entities */
+	public Vector2 getAnchor(String name){
+		return anchors.get(name);
+	}
+
+	protected Vector2 putAnchor(String name, Vector2 anchor){
+		return anchors.put(name, anchor);
+	}
 }

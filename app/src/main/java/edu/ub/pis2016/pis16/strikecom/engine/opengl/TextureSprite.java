@@ -31,7 +31,7 @@ public class TextureSprite {
 		this.position = new Vector2();
 	}
 
-	public void setRegion(TextureRegion region){
+	public void setRegion(TextureRegion region) {
 		this.region = region;
 		this.width = region.width;
 		this.height = region.height;
@@ -59,7 +59,7 @@ public class TextureSprite {
 		position.set(x, y);
 	}
 
-	public void setScale(int sx, int sy){
+	public void setScale(float sx, float sy) {
 		this.scaleX = sx;
 		this.scaleY = sy;
 	}
@@ -81,8 +81,12 @@ public class TextureSprite {
 	}
 
 
-	public TextureRegion getRegion(){
+	public TextureRegion getRegion() {
 		return region;
 	}
 
+	/** Returns the X scale, useful if using same X and Y scale */
+	public float getScale() {
+		return scaleX;
+	}
 }

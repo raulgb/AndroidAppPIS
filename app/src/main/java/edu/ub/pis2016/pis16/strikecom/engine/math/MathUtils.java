@@ -2,13 +2,13 @@
  * Copyright 2011
  * Mario Zechner <badlogicgames@gmail.com>
  * Nathan Sweet <nathan.sweet@gmail.com>
- * <p>
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * <p>
+ * <p/>
  * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -380,6 +380,13 @@ public final class MathUtils {
 	 */
 	static public boolean isEqual(float a, float b, float tolerance) {
 		return Math.abs(a - b) <= tolerance;
+	}
+
+	@Deprecated
+	static public int mod(int a, int b) {
+		if (a > 0)
+			return a % b;
+		return -(a % b);
 	}
 
 	/** @return the logarithm of value with base a */

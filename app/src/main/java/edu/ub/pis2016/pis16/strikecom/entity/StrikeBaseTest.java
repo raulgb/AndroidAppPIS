@@ -4,9 +4,10 @@ import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureRegion;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureSprite;
+import edu.ub.pis2016.pis16.strikecom.engine.util.Animation;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 
-public class StrikeBaseTest implements Vehicle {
+public class StrikeBaseTest extends Vehicle {
 
 	private final int LEFT = 0, RIGHT = 1;
 
@@ -23,26 +24,27 @@ public class StrikeBaseTest implements Vehicle {
 	private Vector2 vel;
 	private Vector2 tmp;
 
+	private float maxSpeed = 250;
+	private float maxTurnSpeed = maxSpeed / 6f;
+	private float accel = 2;
 	private float leftThreadVel;
 	private float rightThreadVel;
 
 	private float rotation;
 
+	private Vector2 turret_1;
+	private Vector2 turret_2;
+	private Vector2 turret_3;
+	private Vector2 turret_4;
 
 	// Sprite information
 	private int numDmgHulls = 3;
 	private int threadFrames = 4;
 
-	private float threads_leftAnimAccum = 0;
-	private float threads_rightAnimAccum = 0;
-
-	private float threads_leftAnimDelay = 0.25f;
-	private float threads_rightAnimDelay = 0.25f;
-
-	private int threads_leftFrame = 0;
-	private int threads_rightFrame = 0;
+	private Animation[] threadAnim;
 
 	public StrikeBaseTest(String model) {
+		super();
 		pos = new Vector2();
 		vel = new Vector2();
 		tmp = new Vector2();
@@ -59,42 +61,54 @@ public class StrikeBaseTest implements Vehicle {
 
 		// Create sprites
 		hull = new TextureSprite(sbmk1_hull[0]);
-		hull.setScale(8, 8);
+		hull.setScale(10, 10);
 
 		threads_left = new TextureSprite(sbmk1_threads[LEFT][0]);
-		threads_left.setScale(8, 8);
+		threads_left.setScale(10, 10);
 
 		threads_right = new TextureSprite(sbmk1_threads[RIGHT][0]);
-		threads_right.setScale(8, 8);
+		threads_right.setScale(10, 10);
+
+		// Animations
+		threadAnim = new Animation[2];
+		threadAnim[0] = new Animation(threadFrames);
+		threadAnim[0].setFrameSpeed(0);
+		threadAnim[1] = new Animation(threadFrames);
+		threadAnim[1].setFrameSpeed(0);
+
+		// Create and put anchors
+		turret_1 = new Vector2();
+		turret_2 = new Vector2();
+		turret_3 = new Vector2();
+		this.putAnchor("turret_1", turret_1);
+		this.putAnchor("turret_2", turret_2);
+		this.putAnchor("turret_3", turret_3);
 	}
 
 	@Override
 	public void update(float delta) {
-		threads_leftAnimAccum += delta;
-		threads_rightAnimAccum += delta;
-		if (threads_leftAnimAccum >= threads_leftAnimDelay) {
-			threads_leftAnimAccum -= threads_leftAnimDelay;
-			threads_leftFrame = (threads_leftFrame + 1) % threadFrames;
-		}
-		if (threads_rightAnimAccum >= threads_rightAnimDelay) {
-			threads_rightAnimAccum -= threads_rightAnimDelay;
-			threads_rightFrame = (threads_rightFrame + 1) % threadFrames;
-		}
+		threadAnim[0].setFrameSpeed(leftThreadVel * 0.1f);
+		threadAnim[1].setFrameSpeed(rightThreadVel * 0.1f);
 
-		threads_leftAnimDelay = 1 - Math.abs(leftThreadVel) * delta;
-		threads_rightAnimDelay = 1 - Math.abs(rightThreadVel) * delta;
+		for (Animation a : threadAnim)
+			a.update(delta);
 
 		// Tank-like controls
 		rotation += (-leftThreadVel + rightThreadVel) * delta;
-
 		vel.set(leftThreadVel + rightThreadVel, 0).rotate(rotation);
 		pos.add(vel.scl(0.5f * delta));
+
+		// TODO Make this more universal, range 0-1 and depending on actual size (game units)
+		turret_1.set(8, -8).scl(hull.getScale()).rotate(rotation).add(pos);
+		turret_2.set(-8, 8).scl(hull.getScale()).rotate(rotation).add(pos);
+		turret_3.set(-8, -8).scl(hull.getScale()).rotate(rotation).add(pos);
+
 	}
 
 	@Override
 	public void draw(SpriteBatch batch) {
-		threads_left.setRegion(sbmk1_threads[LEFT][threads_leftFrame]);
-		threads_right.setRegion(sbmk1_threads[RIGHT][threads_leftFrame]);
+		threads_left.setRegion(sbmk1_threads[LEFT][threadAnim[0].frame()]);
+		threads_right.setRegion(sbmk1_threads[RIGHT][threadAnim[1].frame()]);
 		hull.setRegion(sbmk1_hull[0]);
 
 		threads_left.setRotation(rotation);
@@ -108,28 +122,37 @@ public class StrikeBaseTest implements Vehicle {
 
 	@Override
 	public void turnLeft() {
-		this.rightThreadVel += 2f;
-		this.leftThreadVel -= 1f;
+		this.rightThreadVel = Math.min(rightThreadVel + accel, maxTurnSpeed);
+		this.leftThreadVel = Math.min(Math.max(leftThreadVel - accel / 2f, -maxTurnSpeed/2f), maxTurnSpeed);
 	}
 
 	@Override
 	public void turnRight() {
-		this.leftThreadVel += 2f;
-		this.rightThreadVel -= 1f;
+		this.leftThreadVel = Math.min(leftThreadVel + accel, maxTurnSpeed);
+		this.rightThreadVel = Math.min(Math.max(rightThreadVel - accel / 2f, -maxTurnSpeed/2f), maxTurnSpeed);
 	}
 
 	@Override
 	public void accelerate() {
-		this.leftThreadVel += 2;
-		this.rightThreadVel += 2;
+		this.leftThreadVel = Math.min(leftThreadVel + accel, maxSpeed);
+		this.rightThreadVel = Math.min(rightThreadVel + accel, maxSpeed);
 	}
 
 	@Override
 	public void brake() {
-
+		this.leftThreadVel = Math.max(leftThreadVel - accel, 0);
+		this.rightThreadVel = Math.max(rightThreadVel - accel, 0);
 	}
 
 	public void setPosition(float x, float y) {
 		this.pos.set(x, y);
+	}
+
+	public Vector2 getPosition() {
+		return pos;
+	}
+
+	public float getRotation() {
+		return rotation;
 	}
 }
