@@ -52,7 +52,7 @@ public class Animation {
 				}
 				if (accum <= -1) {
 					accum += 1;
-					frame = frame == 0 ? frames - 1 : frame + 1;
+					frame = frame == 0 ? frames - 1 : frame - 1;
 				}
 				break;
 		}

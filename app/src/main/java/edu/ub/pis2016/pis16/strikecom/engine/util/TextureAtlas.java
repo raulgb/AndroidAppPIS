@@ -65,7 +65,7 @@ public class TextureAtlas {
 		if (index < 0) index = 0;
 		TextureRegion region;
 		if ((region = regions.get(name)[index]) == null)
-			throw new IllegalArgumentException("No region by that name");
+			throw new IllegalArgumentException("No region with name: "+name+".");
 		return region;
 	}
 
@@ -139,11 +139,11 @@ public class TextureAtlas {
 				if (match.find()) {
 					// Found new region definition
 					regionName = match.group(1);
+					index = -1; // Default index
 
 					String[] regionSpec = new String[6];
 					for (int i = 0; i < 6; i++) {
 						regionSpec[i] = reader.readLine();
-//						Log.d("TextureAtlas line", regionSpec[i]);
 					}
 
 					// Read the 2nd and 3rd line of spec, X Y coords and W H size
@@ -169,7 +169,7 @@ public class TextureAtlas {
 					else
 						addRegion(regionName, x, y, w, h);
 
-					Log.d("TextureAtlas REGION", getRegion(regionName, index).toString());
+					Log.d("TextureAtlas", "New Region: " +regionName + ": "+ getRegion(regionName, index).toString());
 				}
 			}
 

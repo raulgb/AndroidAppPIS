@@ -31,7 +31,6 @@ public class Turret {
 		this.anchor = owner.getAnchor(anchor);
 
 		sprite = new TextureSprite(Assets.SPRITE_ATLAS.getRegion(model));
-		sprite.setScale(10, 10);
 	}
 
 	public void update(float delta) {

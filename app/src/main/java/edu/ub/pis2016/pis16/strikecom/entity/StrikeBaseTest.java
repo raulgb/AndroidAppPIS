@@ -20,22 +20,26 @@ public class StrikeBaseTest extends Vehicle {
 
 	// Physics
 	private float health = 1000;
-	private Vector2 pos;
-	private Vector2 vel;
-	private Vector2 tmp;
+	private Vector2 pos = new Vector2();
+	private Vector2 vel = new Vector2();
+	private Vector2 tmp = new Vector2();
 
-	private float maxSpeed = 250;
-	private float maxTurnSpeed = maxSpeed / 6f;
+	private float maxSpeed = 25;
+	private float maxTurnSpeed = maxSpeed / 2f;
 	private float accel = 2;
 	private float leftThreadVel;
 	private float rightThreadVel;
 
 	private float rotation;
 
-	private Vector2 turret_1;
-	private Vector2 turret_2;
-	private Vector2 turret_3;
-	private Vector2 turret_4;
+	// Anchors
+	private Vector2 turret_1 = new Vector2();
+	private Vector2 turret_2 = new Vector2();
+	private Vector2 turret_3 = new Vector2();
+	private Vector2 turret_4 = new Vector2();
+
+	private Vector2 leftThread = new Vector2();
+	private Vector2 rightThread = new Vector2();
 
 	// Sprite information
 	private int numDmgHulls = 3;
@@ -45,9 +49,6 @@ public class StrikeBaseTest extends Vehicle {
 
 	public StrikeBaseTest(String model) {
 		super();
-		pos = new Vector2();
-		vel = new Vector2();
-		tmp = new Vector2();
 
 		sbmk1_hull = new TextureRegion[numDmgHulls];
 		for (int i = 0; i < numDmgHulls; i++)
@@ -61,13 +62,10 @@ public class StrikeBaseTest extends Vehicle {
 
 		// Create sprites
 		hull = new TextureSprite(sbmk1_hull[0]);
-		hull.setScale(10, 10);
 
 		threads_left = new TextureSprite(sbmk1_threads[LEFT][0]);
-		threads_left.setScale(10, 10);
 
 		threads_right = new TextureSprite(sbmk1_threads[RIGHT][0]);
-		threads_right.setScale(10, 10);
 
 		// Animations
 		threadAnim = new Animation[2];
@@ -77,26 +75,49 @@ public class StrikeBaseTest extends Vehicle {
 		threadAnim[1].setFrameSpeed(0);
 
 		// Create and put anchors
-		turret_1 = new Vector2();
-		turret_2 = new Vector2();
-		turret_3 = new Vector2();
 		this.putAnchor("turret_1", turret_1);
 		this.putAnchor("turret_2", turret_2);
 		this.putAnchor("turret_3", turret_3);
+		this.putAnchor("turret_4", turret_4);
+
+		this.putAnchor("left_thread", leftThread);
+		this.putAnchor("right_thread", rightThread);
 	}
 
 	@Override
 	public void update(float delta) {
-		threadAnim[0].setFrameSpeed(leftThreadVel * 0.1f);
-		threadAnim[1].setFrameSpeed(rightThreadVel * 0.1f);
+		threadAnim[0].setFrameSpeed(leftThreadVel);
+		threadAnim[1].setFrameSpeed(rightThreadVel);
 
 		for (Animation a : threadAnim)
 			a.update(delta);
 
-		// Tank-like controls
-		rotation += (-leftThreadVel + rightThreadVel) * delta;
-		vel.set(leftThreadVel + rightThreadVel, 0).rotate(rotation);
-		pos.add(vel.scl(0.5f * delta));
+		// Tank-like controls VERSION 1
+//		rotation += (-leftThreadVel + rightThreadVel) / (32) * delta;
+//		vel.set(leftThreadVel + rightThreadVel, 0).rotate(rotation);
+//		pos.add(vel.scl(0.5f * delta));
+
+		// Tank-like controls VERSION 2
+		float width = 28;
+		float rotDelta = ((-leftThreadVel + rightThreadVel) * delta) % 360;
+		leftThread.set(0, width / 2f).rotate(rotation).add(pos);
+		rightThread.set(0, -width / 2f).rotate(rotation).add(pos);
+
+		if (rotDelta > 0) {
+			Vector2 threadToCenter = new Vector2(pos).sub(leftThread);
+			threadToCenter.rotate(rotDelta * delta);
+			pos.set(leftThread).add(threadToCenter);
+		} else {
+			// Pivot on right thread
+			Vector2 threadToCenter = new Vector2(pos).sub(rightThread);
+			threadToCenter.rotate(rotDelta * delta);
+			pos.set(rightThread).add(threadToCenter);
+		}
+
+		vel.set(leftThreadVel + rightThreadVel, 0).scl(0.5f).rotate(rotation);
+		pos.add(vel.scl(delta));
+
+		rotation += rotDelta;
 
 		// TODO Make this more universal, range 0-1 and depending on actual size (game units)
 		turret_1.set(8, -8).scl(hull.getScale()).rotate(rotation).add(pos);
@@ -120,16 +141,19 @@ public class StrikeBaseTest extends Vehicle {
 		hull.draw(batch, pos.x, pos.y);
 	}
 
+	/**
+	 * Turn the strikebase counter-clock wise, accelerating the right thread forward
+	 */
 	@Override
 	public void turnLeft() {
 		this.rightThreadVel = Math.min(rightThreadVel + accel, maxTurnSpeed);
-		this.leftThreadVel = Math.min(Math.max(leftThreadVel - accel / 2f, -maxTurnSpeed/2f), maxTurnSpeed);
+		this.leftThreadVel = Math.min(Math.max(leftThreadVel - accel / 2f, -maxTurnSpeed / 2f), maxTurnSpeed);
 	}
 
 	@Override
 	public void turnRight() {
 		this.leftThreadVel = Math.min(leftThreadVel + accel, maxTurnSpeed);
-		this.rightThreadVel = Math.min(Math.max(rightThreadVel - accel / 2f, -maxTurnSpeed/2f), maxTurnSpeed);
+		this.rightThreadVel = Math.min(Math.max(rightThreadVel - accel / 2f, -maxTurnSpeed / 2f), maxTurnSpeed);
 	}
 
 	@Override

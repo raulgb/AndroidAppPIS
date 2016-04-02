@@ -59,6 +59,11 @@ public class TextureSprite {
 		position.set(x, y);
 	}
 
+
+	public void setScale(float s) {
+		this.scaleX = this.scaleY = s;
+	}
+
 	public void setScale(float sx, float sy) {
 		this.scaleX = sx;
 		this.scaleY = sy;
