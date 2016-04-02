@@ -1,4 +1,4 @@
-package edu.ub.pis2016.pis16.strikecom.engine.util;
+package edu.ub.pis2016.pis16.strikecom.engine.math;
 
 public class Angle {
 

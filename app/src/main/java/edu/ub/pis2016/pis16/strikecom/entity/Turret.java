@@ -3,7 +3,7 @@ package edu.ub.pis2016.pis16.strikecom.entity;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureSprite;
-import edu.ub.pis2016.pis16.strikecom.engine.util.Angle;
+import edu.ub.pis2016.pis16.strikecom.engine.math.Angle;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 
 /**
