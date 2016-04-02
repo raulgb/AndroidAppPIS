@@ -102,7 +102,7 @@ public class StrikeBaseTest extends Vehicle {
 
 		// Tank-like controls VERSION 2
 		final float width = 28;
-		float rotDelta = ((-leftThreadVel + rightThreadVel) * delta) % 360;
+		float rotDelta = (-leftThreadVel + rightThreadVel) / width;
 		leftThread.set(0, width / 2f).rotate(rotation).add(pos);
 		rightThread.set(0, -width / 2f).rotate(rotation).add(pos);
 
@@ -131,7 +131,9 @@ public class StrikeBaseTest extends Vehicle {
 		vel.set(leftThreadVel + rightThreadVel, 0).scl(0.5f).rotate(rotation);
 		pos.add(vel.scl(delta));
 
-		rotation += rotDelta;
+		rotation = (rotation + rotDelta) %360;
+		if(rotation < 0)
+			rotation = 360 + rotation;
 
 		// TODO Make this more universal, range 0-1 and depending on actual size (game units)
 		turret_1.set(8, -8).scl(hull.getScale()).rotate(rotation).add(pos);
