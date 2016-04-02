@@ -6,7 +6,7 @@ import android.graphics.Matrix;
 
 /**
  * 2D vector math
- * <p>
+ * <p/>
  * Created by German Dempere on 2016-02-29.
  */
 @SuppressLint("DefaultLocale")
@@ -140,5 +140,13 @@ public class Vector2 {
 	@Override
 	public String toString() {
 		return String.format("[%.3f, %.3f]", x, y);
+	}
+
+	/** Linear interpolation between this vector and the target vector, alpha in the range of 0-1 */
+	public Vector2 lerp(Vector2 target, float alpha) {
+		final float invAlpha = 1.0f - alpha;
+		this.x = (x * invAlpha) + (target.x * alpha);
+		this.y = (y * invAlpha) + (target.y * alpha);
+		return this;
 	}
 }

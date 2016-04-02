@@ -25,7 +25,8 @@ public class StrikeBaseTest extends Vehicle {
 	private Vector2 tmp = new Vector2();
 
 	private float maxSpeed = 25;
-	private float maxTurnSpeed = maxSpeed / 2f;
+	private float maxTurnSpeed = maxSpeed / 1f;
+	private float maxReverseSpeed = maxSpeed / 2f;
 	private float accel = 2;
 	private float leftThreadVel;
 	private float rightThreadVel;
@@ -38,6 +39,7 @@ public class StrikeBaseTest extends Vehicle {
 	private Vector2 turret_3 = new Vector2();
 	private Vector2 turret_4 = new Vector2();
 
+	private Vector2 pivot = new Vector2();
 	private Vector2 leftThread = new Vector2();
 	private Vector2 rightThread = new Vector2();
 
@@ -80,6 +82,7 @@ public class StrikeBaseTest extends Vehicle {
 		this.putAnchor("turret_3", turret_3);
 		this.putAnchor("turret_4", turret_4);
 
+		this.putAnchor("pivot", pivot);
 		this.putAnchor("left_thread", leftThread);
 		this.putAnchor("right_thread", rightThread);
 	}
@@ -98,21 +101,32 @@ public class StrikeBaseTest extends Vehicle {
 //		pos.add(vel.scl(0.5f * delta));
 
 		// Tank-like controls VERSION 2
-		float width = 28;
+		final float width = 28;
 		float rotDelta = ((-leftThreadVel + rightThreadVel) * delta) % 360;
 		leftThread.set(0, width / 2f).rotate(rotation).add(pos);
 		rightThread.set(0, -width / 2f).rotate(rotation).add(pos);
 
-		if (rotDelta > 0) {
-			Vector2 threadToCenter = new Vector2(pos).sub(leftThread);
-			threadToCenter.rotate(rotDelta * delta);
-			pos.set(leftThread).add(threadToCenter);
+		float alpha = 0;
+
+		if (rightThreadVel > leftThreadVel) {
+			// Use LEFT as Pivot
+			alpha = (rightThreadVel - leftThreadVel) / (rightThreadVel + leftThreadVel);
+			pivot.set(pos).lerp(leftThread, alpha);
+			pivot.set(leftThread);
+
+		} else if (leftThreadVel > rightThreadVel) {
+			// Use RIGHT as Pivot
+			alpha = (leftThreadVel - rightThreadVel) / (rightThreadVel + leftThreadVel);
+			pivot.set(pos).lerp(rightThread, alpha);
+			pivot.set(rightThread);
+
 		} else {
-			// Pivot on right thread
-			Vector2 threadToCenter = new Vector2(pos).sub(rightThread);
-			threadToCenter.rotate(rotDelta * delta);
-			pos.set(rightThread).add(threadToCenter);
+			pivot.set(pos);
 		}
+
+		Vector2 threadToCenter = new Vector2(pos).sub(pivot);
+		threadToCenter.rotate(rotDelta * delta);
+		pos.set(pivot).add(threadToCenter);
 
 		vel.set(leftThreadVel + rightThreadVel, 0).scl(0.5f).rotate(rotation);
 		pos.add(vel.scl(delta));
@@ -147,13 +161,13 @@ public class StrikeBaseTest extends Vehicle {
 	@Override
 	public void turnLeft() {
 		this.rightThreadVel = Math.min(rightThreadVel + accel, maxTurnSpeed);
-		this.leftThreadVel = Math.min(Math.max(leftThreadVel - accel / 2f, -maxTurnSpeed / 2f), maxTurnSpeed);
+		this.leftThreadVel = Math.min(Math.max(leftThreadVel - accel / 2f, -maxReverseSpeed), maxTurnSpeed);
 	}
 
 	@Override
 	public void turnRight() {
 		this.leftThreadVel = Math.min(leftThreadVel + accel, maxTurnSpeed);
-		this.rightThreadVel = Math.min(Math.max(rightThreadVel - accel / 2f, -maxTurnSpeed / 2f), maxTurnSpeed);
+		this.rightThreadVel = Math.min(Math.max(rightThreadVel - accel / 2f, -maxReverseSpeed), maxTurnSpeed);
 	}
 
 	@Override

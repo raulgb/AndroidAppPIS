@@ -42,7 +42,7 @@ public class DummyGLScreen extends Screen {
 	StrikeBaseTest strikeBase;
 	ArrayList<Turret> turrets;
 
-	TextureSprite grid;
+	TextureSprite grass;
 	TextureSprite moveIcon;
 	TextureSprite dot;
 
@@ -63,12 +63,12 @@ public class DummyGLScreen extends Screen {
 		turrets.add(new Turret("turret_mk1", strikeBase, "turret_2"));
 		turrets.add(new Turret("turret_mk1", strikeBase, "turret_3"));
 
-		batch = new SpriteBatch(game.getGLGraphics(), 128);
+		batch = new SpriteBatch(game.getGLGraphics(), 512);
 
 		moveIcon = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("cursor_move"));
 		moveIcon.setScale(0.25f);
 
-		grid = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("grid"));
+		grass = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("grass"));
 		dot = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("dot"));
 		dot.setScale(0.5f);
 
@@ -92,19 +92,9 @@ public class DummyGLScreen extends Screen {
 		GL10 gl = game.getGLGraphics().getGL();
 		GLGraphics glGraphics = game.getGLGraphics();
 
-		float frustumWidth = width;
-		float frustumHeight = height;
-		float zoom = 1 / 8f;
-
 		gl.glViewport(0, 0, glGraphics.getWidth(), glGraphics.getHeight());
 		gl.glMatrixMode(GL10.GL_PROJECTION);
 		gl.glLoadIdentity();
-		gl.glOrthof(
-				camPos.x - frustumWidth * zoom / 2,
-				camPos.x + frustumWidth * zoom / 2,
-				camPos.y - frustumHeight * zoom / 2,
-				camPos.y + frustumHeight * zoom / 2,
-				1, -1);
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
 	}
@@ -113,18 +103,24 @@ public class DummyGLScreen extends Screen {
 	@Override
 	public void update(float delta) {
 		for (Input.TouchEvent e : game.getInput().getTouchEvents()) {
-			if (e.type != Input.TouchEvent.TOUCH_DOWN)
+			if (e.type == Input.TouchEvent.TOUCH_UP)
 				continue;
+
+			// Manually unproject screen to world:
+			// Invert y axis
+			// substract half-width and half-height
+			// scale by the zoom (zoom factor x8)
+			// add camera offset
 			e.y = glGraphics.getHeight() - e.y;
-			e.x = (e.x - glGraphics.getWidth() / 2) / 8;
-			e.y = (e.y - glGraphics.getHeight() / 2) / 8;
+			e.x = (e.x - glGraphics.getWidth() / 2) / 8 + (int)camPos.x;
+			e.y = (e.y - glGraphics.getHeight() / 2) / 8 + (int)camPos.y;
 			targetPos.set(e.x, e.y);
 		}
 
 		Vector2 sbPos = strikeBase.getPosition();
 		float sbRot = strikeBase.getRotation();
 
-		// Move AI
+		// Move AI, strikebase follows the move pointer
 		if (tmp.set(targetPos).sub(sbPos).len2() > 5 * 5) {
 			float angleDelta = Angle.angleDelta(sbRot, tmp.angle());
 			if (Math.abs(angleDelta) > 5) {
@@ -138,6 +134,9 @@ public class DummyGLScreen extends Screen {
 		} else {
 			strikeBase.brake();
 		}
+
+		camPos.set(strikeBase.getPosition());
+		updateCamera(glGraphics.getWidth(), glGraphics.getHeight(), 1 / 8f);
 
 
 		strikeBase.update(delta);
@@ -156,22 +155,44 @@ public class DummyGLScreen extends Screen {
 
 		batch.begin(Assets.SPRITE_ATLAS.getTexture());
 
-		for (int y = 0; y < 8; y++)
-			for (int x = 0; x < 8; x++)
-				grid.draw(batch, x * 32, y * 32);
+		// Draw terrain
+		for (int y = -8; y < 8; y++)
+			for (int x = -8; x < 8; x++)
+				grass.draw(batch, 16 + x * 32, 16 + y * 32);
 
 		moveIcon.draw(batch, targetPos.x, targetPos.y);
 		strikeBase.draw(batch);
 		for (Turret t : turrets)
 			t.draw(batch);
 
+		// Debug drawing
 //		Vector2 lThread = strikeBase.getAnchor("left_thread");
 //		Vector2 rThread = strikeBase.getAnchor("right_thread");
 //		dot.draw(batch, lThread.x, lThread.y);
 //		dot.draw(batch, rThread.x, rThread.y);
+//		Vector2 pivot = strikeBase.getAnchor("pivot");
+//		dot.draw(batch, pivot.x, pivot.y);
 
 		batch.end();
 	}
+
+	/** Manuallt set the orthographic camera to the camPos vector */
+	private void updateCamera(float w, float h, float zoom) {
+		// TODO Make this a separate class and add rotation
+		float frustumWidth = w;
+		float frustumHeight = h;
+
+		GL10 gl = game.getGLGraphics().getGL();
+		gl.glLoadIdentity();
+		gl.glOrthof(
+				camPos.x - frustumWidth * zoom / 2,
+				camPos.x + frustumWidth * zoom / 2,
+				camPos.y - frustumHeight * zoom / 2,
+				camPos.y + frustumHeight * zoom / 2,
+				1, -1
+		);
+	}
+
 
 	@Override
 	public void pause() {
