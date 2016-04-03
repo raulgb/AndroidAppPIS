@@ -15,8 +15,6 @@ public abstract class Vehicle extends GameObject {
 		anchors = new HashMap<>(8);
 	}
 
-	public abstract void draw(SpriteBatch batch);
-
 	public abstract void turnLeft();
 
 	public abstract void turnRight();

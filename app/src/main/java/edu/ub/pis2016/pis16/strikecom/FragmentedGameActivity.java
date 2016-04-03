@@ -13,6 +13,7 @@ import edu.ub.pis2016.pis16.strikecom.component.SidebarFragment;
 import edu.ub.pis2016.pis16.strikecom.controller.SidebarEventListener;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.entity.StrikeBaseTest;
+import edu.ub.pis2016.pis16.strikecom.entity.Turret;
 import edu.ub.pis2016.pis16.strikecom.screens.DummyGLScreen;
 
 public class FragmentedGameActivity extends Activity {
@@ -29,16 +30,16 @@ public class FragmentedGameActivity extends Activity {
 		// Hide window decorations
 		hideStatusAndNavBar();
 
-		// Obtain wakelok (to keep the screen on)
-		PowerManager powerManager = (PowerManager)getSystemService(Context.POWER_SERVICE);
+		// Obtain wakelock (to keep the screen on)
+		PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
 		wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, "GLGame");
 
 		// Load layout with both fragments defined
 		setContentView(R.layout.activity_fragmented_game);
 
 		// Get a reference to both fragments
-		game = (StrikeComGLGame)getFragmentManager().findFragmentById(R.id.gameFragment);
-		sidebar = (SidebarFragment)getFragmentManager().findFragmentById(R.id.sidebarFragment);
+		game = (StrikeComGLGame) getFragmentManager().findFragmentById(R.id.gameFragment);
+		sidebar = (SidebarFragment) getFragmentManager().findFragmentById(R.id.sidebarFragment);
 
 		// Give the sidebar fragment a reference to the game fragment.
 		sidebar.setGame(game);
@@ -57,12 +58,26 @@ public class FragmentedGameActivity extends Activity {
 
 		game.setSidebarListener(new SidebarEventListener(game) {
 			@Override
-			public void onClickMinimap() {
-				Screen s = this.game.getCurrentScreen();
-				if (s instanceof DummyGLScreen) {
-					DummyGLScreen screen = (DummyGLScreen)s;
-					StrikeBaseTest sb = screen.getGameObject("StrikeBase", StrikeBaseTest.class);
-					sb.setPosition(0, 0);
+			public void onClickInventory() {
+				// TODO ARNAU: Aqui para meter o quitar el DialogFragment del inventorio
+			}
+
+			@Override
+			public void onClickTurret(int index) {
+				if(index > 3 || index == 1)
+					return;
+
+				Screen s = game.getCurrentScreen();
+				String turretName = "Turret"+index;
+
+				if (s.getGameObject(turretName) != null)
+					// remove existing
+					s.removeGameObject(turretName);
+				else {
+					// Create and put new turret
+					StrikeBaseTest sb = s.getGameObject("StrikeBase", StrikeBaseTest.class);
+					s.putGameObject(turretName, new Turret("turret_mk1", sb, "turret_"+index));
+					s.getGameObject(turretName).setLayer(1);
 				}
 			}
 		});

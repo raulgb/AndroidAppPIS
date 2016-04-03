@@ -15,31 +15,10 @@ public abstract class SidebarEventListener {
 		this.game = game;
 	}
 
-	public void onClickTurret1() {
+	public void onClickTurret(int index) {
 	}
 
-	public void onClickTurret2() {
-	}
-
-	public void onClickTurret3() {
-	}
-
-	public void onClickTurret4() {
-	}
-
-	public void onClickTurret5() {
-	}
-
-	public void onClickTurret6() {
-	}
-
-	public void onClickUpgrade1() {
-	}
-
-	public void onClickUpgrade2() {
-	}
-
-	public void onClickUpgrade3() {
+	public void onClickUpgrade(int index) {
 	}
 
 	public void onClickMinimap() {

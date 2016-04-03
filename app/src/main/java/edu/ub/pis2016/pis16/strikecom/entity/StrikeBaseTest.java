@@ -12,8 +12,8 @@ public class StrikeBaseTest extends Vehicle {
 	private final int LEFT = 0, RIGHT = 1;
 
 	private TextureSprite hull;
-	private TextureSprite threads_left;
-	private TextureSprite threads_right;
+	private TextureSprite leftThreads;
+	private TextureSprite rightThreads;
 
 	private TextureRegion[] sbmk1_hull;
 	private TextureRegion[][] sbmk1_threads;
@@ -34,10 +34,10 @@ public class StrikeBaseTest extends Vehicle {
 	private float rotation;
 
 	// Anchors
+	private Vector2 turret_0 = new Vector2();
 	private Vector2 turret_1 = new Vector2();
 	private Vector2 turret_2 = new Vector2();
 	private Vector2 turret_3 = new Vector2();
-	private Vector2 turret_4 = new Vector2();
 
 	private Vector2 pivot = new Vector2();
 	private Vector2 leftThread = new Vector2();
@@ -64,10 +64,8 @@ public class StrikeBaseTest extends Vehicle {
 
 		// Create sprites
 		hull = new TextureSprite(sbmk1_hull[0]);
-
-		threads_left = new TextureSprite(sbmk1_threads[LEFT][0]);
-
-		threads_right = new TextureSprite(sbmk1_threads[RIGHT][0]);
+		leftThreads = new TextureSprite(sbmk1_threads[LEFT][0]);
+		rightThreads = new TextureSprite(sbmk1_threads[RIGHT][0]);
 
 		// Animations
 		threadAnim = new Animation[2];
@@ -77,10 +75,10 @@ public class StrikeBaseTest extends Vehicle {
 		threadAnim[1].setFrameSpeed(0);
 
 		// Create and put anchors
+		this.putAnchor("turret_0", turret_0);
 		this.putAnchor("turret_1", turret_1);
 		this.putAnchor("turret_2", turret_2);
 		this.putAnchor("turret_3", turret_3);
-		this.putAnchor("turret_4", turret_4);
 
 		this.putAnchor("pivot", pivot);
 		this.putAnchor("left_thread", leftThread);
@@ -131,29 +129,29 @@ public class StrikeBaseTest extends Vehicle {
 		vel.set(leftThreadVel + rightThreadVel, 0).scl(0.5f).rotate(rotation);
 		pos.add(vel.scl(delta));
 
-		rotation = (rotation + rotDelta) %360;
-		if(rotation < 0)
+		rotation = (rotation + rotDelta) % 360;
+		if (rotation < 0)
 			rotation = 360 + rotation;
 
 		// TODO Make this more universal, range 0-1 and depending on actual size (game units)
-		turret_1.set(8, -8).scl(hull.getScale()).rotate(rotation).add(pos);
-		turret_2.set(-8, 8).scl(hull.getScale()).rotate(rotation).add(pos);
-		turret_3.set(-8, -8).scl(hull.getScale()).rotate(rotation).add(pos);
-
+		turret_0.set(-8, 8).scl(hull.getScale()).rotate(rotation).add(pos);
+		turret_1.set(8, 8).scl(hull.getScale()).rotate(rotation).add(pos);
+		turret_2.set(-8, -8).scl(hull.getScale()).rotate(rotation).add(pos);
+		turret_3.set(8, -8).scl(hull.getScale()).rotate(rotation).add(pos);
 	}
 
 	@Override
 	public void draw(SpriteBatch batch) {
-		threads_left.setRegion(sbmk1_threads[LEFT][threadAnim[0].frame()]);
-		threads_right.setRegion(sbmk1_threads[RIGHT][threadAnim[1].frame()]);
+		leftThreads.setRegion(sbmk1_threads[LEFT][threadAnim[0].frame()]);
+		rightThreads.setRegion(sbmk1_threads[RIGHT][threadAnim[1].frame()]);
 		hull.setRegion(sbmk1_hull[0]);
 
-		threads_left.setRotation(rotation);
-		threads_right.setRotation(rotation);
+		leftThreads.setRotation(rotation);
+		rightThreads.setRotation(rotation);
 		hull.setRotation(rotation);
 
-		threads_left.draw(batch, pos.x, pos.y);
-		threads_right.draw(batch, pos.x, pos.y);
+		leftThreads.draw(batch, pos.x, pos.y);
+		rightThreads.draw(batch, pos.x, pos.y);
 		hull.draw(batch, pos.x, pos.y);
 	}
 

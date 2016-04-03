@@ -9,6 +9,7 @@ import javax.microedition.khronos.opengles.GL10;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Game;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Input;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
+import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Angle;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.GLGraphics;
@@ -40,8 +41,6 @@ public class DummyGLScreen extends Screen {
 	SpriteBatch batch;
 
 	StrikeBaseTest strikeBase;
-	ArrayList<Turret> turrets;
-
 	TextureSprite grass;
 	TextureSprite moveIcon;
 	TextureSprite dot;
@@ -58,17 +57,12 @@ public class DummyGLScreen extends Screen {
 
 		strikeBase = new StrikeBaseTest("sbmk2");
 
-		turrets = new ArrayList<>(4);
-		turrets.add(new Turret("turret_mk1", strikeBase, "turret_1"));
-		turrets.add(new Turret("turret_mk1", strikeBase, "turret_2"));
-		turrets.add(new Turret("turret_mk1", strikeBase, "turret_3"));
-
-		this.putGameObject("StrikeBase", strikeBase);
+		putGameObject("StrikeBase", strikeBase);
 
 		batch = new SpriteBatch(game.getGLGraphics(), 512);
 
 		moveIcon = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("cursor_move"));
-		moveIcon.setScale(0.25f);
+		moveIcon.setScale(0.5f);
 
 		grass = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("grass"));
 		dot = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("dot"));
@@ -141,10 +135,12 @@ public class DummyGLScreen extends Screen {
 		updateCamera(glGraphics.getWidth(), glGraphics.getHeight(), 1 / 8f);
 
 
-		strikeBase.update(delta);
-		for (Turret t : turrets) {
-			t.aimAt(targetPos);
-			t.update(delta);
+		// Update GameObjects
+		for(GameObject go : getGameObjects()) {
+			if(go instanceof Turret)
+				((Turret)go).aimAt(targetPos);
+
+			go.update(delta);
 		}
 
 	}
@@ -160,12 +156,12 @@ public class DummyGLScreen extends Screen {
 		// Draw terrain
 		for (int y = -8; y < 8; y++)
 			for (int x = -8; x < 8; x++)
-				grass.draw(batch, 16 + x * 32, 16 + y * 32);
+				grass.draw(batch, 16 + x * 31.99f, 16 + y * 31.99f);
 
 		moveIcon.draw(batch, targetPos.x, targetPos.y);
-		strikeBase.draw(batch);
-		for (Turret t : turrets)
-			t.draw(batch);
+
+		for(GameObject go : this.getGameObjects())
+			go.draw(batch);
 
 		// Debug drawing
 //		Vector2 lThread = strikeBase.getAnchor("left_thread");
@@ -180,7 +176,7 @@ public class DummyGLScreen extends Screen {
 
 	/** Manuallt set the orthographic camera to the camPos vector */
 	private void updateCamera(float w, float h, float zoom) {
-		// TODO Make this a separate class and add rotation
+		// TODO Make this a separate OrthographicCamera class and add rotation
 		float frustumWidth = w;
 		float frustumHeight = h;
 
