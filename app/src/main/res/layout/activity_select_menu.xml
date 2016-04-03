@@ -81,7 +81,7 @@
 
         <Button
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="60dp"
             android:text="START"
             android:id="@+id/btnStart"
             android:layout_marginRight="30dp"
