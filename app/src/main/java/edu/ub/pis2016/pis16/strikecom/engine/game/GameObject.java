@@ -17,7 +17,12 @@ public abstract class GameObject {
 		components = new HashMap<>();
 	}
 
-	/** Sets the layer ordering, lowest values get rendered first. */
+	/**
+	 * Sets the layer ordering, lowest values get rendered first.
+	 * <p/>
+	 * <b>WARNING:</b> Set the layer BEFORE adding to a Screen. To change layer if already inside, remove from
+	 * Screen, change layer, and add back.
+	 */
 	public void setLayer(int layerID) {
 		this.layerID = layerID;
 	}

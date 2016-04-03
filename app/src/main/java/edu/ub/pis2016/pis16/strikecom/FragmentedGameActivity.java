@@ -14,7 +14,6 @@ import edu.ub.pis2016.pis16.strikecom.controller.SidebarEventListener;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.entity.StrikeBaseTest;
 import edu.ub.pis2016.pis16.strikecom.entity.Turret;
-import edu.ub.pis2016.pis16.strikecom.screens.DummyGLScreen;
 
 public class FragmentedGameActivity extends Activity {
 
@@ -64,34 +63,28 @@ public class FragmentedGameActivity extends Activity {
 
 			@Override
 			public void onClickTurret(int index) {
-				if(index > 3 || index == 1)
+				if (index > 3 || index == 1)
 					return;
 
-				Screen s = game.getCurrentScreen();
-				String turretName = "Turret"+index;
+				Screen screen = game.getCurrentScreen();
+				String tName = "Turret" + index;
 
-				if (s.getGameObject(turretName) != null)
+				if (screen.getGameObject(tName) != null)
 					// remove existing
-					s.removeGameObject(turretName);
+					screen.removeGameObject(tName);
 				else {
 					// Create and put new turret
-					StrikeBaseTest sb = s.getGameObject("StrikeBase", StrikeBaseTest.class);
-					s.putGameObject(turretName, new Turret("turret_mk1", sb, "turret_"+index));
-					s.getGameObject(turretName).setLayer(1);
+					StrikeBaseTest sb = screen.getGameObject("StrikeBase", StrikeBaseTest.class);
+					Turret newTurret = new Turret("turret_mk1", sb, "turret_" + index);
+					newTurret.setLayer(1);
+					screen.putGameObject(tName, newTurret);
+					screen.getGameObject(tName).update(0);
 				}
 			}
 		});
 	}
 
 	private void hideStatusAndNavBar() {
-		/*
-		getActivity().requestWindowFeature(Window.FEATURE_NO_TITLE);
-		getActivity().getWindow().setFlags(
-				WindowManager.LayoutParams.FLAG_FULLSCREEN,
-				WindowManager.LayoutParams.FLAG_FULLSCREEN
-		);
-		*/
-
 		getWindow().getDecorView().setSystemUiVisibility(
 				View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 						| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION

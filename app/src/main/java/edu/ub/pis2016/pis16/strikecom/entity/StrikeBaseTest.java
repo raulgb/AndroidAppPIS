@@ -52,6 +52,8 @@ public class StrikeBaseTest extends Vehicle {
 	public StrikeBaseTest(String model) {
 		super();
 
+		// TODO Read config parameters for each model from a file or something
+
 		sbmk1_hull = new TextureRegion[numDmgHulls];
 		for (int i = 0; i < numDmgHulls; i++)
 			sbmk1_hull[i] = Assets.SPRITE_ATLAS.getRegion(model + "_hull", i);

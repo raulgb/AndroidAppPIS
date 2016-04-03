@@ -58,13 +58,12 @@ public abstract class Screen implements Disposable {
 
 	/** Returns a list of GameObjects, ordered by their layerID, in ascending order (Ideal for drawing) */
 	public List<GameObject> getGameObjects() {
-		// TODO Cache result on add/remove and not on get
-		reorderGameObjectsByLayer();
 		return goOrderedList;
 	}
 
 	public void putGameObject(String name, GameObject object) {
 		gameObjects.put(name, object);
+		reorderGameObjectsByLayer();
 	}
 
 	public void removeGameObject(GameObject object) {
@@ -73,12 +72,15 @@ public abstract class Screen implements Disposable {
 			if (entry.getValue() == object)
 				keyToRemove = entry.getKey();
 		}
-		if (keyToRemove != null)
+		if (keyToRemove != null) {
 			gameObjects.remove(keyToRemove);
+			reorderGameObjectsByLayer();
+		}
 	}
 
 	public void removeGameObject(String name) {
 		gameObjects.remove(name);
+		reorderGameObjectsByLayer();
 	}
 
 	private void reorderGameObjectsByLayer() {
