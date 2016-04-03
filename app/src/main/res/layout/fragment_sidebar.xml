@@ -9,34 +9,34 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="@dimen/minimap_size">
+        android:layout_height="@dimen/minimap_size"
+        android:layout_marginLeft="1dp">
 
         <Button
             android:layout_width="@dimen/minimap_size"
             android:layout_height="@dimen/minimap_size"
             android:text="MINIMAP"
             android:id="@+id/minimap"
-            />
+            android:layout_margin="1dp" />
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="right"
             android:layout_marginRight="@dimen/sidebar_horizontal_margin"
-            >
+            android:layout_gravity="center_vertical">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                >
+                android:layout_marginBottom="4dp">
 
                 <ImageView
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:layout_marginTop="10dp"
                     android:src="@drawable/scrap64x64"
                     android:id="@+id/scrap_icon"/>
                 <TextView
@@ -44,7 +44,6 @@
                     android:layout_height="wrap_content"
                     android:text="0000"
                     android:id="@+id/textScrap"
-                    android:layout_marginTop="10dp"
                     android:layout_marginLeft="5dp"
                     android:textStyle="bold"
                     android:textSize="18sp"/>
@@ -54,12 +53,12 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginTop="4dp">
 
                 <ImageView
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:layout_marginTop="10dp"
                     android:src="@drawable/fuel64x64"
                     android:id="@+id/fuel_icon"/>
                 <TextView
@@ -67,7 +66,6 @@
                     android:layout_height="wrap_content"
                     android:text="0000"
                     android:id="@+id/textFuel"
-                    android:layout_marginTop="10dp"
                     android:textStyle="bold"
                     android:textSize="18sp"
                     android:layout_marginLeft="5dp"/>
@@ -84,12 +82,12 @@
         />
 
     <GridLayout
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:columnCount="3"
         android:rowCount="3"
         android:layout_gravity="center_horizontal"
-        >
+        android:layout_marginLeft="1dp">
 
         <Button
             style="?android:attr/buttonStyleSmall"
@@ -157,11 +155,12 @@
         />
 
     <GridLayout
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:columnCount="3"
         android:rowCount="1"
-        android:layout_gravity="center_horizontal">
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="1dp">
 
         <Button
             style="?android:attr/buttonStyleSmall"
@@ -207,5 +206,6 @@
         android:text="Inventory"
         android:id="@+id/btnInventory"
         android:layout_marginBottom="@dimen/sidebar_vertical_margin"
-        android:layout_marginEnd="@dimen/sidebar_horizontal_margin"/>
+        android:layout_marginRight="2dp"
+        android:layout_marginLeft="1dp" />
 </LinearLayout>

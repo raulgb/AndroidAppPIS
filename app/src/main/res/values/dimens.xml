@@ -7,5 +7,5 @@
     <dimen name="sidebar_vertical_margin">6dp</dimen>
 
     <dimen name="minimap_size">100dp</dimen>
-    <dimen name="grid_btn_size">58dp</dimen>
+    <dimen name="grid_btn_size">59dp</dimen>
 </resources>
