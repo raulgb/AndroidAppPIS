@@ -29,7 +29,9 @@
             android:textSize="50dp"
             android:layout_weight="0.3"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="35dp" />
+            android:layout_marginLeft="35dp"
+            style="?android:attr/borderlessButtonStyle"
+            android:background="@drawable/botton2"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -48,7 +50,9 @@
             android:textSize="50dp"
             android:layout_weight="0.3"
             android:layout_gravity="center_vertical"
-            android:layout_marginRight="35dp" />
+            android:layout_marginRight="35dp"
+            style="?android:attr/borderlessButtonStyle"
+            android:background="@drawable/botton2" />
     </LinearLayout>
 
     <LinearLayout
@@ -82,6 +86,8 @@
             android:id="@+id/btnStart"
             android:layout_marginRight="35dp"
             android:textSize="30dp"
-            android:layout_gravity="center_vertical" />
+            android:layout_gravity="center_vertical"
+            style="?android:attr/borderlessButtonStyle"
+            android:background="@drawable/botton2"/>
     </LinearLayout>
 </LinearLayout>

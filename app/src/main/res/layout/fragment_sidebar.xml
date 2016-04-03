@@ -17,7 +17,9 @@
             android:layout_height="@dimen/minimap_size"
             android:text="MINIMAP"
             android:id="@+id/minimap"
-            android:layout_margin="1dp" />
+            android:layout_margin="1dp"
+            style="?android:attr/borderlessButtonStyle"
+            android:background="@drawable/botton2" />
 
         <LinearLayout
             android:orientation="vertical"
@@ -91,13 +93,15 @@
 
         <Button
             style="?android:attr/buttonStyleSmall"
+
             android:layout_width="@dimen/grid_btn_size"
             android:layout_height="@dimen/grid_btn_size"
             android:text="T1"
             android:id="@+id/btnT1"
             android:layout_row="0"
             android:layout_column="0"
-            android:layout_rowWeight="0.3"/>
+            android:layout_rowWeight="0.3"
+            android:background="@drawable/botton2"/>
 
         <Button
             style="?android:attr/buttonStyleSmall"
@@ -108,6 +112,7 @@
             android:layout_row="0"
             android:layout_column="1"
             android:layout_rowWeight="0.3"
+            android:background="@drawable/botton2"
             />
 
         <Button
@@ -118,7 +123,8 @@
             android:id="@+id/btnT3"
             android:layout_row="0"
             android:layout_column="2"
-            android:layout_rowWeight="0.3"/>
+            android:layout_rowWeight="0.3"
+            android:background="@drawable/botton2"/>
 
         <Button
             style="?android:attr/buttonStyleSmall"
@@ -127,7 +133,8 @@
             android:text="T4"
             android:id="@+id/btnT4"
             android:layout_row="1"
-            android:layout_column="0"/>
+            android:layout_column="0"
+            android:background="@drawable/botton2"/>
 
         <Button
             style="?android:attr/buttonStyleSmall"
@@ -136,7 +143,8 @@
             android:text="T5"
             android:id="@+id/btnT5"
             android:layout_row="1"
-            android:layout_column="1"/>
+            android:layout_column="1"
+            android:background="@drawable/botton2"/>
 
         <Button
             style="?android:attr/buttonStyleSmall"
@@ -145,7 +153,8 @@
             android:text="T6"
             android:id="@+id/btnT6"
             android:layout_row="1"
-            android:layout_column="2"/>
+            android:layout_column="2"
+            android:background="@drawable/botton2"/>
     </GridLayout>
 
     <Space
@@ -170,7 +179,8 @@
             android:id="@+id/btnU1"
             android:layout_row="0"
             android:layout_column="0"
-            android:layout_rowWeight="0.3"/>
+            android:layout_rowWeight="0.3"
+            android:background="@drawable/botton2"/>
 
         <Button
             style="?android:attr/buttonStyleSmall"
@@ -180,7 +190,8 @@
             android:id="@+id/btnU2"
             android:layout_row="0"
             android:layout_column="1"
-            android:layout_rowWeight="0.3"/>
+            android:layout_rowWeight="0.3"
+            android:background="@drawable/botton2"/>
 
         <Button
             style="?android:attr/buttonStyleSmall"
@@ -190,7 +201,8 @@
             android:id="@+id/btnU3"
             android:layout_row="0"
             android:layout_column="2"
-            android:layout_rowWeight="0.3"/>
+            android:layout_rowWeight="0.3"
+            android:background="@drawable/botton2"/>
 
     </GridLayout>
 
@@ -207,5 +219,6 @@
         android:id="@+id/btnInventory"
         android:layout_marginBottom="@dimen/sidebar_vertical_margin"
         android:layout_marginRight="2dp"
-        android:layout_marginLeft="1dp" />
+        android:layout_marginLeft="1dp"
+        android:background="@drawable/botton2"/>
 </LinearLayout>
