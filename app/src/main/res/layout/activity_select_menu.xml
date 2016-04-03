@@ -7,7 +7,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Select Strike Base"
+        android:text="@string/sel_menu_description"
         android:id="@+id/textView"
         android:layout_weight="0"
         android:layout_marginTop="15dp"
@@ -24,7 +24,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="&lt;"
+            android:text="@string/sel_menu_prev"
             android:id="@+id/btnPrev"
             android:textSize="50dp"
             android:layout_weight="0.3"
@@ -36,7 +36,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TEST"
+            android:text="@string/sel_menu_testDesc"
             android:id="@+id/textView2"
             android:layout_weight="0.3"
             android:layout_gravity="center"
@@ -45,7 +45,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=">"
+            android:text="@string/sel_menu_next"
             android:id="@+id/btnNext"
             android:textSize="50dp"
             android:layout_weight="0.3"
@@ -64,7 +64,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Name:"
+            android:text="@string/sel_menu_nameLabel"
             android:id="@+id/textView3"
             android:layout_marginLeft="30dp"
             android:textSize="25dp"
@@ -82,7 +82,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="60dp"
-            android:text="START"
+            android:text="@string/sel_menu_startButton"
             android:id="@+id/btnStart"
             android:layout_marginRight="30dp"
             android:textSize="20dp"
