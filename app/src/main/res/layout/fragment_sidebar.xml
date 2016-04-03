@@ -16,7 +16,7 @@
             android:layout_width="@dimen/minimap_size"
             android:layout_height="@dimen/minimap_size"
             android:text="MINIMAP"
-            android:id="@+id/minimap"
+            android:id="@+id/btnMinimap"
             android:layout_margin="1dp"
             style="?android:attr/borderlessButtonStyle"
             android:background="@drawable/botton2" />
