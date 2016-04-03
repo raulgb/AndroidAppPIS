@@ -29,7 +29,7 @@
             android:textSize="50dp"
             android:layout_weight="0.3"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="35dp"
+            android:layout_marginLeft="30dp"
             style="?android:attr/borderlessButtonStyle"
             android:background="@drawable/botton2"/>
 
@@ -50,7 +50,7 @@
             android:textSize="50dp"
             android:layout_weight="0.3"
             android:layout_gravity="center_vertical"
-            android:layout_marginRight="35dp"
+            android:layout_marginRight="30dp"
             style="?android:attr/borderlessButtonStyle"
             android:background="@drawable/botton2" />
     </LinearLayout>
@@ -66,7 +66,7 @@
             android:layout_height="wrap_content"
             android:text="Name:"
             android:id="@+id/textView3"
-            android:layout_marginLeft="35dp"
+            android:layout_marginLeft="30dp"
             android:textSize="25dp"
             android:layout_gravity="center_vertical" />
 
@@ -74,20 +74,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textName"
-            android:layout_weight="1"
+            android:layout_weight="0.95"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="20dp"
             android:layout_gravity="center_vertical" />
 
         <Button
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:text="START"
             android:id="@+id/btnStart"
-            android:layout_marginRight="35dp"
-            android:textSize="30dp"
+            android:layout_marginRight="30dp"
+            android:textSize="20dp"
             android:layout_gravity="center_vertical"
             style="?android:attr/borderlessButtonStyle"
-            android:background="@drawable/botton2"/>
+            android:background="@drawable/botton2"
+            android:layout_weight="0.05" />
     </LinearLayout>
 </LinearLayout>
