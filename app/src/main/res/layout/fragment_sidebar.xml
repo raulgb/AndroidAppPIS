@@ -29,13 +29,15 @@
             android:layout_weight="1"
             android:gravity="right"
             android:layout_marginRight="@dimen/sidebar_horizontal_margin"
-            android:layout_gravity="center_vertical">
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="2dp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="4dp">
+                android:layout_marginBottom="4dp"
+                android:layout_gravity="center_horizontal">
 
                 <ImageView
                     android:layout_width="22dp"
@@ -57,7 +59,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="4dp">
+                android:layout_marginTop="4dp"
+                android:layout_gravity="center_horizontal">
 
                 <ImageView
                     android:layout_width="22dp"
