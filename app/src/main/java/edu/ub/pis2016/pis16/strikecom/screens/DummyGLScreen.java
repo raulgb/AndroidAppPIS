@@ -1,11 +1,13 @@
 package edu.ub.pis2016.pis16.strikecom.screens;
 
+import android.content.Context;
 import android.util.Log;
 
 import java.util.ArrayList;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import edu.ub.pis2016.pis16.strikecom.StrikeComGLGame;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Game;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Input;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
@@ -132,7 +134,7 @@ public class DummyGLScreen extends Screen {
 		}
 
 		camPos.set(strikeBase.getPosition());
-		updateCamera(glGraphics.getWidth(), glGraphics.getHeight(), 1 / 8f);
+		updateCamera(glGraphics.getWidth(), glGraphics.getHeight(), 1 / getZoomConstant());
 
 
 		// Update GameObjects
@@ -143,6 +145,24 @@ public class DummyGLScreen extends Screen {
 			go.update(delta);
 		}
 
+	}
+
+	private float getZoomConstant() {
+		Context ctx = ((StrikeComGLGame)game).getActivity().getApplicationContext();
+
+		/*	DENSITY IDs:
+				xxxhdpi - 4.0
+				xxhdpi - 3.0
+				xhdpi - 2.0
+				hdpi - 1.5
+				tvdpi - 1.33
+				mdpi - 1.0
+				ldpi - 0.75
+		 */
+		float density_id = ctx.getResources().getDisplayMetrics().density;
+
+		//Based on the fact that xxhdpi has a constant of 8
+		return density_id * 8.0f / 3.0f;
 	}
 
 
@@ -174,7 +194,7 @@ public class DummyGLScreen extends Screen {
 		batch.end();
 	}
 
-	/** Manuallt set the orthographic camera to the camPos vector */
+	/** Manually set the orthographic camera to the camPos vector */
 	private void updateCamera(float w, float h, float zoom) {
 		// TODO Make this a separate OrthographicCamera class and add rotation
 		float frustumWidth = w;

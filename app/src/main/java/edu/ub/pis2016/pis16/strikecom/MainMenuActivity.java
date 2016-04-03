@@ -13,6 +13,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+
 		super.onCreate(savedInstanceState);
 		mainMenu = this;
 
