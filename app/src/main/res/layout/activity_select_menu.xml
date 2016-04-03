@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="fill_parent">
+              android:layout_height="fill_parent"
+              android:background="@drawable/select_bg">
 
     <TextView
         android:layout_width="wrap_content"
@@ -13,7 +14,8 @@
         android:layout_marginTop="15dp"
         android:textSize="35dp"
         android:textStyle="bold"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/foreground_material_light"/>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -22,7 +24,7 @@
         android:layout_weight="0.6">
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/sel_menu_prev"
             android:id="@+id/btnPrev"
@@ -31,19 +33,20 @@
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="30dp"
             style="?android:attr/borderlessButtonStyle"
-            android:background="@drawable/botton2"/>
+            android:background="@drawable/botton2"
+            android:layout_marginRight="10dp"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/sel_menu_testDesc"
-            android:id="@+id/textView2"
-            android:layout_weight="0.3"
-            android:layout_gravity="center"
-            android:textAlignment="center" />
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="128dp"
+            android:id="@+id/imgSelectedBase"
+            android:layout_weight="0.4"
+            android:src="@drawable/sbmk2"
+            android:layout_gravity="center_vertical"
+            />
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/sel_menu_next"
             android:id="@+id/btnNext"
@@ -52,8 +55,20 @@
             android:layout_gravity="center_vertical"
             android:layout_marginRight="30dp"
             style="?android:attr/borderlessButtonStyle"
-            android:background="@drawable/botton2" />
+            android:background="@drawable/botton2"
+            android:layout_marginLeft="10dp"/>
     </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/sel_menu_mk2name"
+        android:id="@+id/textView2"
+        android:layout_gravity="center"
+        android:typeface="serif"
+        android:textStyle="bold"
+        android:textSize="25dp"/>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -68,7 +83,8 @@
             android:id="@+id/textView3"
             android:layout_marginLeft="30dp"
             android:textSize="25dp"
-            android:layout_gravity="center_vertical" />
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/foreground_material_light"/>
 
         <EditText
             android:layout_width="wrap_content"

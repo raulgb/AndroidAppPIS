@@ -2,6 +2,7 @@ package edu.ub.pis2016.pis16.strikecom;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -24,26 +25,33 @@ public class SelectMenuActivity extends AppCompatActivity {
 
 		selectMenu = this;
 
-		Button btnStart = (Button)findViewById(R.id.btnStart);
+
+		Button btnStart = (Button) findViewById(R.id.btnStart);
 		btnStart.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 
 				// cannot start gameFrag if a name has not been introduced
-				EditText textName = (EditText)findViewById(R.id.textName);
+				EditText textName = (EditText) findViewById(R.id.textName);
 
 				// Disabled check
-				if(false && textName.getText().toString().isEmpty()){
+				if (false && textName.getText().toString().isEmpty()) {
 
 					Toast.makeText(getApplicationContext(), getString(R.string.enter_name_toast),
 							Toast.LENGTH_SHORT).show();
 
-				}else{
+				} else {
 					Intent changeToGame = new Intent(selectMenu, FragmentedGameActivity.class);
 					startActivity(changeToGame);
 				}
 			}
 		});
+
+		// Disable Texture Filtering
+		Paint p = new Paint();
+		p.setDither(false);
+		p.setAntiAlias(false);
+		findViewById(R.id.imgSelectedBase).setLayerPaint(p);
 
 	}
 }

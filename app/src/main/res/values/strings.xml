@@ -11,6 +11,8 @@
     <string name="sel_menu_testDesc">TEST</string>
     <string name="sel_menu_nameLabel">Name:</string>
     <string name="sel_menu_startButton">START</string>
+    <string name="sel_menu_mk1name">StrikeBase Mark. I</string>
+    <string name="sel_menu_mk2name">StrikeBase Mark. II</string>
 
     <string name="minimap">MINIMAP</string>
     <string name="resource_1">Scrap</string>
