@@ -19,7 +19,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
 		setContentView(R.layout.activity_main_menu);
 
-		Button btnPlay = (Button)findViewById(R.id.btnPlay);
+		Button btnPlay = (Button) findViewById(R.id.btnPlay);
 		btnPlay.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -28,7 +28,7 @@ public class MainMenuActivity extends AppCompatActivity {
 			}
 		});
 
-		Button btnExit = (Button)findViewById(R.id.btnExit);
+		Button btnExit = (Button) findViewById(R.id.btnExit);
 		btnExit.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -37,9 +37,16 @@ public class MainMenuActivity extends AppCompatActivity {
 			}
 		});
 
-		Button btnOptions = (Button)findViewById(R.id.bntOptions);
+		Button btnOptions = (Button) findViewById(R.id.bntOptions);
 		btnOptions.setEnabled(false);
 
 
+		getWindow().getDecorView().setSystemUiVisibility(
+				View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+						| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+						| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+						| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+						| View.SYSTEM_UI_FLAG_FULLSCREEN
+						| View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
 	}
 }
