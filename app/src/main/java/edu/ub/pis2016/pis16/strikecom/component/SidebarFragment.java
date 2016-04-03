@@ -8,12 +8,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import edu.ub.pis2016.pis16.strikecom.R;
-import edu.ub.pis2016.pis16.strikecom.engine.opengl.GLGameFragment;
+import edu.ub.pis2016.pis16.strikecom.StrikeComGLGame;
 
 
 public class SidebarFragment extends Fragment {
 
-	public GLGameFragment gameFrag;
+	protected StrikeComGLGame game;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -25,18 +25,33 @@ public class SidebarFragment extends Fragment {
 		//return super.onCreateView(inflater, container, savedInstanceState);
 		View view = inflater.inflate(R.layout.fragment_sidebar, container, false);
 
-		Button btnInventory = (Button)view.findViewById(R.id.btnInventory);
-		btnInventory.setOnClickListener(new View.OnClickListener() {
+
+		view.findViewById(R.id.btnMinimap).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-
+				game.getSidebarListener().onClickMinimap();
 			}
 		});
+
+		view.findViewById(R.id.btnInventory).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				game.getSidebarListener().onClickInventory();
+			}
+		});
+
+		view.findViewById(R.id.btnT1).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				game.getSidebarListener().onClickTurret1();
+			}
+		});
+
 
 		return view;
 	}
 
-	public void setGameFrag(GLGameFragment gameFrag) {
-		this.gameFrag = gameFrag;
+	public void setGame(StrikeComGLGame game) {
+		this.game = game;
 	}
 }

@@ -63,6 +63,8 @@ public class DummyGLScreen extends Screen {
 		turrets.add(new Turret("turret_mk1", strikeBase, "turret_2"));
 		turrets.add(new Turret("turret_mk1", strikeBase, "turret_3"));
 
+		this.putGameObject("StrikeBase", strikeBase);
+
 		batch = new SpriteBatch(game.getGLGraphics(), 512);
 
 		moveIcon = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("cursor_move"));
@@ -192,7 +194,6 @@ public class DummyGLScreen extends Screen {
 				1, -1
 		);
 	}
-
 
 	@Override
 	public void pause() {

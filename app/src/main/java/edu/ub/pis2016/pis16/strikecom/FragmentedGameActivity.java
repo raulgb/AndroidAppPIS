@@ -9,12 +9,18 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.view.View;
 
-import edu.ub.pis2016.pis16.strikecom.engine.opengl.GLGameFragment;
 import edu.ub.pis2016.pis16.strikecom.component.SidebarFragment;
+import edu.ub.pis2016.pis16.strikecom.controller.SidebarEventListener;
+import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
+import edu.ub.pis2016.pis16.strikecom.entity.StrikeBaseTest;
+import edu.ub.pis2016.pis16.strikecom.screens.DummyGLScreen;
 
 public class FragmentedGameActivity extends Activity {
 
 	PowerManager.WakeLock wakeLock;
+
+	StrikeComGLGame game;
+	SidebarFragment sidebar;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -31,11 +37,11 @@ public class FragmentedGameActivity extends Activity {
 		setContentView(R.layout.activity_fragmented_game);
 
 		// Get a reference to both fragments
-		GLGameFragment gameFragment = (GLGameFragment)getFragmentManager().findFragmentById(R.id.gameFragment);
-		SidebarFragment sidebarFragment = (SidebarFragment)getFragmentManager().findFragmentById(R.id.sidebarFragment);
+		game = (StrikeComGLGame)getFragmentManager().findFragmentById(R.id.gameFragment);
+		sidebar = (SidebarFragment)getFragmentManager().findFragmentById(R.id.sidebarFragment);
 
-		// Give the sidebar fragment a reference to the gameFrag fragment.
-		sidebarFragment.setGameFrag(gameFragment);
+		// Give the sidebar fragment a reference to the game fragment.
+		sidebar.setGame(game);
 	}
 
 	@Override
@@ -48,6 +54,18 @@ public class FragmentedGameActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		wakeLock.acquire();
+
+		game.setSidebarListener(new SidebarEventListener(game) {
+			@Override
+			public void onClickMinimap() {
+				Screen s = this.game.getCurrentScreen();
+				if (s instanceof DummyGLScreen) {
+					DummyGLScreen screen = (DummyGLScreen)s;
+					StrikeBaseTest sb = screen.getGameObject("StrikeBase", StrikeBaseTest.class);
+					sb.setPosition(0, 0);
+				}
+			}
+		});
 	}
 
 	private void hideStatusAndNavBar() {
@@ -70,24 +88,24 @@ public class FragmentedGameActivity extends Activity {
 
 	@Override
 	public void onBackPressed() {
-        //Ask the user if he/she really wants to exit gameFrag
+		//Ask the user if he/she really wants to exit game
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setIcon(android.R.drawable.ic_dialog_alert);
-        builder.setTitle(getString(R.string.quit_alert));
-        builder.setPositiveButton(getString(R.string.alert_positive), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // return to main menu
-                Intent intent = new Intent(getApplicationContext(), MainMenuActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setIcon(android.R.drawable.ic_dialog_alert);
+		builder.setTitle(getString(R.string.quit_alert));
+		builder.setPositiveButton(getString(R.string.alert_positive), new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// return to main menu
+				Intent intent = new Intent(getApplicationContext(), MainMenuActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
 
-            }
-        });
-        builder.setNegativeButton(getString(R.string.alert_negative), null);
+			}
+		});
+		builder.setNegativeButton(getString(R.string.alert_negative), null);
 
-        (builder.create()).show();
+		(builder.create()).show();
 	}
 }
 

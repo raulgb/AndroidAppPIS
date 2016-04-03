@@ -2,14 +2,16 @@ package edu.ub.pis2016.pis16.strikecom.entity;
 
 import java.util.HashMap;
 
+import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
 
-public abstract class Vehicle {
+public abstract class Vehicle extends GameObject {
 
 	private HashMap<String, Vector2> anchors;
 
 	public Vehicle(){
+		super();
 		anchors = new HashMap<>(8);
 	}
 
