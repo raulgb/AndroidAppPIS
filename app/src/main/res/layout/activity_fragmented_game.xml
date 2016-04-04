@@ -14,7 +14,7 @@
 
 
     <fragment
-        android:name="edu.ub.pis2016.pis16.strikecom.component.SidebarFragment"
+        android:name="edu.ub.pis2016.pis16.strikecom.fragments.SidebarFragment"
         android:layout_width="180dp"
         android:id="@+id/sidebarFragment"
         android:layout_height="fill_parent"

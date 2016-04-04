@@ -1,11 +1,13 @@
-package edu.ub.pis2016.pis16.strikecom.entity;
+package edu.ub.pis2016.pis16.strikecom.gameplay;
 
+import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureRegion;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureSprite;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Animation;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
+import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
 
 public class StrikeBaseTest extends Vehicle {
 
@@ -18,11 +20,10 @@ public class StrikeBaseTest extends Vehicle {
 	private TextureRegion[] sbmk1_hull;
 	private TextureRegion[][] sbmk1_threads;
 
+	private PhysicsComponent physics;
+
 	// Physics
 	private float health = 1000;
-	private Vector2 pos = new Vector2();
-	private Vector2 vel = new Vector2();
-	private Vector2 tmp = new Vector2();
 
 	private float maxSpeed = 25;
 	private float maxTurnSpeed = maxSpeed / 1f;
@@ -30,8 +31,6 @@ public class StrikeBaseTest extends Vehicle {
 	private float accel = 2;
 	private float leftThreadVel;
 	private float rightThreadVel;
-
-	private float rotation;
 
 	// Anchors
 	private Vector2 turret_0 = new Vector2();
@@ -43,23 +42,25 @@ public class StrikeBaseTest extends Vehicle {
 	private Vector2 leftThread = new Vector2();
 	private Vector2 rightThread = new Vector2();
 
-	// Sprite information
-	private int numDmgHulls = 3;
-	private int threadFrames = 4;
-
 	private Animation[] threadAnim;
 
-	public StrikeBaseTest(String model) {
+	public StrikeBaseTest(StrikeBaseConfig cfg) {
 		super();
 
-		// TODO Read config parameters for each model from a file or something
+		// Component Managing
+		physics = new PhysicsComponent();
+		putComponent(physics);
 
-		sbmk1_hull = new TextureRegion[numDmgHulls];
-		for (int i = 0; i < numDmgHulls; i++)
+
+		// TODO Read config parameters for each modelName from a file or something
+		String model = cfg.modelName;
+
+		sbmk1_hull = new TextureRegion[cfg.animHullFrames];
+		for (int i = 0; i < cfg.animHullFrames; i++)
 			sbmk1_hull[i] = Assets.SPRITE_ATLAS.getRegion(model + "_hull", i);
 
-		sbmk1_threads = new TextureRegion[2][threadFrames];
-		for (int i = 0; i < threadFrames; i++) {
+		sbmk1_threads = new TextureRegion[2][cfg.animThreadFrames];
+		for (int i = 0; i < cfg.animThreadFrames; i++) {
 			sbmk1_threads[LEFT][i] = Assets.SPRITE_ATLAS.getRegion(model + "_threads_left", i);
 			sbmk1_threads[RIGHT][i] = Assets.SPRITE_ATLAS.getRegion(model + "_threads_right", i);
 		}
@@ -71,9 +72,9 @@ public class StrikeBaseTest extends Vehicle {
 
 		// Animations
 		threadAnim = new Animation[2];
-		threadAnim[0] = new Animation(threadFrames);
+		threadAnim[0] = new Animation(cfg.animThreadFrames);
 		threadAnim[0].setFrameSpeed(0);
-		threadAnim[1] = new Animation(threadFrames);
+		threadAnim[1] = new Animation(cfg.animThreadFrames);
 		threadAnim[1].setFrameSpeed(0);
 
 		// Create and put anchors
@@ -103,28 +104,21 @@ public class StrikeBaseTest extends Vehicle {
 		// Tank-like controls VERSION 2
 		final float width = 28;
 		float rotDelta = (-leftThreadVel + rightThreadVel) / width;
-		leftThread.set(0, width / 2f).rotate(rotation).add(pos);
-		rightThread.set(0, -width / 2f).rotate(rotation).add(pos);
+		Vector2 pos = physics.getPosition();
+		Vector2 vel = physics.getVelocity();
+		float rotation = physics.getRotation();
 
-		float alpha = 0;
+		leftThread.set(0, width / 2f).rotate(physics.getRotation()).add(pos);
+		rightThread.set(0, -width / 2f).rotate(physics.getRotation()).add(pos);
 
-		if (rightThreadVel > leftThreadVel) {
-			// Use LEFT as Pivot
-			alpha = (rightThreadVel - leftThreadVel) / (rightThreadVel + leftThreadVel);
-			pivot.set(pos).lerp(leftThread, alpha);
+		if (rightThreadVel > leftThreadVel)
 			pivot.set(leftThread);
-
-		} else if (leftThreadVel > rightThreadVel) {
-			// Use RIGHT as Pivot
-			alpha = (leftThreadVel - rightThreadVel) / (rightThreadVel + leftThreadVel);
-			pivot.set(pos).lerp(rightThread, alpha);
+		else if (leftThreadVel > rightThreadVel)
 			pivot.set(rightThread);
+		else
+			pivot.set(physics.getPosition());
 
-		} else {
-			pivot.set(pos);
-		}
-
-		Vector2 threadToCenter = new Vector2(pos).sub(pivot);
+		Vector2 threadToCenter = new Vector2(physics.getPosition()).sub(pivot);
 		threadToCenter.rotate(rotDelta * delta);
 		pos.set(pivot).add(threadToCenter);
 
@@ -135,15 +129,24 @@ public class StrikeBaseTest extends Vehicle {
 		if (rotation < 0)
 			rotation = 360 + rotation;
 
+		// Commit rotation changes
+		physics.setRotation(rotation);
+
 		// TODO Make this more universal, range 0-1 and depending on actual size (game units)
 		turret_0.set(-8, 8).scl(hull.getScale()).rotate(rotation).add(pos);
 		turret_1.set(8, 8).scl(hull.getScale()).rotate(rotation).add(pos);
 		turret_2.set(-8, -8).scl(hull.getScale()).rotate(rotation).add(pos);
 		turret_3.set(8, -8).scl(hull.getScale()).rotate(rotation).add(pos);
+
+		// Commit rotation changes
+		physics.setRotation(rotation);
 	}
 
 	@Override
 	public void draw(SpriteBatch batch) {
+		Vector2 pos = physics.getPosition();
+		float rotation = physics.getRotation();
+
 		leftThreads.setRegion(sbmk1_threads[LEFT][threadAnim[0].frame()]);
 		rightThreads.setRegion(sbmk1_threads[RIGHT][threadAnim[1].frame()]);
 		hull.setRegion(sbmk1_hull[0]);
@@ -184,15 +187,4 @@ public class StrikeBaseTest extends Vehicle {
 		this.rightThreadVel = Math.max(rightThreadVel - accel, 0);
 	}
 
-	public void setPosition(float x, float y) {
-		this.pos.set(x, y);
-	}
-
-	public Vector2 getPosition() {
-		return pos;
-	}
-
-	public float getRotation() {
-		return rotation;
-	}
 }

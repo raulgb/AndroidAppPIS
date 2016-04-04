@@ -1,9 +1,10 @@
-package edu.ub.pis2016.pis16.strikecom.entity;
+package edu.ub.pis2016.pis16.strikecom.gameplay;
 
 import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
+import edu.ub.pis2016.pis16.strikecom.engine.game.component.GraphicsComponent;
+import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Angle;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
-import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureSprite;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 
@@ -12,11 +13,6 @@ public class Turret extends GameObject {
 
 	String model;
 
-	Vector2 pos;
-	float rotation;
-
-
-	Vector2 target;
 	Vector2 tmp;
 
 	TextureSprite sprite;
@@ -27,23 +23,28 @@ public class Turret extends GameObject {
 
 	public Turret(String model, Vehicle owner, String anchor) {
 		this.model = model;
-		this.pos = new Vector2();
 		this.tmp = new Vector2();
 
 		this.owner = owner;
 		this.anchor = owner.getAnchor(anchor);
 
+		putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion(model, upgradeStatus)));
+		putComponent(new PhysicsComponent());
+
 		sprite = new TextureSprite(Assets.SPRITE_ATLAS.getRegion(model, upgradeStatus));
 	}
 
+	@Override
 	public void update(float delta) {
-		this.pos.set(anchor);
+		getComponent(PhysicsComponent.class).setPosition(anchor);
+		super.update(delta);
 	}
 
-	public void draw(SpriteBatch batch) {
-		sprite.setRotation(rotation);
-		sprite.draw(batch, pos.x, pos.y);
+	public Vehicle getOwner() {
+		return owner;
 	}
+
+
 
 	public int getUpgradeStatus() {
 		return upgradeStatus;
@@ -51,14 +52,6 @@ public class Turret extends GameObject {
 
 	public void setUpgradeStatus(int status) {
 		this.upgradeStatus = status;
-		sprite = new TextureSprite(Assets.SPRITE_ATLAS.getRegion(model, status));
+		putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion(model, upgradeStatus)));
 	}
-
-	public void aimAt(Vector2 target) {
-		float angleToTarget = tmp.set(target).sub(pos).angle();
-		float angleDelta = Angle.angleDelta(rotation, angleToTarget);
-
-		this.rotation += angleDelta * 0.05f;
-	}
-
 }

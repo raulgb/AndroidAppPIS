@@ -62,6 +62,7 @@ public abstract class Screen implements Disposable {
 	}
 
 	public void putGameObject(String name, GameObject object) {
+		object.setScreen(this);
 		gameObjects.put(name, object);
 		reorderGameObjectsByLayer();
 	}
@@ -73,12 +74,12 @@ public abstract class Screen implements Disposable {
 				keyToRemove = entry.getKey();
 		}
 		if (keyToRemove != null) {
-			gameObjects.remove(keyToRemove);
-			reorderGameObjectsByLayer();
+			removeGameObject(keyToRemove);
 		}
 	}
 
 	public void removeGameObject(String name) {
+		gameObjects.get(name).setScreen(null);
 		gameObjects.remove(name);
 		reorderGameObjectsByLayer();
 	}

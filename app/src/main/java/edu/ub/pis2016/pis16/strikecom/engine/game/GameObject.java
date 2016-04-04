@@ -2,20 +2,23 @@ package edu.ub.pis2016.pis16.strikecom.engine.game;
 
 import java.util.HashMap;
 
+import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
 
 /**
  * Basic game object class, all game objects derive from this class.
  * Contains a HashMap with references to each of its components.
  */
-public abstract class GameObject {
+public class GameObject {
 
-	private HashMap<String, Component> components;
+	/** A Map of components, using their class as a Key */
+	private HashMap<Class, Component> components = new HashMap<>();
+	protected Screen screen;
+
+	/** The layer ID refers to how this component will be ordered in the draw call stack. Lower layers will be drawn first */
 	private int layerID = 0;
-
-	public GameObject() {
-		components = new HashMap<>();
-	}
+	/** Tags are used internally for BehaviorComponents to identify certain GameObject as part of the scenery, allied, enemy, etc. */
+	private String tag = "";
 
 	/**
 	 * Sets the layer ordering, lowest values get rendered first.
@@ -33,18 +36,53 @@ public abstract class GameObject {
 	}
 
 	/** Steps the game simulation. Delta is the time passed since the last frame, in seconds. */
-	public abstract void update(float delta);
+	public  void update(float delta) {
+		for (Component c : components.values())
+			if (c instanceof UpdateableComponent)
+				((UpdateableComponent) c).update(delta);
+	}
 
 	/** Draws the GameObject to the {@link SpriteBatch} provided. */
-	public abstract void draw(SpriteBatch batch);
+	public void draw(SpriteBatch batch) {
+		for (Component c : components.values())
+			if (c instanceof DrawableComponent)
+				((DrawableComponent) c).draw(batch);
+	}
 
 	/** Returns the component by that name. */
-	public Component getComponent(String name) {
-		return components.get(name);
+	public <T extends Component> T getComponent(Class<T> type) {
+		return type.cast(components.get(type));
 	}
 
 	/** Puts a new component linked to this GameObject. */
-	public void putComponent(String name, Component component) {
-		components.put(name, component);
+	public void putComponent(Component component) {
+		component.setGameObject(this);
+		components.put(component.getClass(), component);
+	}
+
+	/** Returns true if GameObject has a component of the given type. */
+	public boolean hasComponent(Class type) {
+		return (components.get(type)) == null;
+	}
+
+	/** Remove a Component from the GameObject. */
+	public void removeComponent(Class type) {
+		components.remove(type);
+	}
+
+	public void setTag(String tag) {
+		this.tag = tag;
+	}
+
+	public String getTag() {
+		return tag;
+	}
+
+	public void setScreen(Screen s) {
+		this.screen = s;
+	}
+
+	public Screen getScreen() {
+		return screen;
 	}
 }

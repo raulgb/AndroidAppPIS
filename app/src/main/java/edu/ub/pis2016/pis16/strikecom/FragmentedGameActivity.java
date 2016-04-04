@@ -9,11 +9,12 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.view.View;
 
-import edu.ub.pis2016.pis16.strikecom.component.SidebarFragment;
+import edu.ub.pis2016.pis16.strikecom.fragments.SidebarFragment;
 import edu.ub.pis2016.pis16.strikecom.controller.SidebarEventListener;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
-import edu.ub.pis2016.pis16.strikecom.entity.StrikeBaseTest;
-import edu.ub.pis2016.pis16.strikecom.entity.Turret;
+import edu.ub.pis2016.pis16.strikecom.gameplay.StrikeBaseTest;
+import edu.ub.pis2016.pis16.strikecom.gameplay.Turret;
+import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.TurretBehavior;
 
 public class FragmentedGameActivity extends Activity {
 
@@ -76,6 +77,7 @@ public class FragmentedGameActivity extends Activity {
 					// Create and put new turret
 					StrikeBaseTest sb = screen.getGameObject("StrikeBase", StrikeBaseTest.class);
 					Turret newTurret = new Turret("turret_mk1", sb, "turret_" + index);
+					newTurret.putComponent(new TurretBehavior());
 					newTurret.setLayer(1);
 					screen.putGameObject(tName, newTurret);
 					screen.getGameObject(tName).update(0);

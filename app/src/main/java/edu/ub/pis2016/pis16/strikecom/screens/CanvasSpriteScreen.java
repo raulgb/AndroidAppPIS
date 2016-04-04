@@ -15,7 +15,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.android.CanvasOrthoCamera;
 import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.math.WindowedMean;
-import edu.ub.pis2016.pis16.strikecom.entity.StrikeBase;
+import edu.ub.pis2016.pis16.strikecom.gameplay.StrikeBase;
 
 public class CanvasSpriteScreen extends Screen {
 

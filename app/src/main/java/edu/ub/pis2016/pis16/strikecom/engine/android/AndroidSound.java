@@ -1,13 +1,16 @@
 package edu.ub.pis2016.pis16.strikecom.engine.android;
 
 import android.media.SoundPool;
-import android.util.Log;
 
 import edu.ub.pis2016.pis16.strikecom.engine.framework.audio.Sound;
 
 public class AndroidSound implements Sound {
-	int soundId;
+
 	SoundPool soundPool;
+
+	int looping = 0;
+	int soundId;
+	int streamId;
 
 	public AndroidSound(SoundPool soundPool, int soundId) {
 		this.soundId = soundId;
@@ -15,27 +18,27 @@ public class AndroidSound implements Sound {
 	}
 
 	public void play(float volume) {
-		soundPool.play(soundId, volume, volume, 0, 0, 1);
+		streamId = soundPool.play(soundId, volume, volume, 0, looping, 1);
 	}
 
 	@Override
 	public void stop() {
-		soundPool.stop(soundId);
+		soundPool.stop(streamId);
 	}
 
 	@Override
 	public void pause() {
-		soundPool.pause(soundId);
+		soundPool.pause(streamId);
 	}
 
 	@Override
 	public void setLooping(boolean looping) {
-		Log.e("SOUND", "METHOD STUB: setLooping");
+		this.looping = looping ? 1 : 0;
 	}
 
 	@Override
 	public void setVolume(float volume) {
-		soundPool.setVolume(soundId, volume, volume);
+		soundPool.setVolume(streamId, volume, volume);
 
 	}
 
@@ -51,7 +54,7 @@ public class AndroidSound implements Sound {
 
 	@Override
 	public boolean isLooping() {
-		return false;
+		return looping == 1;
 	}
 
 	public void dispose() {
