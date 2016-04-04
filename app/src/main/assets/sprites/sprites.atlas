@@ -5,147 +5,168 @@ filter: Nearest,Nearest
 repeat: none
 cursor_attack
   rotate: false
-  xy: 0, 80
+  xy: 0, 74
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 cursor_move
   rotate: false
-  xy: 0, 32
+  xy: 0, 24
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
+default_enemy
+  rotate: false
+  xy: 50, 90
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+enemy
+  rotate: false
+  xy: 50, 56
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
 grass
   rotate: false
-  xy: 0, 0
+  xy: 84, 90
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 grid
   rotate: false
-  xy: 32, 0
+  xy: 84, 56
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 sbmk1_hull
   rotate: false
-  xy: 48, 96
+  xy: 118, 90
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 0
 sbmk1_hull
   rotate: false
-  xy: 48, 64
+  xy: 118, 56
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 1
 sbmk1_hull
   rotate: false
-  xy: 48, 32
+  xy: 152, 90
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 2
 sbmk2_hull
   rotate: false
-  xy: 64, 0
+  xy: 152, 56
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 0
 sbmk2_hull
   rotate: false
-  xy: 80, 96
+  xy: 186, 90
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 1
 sbmk2_hull
   rotate: false
-  xy: 80, 64
+  xy: 220, 90
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 2
 sbmk2_threads_left
   rotate: false
-  xy: 80, 32
+  xy: 186, 56
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 0
 sbmk2_threads_left
   rotate: false
-  xy: 96, 0
+  xy: 220, 56
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 1
 sbmk2_threads_left
   rotate: false
-  xy: 112, 96
+  xy: 50, 22
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 2
 sbmk2_threads_left
   rotate: false
-  xy: 112, 64
+  xy: 84, 22
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 3
 sbmk2_threads_right
   rotate: false
-  xy: 112, 32
+  xy: 118, 22
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 0
 sbmk2_threads_right
   rotate: false
-  xy: 128, 0
+  xy: 152, 22
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 1
 sbmk2_threads_right
   rotate: false
-  xy: 144, 96
+  xy: 186, 22
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 2
 sbmk2_threads_right
   rotate: false
-  xy: 144, 64
+  xy: 220, 22
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 3
 turret_mk1
   rotate: false
-  xy: 176, 112
+  xy: 0, 6
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: 0
 turret_mk1
   rotate: false
-  xy: 144, 48
+  xy: 18, 6
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: 1
+bullet
+  rotate: false
+  xy: 0, 0
+  size: 8, 4
+  orig: 8, 4
+  offset: 0, 0
+  index: -1
 dot
   rotate: false
-  xy: 160, 61
+  xy: 36, 19
   size: 3, 3
   orig: 3, 3
   offset: 0, 0

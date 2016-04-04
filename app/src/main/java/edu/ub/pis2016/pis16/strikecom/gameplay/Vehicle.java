@@ -1,10 +1,9 @@
-package edu.ub.pis2016.pis16.strikecom.entity;
+package edu.ub.pis2016.pis16.strikecom.gameplay;
 
 import java.util.HashMap;
 
 import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
-import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
 
 public abstract class Vehicle extends GameObject {
 
@@ -22,10 +21,6 @@ public abstract class Vehicle extends GameObject {
 	public abstract void accelerate();
 
 	public abstract void brake();
-
-	public abstract Vector2 getPosition();
-
-	public abstract float getRotation();
 
 	/** Returns a Vector2 anchor for usage with anchored entities */
 	public Vector2 getAnchor(String name){

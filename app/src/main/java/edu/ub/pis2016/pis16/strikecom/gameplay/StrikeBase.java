@@ -1,4 +1,4 @@
-package edu.ub.pis2016.pis16.strikecom.entity;
+package edu.ub.pis2016.pis16.strikecom.gameplay;
 
 import edu.ub.pis2016.pis16.strikecom.engine.android.AndroidSprite;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Game;
@@ -73,7 +73,6 @@ public class StrikeBase {
 
 			turrets[i].rotateTo(tRotation[i] + angle);
 		}
-
 
 	}
 

@@ -3,13 +3,10 @@ package edu.ub.pis2016.pis16.strikecom.engine.util;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Akira on 2016-02-29.
- */
 public class Pool<T> {
 
 	public interface PoolObjectFactory<T> {
-		public T createObject();
+		T createObject();
 	}
 
 	private final List<T> freeObjects;
@@ -32,6 +29,9 @@ public class Pool<T> {
 	}
 
 	public void free(T object) {
+		if(freeObjects.contains(object))
+			return;
+
 		if (freeObjects.size() < maxSize)
 			freeObjects.add(object);
 	}
