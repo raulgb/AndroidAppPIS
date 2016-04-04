@@ -22,7 +22,7 @@ public class VehicleFollowBehavior extends BehaviorComponent {
 		Vehicle vehicle = (Vehicle) gameObject;
 
 		// Move AI, strikebase follows the move pointer
-		if (tmp.set(target).sub(pos).len2() > 5 * 5) {
+		if (tmp.set(target).sub(pos).len2() > 10*10) {
 			float angleDelta = Angle.angleDelta(rotation, tmp.angle());
 			if (Math.abs(angleDelta) > 5) {
 				if (angleDelta > 0)

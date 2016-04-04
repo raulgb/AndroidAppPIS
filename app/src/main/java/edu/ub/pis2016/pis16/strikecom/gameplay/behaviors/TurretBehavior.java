@@ -1,9 +1,14 @@
 package edu.ub.pis2016.pis16.strikecom.gameplay.behaviors;
 
+import android.util.Log;
+
+import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.BehaviorComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
-import edu.ub.pis2016.pis16.strikecom.gameplay.Turret;
+import edu.ub.pis2016.pis16.strikecom.engine.math.Angle;
+import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
+import edu.ub.pis2016.pis16.strikecom.screens.DummyGLScreen;
 
 /**
  * Behavior of an allied turret.
@@ -11,26 +16,51 @@ import edu.ub.pis2016.pis16.strikecom.gameplay.Turret;
 public class TurretBehavior extends BehaviorComponent {
 
 	GameObject target = null;
-	GameObject owner = null;
+
+	Vector2 tmp = new Vector2();
+	float counter = 0;
+	float shootFreq = 0.5f;
 
 	@Override
 	public void update(float delta) {
-		if (owner == null) {
-			Turret turret = ((Turret) gameObject);
-			owner = turret.getOwner();
-		}
+		counter += delta;
 
 		PhysicsComponent physics = gameObject.getComponent(PhysicsComponent.class);
 
 		// If we have no target, try to find our next target
 		if (target == null || isTooFar(target))
 			for (GameObject go : gameObject.getScreen().getGameObjects())
-				if (go.getTag().equals("enemy") && !isTooFar(go))
+				if (go.getTag().equals("enemy") && !isTooFar(go)) {
 					target = go;
+					break;
+				}
 
 		// If we have a target, aim at it
-		if (target != null)
-			physics.lookAt(target.getComponent(PhysicsComponent.class).getPosition(), 0.1f);
+		if (target != null) {
+			PhysicsComponent targetPhys = target.getComponent(PhysicsComponent.class);
+			physics.lookAt(targetPhys.getPosition(), 0.15f);
+
+			// Shooting timeout
+			if (counter < shootFreq)
+				return;
+			counter = 0;
+
+			float shootAngle = tmp.set(targetPhys.getPosition()).sub(physics.getPosition()).angle();
+
+			if (Math.abs(Angle.angleDelta(physics.getRotation(), shootAngle)) < 3f) {
+				GameObject projectile = ((DummyGLScreen) gameObject.getScreen()).projectilePool.newObject();
+				projectile.setParent(gameObject);
+
+				PhysicsComponent projPhys = projectile.getComponent(PhysicsComponent.class);
+				// Set position, velocity and rotation;
+				projPhys.getPosition().set(physics.getPosition());
+				projPhys.getVelocity().set(90f, 0).rotate(physics.getRotation());
+
+				projectile.setTag("player");
+				projectile.setLayer(Screen.LAYER_1);
+				gameObject.getScreen().putGameObject(projectile);
+			}
+		}
 
 
 	}

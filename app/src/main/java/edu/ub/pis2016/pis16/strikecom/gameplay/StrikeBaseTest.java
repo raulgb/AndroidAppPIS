@@ -140,6 +140,8 @@ public class StrikeBaseTest extends Vehicle {
 
 		// Commit rotation changes
 		physics.setRotation(rotation);
+
+		super.update(delta);
 	}
 
 	@Override

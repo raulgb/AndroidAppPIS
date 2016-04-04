@@ -44,14 +44,12 @@ public class Turret extends GameObject {
 		return owner;
 	}
 
-
-
 	public int getUpgradeStatus() {
 		return upgradeStatus;
 	}
 
 	public void setUpgradeStatus(int status) {
 		this.upgradeStatus = status;
-		putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion(model, upgradeStatus)));
+		getComponent(GraphicsComponent.class).setRegion(Assets.SPRITE_ATLAS.getRegion(model, upgradeStatus));
 	}
 }

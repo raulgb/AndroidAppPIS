@@ -74,7 +74,6 @@ public class StrikeBase {
 			turrets[i].rotateTo(tRotation[i] + angle);
 		}
 
-
 	}
 
 	public void draw(Graphics g) {

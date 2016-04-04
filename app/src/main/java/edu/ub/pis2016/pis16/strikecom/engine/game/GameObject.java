@@ -11,10 +11,13 @@ import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
  */
 public class GameObject {
 
+	/** The Screen owning this GameObject */
+	protected Screen screen;
 	/** A Map of components, using their class as a Key */
 	private HashMap<Class, Component> components = new HashMap<>();
-	protected Screen screen;
 
+	/** A parent GameObject in a hierarchy */
+	private GameObject parent = null;
 	/** The layer ID refers to how this component will be ordered in the draw call stack. Lower layers will be drawn first */
 	private int layerID = 0;
 	/** Tags are used internally for BehaviorComponents to identify certain GameObject as part of the scenery, allied, enemy, etc. */
@@ -36,7 +39,7 @@ public class GameObject {
 	}
 
 	/** Steps the game simulation. Delta is the time passed since the last frame, in seconds. */
-	public  void update(float delta) {
+	public void update(float delta) {
 		for (Component c : components.values())
 			if (c instanceof UpdateableComponent)
 				((UpdateableComponent) c).update(delta);
@@ -84,5 +87,13 @@ public class GameObject {
 
 	public Screen getScreen() {
 		return screen;
+	}
+
+	public GameObject getParent() {
+		return parent;
+	}
+
+	public void setParent(GameObject parent) {
+		this.parent = parent;
 	}
 }

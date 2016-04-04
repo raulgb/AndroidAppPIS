@@ -55,6 +55,10 @@ public class PhysicsComponent extends Component {
 		this.velocity.set(velocity);
 	}
 
+	public void setVelocity(float x, float y) {
+		this.velocity.set(x, y);
+	}
+
 	public Vector2 getAcceleration() {
 		return acceleration;
 	}
@@ -79,5 +83,6 @@ public class PhysicsComponent extends Component {
 
 		rotation += angleDelta * lerpSpeed;
 	}
+
 
 }

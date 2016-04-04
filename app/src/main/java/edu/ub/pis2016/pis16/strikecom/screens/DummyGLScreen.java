@@ -20,7 +20,10 @@ import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Texture;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureSprite;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
+import edu.ub.pis2016.pis16.strikecom.engine.util.Pool;
 import edu.ub.pis2016.pis16.strikecom.gameplay.StrikeBaseTest;
+import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.ProjectileBehavior;
+import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.VehicleFollowBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
 
 /**
@@ -50,6 +53,8 @@ public class DummyGLScreen extends Screen {
 
 	TextureSprite grass;
 
+	public Pool<GameObject> projectilePool;
+
 	private Vector2 targetPos = new Vector2();
 	private Vector2 tmp = new Vector2();
 	private Vector2 camPos = new Vector2();
@@ -61,11 +66,29 @@ public class DummyGLScreen extends Screen {
 		glGraphics = game.getGLGraphics();
 		batch = new SpriteBatch(game.getGLGraphics(), 512);
 
+		projectilePool = new Pool<>(new Pool.PoolObjectFactory<GameObject>() {
+			@Override
+			public GameObject createObject() {
+				// Create a Bullet gameObject
+				GameObject projectile = new GameObject();
+				projectile.setLayer(Screen.LAYER_2);
+				projectile.putComponent(new PhysicsComponent());
+				projectile.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("bullet")));
+				projectile.getComponent(GraphicsComponent.class).getSprite().setScale(0.3f);
+				projectile.putComponent(new ProjectileBehavior());
+				return projectile;
+			}
+		}, 64);
+
 		strikeBase = new StrikeBaseTest(new StrikeBaseConfig(StrikeBaseConfig.Model.MKII));
+		strikeBase.putComponent(new VehicleFollowBehavior());
+		strikeBase.setTag("player");
+		strikeBase.setLayer(LAYER_1);
 		putGameObject("StrikeBase", strikeBase);
 
 		// Create an  Enemy GameObject
 		enemy = new GameObject();
+		enemy.setLayer(LAYER_1);
 		enemy.setTag("enemy");
 		enemy.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("enemy")));
 		enemy.putComponent(new PhysicsComponent());
@@ -74,13 +97,13 @@ public class DummyGLScreen extends Screen {
 		putGameObject("Enemy", enemy);
 
 		moveIcon = new GameObject();
+		moveIcon.setLayer(LAYER_BACKGROUND);
 		moveIcon.putComponent(new PhysicsComponent());
 		moveIcon.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("cursor_move")));
 		moveIcon.getComponent(GraphicsComponent.class).getSprite().setScale(0.3f);
 		putGameObject("MoveIcon", moveIcon);
 
 		grass = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("grass"));
-
 	}
 
 	@Override
@@ -110,6 +133,8 @@ public class DummyGLScreen extends Screen {
 
 	@Override
 	public void update(float delta) {
+		super.update(delta);
+
 		secondsElapsed += delta;
 
 		for (Input.TouchEvent e : game.getInput().getTouchEvents()) {
@@ -126,39 +151,28 @@ public class DummyGLScreen extends Screen {
 			e.y = (e.y - glGraphics.getHeight() / 2) / 8 + (int) camPos.y;
 			targetPos.set(e.x, e.y);
 
+			strikeBase.getComponent(VehicleFollowBehavior.class).setTarget(targetPos);
 			moveIcon.getComponent(PhysicsComponent.class).setPosition(targetPos);
 		}
 
-		Vector2 sbPos = strikeBase.getComponent(PhysicsComponent.class).getPosition();
-		float sbRot = strikeBase.getComponent(PhysicsComponent.class).getRotation();
+		// Move enemy around
+		Vector2 oldPos = getGameObject("Enemy").getComponent(PhysicsComponent.class).getPosition();
+		tmp.set(MathUtils.cosDeg(secondsElapsed * 10) * 64, MathUtils.sinDeg(secondsElapsed * 10) * 64);
+		float angle = tmp.sub(oldPos).angle();
 
-		// Move AI, strikebase follows the move pointer
-		if (tmp.set(targetPos).sub(sbPos).len2() > 5 * 5) {
-			float angleDelta = Angle.angleDelta(sbRot, tmp.angle());
-			if (Math.abs(angleDelta) > 5) {
-				if (angleDelta > 0)
-					strikeBase.turnLeft();
-				else
-					strikeBase.turnRight();
-			} else {
-				strikeBase.accelerate();
-			}
-		} else {
-			strikeBase.brake();
-		}
-
-		getGameObject("Enemy").getComponent(PhysicsComponent.class).setPosition(
-				MathUtils.cosDeg(secondsElapsed * 60) * 64,
-				MathUtils.sinDeg(secondsElapsed * 60) * 64
-		);
-
-		camPos.set(strikeBase.getComponent(PhysicsComponent.class).getPosition());
-		updateCamera(glGraphics.getWidth(), glGraphics.getHeight(), 1 / getZoomConstant());
-
+		getGameObject("Enemy").getComponent(PhysicsComponent.class).setPosition(tmp.add(oldPos));
+		getGameObject("Enemy").getComponent(PhysicsComponent.class).setRotation(angle);
 
 		// Update GameObjects
-		for (GameObject go : getGameObjects())
+		for (GameObject go : this.getGameObjects())
 			go.update(delta);
+
+		// Move camera to strikebase
+		camPos.set(strikeBase.getComponent(PhysicsComponent.class).getPosition());
+		camPos.add(strikeBase.getComponent(PhysicsComponent.class).getVelocity());
+		updateCamera(glGraphics.getWidth(), glGraphics.getHeight(), 1 / getZoomConstant());
+
+		commitGameObjectChanges();
 	}
 
 	private float getZoomConstant() {
