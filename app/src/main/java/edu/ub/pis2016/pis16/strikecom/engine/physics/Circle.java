@@ -3,18 +3,41 @@ package edu.ub.pis2016.pis16.strikecom.engine.physics;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 
 /**
- * Created by Akira on 2016-03-15.
+ * A circle defined by its position and radius;
  */
 public class Circle implements Shape {
-	private Vector2 center;
+
+	private Vector2 tmp = new Vector2();
+	private Vector2 position;
 	private float radius;
 
-	public Vector2 getCenter() {
-		return center;
+	public Circle(float x, float y, float radius) {
+		this.position = new Vector2(x, y);
+		this.radius = radius;
 	}
 
-	public void setCenter(Vector2 center) {
-		this.center = center;
+
+	public Vector2 getCenter() {
+		return tmp.set(position).sub(radius, radius);
+	}
+
+	/** Lower left corner of the circle */
+	public Vector2 getPosition() {
+		return position;
+	}
+
+	@Override
+	public float getWidth() {
+		return radius * 2;
+	}
+
+	@Override
+	public float getHeight() {
+		return radius * 2;
+	}
+
+	public void setPosition(Vector2 position) {
+		this.position.set(position);
 	}
 
 	public float getRadius() {
@@ -25,19 +48,15 @@ public class Circle implements Shape {
 		this.radius = radius;
 	}
 
-	public Circle(float x, float y, float radi){
-		this.center= new Vector2(x,y);
-		this.radius=radi;
-	}
 	@Override
 	public boolean overlaps(Shape p) {
 		//if p is circle
-		if (p instanceof Circle){
-			return OverlapAlgorithms.overlapCircles(this, (Circle)p);
+		if (p instanceof Circle) {
+			return OverlapAlgorithms.overlapCircles(this, (Circle) p);
 		}
 		//if p is rectangle
-		else if (p instanceof Rectangle){
-			return OverlapAlgorithms.overlapCircleRectangle(this,(Rectangle)p);
+		else if (p instanceof Rectangle) {
+			return OverlapAlgorithms.overlapCircleRectangle(this, (Rectangle) p);
 		}
 
 		return false;

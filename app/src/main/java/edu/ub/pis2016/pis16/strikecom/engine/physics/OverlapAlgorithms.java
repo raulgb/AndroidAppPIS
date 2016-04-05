@@ -11,8 +11,8 @@ public class OverlapAlgorithms {
      * @return true if they are collided
      */
     public static boolean overlapCircles(Circle c1, Circle c2){
-        float dx=c1.getCenter().x-c2.getCenter().x;
-        float dy=c1.getCenter().y-c2.getCenter().y;
+        float dx=c1.getPosition().x-c2.getPosition().x;
+        float dy=c1.getPosition().y-c2.getPosition().y;
         float rs=c1.getRadius()+c2.getRadius();
         return (dx*dx+dy*dy<=rs*rs);
     }
@@ -24,7 +24,7 @@ public class OverlapAlgorithms {
      * @return true if they are collided
      */
     public static boolean overlapRectangles(Rectangle r1, Rectangle r2){
-        if(r1.getLlpos().x<r2.getLlpos().x+r2.getWidth()&&r1.getLlpos().x+r1.getWidth()>r2.getLlpos().x&&r1.getLlpos().y<r2.getLlpos().y+r2.getHeight()&&r1.getLlpos().y+r1.getHeight()>r2.getLlpos().y){
+        if(r1.getPosition().x<r2.getPosition().x+r2.getWidth()&&r1.getPosition().x+r1.getWidth()>r2.getPosition().x&&r1.getPosition().y<r2.getPosition().y+r2.getHeight()&&r1.getPosition().y+r1.getHeight()>r2.getPosition().y){
             return true;
         }
         else{return false;}
@@ -37,22 +37,22 @@ public class OverlapAlgorithms {
      * @return true if they are collided
      */
     public static boolean overlapCircleRectangle(Circle c, Rectangle r){
-        float closestX=c.getCenter().x;
-        float closestY=c.getCenter().y;
-        if (c.getCenter().x<r.getLlpos().x){
-            closestX=r.getLlpos().x;
+        float closestX=c.getPosition().x;
+        float closestY=c.getPosition().y;
+        if (c.getPosition().x<r.getPosition().x){
+            closestX=r.getPosition().x;
         }
-        else if (c.getCenter().x>r.getLlpos().x+r.getWidth()){
-            closestX=r.getLlpos().x+r.getWidth();
+        else if (c.getPosition().x>r.getPosition().x+r.getWidth()){
+            closestX=r.getPosition().x+r.getWidth();
         }
-        if (c.getCenter().y<r.getLlpos().y){
-            closestY=r.getLlpos().y;
+        if (c.getPosition().y<r.getPosition().y){
+            closestY=r.getPosition().y;
         }
-        else if (c.getCenter().y>r.getLlpos().y+r.getHeight()){
-            closestY=r.getLlpos().y+r.getHeight();
+        else if (c.getPosition().y>r.getPosition().y+r.getHeight()){
+            closestY=r.getPosition().y+r.getHeight();
         }
-        closestX=c.getCenter().x-closestX;
-        closestY=c.getCenter().y-closestY;
+        closestX=c.getPosition().x-closestX;
+        closestY=c.getPosition().y-closestY;
         return (closestX*closestX+closestY*closestY<=c.getRadius()*c.getRadius());
 
 

@@ -7,7 +7,8 @@ public interface ContactListener {
 	public class CollisionEvent{
 		public Body a;
 		public Body b;
-		public Vector2 normal;
+		public float contactX, contactY;
+		public float normalX, normalY;
 	}
 
 	public void onCollision(CollisionEvent ce);

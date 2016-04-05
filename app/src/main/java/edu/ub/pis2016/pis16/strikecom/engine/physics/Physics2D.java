@@ -1,22 +1,30 @@
 package edu.ub.pis2016.pis16.strikecom.engine.physics;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
+import edu.ub.pis2016.pis16.strikecom.engine.util.Pool;
 
-/**
- * Created by Akira on 2016-03-15.
- */
 public class Physics2D {
 
 	private ArrayList<Body> staticBodies; // all   staticBodies here
-	private ArrayList<DynamicRectangleObject> dynamicBodies; // all   dynamicBodies here
+	private ArrayList<Body> dynamicBodies; // Dynamic + Kinematic
 	private Vector2 gravity; // not sure if needed
+
+	private Vector2 tmp = new Vector2();
+
 	private float worldWidth;
 	private float worldHeight;
 	private float scale; //lets store here  grafix/physics scaling rate here for now
+
+	private Set<Body> collidedBodies = new HashSet<>();
 	private SpatialHashGrid spatialHashGrid; // collision detection optimisation
+
+	private Pool<ContactListener.CollisionEvent> cePool;
+	private ArrayList<ContactListener> listeners;
 
 	public float getWorldWidth() {
 		return worldWidth;
@@ -32,66 +40,100 @@ public class Physics2D {
 
 	/**
 	 * creates 2d physics world
-	 * @param worldWidth width of world
+	 *
+	 * @param worldWidth  width of world
 	 * @param worldHeight height of world
-	 * @param cellSize size of a cell used in hash grid optimizaton - should be  more than 2x bigger than largest
-	 *                    game object
-	 * @param gravity gravity vector, not sure if needed
+	 * @param gravity     gravity vector, not sure if needed
 	 */
-	public Physics2D(float worldWidth, float worldHeight, float cellSize, Vector2 gravity){
-		this.staticBodies =new ArrayList<>(); //initialize list of staticBodies
-		this.dynamicBodies =new ArrayList<>(); //initialize list of dynamicBodies
-		this.gravity= gravity;
-		this.worldWidth=worldWidth;
-		this.worldWidth=worldWidth;
+	public Physics2D(float worldWidth, float worldHeight, Vector2 gravity) {
+		this.staticBodies = new ArrayList<>(); //initialize list of staticBodies
+		this.dynamicBodies = new ArrayList<>(); //initialize list of dynamicBodies
+		this.gravity = gravity;
 
-		spatialHashGrid= new SpatialHashGrid(worldWidth, worldHeight, cellSize);
+		// HashGrid Init
+		this.worldWidth = worldWidth;
+		this.worldHeight = worldHeight;
+		float cellSize = worldHeight / 128f;
+		spatialHashGrid = new SpatialHashGrid(worldWidth, worldHeight, cellSize);
+
+		// Listener and EventPool init
+		listeners = new ArrayList<>();
+		cePool = new Pool<>(new Pool.PoolObjectFactory<ContactListener.CollisionEvent>() {
+			@Override
+			public ContactListener.CollisionEvent createObject() {
+				return new ContactListener.CollisionEvent();
+			}
+		}, 128);
 
 	}
 
-	public void update(float delta){//update all Bodies of the game
+	public void update(float delta) {//update all Bodies of the game
 		spatialHashGrid.clearDynamicCells(); //clear previous cells numbers assigned to dynamic objects
 
 		//update velocity and positions of all dynamic bodies
-		for(int i =0;i<this.dynamicBodies.size();i++){
-			DynamicRectangleObject obj=this.dynamicBodies.get(i);
-			obj.getVelocity().add(obj.getAccel().x*delta,obj.getAccel().y*delta);// I'll check how movement is implemented, probably i
-			// should just update positions
-			obj.getPosition().add(obj.getVelocity());
-			obj.getBounds().getLlpos().add(obj.getVelocity());
-			this.spatialHashGrid.insertDynamicObject(obj); // insert back to  hash grid
-		}
-		// now lets handle collisions
-		for(int i =0;i<this.dynamicBodies.size();i++) { // currecntly it checks TWICE - fix this asap
-			DynamicRectangleObject obj = this.dynamicBodies.get(i);
-			List<RectangleObject> colliders = this.spatialHashGrid.getPotentialColliders(obj);
-			for(int j =0;j<colliders.size();j++) {
-				if(obj.getBounds().overlaps(colliders.get(j).getBounds())){
-					/*
+		for (Body body : dynamicBodies) {
 
-					COLLISION DETECTED
-
-					 */
-				}
+			// Only update Dynamic Bodies
+			if (body instanceof DynamicBody) {
+				DynamicBody dynBody = (DynamicBody) body;
+				// Update vel
+				tmp.set(dynBody.getAcceleration());
+				dynBody.setVelocity(dynBody.getVelocity().add(tmp.scl(delta)));
+				// Update position
+				tmp.set(dynBody.getVelocity());
+				body.setPosition(body.getPosition().add(tmp.scl(delta)));
 			}
 
+			this.spatialHashGrid.insertDynamicObject(body); // insert back to  hash grid
 		}
 
+		// Handle collisions
+		collidedBodies.clear();
+		for (Body bodyA : dynamicBodies) {
+			List<Body> potentials = spatialHashGrid.getPotentialColliders(bodyA);
+			for (Body bodyB : potentials) {
+
+				// Skip already collided
+				if (collidedBodies.contains(bodyB))
+					continue;
+
+				// Detect Collision
+				if (bodyA.getBounds().overlaps(bodyB.getBounds())) {
+					// Create collision event
+					ContactListener.CollisionEvent cEvent = cePool.newObject();
+					cEvent.a = bodyA;
+					cEvent.b = bodyB;
+					// set contact to middle-point between centers
+					tmp.set(bodyA.getBounds().getCenter()).lerp(bodyB.getBounds().getCenter(), 0.5f);
+
+					cEvent.contactX = tmp.x;
+					cEvent.contactY = tmp.y;
+
+					// Pass along to listeners
+					for (ContactListener cl : listeners)
+						cl.onCollision(cEvent);
+
+					collidedBodies.add(bodyB);
+				}
+			}
+		}
 
 	}
 
-	public void addStaticBody(Body b){//add static body to physics engine
+	/** Static bodies */
+	public void addStaticBody(Body b) {//add static body to physics engine
 		this.staticBodies.add(b);
-		this.spatialHashGrid.insertStaticObject((RectangleObject)b); //warning
-
-	}
-	public void addDynamicBody(Body b){//add dynamic body to physics engine
-		this.dynamicBodies.add((DynamicRectangleObject)b);
+		this.spatialHashGrid.insertStaticObject(b); //warning
 
 	}
 
-	public void addContactListener(ContactListener cl){
+	/** Dynamic and Kinematic bodies */
+	public void addDynamicBody(Body b) {//add dynamic body to physics engine
+		this.dynamicBodies.add(b);
+	}
 
+	public void addContactListener(ContactListener cl) {
+		listeners.add(cl);
 	}
 }
 /*
