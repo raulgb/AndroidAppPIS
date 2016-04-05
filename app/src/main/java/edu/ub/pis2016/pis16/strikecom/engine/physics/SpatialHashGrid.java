@@ -87,14 +87,16 @@ public class SpatialHashGrid {
 		int i = 0;
 		int cellId = -1;
 		while (i <= 3 && (cellId = cellIds[i++]) != -1) {
-			for (int j = 0; j < this.dynamicCells.length; j++) {
-				Log.d("SpatialHG", i + ", " + j);
+			int len =this.dynamicCells[cellId].size();
+			for (int j = 0; j < len; j++) {
+				//Log.d("SpatialHG", i + ", " + j + ", " + this.dynamicCells[cellId].size());
 				Body collider = this.dynamicCells[cellId].get(j);
 				if (!this.foundObjects.contains(collider)) {
 					this.foundObjects.add(collider);
 				}
 			}
-			for (int j = 0; j < this.staticCells.length; j++) {
+			len =this.staticCells[cellId].size();
+			for (int j = 0; j < len; j++) {
 				Body collider = this.staticCells[cellId].get(j);
 				if (!this.foundObjects.contains(collider)) {
 					this.foundObjects.add(collider);
