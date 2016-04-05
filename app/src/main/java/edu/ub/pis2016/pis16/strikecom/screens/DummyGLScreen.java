@@ -190,7 +190,7 @@ public class DummyGLScreen extends Screen {
 		float density_id = ctx.getResources().getDisplayMetrics().density;
 
 		//Based on the fact that xxhdpi has a constant of 8
-		return density_id * 8.0f / 3.0f;
+		return density_id * 6.0f / 3.0f;
 	}
 
 
