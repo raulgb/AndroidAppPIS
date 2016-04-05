@@ -114,6 +114,9 @@ public class Vector2 {
 		return (float)Math.sqrt(x * x + y * y);
 	}
 
+	public float len2() {
+		return x * x + y * y;
+	}
 	public float angle() {
 		return MathUtils.radiansToDegrees * MathUtils.atan2(y, x);
 	}
@@ -125,9 +128,7 @@ public class Vector2 {
 		return this;
 	}
 
-	public float len2() {
-		return x * x + y * y;
-	}
+
 
 	public boolean notZero() {
 		return Math.abs(x) > 0.001f && Math.abs(y) > 0.001f;

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import edu.ub.pis2016.pis16.strikecom.engine.game.Component;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Angle;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
+import edu.ub.pis2016.pis16.strikecom.engine.physics.Body;
 
 /**
  * A Component in charge of keeping the velocity, position and acceleration of a GameObject, as well as managing the
@@ -13,6 +14,9 @@ import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
  * @author German
  */
 public class PhysicsComponent extends Component {
+
+	// TODO Integrate Physics2D
+	private Body body;
 
 	private static Vector2 tmp = new Vector2();
 	private Vector2 position = new Vector2();
@@ -36,6 +40,7 @@ public class PhysicsComponent extends Component {
 	}
 
 	public Vector2 getPosition() {
+		//return body.getPosition();
 		return position;
 	}
 

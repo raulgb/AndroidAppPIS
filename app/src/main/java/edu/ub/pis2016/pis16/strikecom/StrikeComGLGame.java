@@ -30,4 +30,12 @@ public class StrikeComGLGame extends GLGameFragment {
 		return sidebarListener;
 	}
 
+	public Object getInventoryListener(){
+		return null;
+	}
+
+	public Object getShopListener(){
+		return null;
+	}
+
 }

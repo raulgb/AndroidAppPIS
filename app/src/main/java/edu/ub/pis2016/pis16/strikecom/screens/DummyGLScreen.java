@@ -57,7 +57,9 @@ public class DummyGLScreen extends Screen {
 
 	private Vector2 targetPos = new Vector2();
 	private Vector2 tmp = new Vector2();
+
 	private Vector2 camPos = new Vector2();
+	public float camZoom = 6f;
 
 	public DummyGLScreen(Game game) {
 		super(game);
@@ -147,21 +149,13 @@ public class DummyGLScreen extends Screen {
 			// scale by the zoom (zoom factor x8)
 			// add camera offset
 			e.y = glGraphics.getHeight() - e.y;
-			e.x = (e.x - glGraphics.getWidth() / 2) / 8 + (int) camPos.x;
-			e.y = (e.y - glGraphics.getHeight() / 2) / 8 + (int) camPos.y;
+			e.x = (e.x - glGraphics.getWidth() / 2) / (int)camZoom + (int) camPos.x;
+			e.y = (e.y - glGraphics.getHeight() / 2) / (int)camZoom + (int) camPos.y;
 			targetPos.set(e.x, e.y);
 
 			strikeBase.getComponent(VehicleFollowBehavior.class).setTarget(targetPos);
 			moveIcon.getComponent(PhysicsComponent.class).setPosition(targetPos);
 		}
-
-		// Move enemy around
-		Vector2 oldPos = getGameObject("Enemy").getComponent(PhysicsComponent.class).getPosition();
-		tmp.set(MathUtils.cosDeg(secondsElapsed * 10) * 64, MathUtils.sinDeg(secondsElapsed * 10) * 64);
-		float angle = tmp.sub(oldPos).angle();
-
-		getGameObject("Enemy").getComponent(PhysicsComponent.class).setPosition(tmp.add(oldPos));
-		getGameObject("Enemy").getComponent(PhysicsComponent.class).setRotation(angle);
 
 		// Update GameObjects
 		for (GameObject go : this.getGameObjects())
@@ -190,7 +184,7 @@ public class DummyGLScreen extends Screen {
 		float density_id = ctx.getResources().getDisplayMetrics().density;
 
 		//Based on the fact that xxhdpi has a constant of 8
-		return density_id * 6.0f / 3.0f;
+		return density_id * camZoom / 3.0f;
 	}
 
 

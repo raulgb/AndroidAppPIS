@@ -71,6 +71,8 @@ public abstract class Screen implements Disposable {
 
 	/** Commit changes to GameObject Map. Must be called at the begging of update method */
 	protected void commitGameObjectChanges() {
+		// TODO Raul: Usar PriorityQueue para no reordenar cada vez TODO el array
+
 		// Add all pending GOs, link to this screen
 		for (Map.Entry<String, GameObject> entry : addedGOs.entrySet()) {
 			dirty = true;
