@@ -50,11 +50,11 @@ public class Rectangle implements Shape {
 	@Override
 	public boolean overlaps(Shape p) {
 		// if p is rectangle
-		if(p.getClass().getName().equals("Rectangle")){
+		if(p instanceof Rectangle){
 			return OverlapAlgorithms.overlapRectangles(this, (Rectangle)p);
 		}
 		//if p is circle
-		else if (p.getClass().getName().equals("Circle")){
+		else if (p instanceof Circle){
 			return OverlapAlgorithms.overlapCircleRectangle((Circle)p,this);
 		}
 

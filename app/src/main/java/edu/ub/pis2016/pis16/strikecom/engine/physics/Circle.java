@@ -32,11 +32,11 @@ public class Circle implements Shape {
 	@Override
 	public boolean overlaps(Shape p) {
 		//if p is circle
-		if (p.getClass().getName().equals("Circle")){
+		if (p instanceof Circle){
 			return OverlapAlgorithms.overlapCircles(this, (Circle)p);
 		}
 		//if p is rectangle
-		else if (p.getClass().getName().equals("Rectangle")){
+		else if (p instanceof Rectangle){
 			return OverlapAlgorithms.overlapCircleRectangle(this,(Rectangle)p);
 		}
 
