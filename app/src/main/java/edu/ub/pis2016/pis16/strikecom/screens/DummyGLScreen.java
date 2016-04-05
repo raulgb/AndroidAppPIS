@@ -12,13 +12,15 @@ import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.GraphicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
-import edu.ub.pis2016.pis16.strikecom.engine.math.Angle;
-import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.GLGraphics;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Texture;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureSprite;
+import edu.ub.pis2016.pis16.strikecom.engine.physics.Body;
+import edu.ub.pis2016.pis16.strikecom.engine.physics.DynamicBody;
+import edu.ub.pis2016.pis16.strikecom.engine.physics.Physics2D;
+import edu.ub.pis2016.pis16.strikecom.engine.physics.Rectangle;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Pool;
 import edu.ub.pis2016.pis16.strikecom.gameplay.StrikeBaseTest;
@@ -28,16 +30,16 @@ import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
 
 /**
  * Dummy OpenGL screen.
- * <p/>
+ * <p>
  * Order of calls:
  * - Created
  * - Resumed
  * - Resized
- * <p/>
+ * <p>
  * Loop:
  * - Update
  * - Presented
- * <p/>
+ * <p>
  * On back:
  * - Paused
  * - Disposed
@@ -46,6 +48,12 @@ public class DummyGLScreen extends Screen {
 	GLGraphics glGraphics;
 	SpriteBatch batch;
 	float secondsElapsed;
+
+	Physics2D physics2D;
+	GameObject bodySprite;
+	GameObject bodySprite2;
+	Body testBody;
+	Body testBody2;
 
 	GameObject enemy;
 	GameObject moveIcon;
@@ -66,6 +74,8 @@ public class DummyGLScreen extends Screen {
 		Log.i("DUMMY_SCREEN", "Created");
 
 		glGraphics = game.getGLGraphics();
+		physics2D = new Physics2D(1024, 1024, Vector2.ZERO);
+
 		batch = new SpriteBatch(game.getGLGraphics(), 512);
 
 		projectilePool = new Pool<>(new Pool.PoolObjectFactory<GameObject>() {
@@ -106,6 +116,30 @@ public class DummyGLScreen extends Screen {
 		putGameObject("MoveIcon", moveIcon);
 
 		grass = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("grass"));
+
+
+		// Test Physics2d
+		bodySprite = new GameObject();
+		bodySprite.putComponent(new PhysicsComponent());
+		bodySprite.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("default_enemy")));
+		bodySprite.setLayer(LAYER_4);
+		this.putGameObject(bodySprite);
+
+		bodySprite2 = new GameObject();
+		bodySprite2.putComponent(new PhysicsComponent());
+		bodySprite2.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("default_enemy")));
+		bodySprite2.setLayer(LAYER_4);
+		this.putGameObject(bodySprite2);
+
+		testBody = new DynamicBody(new Rectangle(32, 32));
+		testBody2 = new DynamicBody(new Rectangle(32, 32));
+
+		testBody.setPosition(0, 64);
+		testBody2.setPosition(128, 64);
+		((DynamicBody) testBody2).setVelocity(-2, 0);
+
+		physics2D.addDynamicBody(testBody);
+		physics2D.addDynamicBody(testBody2);
 	}
 
 	@Override
@@ -136,7 +170,6 @@ public class DummyGLScreen extends Screen {
 	@Override
 	public void update(float delta) {
 		super.update(delta);
-
 		secondsElapsed += delta;
 
 		for (Input.TouchEvent e : game.getInput().getTouchEvents()) {
@@ -149,13 +182,18 @@ public class DummyGLScreen extends Screen {
 			// scale by the zoom (zoom factor x8)
 			// add camera offset
 			e.y = glGraphics.getHeight() - e.y;
-			e.x = (e.x - glGraphics.getWidth() / 2) / (int)camZoom + (int) camPos.x;
-			e.y = (e.y - glGraphics.getHeight() / 2) / (int)camZoom + (int) camPos.y;
+			e.x = (e.x - glGraphics.getWidth() / 2) / (int) camZoom + (int) camPos.x;
+			e.y = (e.y - glGraphics.getHeight() / 2) / (int) camZoom + (int) camPos.y;
 			targetPos.set(e.x, e.y);
 
 			strikeBase.getComponent(VehicleFollowBehavior.class).setTarget(targetPos);
 			moveIcon.getComponent(PhysicsComponent.class).setPosition(targetPos);
 		}
+
+		// Step physics simulation
+		//physics2D.update(delta);
+		//bodySprite.getComponent(PhysicsComponent.class).setPosition(testBody.getPosition());
+		//bodySprite2.getComponent(PhysicsComponent.class).setPosition(testBody2.getPosition());
 
 		// Update GameObjects
 		for (GameObject go : this.getGameObjects())

@@ -1,6 +1,8 @@
 package edu.ub.pis2016.pis16.strikecom.engine.physics;
 
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +37,7 @@ public class SpatialHashGrid {
 		staticCells = new List[numCells];
 
 		for (int i = 0; i < numCells; i++) {
-			dynamicCells[i] = new ArrayList<Body>(5);
+			dynamicCells[i] = new ArrayList<Body>(10);
 			staticCells[i] = new ArrayList<Body>(10);
 		}
 	}
@@ -81,16 +83,18 @@ public class SpatialHashGrid {
 		this.foundObjects.clear();
 
 		int[] cellIds = getCellIds(body);
+
 		int i = 0;
 		int cellId = -1;
 		while (i <= 3 && (cellId = cellIds[i++]) != -1) {
-			for (int j = 0; i < this.dynamicCells.length; j++) {
+			for (int j = 0; j < this.dynamicCells.length; j++) {
+				Log.d("SpatialHG", i + ", " + j);
 				Body collider = this.dynamicCells[cellId].get(j);
 				if (!this.foundObjects.contains(collider)) {
 					this.foundObjects.add(collider);
 				}
 			}
-			for (int j = 0; i < this.staticCells.length; j++) {
+			for (int j = 0; j < this.staticCells.length; j++) {
 				Body collider = this.staticCells[cellId].get(j);
 				if (!this.foundObjects.contains(collider)) {
 					this.foundObjects.add(collider);

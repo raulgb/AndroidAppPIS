@@ -47,8 +47,8 @@ public class Rectangle implements Shape {
 	 * @param width  rectangle width
 	 * @param height rectangle height
 	 */
-	public Rectangle(float x, float y, float width, float height) {
-		this.pos = new Vector2(x, y);
+	public Rectangle(float width, float height) {
+		this.pos = new Vector2(0, 0);
 		this.width = width;
 		this.height = height;
 	}

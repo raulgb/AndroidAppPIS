@@ -32,5 +32,9 @@ public class DynamicBody extends Body {
 		this.velocity.set(velocity);
 	}
 
+	public void setVelocity(float x, float y) {
+		this.velocity.set(x, y);
+	}
+
 
 }

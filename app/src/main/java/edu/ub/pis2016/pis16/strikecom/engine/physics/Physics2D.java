@@ -53,7 +53,7 @@ public class Physics2D {
 		// HashGrid Init
 		this.worldWidth = worldWidth;
 		this.worldHeight = worldHeight;
-		float cellSize = worldHeight / 128f;
+		float cellSize = worldHeight / 8f;
 		spatialHashGrid = new SpatialHashGrid(worldWidth, worldHeight, cellSize);
 
 		// Listener and EventPool init

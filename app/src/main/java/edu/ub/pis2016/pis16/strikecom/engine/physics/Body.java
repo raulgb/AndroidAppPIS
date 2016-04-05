@@ -25,6 +25,11 @@ public abstract class Body {
 		bounds.setPosition(pos);
 	}
 
+	public void setPosition(float x, float y) {
+		this.position.set(x, y);
+		bounds.setPosition(new Vector2(x, y));
+	}
+
 	public Shape getBounds() {
 		return bounds;
 	}
