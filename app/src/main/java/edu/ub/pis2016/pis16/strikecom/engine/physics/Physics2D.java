@@ -55,8 +55,10 @@ public class Physics2D {
 		//update velocity and positions of all dynamic bodies
 		for(int i =0;i<this.dynamicBodies.size();i++){
 			DynamicRectangleObject obj=this.dynamicBodies.get(i);
-			obj.getVelocity().add(obj.getAccel().x*delta,obj.getAccel().y*delta);
+			obj.getVelocity().add(obj.getAccel().x*delta,obj.getAccel().y*delta);// I'll check how movement is implemented, probably i
+			// should just update positions
 			obj.getPosition().add(obj.getVelocity());
+			obj.getBounds().getLlpos().add(obj.getVelocity());
 			this.spatialHashGrid.insertDynamicObject(obj); // insert back to  hash grid
 		}
 		// now lets handle collisions
