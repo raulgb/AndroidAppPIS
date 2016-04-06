@@ -81,7 +81,7 @@ public class AlexanderScreen extends Screen {
 		strikeBase.putComponent(new VehicleFollowBehavior());
 		strikeBase.setTag("player");
 		strikeBase.setLayer(LAYER_1);
-		putGameObject("StrikeBase", strikeBase);
+		addGameObject("StrikeBase", strikeBase);
 
 		// Create an  Enemy GameObject
 		enemy = new GameObject();
@@ -91,14 +91,14 @@ public class AlexanderScreen extends Screen {
 		enemy.putComponent(new PhysicsComponent());
 		enemy.getComponent(PhysicsComponent.class).setPosition(64, 0);
 		enemy.getComponent(GraphicsComponent.class).getSprite().setScale(0.5f);
-		putGameObject("Enemy", enemy);
+		addGameObject("Enemy", enemy);
 
 		moveIcon = new GameObject();
 		moveIcon.setLayer(LAYER_BACKGROUND);
 		moveIcon.putComponent(new PhysicsComponent());
 		moveIcon.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("cursor_move")));
 		moveIcon.getComponent(GraphicsComponent.class).getSprite().setScale(0.3f);
-		putGameObject("MoveIcon", moveIcon);
+		addGameObject("MoveIcon", moveIcon);
 
 		grass = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("grass"));
 
@@ -108,13 +108,13 @@ public class AlexanderScreen extends Screen {
 		bodySprite.putComponent(new PhysicsComponent());
 		bodySprite.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("default_enemy")));
 		bodySprite.setLayer(LAYER_4);
-		this.putGameObject(bodySprite);
+		addGameObject(bodySprite);
 
 		bodySprite2 = new GameObject();
 		bodySprite2.putComponent(new PhysicsComponent());
 		bodySprite2.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("default_enemy")));
 		bodySprite2.setLayer(LAYER_4);
-		this.putGameObject(bodySprite2);
+		addGameObject(bodySprite2);
 
 		testBody = new DynamicBody(new Rectangle(32, 32));
 		testBody2 = new DynamicBody(new Rectangle(32, 32));
