@@ -4,7 +4,10 @@ import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 
 public class Rectangle implements Shape {
 	private Vector2 tmp = new Vector2();
-
+    //Todo: Alex, you changed llpos to pos but the rest part of physics engine is written to compare bounds with  lower left corner in mind
+	// so basically our physics rectangle is displaced, and collisions are not calculated correctly
+	//we need to change it back or redo algorithm so that it will get desired low-left position from rectangle.pos and width, height values
+	//whatever is better performance-wise
 	private Vector2 pos = new Vector2(); //lower left corner of rectangle
 	private float width;
 	private float height;
@@ -42,8 +45,6 @@ public class Rectangle implements Shape {
 	/**
 	 * generic constructor
 	 *
-	 * @param x      x-position of low left corner
-	 * @param y      y-position of low left corner
 	 * @param width  rectangle width
 	 * @param height rectangle height
 	 */

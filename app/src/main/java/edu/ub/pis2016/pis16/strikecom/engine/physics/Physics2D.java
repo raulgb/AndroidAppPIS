@@ -1,5 +1,7 @@
 package edu.ub.pis2016.pis16.strikecom.engine.physics;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -98,7 +100,9 @@ public class Physics2D {
 					continue;
 
 				// Detect Collision
-				if (bodyA.getBounds().overlaps(bodyB.getBounds())) {
+				// todo: every object still checks collision with itself, probably there is a better way to fix this than simple if
+				if (bodyA!=bodyB && bodyA.getBounds().overlaps(bodyB.getBounds())) {
+					Log.i("collision","detected");//
 					// Create collision event
 					ContactListener.CollisionEvent cEvent = cePool.newObject();
 					cEvent.a = bodyA;
