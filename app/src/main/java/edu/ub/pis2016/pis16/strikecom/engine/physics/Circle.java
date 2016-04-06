@@ -6,24 +6,23 @@ import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
  * A circle defined by its position and radius;
  */
 public class Circle implements Shape {
-
 	private Vector2 tmp = new Vector2();
-	private Vector2 position;
-	private float radius;
+
+	public float x, y;
+	public float radius;
 
 	public Circle(float x, float y, float radius) {
-		this.position = new Vector2(x, y);
+		this.x = x;
+		this.y = y;
 		this.radius = radius;
 	}
 
-
 	public Vector2 getCenter() {
-		return tmp.set(position).sub(radius, radius);
+		return tmp.set(x, y);
 	}
 
-	/** Lower left corner of the circle */
 	public Vector2 getPosition() {
-		return position;
+		return tmp.set(x, y).sub(radius, radius);
 	}
 
 	@Override
@@ -36,16 +35,15 @@ public class Circle implements Shape {
 		return radius * 2;
 	}
 
-	public void setPosition(Vector2 position) {
-		this.position.set(position);
+	public void setPosition(Vector2 p) {
+		x = p.x + radius;
+		y = p.y + radius;
 	}
 
-	public float getRadius() {
-		return radius;
-	}
-
-	public void setRadius(float radius) {
-		this.radius = radius;
+	@Override
+	public void setPosition(float x, float y) {
+		this.x = x + radius;
+		this.y = y + radius;
 	}
 
 	@Override

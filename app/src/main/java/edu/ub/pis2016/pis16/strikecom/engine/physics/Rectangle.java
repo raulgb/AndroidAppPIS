@@ -4,54 +4,53 @@ import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 
 public class Rectangle implements Shape {
 	private Vector2 tmp = new Vector2();
-    //Todo: Alex, you changed llpos to pos but the rest part of physics engine is written to compare bounds with  lower left corner in mind
-	// so basically our physics rectangle is displaced, and collisions are not calculated correctly
-	//we need to change it back or redo algorithm so that it will get desired low-left position from rectangle.pos and width, height values
-	//whatever is better performance-wise
-	private Vector2 pos = new Vector2(); //lower left corner of rectangle
-	private float width;
-	private float height;
 
-	//generic getters and setters
-	public Vector2 getPosition() {
-		return tmp.set(pos);
+	public float x, y;
+	public float width;
+	public float height;
+	/** rotation around the center */
+	public float rotation;
+
+	public Rectangle(float x, float y, float width, float height) {
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+		rotation = 0;
 	}
 
+	public Rectangle(float w, float h) {
+		this(0, 0, w, h);
+	}
+
+	public Vector2 getPosition() {
+		return tmp.set(x, y);
+	}
+
+	@Override
 	public void setPosition(Vector2 pos) {
-		this.pos = pos;
+		x = pos.x;
+		y = pos.y;
+	}
+
+	@Override
+	public void setPosition(float x, float y) {
+		this.x = x;
+		this.y = y;
 	}
 
 	@Override
 	public Vector2 getCenter() {
-		return tmp.set(pos).add(width / 2f, height / 2f);
+		return tmp.set(x, y).add(width / 2f, height / 2f);
 	}
 
+	@Override
 	public float getWidth() {
 		return width;
 	}
 
-	public void setWidth(float width) {
-		this.width = width;
-	}
-
 	public float getHeight() {
 		return height;
-	}
-
-	public void setHeight(float height) {
-		this.height = height;
-	}
-
-	/**
-	 * generic constructor
-	 *
-	 * @param width  rectangle width
-	 * @param height rectangle height
-	 */
-	public Rectangle(float width, float height) {
-		this.pos = new Vector2(0, 0);
-		this.width = width;
-		this.height = height;
 	}
 
 	@Override
@@ -64,7 +63,6 @@ public class Rectangle implements Shape {
 		else if (p instanceof Circle) {
 			return OverlapAlgorithms.overlapCircleRectangle((Circle) p, this);
 		}
-
 		return false;
 	}
 }
