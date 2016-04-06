@@ -82,7 +82,7 @@ public class FragmentedGameActivity extends Activity {
 					newTurret.setParent(strikeBase);
 					newTurret.putComponent(new TurretBehavior());
 					newTurret.setLayer(Screen.LAYER_3);
-					screen.putGameObject(tName, newTurret);
+					screen.addGameObject(tName, newTurret);
 				}
 			}
 		});

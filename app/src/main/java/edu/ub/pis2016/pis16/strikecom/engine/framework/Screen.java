@@ -20,6 +20,7 @@ public abstract class Screen implements Disposable {
 
 	protected final Game game;
 
+	private List<InputProcessor> inputProcessors;
 	private HashMap<String, GameObject> gameObjects;
 	private List<GameObject> goOrderedList;
 	private int uniqueID = 0;
@@ -29,10 +30,34 @@ public abstract class Screen implements Disposable {
 
 		gameObjects = new HashMap<>();
 		goOrderedList = new ArrayList<>();
+		inputProcessors = new ArrayList<>();
 	}
 
-	public void update(float deltaTime){
+	/** Must be called by any subclasses. Commits any changes to the GameObject Map and sends all input to InputProcessors. */
+	public void update(float deltaTime) {
 		commitGameObjectChanges();
+
+		// Send touch events down the cascade of input processors. If any input processor returns True, it is
+		// understood as input successfully processed, and no further passing along is done
+		for (Input.TouchEvent e : game.getInput().getTouchEvents()) {
+			switch (e.type) {
+				case Input.TouchEvent.TOUCH_UP:
+					for (InputProcessor ip : inputProcessors)
+						if (ip.touchUp(e.x, e.y, e.pointer))
+							break;
+					break;
+				case Input.TouchEvent.TOUCH_DOWN:
+					for (InputProcessor ip : inputProcessors)
+						if (ip.touchDown(e.x, e.y, e.pointer))
+							break;
+					break;
+				case Input.TouchEvent.TOUCH_DRAGGED:
+					for (InputProcessor ip : inputProcessors)
+						if (ip.touchDragged(e.x, e.y, e.pointer))
+							break;
+					break;
+			}
+		}
 	}
 
 	public abstract void present(float deltaTime);
@@ -45,6 +70,14 @@ public abstract class Screen implements Disposable {
 
 	public abstract void dispose();
 
+	public void addInputProcessor(InputProcessor ip) {
+		inputProcessors.add(ip);
+	}
+
+	public void removeInputProcessor(InputProcessor ip) {
+		inputProcessors.remove(ip);
+	}
+
 	/**********************************/
 	/*** GameObject RELATED METHODS ***/
 	/**********************************/
@@ -53,7 +86,7 @@ public abstract class Screen implements Disposable {
 	 * Add a new tagged gameObject. Please note the GameObject will NOT be available until the next frame.
 	 * All other methods use this method to actually add a GameObject.
 	 */
-	public void putGameObject(String name, GameObject object) {
+	public void addGameObject(String name, GameObject object) {
 		addedGOs.put(name, object);
 	}
 
@@ -95,8 +128,8 @@ public abstract class Screen implements Disposable {
 	}
 
 	/** Add a new untagged gameObject */
-	public void putGameObject(GameObject object) {
-		putGameObject("go" + (uniqueID++), object);
+	public void addGameObject(GameObject object) {
+		addGameObject("go" + (uniqueID++), object);
 	}
 
 	/** Lightweight method to get a named game object. Does not check for existence. */

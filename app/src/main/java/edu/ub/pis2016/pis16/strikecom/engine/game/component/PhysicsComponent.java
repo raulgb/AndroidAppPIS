@@ -41,7 +41,7 @@ public class PhysicsComponent extends Component {
 
 	public Vector2 getPosition() {
 		//return body.getPosition();
-		return position;
+		return tmp.set(position);
 	}
 
 	public void setPosition(Vector2 position) {
@@ -53,7 +53,7 @@ public class PhysicsComponent extends Component {
 	}
 
 	public Vector2 getVelocity() {
-		return velocity;
+		return tmp.set(velocity);
 	}
 
 	public void setVelocity(Vector2 velocity) {
@@ -80,8 +80,10 @@ public class PhysicsComponent extends Component {
 		return rotation;
 	}
 
-	/** Rotates the component to face the given target. Lerp speed refers to how fast the rotation zeroes-in. I.e. a
-	 * lerp speed of 1 is instant rotation*/
+	/**
+	 * Rotates the component to face the given target. Lerp speed refers to how fast the rotation zeroes-in. I.e. a
+	 * lerp speed of 1 is instant rotation
+	 */
 	public void lookAt(Vector2 target, float lerpSpeed) {
 		float angleToTarget = tmp.set(target).sub(position).angle();
 		float angleDelta = Angle.angleDelta(rotation, angleToTarget);

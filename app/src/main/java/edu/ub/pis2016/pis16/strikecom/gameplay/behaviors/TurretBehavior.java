@@ -1,7 +1,5 @@
 package edu.ub.pis2016.pis16.strikecom.gameplay.behaviors;
 
-import android.util.Log;
-
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.BehaviorComponent;
@@ -58,7 +56,7 @@ public class TurretBehavior extends BehaviorComponent {
 
 				projectile.setTag("player");
 				projectile.setLayer(Screen.LAYER_1);
-				gameObject.getScreen().putGameObject(projectile);
+				gameObject.getScreen().addGameObject(projectile);
 			}
 		}
 

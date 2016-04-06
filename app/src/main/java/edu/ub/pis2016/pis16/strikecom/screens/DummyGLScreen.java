@@ -7,9 +7,9 @@ import javax.microedition.khronos.opengles.GL10;
 
 import edu.ub.pis2016.pis16.strikecom.StrikeComGLGame;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Game;
-import edu.ub.pis2016.pis16.strikecom.engine.framework.Input;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
+import edu.ub.pis2016.pis16.strikecom.engine.framework.InputProcessor;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.GraphicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
@@ -30,16 +30,16 @@ import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
 
 /**
  * Dummy OpenGL screen.
- * <p>
+ * <p/>
  * Order of calls:
  * - Created
  * - Resumed
  * - Resized
- * <p>
+ * <p/>
  * Loop:
  * - Update
  * - Presented
- * <p>
+ * <p/>
  * On back:
  * - Paused
  * - Disposed
@@ -96,7 +96,7 @@ public class DummyGLScreen extends Screen {
 		strikeBase.putComponent(new VehicleFollowBehavior());
 		strikeBase.setTag("player");
 		strikeBase.setLayer(LAYER_1);
-		putGameObject("StrikeBase", strikeBase);
+		addGameObject("StrikeBase", strikeBase);
 
 		// Create an  Enemy GameObject
 		enemy = new GameObject();
@@ -106,14 +106,14 @@ public class DummyGLScreen extends Screen {
 		enemy.putComponent(new PhysicsComponent());
 		enemy.getComponent(PhysicsComponent.class).setPosition(64, 0);
 		enemy.getComponent(GraphicsComponent.class).getSprite().setScale(0.5f);
-		putGameObject("Enemy", enemy);
+		addGameObject("Enemy", enemy);
 
 		moveIcon = new GameObject();
 		moveIcon.setLayer(LAYER_BACKGROUND);
 		moveIcon.putComponent(new PhysicsComponent());
 		moveIcon.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("cursor_move")));
 		moveIcon.getComponent(GraphicsComponent.class).getSprite().setScale(0.3f);
-		putGameObject("MoveIcon", moveIcon);
+		addGameObject("MoveIcon", moveIcon);
 
 		grass = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("grass"));
 
@@ -123,13 +123,13 @@ public class DummyGLScreen extends Screen {
 		bodySprite.putComponent(new PhysicsComponent());
 		bodySprite.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("default_enemy")));
 		bodySprite.setLayer(LAYER_4);
-		this.putGameObject(bodySprite);
+		this.addGameObject(bodySprite);
 
 		bodySprite2 = new GameObject();
 		bodySprite2.putComponent(new PhysicsComponent());
 		bodySprite2.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("default_enemy")));
 		bodySprite2.setLayer(LAYER_4);
-		this.putGameObject(bodySprite2);
+		this.addGameObject(bodySprite2);
 
 		testBody = new DynamicBody(new Rectangle(32, 32));
 		testBody2 = new DynamicBody(new Rectangle(32, 32));
@@ -140,6 +140,26 @@ public class DummyGLScreen extends Screen {
 
 		physics2D.addDynamicBody(testBody);
 		physics2D.addDynamicBody(testBody2);
+
+		addInputProcessor(new InputProcessor() {
+			@Override
+			public boolean touchUp(float x, float y, int pointer) {
+				return false;
+			}
+
+			@Override
+			public boolean touchDown(float x, float y, int pointer) {
+				return false;
+			}
+
+			@Override
+			public boolean touchDragged(float x, float y, int pointer) {
+				targetPos.set(x, y);
+				strikeBase.getComponent(VehicleFollowBehavior.class).setTarget(targetPos);
+				moveIcon.getComponent(PhysicsComponent.class).setPosition(targetPos);
+				return true;
+			}
+		});
 	}
 
 	@Override
@@ -172,28 +192,10 @@ public class DummyGLScreen extends Screen {
 		super.update(delta);
 		secondsElapsed += delta;
 
-		for (Input.TouchEvent e : game.getInput().getTouchEvents()) {
-			if (e.type == Input.TouchEvent.TOUCH_UP)
-				continue;
-
-			// Manually unproject screen to world:
-			// Invert y axis
-			// substract half-width and half-height
-			// scale by the zoom (zoom factor x8)
-			// add camera offset
-			e.y = glGraphics.getHeight() - e.y;
-			e.x = (e.x - glGraphics.getWidth() / 2) / (int) camZoom + (int) camPos.x;
-			e.y = (e.y - glGraphics.getHeight() / 2) / (int) camZoom + (int) camPos.y;
-			targetPos.set(e.x, e.y);
-
-			strikeBase.getComponent(VehicleFollowBehavior.class).setTarget(targetPos);
-			moveIcon.getComponent(PhysicsComponent.class).setPosition(targetPos);
-		}
-
 		// Step physics simulation
-		//physics2D.update(delta);
-		//bodySprite.getComponent(PhysicsComponent.class).setPosition(testBody.getPosition());
-		//bodySprite2.getComponent(PhysicsComponent.class).setPosition(testBody2.getPosition());
+		physics2D.update(delta);
+		bodySprite.getComponent(PhysicsComponent.class).setPosition(testBody.getPosition());
+		bodySprite2.getComponent(PhysicsComponent.class).setPosition(testBody2.getPosition());
 
 		// Update GameObjects
 		for (GameObject go : this.getGameObjects())
