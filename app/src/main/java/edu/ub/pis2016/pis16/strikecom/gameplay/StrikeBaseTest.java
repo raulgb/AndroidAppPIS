@@ -5,6 +5,9 @@ import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureRegion;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureSprite;
+import edu.ub.pis2016.pis16.strikecom.engine.physics.Body;
+import edu.ub.pis2016.pis16.strikecom.engine.physics.DynamicBody;
+import edu.ub.pis2016.pis16.strikecom.engine.physics.Rectangle;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Animation;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
@@ -21,6 +24,7 @@ public class StrikeBaseTest extends Vehicle {
 	private TextureRegion[][] sbmk1_threads;
 
 	private PhysicsComponent physics;
+	private Vector2 tmp = new Vector2();
 
 	// Physics
 	private float health = 1000;
@@ -47,10 +51,11 @@ public class StrikeBaseTest extends Vehicle {
 	public StrikeBaseTest(StrikeBaseConfig cfg) {
 		super();
 
-		// Component Managing
-		physics = new PhysicsComponent();
+		//  Create Physics component
+		Rectangle rect = new Rectangle(32,32);
+		Body b = new DynamicBody(rect);
+		physics = new PhysicsComponent(b);
 		putComponent(physics);
-
 
 		// TODO Read config parameters for each modelName from a file or something
 		String model = cfg.modelName;
@@ -105,7 +110,6 @@ public class StrikeBaseTest extends Vehicle {
 		final float width = 28;
 		float rotDelta = (-leftThreadVel + rightThreadVel) / width;
 		Vector2 pos = physics.getPosition();
-		Vector2 vel = physics.getVelocity();
 		float rotation = physics.getRotation();
 
 		leftThread.set(0, width / 2f).rotate(physics.getRotation()).add(pos);
@@ -122,8 +126,8 @@ public class StrikeBaseTest extends Vehicle {
 		threadToCenter.rotate(rotDelta * delta);
 		pos.set(pivot).add(threadToCenter);
 
-		vel.set(leftThreadVel + rightThreadVel, 0).scl(0.5f).rotate(rotation);
-		pos.add(vel.scl(delta));
+		tmp.set(leftThreadVel + rightThreadVel, 0).scl(0.5f).rotate(rotation);
+		pos.add(tmp.scl(delta));
 
 		rotation = (rotation + rotDelta) % 360;
 		if (rotation < 0)

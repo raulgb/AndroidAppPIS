@@ -39,14 +39,6 @@ public class OverlapAlgorithms {
 
 	}
 
-	float min(float a, float b) {
-		return a < b ? a : b;
-	}
-
-	float max(float a, float b) {
-		return a > b ? a : b;
-	}
-
 	/**
 	 * generic circlre-rectangle collision detection
 	 *
@@ -55,20 +47,29 @@ public class OverlapAlgorithms {
 	 * @return true if they are collided
 	 */
 	public static boolean overlapCircleRectangle(Circle c, Rectangle r) {
-		float closestX = c.getPosition().x;
-		float closestY = c.getPosition().y;
-		if (c.getPosition().x < r.getPosition().x) {
-			closestX = r.getPosition().x;
-		} else if (c.getPosition().x > r.getPosition().x + r.getWidth()) {
-			closestX = r.getPosition().x + r.getWidth();
-		}
-		if (c.getPosition().y < r.getPosition().y) {
-			closestY = r.getPosition().y;
-		} else if (c.getPosition().y > r.getPosition().y + r.getHeight()) {
-			closestY = r.getPosition().y + r.getHeight();
-		}
-		closestX = c.getPosition().x - closestX;
-		closestY = c.getPosition().y - closestY;
+		float closestX = c.x;
+		float closestY = c.y;
+
+		if (c.x < r.x)
+			closestX = r.x;
+		else if (c.x > r.x + r.width)
+			closestX = r.x + r.width;
+
+		if (c.y < r.y)
+			closestY = r.y;
+		else if (c.y > r.y + r.height)
+			closestY = r.y + r.height;
+
+		closestX = c.x - closestX;
+		closestY = c.y - closestY;
 		return (closestX * closestX + closestY * closestY <= c.radius * c.radius);
+	}
+
+	float min(float a, float b) {
+		return a < b ? a : b;
+	}
+
+	float max(float a, float b) {
+		return a > b ? a : b;
 	}
 }

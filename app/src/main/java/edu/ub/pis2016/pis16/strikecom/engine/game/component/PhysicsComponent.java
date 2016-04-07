@@ -5,9 +5,13 @@ import java.util.HashMap;
 import edu.ub.pis2016.pis16.strikecom.engine.game.Component;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Angle;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
+import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureRegion;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Body;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.DynamicBody;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.KinematicBody;
+import edu.ub.pis2016.pis16.strikecom.engine.physics.Rectangle;
+import edu.ub.pis2016.pis16.strikecom.engine.physics.Shape;
+import edu.ub.pis2016.pis16.strikecom.engine.physics.StaticBody;
 
 /**
  * A Component in charge of keeping the velocity, position and acceleration of a GameObject, as well as managing the
@@ -26,15 +30,28 @@ public class PhysicsComponent extends Component {
 	private Vector2 acceleration = new Vector2();
 	private float rotation = 0;
 
-
 	private HashMap<String, Vector2> anchors = new HashMap<>();
 
 	public PhysicsComponent() {
-		body = null;
+		GraphicsComponent g = gameObject.getComponent(GraphicsComponent.class);
+		if (g != null) {
+			TextureRegion r = g.getSprite().getRegion();
+			Shape shape = new Rectangle(r.width, r.height);
+			body = new DynamicBody(shape);
+		} else
+			body = new DynamicBody(new Rectangle(1, 1));
+
+		body.userData = this;
+		gameObject.getScreen().getPhysics2D().addDynamicBody(body);
 	}
 
 	public PhysicsComponent(Body body) {
 		this.body = body;
+		body.userData = this;
+		if (body instanceof StaticBody)
+			gameObject.getScreen().getPhysics2D().addStaticBody(body);
+		else
+			gameObject.getScreen().getPhysics2D().addDynamicBody(body);
 	}
 
 	/** Returns a Vector2 anchor for usage with anchored entities */
@@ -47,52 +64,56 @@ public class PhysicsComponent extends Component {
 	}
 
 	public Vector2 getPosition() {
-		if (body != null)
-			return position.set(body.getPosition());
-
-		return position;
+		return position.set(body.position);
 	}
 
 	public void setPosition(Vector2 position) {
-		if (body != null)
-			body.setPosition(position);
-
-		this.position.set(position);
+		body.position.set(position);
 	}
 
 	public void setPosition(float x, float y) {
-		if (body != null)
-			body.setPosition(x, y);
-
-		this.position.set(x, y);
+		body.position.set(x, y);
 	}
 
 	public Vector2 getVelocity() {
-		return velocity;
+		if (body instanceof DynamicBody)
+			return velocity.set(((DynamicBody) body).velocity);
+		if (body instanceof KinematicBody)
+			return velocity.set(((KinematicBody) body).velocity);
+		return tmp.set(0, 0);
 	}
 
 	public void setVelocity(Vector2 velocity) {
-		this.velocity.set(velocity);
+		if (body instanceof DynamicBody)
+			((DynamicBody) body).velocity.set(velocity);
+		if (body instanceof KinematicBody)
+			((KinematicBody) body).velocity.set(velocity);
 	}
 
 	public void setVelocity(float x, float y) {
-		this.velocity.set(x, y);
+		if (body instanceof DynamicBody)
+			((DynamicBody) body).velocity.set(x, y);
+		if (body instanceof KinematicBody)
+			((KinematicBody) body).velocity.set(x, y);
 	}
 
 	public Vector2 getAcceleration() {
-		return acceleration;
+		if (body instanceof DynamicBody)
+			return acceleration.set(((DynamicBody) body).acceleration);
+		return tmp.set(0, 0);
 	}
 
-	public void setAcceleration(Vector2 acceleration) {
-		this.acceleration.set(acceleration);
+	public void setAcceleration(Vector2 accel) {
+		if (body instanceof DynamicBody)
+			((DynamicBody) body).acceleration.set(accel);
 	}
 
 	public void setRotation(float r) {
-		this.rotation = r;
+		body.getBounds().setRotation(r);
 	}
 
 	public float getRotation() {
-		return rotation;
+		return body.getBounds().getRotation();
 	}
 
 	/**

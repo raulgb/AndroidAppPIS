@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
+import edu.ub.pis2016.pis16.strikecom.engine.physics.Physics2D;
 
 public abstract class Screen implements Disposable {
 	public static final int LAYER_TERRAIN = -1;
@@ -69,6 +70,10 @@ public abstract class Screen implements Disposable {
 	public abstract void resume();
 
 	public abstract void dispose();
+
+	public Physics2D getPhysics2D() {
+		return null;
+	}
 
 	public void addInputProcessor(InputProcessor ip) {
 		inputProcessors.add(ip);

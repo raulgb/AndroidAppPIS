@@ -5,6 +5,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 public class Rectangle implements Shape {
 	private Vector2 tmp = new Vector2();
 
+	/** Lower Left corner of the Rectangle */
 	public float x, y;
 	public float width;
 	public float height;
@@ -12,8 +13,8 @@ public class Rectangle implements Shape {
 	public float rotation;
 
 	public Rectangle(float x, float y, float width, float height) {
-		this.x = x;
-		this.y = y;
+		this.x = x - width / 2f;
+		this.y = y - height / 2f;
 		this.width = width;
 		this.height = height;
 		rotation = 0;
@@ -29,8 +30,8 @@ public class Rectangle implements Shape {
 
 	@Override
 	public void setPosition(Vector2 pos) {
-		x = pos.x;
-		y = pos.y;
+		x = pos.x - width / 2f;
+		y = pos.y - height / 2f;
 	}
 
 	@Override
@@ -40,8 +41,14 @@ public class Rectangle implements Shape {
 	}
 
 	@Override
-	public Vector2 getCenter() {
-		return tmp.set(x, y).add(width / 2f, height / 2f);
+	public float getRotation() {
+		return rotation;
+	}
+
+	@Override
+	public void setRotation(float r) {
+		// TODO Enable Rectangle rotation
+		//rotation = r;
 	}
 
 	@Override

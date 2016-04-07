@@ -1,7 +1,5 @@
 package edu.ub.pis2016.pis16.strikecom.engine.physics;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -79,35 +77,38 @@ public class Physics2D {
 			if (body instanceof DynamicBody) {
 				DynamicBody dynBody = (DynamicBody) body;
 				// Update vel
-				tmp.set(dynBody.getAcceleration());
-				dynBody.setVelocity(dynBody.getVelocity().add(tmp.scl(delta)));
+				dynBody.velocity.add(tmp.set(dynBody.acceleration).scl(delta));
+
 				// Update position
-				tmp.set(dynBody.getVelocity());
-				body.setPosition(body.getPosition().add(tmp.scl(delta)));
+				dynBody.position.add(tmp.set(dynBody.velocity).scl(delta));
 			}
 
 			this.spatialHashGrid.insertDynamicObject(body); // insert back to  hash grid
 		}
 
+		// Update all bodies so bounds are centered on the position
+		for (Body b : dynamicBodies)
+			b.update(delta);
+
 		// Handle collisions
 		collidedBodies.clear();
 		for (Body bodyA : dynamicBodies) {
 			List<Body> potentials = spatialHashGrid.getPotentialColliders(bodyA);
-			for (Body bodyB : potentials) {
 
+			for (Body bodyB : potentials) {
 				// Skip already collided
 				if (collidedBodies.contains(bodyB))
 					continue;
 
 				// Detect Collision
 				// todo: every object still checks collision with itself, probably there is a better way to fix this than simple if
-				if (bodyA!=bodyB && bodyA.getBounds().overlaps(bodyB.getBounds())) {
+				if (bodyA != bodyB && bodyA.getBounds().overlaps(bodyB.getBounds())) {
 					// Create collision event
 					ContactListener.CollisionEvent cEvent = cePool.newObject();
 					cEvent.a = bodyA;
 					cEvent.b = bodyB;
 					// set contact to middle-point between centers
-					tmp.set(bodyA.getBounds().getCenter()).lerp(bodyB.getBounds().getCenter(), 0.5f);
+					tmp.set(bodyA.getBounds().getPosition()).lerp(bodyB.getBounds().getPosition(), 0.5f);
 
 					cEvent.contactX = tmp.x;
 					cEvent.contactY = tmp.y;

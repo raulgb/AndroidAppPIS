@@ -96,4 +96,8 @@ public class GameObject {
 	public void setParent(GameObject parent) {
 		this.parent = parent;
 	}
+
+	public String toString(){
+		return new StringBuilder().append("GO: ").append(tag).toString();
+	}
 }

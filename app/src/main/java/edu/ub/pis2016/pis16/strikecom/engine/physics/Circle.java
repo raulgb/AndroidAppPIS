@@ -8,6 +8,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 public class Circle implements Shape {
 	private Vector2 tmp = new Vector2();
 
+	/** Center coordinates of the Circle */
 	public float x, y;
 	public float radius;
 
@@ -15,10 +16,6 @@ public class Circle implements Shape {
 		this.x = x;
 		this.y = y;
 		this.radius = radius;
-	}
-
-	public Vector2 getCenter() {
-		return tmp.set(x, y);
 	}
 
 	public Vector2 getPosition() {
@@ -36,14 +33,23 @@ public class Circle implements Shape {
 	}
 
 	public void setPosition(Vector2 p) {
-		x = p.x + radius;
-		y = p.y + radius;
+		x = p.x;
+		y = p.y;
 	}
 
 	@Override
 	public void setPosition(float x, float y) {
-		this.x = x + radius;
-		this.y = y + radius;
+		this.x = x;
+		this.y = y;
+	}
+
+	@Override
+	public float getRotation() {
+		return 0;
+	}
+
+	@Override
+	public void setRotation(float r) {
 	}
 
 	@Override

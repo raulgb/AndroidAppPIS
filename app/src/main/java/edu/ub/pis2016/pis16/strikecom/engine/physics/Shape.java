@@ -7,14 +7,15 @@ public interface Shape {//interface with basic collision methods
 	/** Lower Left corner of the Shape, whatever it is. */
 	Vector2 getPosition();
 
-	/** Set the lower-left corner of the shape */
+	/** Set the center position of the shape */
 	void setPosition(Vector2 pos);
 
-	/** Set the lower-left corner of the shape */
+	/** Set the center position of the shape */
 	void setPosition(float x, float y);
 
-	/** Center of the shape */
-	Vector2 getCenter();
+	float getRotation();
+
+	void setRotation(float r);
 
 	float getWidth();
 
