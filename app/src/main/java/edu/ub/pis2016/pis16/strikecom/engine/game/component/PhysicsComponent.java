@@ -6,6 +6,8 @@ import edu.ub.pis2016.pis16.strikecom.engine.game.Component;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Angle;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Body;
+import edu.ub.pis2016.pis16.strikecom.engine.physics.DynamicBody;
+import edu.ub.pis2016.pis16.strikecom.engine.physics.KinematicBody;
 
 /**
  * A Component in charge of keeping the velocity, position and acceleration of a GameObject, as well as managing the
@@ -24,10 +26,15 @@ public class PhysicsComponent extends Component {
 	private Vector2 acceleration = new Vector2();
 	private float rotation = 0;
 
-	private HashMap<String, Vector2> anchors;
+
+	private HashMap<String, Vector2> anchors = new HashMap<>();
 
 	public PhysicsComponent() {
-		anchors = new HashMap<>();
+		body = null;
+	}
+
+	public PhysicsComponent(Body body) {
+		this.body = body;
 	}
 
 	/** Returns a Vector2 anchor for usage with anchored entities */
@@ -40,20 +47,28 @@ public class PhysicsComponent extends Component {
 	}
 
 	public Vector2 getPosition() {
-		//return body.getPosition();
-		return tmp.set(position);
+		if (body != null)
+			return position.set(body.getPosition());
+
+		return position;
 	}
 
 	public void setPosition(Vector2 position) {
+		if (body != null)
+			body.setPosition(position);
+
 		this.position.set(position);
 	}
 
 	public void setPosition(float x, float y) {
+		if (body != null)
+			body.setPosition(x, y);
+
 		this.position.set(x, y);
 	}
 
 	public Vector2 getVelocity() {
-		return tmp.set(velocity);
+		return velocity;
 	}
 
 	public void setVelocity(Vector2 velocity) {

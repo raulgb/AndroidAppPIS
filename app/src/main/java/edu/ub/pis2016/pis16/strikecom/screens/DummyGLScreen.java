@@ -14,10 +14,12 @@ import edu.ub.pis2016.pis16.strikecom.engine.game.component.GraphicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.GLGraphics;
+import edu.ub.pis2016.pis16.strikecom.engine.opengl.OrthoCamera;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Texture;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureSprite;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Body;
+import edu.ub.pis2016.pis16.strikecom.engine.physics.ContactListener;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.DynamicBody;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Physics2D;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Rectangle;
@@ -45,9 +47,12 @@ import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
  * - Disposed
  */
 public class DummyGLScreen extends Screen {
-	GLGraphics glGraphics;
-	SpriteBatch batch;
+
 	float secondsElapsed;
+
+	GLGraphics glGraphics;
+	OrthoCamera camera;
+	SpriteBatch batch;
 
 	Physics2D physics2D;
 	GameObject bodySprite;
@@ -66,14 +71,16 @@ public class DummyGLScreen extends Screen {
 	private Vector2 targetPos = new Vector2();
 	private Vector2 tmp = new Vector2();
 
-	private Vector2 camPos = new Vector2();
-	public float camZoom = 6f;
-
 	public DummyGLScreen(Game game) {
 		super(game);
 		Log.i("DUMMY_SCREEN", "Created");
 
 		glGraphics = game.getGLGraphics();
+
+		camera = new OrthoCamera(glGraphics, glGraphics.getWidth(), glGraphics.getHeight());
+		camera.zoom = 1 / getZoomConstant();
+		//camera.zoom = 1 / 8f;
+
 		physics2D = new Physics2D(1024, 1024, Vector2.ZERO);
 
 		batch = new SpriteBatch(game.getGLGraphics(), 512);
@@ -136,7 +143,7 @@ public class DummyGLScreen extends Screen {
 
 		testBody.setPosition(0, 64);
 		testBody2.setPosition(128, 64);
-		((DynamicBody) testBody2).setVelocity(-2, 0);
+		((DynamicBody) testBody2).setVelocity(-10, 0);
 
 		physics2D.addDynamicBody(testBody);
 		physics2D.addDynamicBody(testBody2);
@@ -155,6 +162,7 @@ public class DummyGLScreen extends Screen {
 			@Override
 			public boolean touchDragged(float x, float y, int pointer) {
 				targetPos.set(x, y);
+				camera.unproject(targetPos);
 				strikeBase.getComponent(VehicleFollowBehavior.class).setTarget(targetPos);
 				moveIcon.getComponent(PhysicsComponent.class).setPosition(targetPos);
 				return true;
@@ -175,15 +183,7 @@ public class DummyGLScreen extends Screen {
 	public void resize(int width, int height) {
 		Log.i("DUMMY_SCREEN", "Resized: " + width + "x" + height);
 
-		// Crude 2D Camera
-		GL10 gl = game.getGLGraphics().getGL();
-		GLGraphics glGraphics = game.getGLGraphics();
-
-		gl.glViewport(0, 0, glGraphics.getWidth(), glGraphics.getHeight());
-		gl.glMatrixMode(GL10.GL_PROJECTION);
-		gl.glLoadIdentity();
-		gl.glMatrixMode(GL10.GL_MODELVIEW);
-		gl.glLoadIdentity();
+		// TODO resize camera here
 	}
 
 
@@ -202,11 +202,9 @@ public class DummyGLScreen extends Screen {
 			go.update(delta);
 
 		// Move camera to strikebase
-		camPos.set(strikeBase.getComponent(PhysicsComponent.class).getPosition());
-		camPos.add(strikeBase.getComponent(PhysicsComponent.class).getVelocity());
-		updateCamera(glGraphics.getWidth(), glGraphics.getHeight(), 1 / getZoomConstant());
-
-		commitGameObjectChanges();
+		camera.position.set(strikeBase.getComponent(PhysicsComponent.class).getPosition());
+		camera.position.add(strikeBase.getComponent(PhysicsComponent.class).getVelocity().scl(0.25f));
+		camera.update();
 	}
 
 	private float getZoomConstant() {
@@ -224,7 +222,7 @@ public class DummyGLScreen extends Screen {
 		float density_id = ctx.getResources().getDisplayMetrics().density;
 
 		//Based on the fact that xxhdpi has a constant of 8
-		return density_id * camZoom / 3.0f;
+		return density_id * 6f / 3.0f;
 	}
 
 
@@ -246,22 +244,6 @@ public class DummyGLScreen extends Screen {
 		batch.end();
 	}
 
-	/** Manually set the orthographic camera to the camPos vector */
-	private void updateCamera(float w, float h, float zoom) {
-		// TODO Make this a separate OrthographicCamera class and add rotation
-		float frustumWidth = w;
-		float frustumHeight = h;
-
-		GL10 gl = game.getGLGraphics().getGL();
-		gl.glLoadIdentity();
-		gl.glOrthof(
-				camPos.x - frustumWidth * zoom / 2,
-				camPos.x + frustumWidth * zoom / 2,
-				camPos.y - frustumHeight * zoom / 2,
-				camPos.y + frustumHeight * zoom / 2,
-				1, -1
-		);
-	}
 
 	@Override
 	public void pause() {

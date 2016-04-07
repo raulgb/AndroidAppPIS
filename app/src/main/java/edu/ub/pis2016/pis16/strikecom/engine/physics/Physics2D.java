@@ -102,7 +102,6 @@ public class Physics2D {
 				// Detect Collision
 				// todo: every object still checks collision with itself, probably there is a better way to fix this than simple if
 				if (bodyA!=bodyB && bodyA.getBounds().overlaps(bodyB.getBounds())) {
-					Log.i("collision","detected");//
 					// Create collision event
 					ContactListener.CollisionEvent cEvent = cePool.newObject();
 					cEvent.a = bodyA;
