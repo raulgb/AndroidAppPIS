@@ -24,4 +24,15 @@ public abstract class Body {
 		return bounds;
 	}
 
+	public Vector2 getPosition(){
+		return this.position;
+	}
+
+	public void setPosition(Vector2 v){
+		this.position = v;
+	}
+
+	public void setPosition(float x, float y){
+		this.position = new Vector2(x,y);
+	}
 }
