@@ -22,7 +22,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.physics.StaticBody;
 public class PhysicsComponent extends Component {
 
 	// TODO Integrate Physics2D
-	private Body body;
+	public Body body;
 
 	private static Vector2 tmp = new Vector2();
 	private Vector2 position = new Vector2();
@@ -33,25 +33,12 @@ public class PhysicsComponent extends Component {
 	private HashMap<String, Vector2> anchors = new HashMap<>();
 
 	public PhysicsComponent() {
-		GraphicsComponent g = gameObject.getComponent(GraphicsComponent.class);
-		if (g != null) {
-			TextureRegion r = g.getSprite().getRegion();
-			Shape shape = new Rectangle(r.width, r.height);
-			body = new DynamicBody(shape);
-		} else
-			body = new DynamicBody(new Rectangle(1, 1));
-
-		body.userData = this;
-		gameObject.getScreen().getPhysics2D().addDynamicBody(body);
+		position.set(0, 0);
 	}
 
 	public PhysicsComponent(Body body) {
 		this.body = body;
 		body.userData = this;
-		if (body instanceof StaticBody)
-			gameObject.getScreen().getPhysics2D().addStaticBody(body);
-		else
-			gameObject.getScreen().getPhysics2D().addDynamicBody(body);
 	}
 
 	/** Returns a Vector2 anchor for usage with anchored entities */
@@ -64,15 +51,21 @@ public class PhysicsComponent extends Component {
 	}
 
 	public Vector2 getPosition() {
-		return position.set(body.position);
+		if (body != null)
+			return position.set(body.position);
+		else return position;
 	}
 
 	public void setPosition(Vector2 position) {
-		body.position.set(position);
+		if (body != null)
+			body.position.set(position);
+		else position.set(position);
 	}
 
 	public void setPosition(float x, float y) {
-		body.position.set(x, y);
+		if (body != null)
+			body.position.set(x, y);
+		else position.set(position);
 	}
 
 	public Vector2 getVelocity() {
@@ -109,11 +102,15 @@ public class PhysicsComponent extends Component {
 	}
 
 	public void setRotation(float r) {
-		body.getBounds().setRotation(r);
+		if (body != null)
+			body.getBounds().setRotation(r);
+		else rotation = r;
 	}
 
 	public float getRotation() {
-		return body.getBounds().getRotation();
+		if (body != null)
+			return body.getBounds().getRotation();
+		else return rotation;
 	}
 
 	/**

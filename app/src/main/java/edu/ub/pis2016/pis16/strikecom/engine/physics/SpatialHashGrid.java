@@ -164,4 +164,7 @@ public class SpatialHashGrid {
 		return this.cellIds;
 	}
 
+	public int cellCount() {
+		return this.cellsPerCol * this.cellsPerRow;
+	}
 }
