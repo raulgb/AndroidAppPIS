@@ -144,6 +144,7 @@ public class StrikeBaseTest extends Vehicle {
 
 		// Commit rotation changes
 		physics.setRotation(rotation);
+		physics.setVelocity(5,0);
 
 		super.update(delta);
 	}

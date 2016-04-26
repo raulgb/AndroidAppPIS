@@ -6,7 +6,4 @@ public class StaticBody extends Body {
 		super(bounds);
 	}
 
-	@Override
-	public void update(float delta) {
-	}
 }

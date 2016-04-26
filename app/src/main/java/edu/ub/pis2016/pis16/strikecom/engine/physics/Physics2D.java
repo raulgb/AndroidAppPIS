@@ -124,14 +124,14 @@ public class Physics2D {
 	}
 
 	/** Static bodies */
-	public void addStaticBody(Body b) {//add static body to physics engine
+	protected void addStaticBody(Body b) {//add static body to physics engine
 		this.staticBodies.add(b);
 		this.spatialHashGrid.insertStaticObject(b); //warning
 
 	}
 
 	/** Dynamic and Kinematic bodies */
-	public void addDynamicBody(Body b) {//add dynamic body to physics engine
+	protected void addDynamicBody(Body b) {//add dynamic body to physics engine
 		this.dynamicBodies.add(b);
 	}
 
@@ -144,6 +144,15 @@ public class Physics2D {
 			addStaticBody(body);
 		else if(body instanceof DynamicBody)
 			addDynamicBody(body);
+	}
+
+	public boolean removeBody(Body body){
+		spatialHashGrid.removeObject(body);
+		if(staticBodies.remove(body))
+			return true;
+		if(dynamicBodies.remove(body))
+			return true;
+		return false;
 	}
 }
 /*

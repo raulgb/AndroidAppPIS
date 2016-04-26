@@ -19,7 +19,9 @@ import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Texture;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureSprite;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.ContactListener;
+import edu.ub.pis2016.pis16.strikecom.engine.physics.DynamicBody;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Physics2D;
+import edu.ub.pis2016.pis16.strikecom.engine.physics.Rectangle;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Pool;
 import edu.ub.pis2016.pis16.strikecom.gameplay.StrikeBaseTest;
@@ -96,6 +98,7 @@ public class DummyGLScreen extends Screen {
 		strikeBase.putComponent(new VehicleFollowBehavior());
 		strikeBase.setTag("player");
 		strikeBase.setLayer(LAYER_1);
+		physics2D.addBody(strikeBase.getComponent(PhysicsComponent.class).body);
 		addGameObject("StrikeBase", strikeBase);
 
 		// Create an  Enemy GameObject
@@ -103,7 +106,9 @@ public class DummyGLScreen extends Screen {
 		enemy.setLayer(LAYER_1);
 		enemy.setTag("enemy");
 		enemy.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("enemy")));
-		enemy.putComponent(new PhysicsComponent());
+		enemy.putComponent(new PhysicsComponent(
+				new DynamicBody(new Rectangle(4,4))
+		));
 		enemy.getComponent(PhysicsComponent.class).setPosition(64, 0);
 		enemy.getComponent(GraphicsComponent.class).getSprite().setScale(0.5f);
 		addGameObject("Enemy", enemy);
