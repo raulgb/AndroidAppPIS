@@ -8,7 +8,7 @@ public class Perlin2D {
 
 	/**
 	 * constructor
-	 * @param seed seed to generate pseude random values from
+	 * @param seed seed to generate pseudo random values from
 	 */
 	public Perlin2D(long seed){
 		Random random = new Random(seed);
@@ -22,8 +22,8 @@ public class Perlin2D {
 	 * @param y y-coordinate
 	 * @return returns one of 4 basic gradient vectors
 	 */
-	private float [] getPseudeRandomGradientVector(int x, int y){
-		int v = (int)(((x * 1836311903) ^ ((long)y * 2971215073L)+ 4807526976L) & 1023);
+	private float [] getPseudoRandomGradientVector(int x, int y){
+		int v = (int)(((x * 1836311903) ^ (y * 2971215073L)+ 4807526976L) & 1023);
 		v=permutationTable[v]&3;
 
 		switch(v) {
@@ -53,14 +53,14 @@ public class Perlin2D {
 	 * @param a left border of interval
 	 * @param b right border of interval
 	 * @param t point location between a and b
-	 * @return returnt interpolated value of t
+	 * @return returns interpolated value of t
 	 */
 	static float Lerp(float a, float b, float t){
 		return a + (b - a) * t;
 	}
 
 	/**
-	 * Dot product of v 2d vectors
+	 * Dot product of 2d vectors
 	 * @param a 2d vector a
 	 * @param b 2d vector b
 	 * @return dot product
@@ -82,10 +82,10 @@ public class Perlin2D {
 		float pointInQuadX= fx-left;
 		float pointInQuadY=fy-top;
 
-		float[] topLeftGradient = getPseudeRandomGradientVector(left,top);
-		float[] topRightGradient = getPseudeRandomGradientVector(left+1,top);
-		float[] bottomLeftGradient = getPseudeRandomGradientVector(left,top+1);
-		float[] bottomRightGradient = getPseudeRandomGradientVector(left+1,top+1);
+		float[] topLeftGradient = getPseudoRandomGradientVector(left, top);
+		float[] topRightGradient = getPseudoRandomGradientVector(left + 1, top);
+		float[] bottomLeftGradient = getPseudoRandomGradientVector(left, top + 1);
+		float[] bottomRightGradient = getPseudoRandomGradientVector(left + 1, top + 1);
 
 		float[] distanceToTopLeft = new float[]{pointInQuadX,pointInQuadY};
 		float[] distanceToTopRight = new float[]{pointInQuadX-1,pointInQuadY};
@@ -130,5 +130,32 @@ public class Perlin2D {
 
 		return result/max;
 	}
+
+	/**
+	 * generates 2d table with float values from -1 to 1
+	 * @param width map width
+	 * @param height map height
+	 * @param squareSize squares, gradient interpolation is done into
+	 * @param octaves octaves of noise
+	 * @param persistence noise persistence
+	 * @return returns 2d table with float values from -1 to 1
+	 */
+
+	public float[][] perlinMap(int width, int height, int squareSize,int octaves, float persistence){
+		float[][] resultMap = new float [width][height];
+		float increment = 1f/(float)squareSize;
+		float cX=0;
+		float cY=0;
+		for(int i=0;i<width;i++){
+			for(int j=0;i<height;j++){
+				resultMap[i][j]=this.Noise(cX,cY,octaves,persistence);
+				cY+=increment;
+			}
+			cX+=increment;
+		}
+
+		return resultMap;
+	}
+
 
 }
