@@ -102,16 +102,15 @@ public class Physics2D {
 
 				// Detect Collision
 				// todo: every object still checks collision with itself, probably there is a better way to fix this than simple if
-				if (bodyA != bodyB && bodyA.getBounds().overlaps(bodyB.getBounds())) {
+				if (bodyA != bodyB && bodyA.collide(bodyB)) {
 					// Create collision event
 					ContactListener.CollisionEvent cEvent = cePool.newObject();
 					cEvent.a = bodyA;
 					cEvent.b = bodyB;
 					// set contact to middle-point between centers
-					tmp.set(bodyA.getBounds().getPosition()).lerp(bodyB.getBounds().getPosition(), 0.5f);
-
-					cEvent.contactX = tmp.x;
-					cEvent.contactY = tmp.y;
+//					tmp.set(bodyA.getBounds().getPosition()).lerp(bodyB.getBounds().getPosition(), 0.5f);
+//					cEvent.contactX = tmp.x;
+//					cEvent.contactY = tmp.y;
 
 					// Pass along to listeners
 					for (ContactListener cl : listeners)
@@ -138,6 +137,13 @@ public class Physics2D {
 
 	public void addContactListener(ContactListener cl) {
 		listeners.add(cl);
+	}
+
+	public void addBody(Body body) {
+		if(body instanceof StaticBody)
+			addStaticBody(body);
+		else if(body instanceof DynamicBody)
+			addDynamicBody(body);
 	}
 }
 /*

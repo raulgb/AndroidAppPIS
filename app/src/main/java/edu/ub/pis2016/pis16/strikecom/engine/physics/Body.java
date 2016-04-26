@@ -5,11 +5,11 @@ import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 /** Body is a generic type of object used in collision system */
 public abstract class Body {
 
-	protected Shape bounds;
-
 	public Vector2 position = new Vector2();
-
 	public Object userData;
+
+	/** The shape of the body, centered around it */
+	protected Shape bounds;
 
 	public Body(Shape bounds) {
 		this.bounds = bounds;
@@ -17,6 +17,7 @@ public abstract class Body {
 	}
 
 	public void update(float delta){
+		// TODO Maybe find a better way of doing this
 		bounds.setPosition(position);
 	}
 
@@ -34,5 +35,9 @@ public abstract class Body {
 
 	public void setPosition(float x, float y){
 		this.position = new Vector2(x,y);
+	}
+
+	public boolean collide(Body b){
+		return bounds.overlaps(b.bounds);
 	}
 }
