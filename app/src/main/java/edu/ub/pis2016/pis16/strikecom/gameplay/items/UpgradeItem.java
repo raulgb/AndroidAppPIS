@@ -14,4 +14,9 @@ public class UpgradeItem extends Item{
 		}
 		return new UpgradeItem(param[0], param[1], param[2], Float.valueOf(param[3]));
 	}
+
+	@Override
+	public String getDisplay() {
+		return this.flavour;
+	}
 }

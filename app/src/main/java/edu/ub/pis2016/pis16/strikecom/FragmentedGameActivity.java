@@ -10,6 +10,7 @@ import android.os.PowerManager;
 import android.view.View;
 
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.GraphicsComponent;
+import edu.ub.pis2016.pis16.strikecom.fragments.InventoryFragment;
 import edu.ub.pis2016.pis16.strikecom.fragments.SidebarFragment;
 import edu.ub.pis2016.pis16.strikecom.controller.SidebarEventListener;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;

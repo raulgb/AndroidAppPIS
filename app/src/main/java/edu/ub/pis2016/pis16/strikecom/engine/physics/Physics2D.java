@@ -131,7 +131,7 @@ public class Physics2D {
 	}
 
 	/** Dynamic and Kinematic bodies */
-	protected void addDynamicBody(Body b) {//add dynamic body to physics engine
+	public void addDynamicBody(Body b) {//add dynamic body to physics engine
 		this.dynamicBodies.add(b);
 	}
 

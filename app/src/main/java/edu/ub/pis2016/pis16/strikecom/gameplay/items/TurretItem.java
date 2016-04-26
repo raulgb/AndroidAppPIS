@@ -1,5 +1,8 @@
 package edu.ub.pis2016.pis16.strikecom.gameplay.items;
 
+import edu.ub.pis2016.pis16.strikecom.engine.game.component.BehaviorComponent;
+import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.CustomTurretBehavior;
+
 public class TurretItem extends Item {
 	float[] stats;
 
@@ -32,6 +35,16 @@ public class TurretItem extends Item {
 			seq += (";" + Float.toString(s));
 		}
 		return seq;
+	}
+
+	@Override
+	public String getDisplay() {
+		return  ("attack: " + Float.toString(stats[0]) + "\nspeed: " + Float.toString(stats[0]) + "\nHP: " + Float.toString(stats[0]) +
+				"\n\n" + flavour);
+	}
+
+	public BehaviorComponent getTurretBehavior() {
+		return new CustomTurretBehavior(stats[2], 0.15f);
 	}
 
 }

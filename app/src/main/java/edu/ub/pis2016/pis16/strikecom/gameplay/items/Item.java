@@ -32,4 +32,6 @@ public abstract class Item implements Comparable<Item> {
 	public int compareTo(@NonNull Item o) {
 		return Math.round(this.price - o.price);
 	}
+
+	public abstract String getDisplay();
 }

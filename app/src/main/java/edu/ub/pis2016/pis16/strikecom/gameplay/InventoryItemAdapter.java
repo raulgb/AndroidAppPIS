@@ -1,8 +1,13 @@
 package edu.ub.pis2016.pis16.strikecom.gameplay;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import android.content.Context;
 //import android.graphics.drawable.Drawable;
+import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import edu.ub.pis2016.pis16.strikecom.R;
+import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.Item;
 
 public class InventoryItemAdapter extends BaseAdapter {
@@ -55,8 +61,15 @@ public class InventoryItemAdapter extends BaseAdapter {
 		TextView itemName = (TextView) rowView.findViewById(R.id.itemName);
 
 		Item item = this.items.get(position);
-		itemName.setText(item.getName());
-		//itemImage.setImageDrawable(Drawable.createFromPath(item.getImage()));
+		itemName.setText(item.getDisplay());
+
+		int imageID = context.getResources().getIdentifier(item.getImage(), "drawable", context.getPackageName());
+		if (imageID > 0) {
+			// Item has an associated image in drawables
+			itemImage.setImageResource(imageID);
+		} else {
+			itemImage.setImageResource(R.drawable.scrap64x64);
+		}
 
 		return rowView;
 	}
