@@ -46,5 +46,4 @@ public class TurretItem extends Item {
 	public BehaviorComponent getTurretBehavior() {
 		return new CustomTurretBehavior(stats[2], 0.15f);
 	}
-
 }

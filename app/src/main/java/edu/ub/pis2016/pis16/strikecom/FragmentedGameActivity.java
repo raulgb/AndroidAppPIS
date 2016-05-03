@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.view.View;
 
+import java.util.HashMap;
+
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.GraphicsComponent;
 import edu.ub.pis2016.pis16.strikecom.fragments.InventoryFragment;
 import edu.ub.pis2016.pis16.strikecom.fragments.SidebarFragment;
@@ -17,6 +19,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.gameplay.StrikeBaseTest;
 import edu.ub.pis2016.pis16.strikecom.gameplay.Turret;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.TurretBehavior;
+import edu.ub.pis2016.pis16.strikecom.gameplay.items.Inventory;
 
 public class FragmentedGameActivity extends Activity {
 
@@ -24,6 +27,8 @@ public class FragmentedGameActivity extends Activity {
 
 	StrikeComGLGame game;
 	SidebarFragment sidebar;
+
+	HashMap<String, Object> playerState;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +50,11 @@ public class FragmentedGameActivity extends Activity {
 
 		// Give the sidebar fragment a reference to the game fragment.
 		sidebar.setGame(game);
+
+		playerState.put("SCRAP", Integer.valueOf(getString(R.string.res1_defVal)));
+		playerState.put("FUEL", Integer.valueOf(getString(R.string.res2_defVal)));
+		playerState.put("POINTS",0);
+		playerState.put("INVENTORY", new Inventory());
 	}
 
 	@Override

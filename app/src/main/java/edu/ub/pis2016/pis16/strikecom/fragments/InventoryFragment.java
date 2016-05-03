@@ -5,19 +5,127 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
 
+import edu.ub.pis2016.pis16.strikecom.R;
 import edu.ub.pis2016.pis16.strikecom.StrikeComGLGame;
+import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
+import edu.ub.pis2016.pis16.strikecom.engine.game.component.GraphicsComponent;
+import edu.ub.pis2016.pis16.strikecom.gameplay.InventoryItemAdapter;
+import edu.ub.pis2016.pis16.strikecom.gameplay.StrikeBaseTest;
+import edu.ub.pis2016.pis16.strikecom.gameplay.Turret;
+import edu.ub.pis2016.pis16.strikecom.gameplay.items.Inventory;
+import edu.ub.pis2016.pis16.strikecom.gameplay.items.TurretItem;
+import edu.ub.pis2016.pis16.strikecom.gameplay.items.UpgradeItem;
 
 public class InventoryFragment extends DialogFragment {
 
 	private StrikeComGLGame game;
+	private Inventory inventory;
+
+	private Button equipBtn;
+	private Button cancelBtn;
+	private ListView itemList;
+	private TextView itemDesc;
+
+	int selectedItem;
+	int selectedSlot = -1;
+	boolean isEquipped = false; //selected item is currently equipped
 
 	public void setGame(StrikeComGLGame game) {
 		this.game = game;
 	}
 
+	public void setInventory(Inventory inventory) { this.inventory = inventory; }
+
+	public void setSelectedSlot(int selectedSlot) { this.selectedSlot = selectedSlot; }
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		return super.onCreateView(inflater, container, savedInstanceState);
+		View view = inflater.inflate(R.layout.inventory, container);
+
+		equipBtn = (Button) view.findViewById(R.id.inventoryBtn_1);
+		cancelBtn = (Button) view.findViewById(R.id.inventoryBtn_2);
+		itemList = (ListView) view.findViewById(R.id.itemList);
+		itemDesc = (TextView) view.findViewById(R.id.itemDesc);
+
+		initButtons();
+		initItemList();
+
+		getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+		return view;
+	}
+
+	private void initButtons(){
+		equipBtn.setEnabled(false);
+		equipBtn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				//Item item = inventory.getItem(selectedItem);
+				equipItem((TurretItem)inventory.getItem(selectedItem));
+			}
+		});
+
+		cancelBtn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				dismiss();
+			}
+		});
+	}
+
+	private void initItemList(){
+		itemList.setAdapter(new InventoryItemAdapter(getActivity(), inventory.getInventory()));
+		itemList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+				if(i>=0){ //valid item is selected
+					selectedItem = i;
+					itemDesc.setText( inventory.getItem(selectedItem).getDisplay() );
+
+					if(selectedSlot >= 0) { //valid slot is selected
+						equipBtn.setEnabled(true);
+					}
+				} else {
+					equipBtn.setEnabled(false);
+				}
+			}
+		});
+	}
+
+	private void equipItem(TurretItem turretItem) {
+		Screen screen = game.getCurrentScreen();
+		StrikeBaseTest strikeBase = screen.getGameObject("StrikeBase", StrikeBaseTest.class);
+		String tName = "turret_" + selectedSlot;
+		if (isEquipped) {
+			screen.removeGameObject(tName);
+			equipBtn.setText(R.string.equip_button);
+		} else {
+			Turret newTurret = new Turret(turretItem.getImage(), strikeBase, tName);
+			newTurret.getComponent(GraphicsComponent.class).getSprite().setScale(0.75f);
+			newTurret.setParent(strikeBase);
+			newTurret.putComponent(turretItem.getTurretBehavior());
+			newTurret.setLayer(Screen.LAYER_3);
+			screen.addGameObject(tName, newTurret);
+			equipBtn.setText(R.string.unequip_button);
+		}
+		isEquipped = !isEquipped;
+	}
+
+	private void equipItem(UpgradeItem upgrade) {
+		Screen screen = game.getCurrentScreen();
+		StrikeBaseTest strikeBase = screen.getGameObject("StrikeBase", StrikeBaseTest.class);
+		if (isEquipped) {
+			strikeBase.removeUpgrade(upgrade);
+			equipBtn.setText(getString(R.string.equip_button));
+		} else {
+			strikeBase.addUpgrade(upgrade);
+			equipBtn.setText(getString(R.string.equip_button));
+		}
+		isEquipped = !isEquipped;
 	}
 }

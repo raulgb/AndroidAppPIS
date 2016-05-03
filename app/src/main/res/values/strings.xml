@@ -28,7 +28,10 @@
     <string name="upgrade1_button">U1</string>
     <string name="upgrade2_button">U2</string>
     <string name="upgrade3_button">U3</string>
+    <string name="equip_button">Equip</string>
+    <string name="unequip_button">Unequip</string>
     <string name="inventory_button">Inventory</string>
+    <string name="cancel_button">Cancel</string>
 
     <string name="enter_name_toast">Please enter a name!</string>
     <string name="quit_alert">Exit the Game?</string>

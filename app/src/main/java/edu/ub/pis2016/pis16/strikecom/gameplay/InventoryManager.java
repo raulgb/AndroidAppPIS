@@ -17,10 +17,11 @@ import edu.ub.pis2016.pis16.strikecom.gameplay.items.UpgradeItem;
 public class InventoryManager {
 	private Inventory master; //inventory containing every gameObject available to the player
 
-	// Builder. Currently loads turret objects only
+	// Builder.
 	public InventoryManager(Context context, String turretsFile, String upgradesFile) throws IOException{
 		this.master = new Inventory();
 		loadTurrets(context, turretsFile);
+		loadUpgrades(context, upgradesFile);
 	}
 
 	// Loads turret objects from assets to master inventory.

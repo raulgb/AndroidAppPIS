@@ -6,7 +6,7 @@
               android:background="@drawable/frame_retro">
 
     <ListView
-        android:id="@+id/listView"
+        android:id="@+id/itemList"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="1"/>
@@ -36,7 +36,7 @@
             android:layout_gravity="center"
             style="?android:attr/borderlessButtonStyle"
             android:background="@drawable/btn_retro"
-            android:text="equip"/>
+            android:text="@string/equip_button"/>
         <Button
             android:id="@+id/inventoryBtn_2"
             android:layout_width="match_parent"
@@ -44,7 +44,7 @@
             android:layout_gravity="center"
             style="?android:attr/borderlessButtonStyle"
             android:background="@drawable/btn_retro"
-            android:text="close"/>
+            android:text="@string/cancel_button"/>
     </LinearLayout>
 
 </LinearLayout>
