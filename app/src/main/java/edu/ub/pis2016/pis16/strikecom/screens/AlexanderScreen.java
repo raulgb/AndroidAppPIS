@@ -62,10 +62,14 @@ public class AlexanderScreen extends Screen {
 	StrikeBaseTest strikeBase;
 
 	TextureSprite grass;
-	TextureSprite h0;
-	TextureSprite h1;
-	TextureSprite h2;
-	TextureSprite h3;
+	TextureSprite g0;
+	TextureSprite g1;
+	TextureSprite g2;
+	TextureSprite g3;
+	TextureSprite g4;
+	TextureSprite g5;
+	TextureSprite g6;
+	TextureSprite g7;
 	float[][] pTable;
 
 
@@ -80,7 +84,7 @@ public class AlexanderScreen extends Screen {
 
 		glGraphics = game.getGLGraphics();
 		camera = new OrthoCamera(glGraphics, glGraphics.getWidth(), glGraphics.getHeight());
-		camera.zoom = 3 / getZoomConstant();
+		camera.zoom = 1 / getZoomConstant();
 		//camera.zoom = 1 / 8f;
 
 		physics2D = new Physics2D(1024, 1024, Vector2.ZERO);
@@ -116,17 +120,17 @@ public class AlexanderScreen extends Screen {
 		addGameObject("MoveIcon", moveIcon);
 
 		grass = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("grass"));
-		h0 = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("heat",0));
-		h0.setScale(2f);
-		h1 = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("heat",1));
-		h1.setScale(2f);
-		h2 = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("heat",2));
-		h2.setScale(2f);
-		h3 = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("heat",3));
-		h3.setScale(2f);
-		Perlin2D perlin = new Perlin2D(1339);
+		g0 = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("gray",0));
+		g1 = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("gray",1));
+		g2 = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("gray",2));
+		g3 = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("gray",3));
+		g4 = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("gray",4));
+		g5 = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("gray",5));
+		g6 = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("gray",6));
+		g7 = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("gray",7));
+		Perlin2D perlin = new Perlin2D(1331);
 		pTable = new float[64][64];
-		pTable = perlin.perlinMap(64,64,16,3,0.85f);
+		pTable = perlin.perlinMap(64,64,8,4,0.7f);
 
 		physics2D.addContactListener(new ContactListener() {
 			@Override
@@ -189,10 +193,14 @@ public class AlexanderScreen extends Screen {
 //				TextureRegion heat = Assets.SPRITE_ATLAS.getRegion("heat", MathUtils.random(0, 3));
 //				grass.setRegion(heat);
 				if (pTable[x][y]<-0.25f){
-					h0.draw(batch, 16 + x * 31.99f, 16 + y * 31.99f);
-				}else if (pTable[x][y]<0.0f){h1.draw(batch, 16 + x * 31.99f, 16 + y * 31.99f);}
-				else if (pTable[x][y]<0.25f){h2.draw(batch, 16 + x * 31.99f, 16 + y * 31.99f);}
-				else{h3.draw(batch, 16 + x * 31.99f, 16 + y * 31.99f);}
+					g0.draw(batch, 16 + x * 7.99f, 16 + y * 7.99f);
+				}else if (pTable[x][y]<-0.5f){g1.draw(batch, 16 + x * 7.99f, 16 + y * 7.99f);}
+				else if (pTable[x][y]<-0.25f){g2.draw(batch, 16 + x * 7.99f, 16 + y * 7.99f);}
+				else if (pTable[x][y]<0.0f){g3.draw(batch, 16 + x * 7.99f, 16 + y * 7.99f);}
+				else if (pTable[x][y]<0.25f){g4.draw(batch, 16 + x * 7.99f, 16 + y * 7.99f);}
+				else if (pTable[x][y]<0.5f){g5.draw(batch, 16 + x * 7.99f, 16 + y * 7.99f);}
+				else if (pTable[x][y]<0.75f){g6.draw(batch, 16 + x * 7.99f, 16 + y * 7.99f);}
+				else{g7.draw(batch, 16 + x * 7.99f, 16 + y * 7.99f);}
 			}
 		}
 
