@@ -119,18 +119,19 @@ public class AlexanderScreen extends Screen {
 		testBody = new DynamicBody(new Rectangle(32, 32));
 		testBody2 = new DynamicBody(new Rectangle(32, 32));
 
-		testBody.setPosition(0, 64);
-		testBody2.setPosition(strikeBase.getComponent(PhysicsComponent.class).getPosition());//lets use if for strikeBase
+		testBody.position.set(0, 64);
+		testBody2.position.set(strikeBase.getComponent(PhysicsComponent.class).getPosition());//lets use if for strikeBase
 		physics2D.addContactListener(new ContactListener() {
 			@Override
 			public void onCollision(CollisionEvent ce) {
-				Vector2 tmp=testBody.getPosition();
-				testBody.setPosition(tmp.add(64*(float)Math.random()-32,64*(float)Math.random()-32));// random position near old one
+				Vector2 tmp = new Vector2().set(testBody.position);
+				testBody.position.set(tmp.add(64 * (float) Math.random() - 32, 64 * (float) Math.random() - 32));// random position near old
+				// one
 			}
 		});
 
-		physics2D.addDynamicBody(testBody);
-		physics2D.addDynamicBody(testBody2);
+		physics2D.addBody(testBody);
+		physics2D.addBody(testBody2);
 	}
 
 	@Override
@@ -183,11 +184,11 @@ public class AlexanderScreen extends Screen {
 		//Todo curretnly one rectangle is bound to strikeBase, another one changes position randomly if collision is occured
 		//also we need to create everything not near the coordinate origin but rather near Physics2d.worldWidth/2, Physics2d.worldHeight/2
 		// because if our object gets negative coodrinates - SpatialHashGrid stops working
-		testBody2.setPosition(strikeBase.getComponent(PhysicsComponent.class).getPosition());
+		testBody2.position.set(strikeBase.getComponent(PhysicsComponent.class).getPosition());
 		// Step physics simulation
 		physics2D.update(delta);
-		bodySprite.getComponent(PhysicsComponent.class).setPosition(testBody.getPosition());
-		bodySprite2.getComponent(PhysicsComponent.class).setPosition(testBody2.getPosition());
+		bodySprite.getComponent(PhysicsComponent.class).setPosition(testBody.position);
+		bodySprite2.getComponent(PhysicsComponent.class).setPosition(testBody2.position);
 
 		// Update GameObjects
 		for (GameObject go : this.getGameObjects())

@@ -12,8 +12,8 @@ public class OrthoCamera {
 
 	public Vector2 position;
 	public float zoom;
-	public float frustumWidth;
-	public float frustumHeight;
+	private float frustumWidth;
+	private float frustumHeight;
 
 	public OrthoCamera(GLGraphics glGraphics, float frustumWidth, float frustumHeight) {
 		this.glGraphics = glGraphics;
@@ -30,7 +30,6 @@ public class OrthoCamera {
 		gl.glLoadIdentity();
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
-
 	}
 
 	public void update() {

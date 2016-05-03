@@ -4,7 +4,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 
 public interface Shape {//interface with basic collision methods
 
-	/** Lower Left corner of the Shape, whatever it is. */
+	/** Natural position of the plauer, LL corner for rects, center for circles  */
 	Vector2 getPosition();
 
 	/** Set the center position of the shape */

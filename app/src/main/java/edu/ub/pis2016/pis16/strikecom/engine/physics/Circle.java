@@ -6,7 +6,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
  * A circle defined by its position and radius;
  */
 public class Circle implements Shape {
-	private Vector2 tmp = new Vector2();
+	Vector2 tmp = new Vector2();
 
 	/** Center coordinates of the Circle */
 	public float x, y;
@@ -19,7 +19,7 @@ public class Circle implements Shape {
 	}
 
 	public Vector2 getPosition() {
-		return tmp.set(x, y).sub(radius, radius);
+		return tmp.set(x, y);
 	}
 
 	@Override

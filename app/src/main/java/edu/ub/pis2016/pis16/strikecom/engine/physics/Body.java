@@ -16,28 +16,14 @@ public abstract class Body {
 		bounds.setPosition(this.position);
 	}
 
-	public void update(float delta){
-		// TODO Maybe find a better way of doing this
-		bounds.setPosition(position);
-	}
-
 	public Shape getBounds() {
 		return bounds;
 	}
 
-	public Vector2 getPosition(){
-		return this.position;
-	}
+	public boolean collide(Body body){
+		bounds.setPosition(this.position);
+		body.bounds.setPosition(body.position);
 
-	public void setPosition(Vector2 v){
-		this.position = v;
-	}
-
-	public void setPosition(float x, float y){
-		this.position = new Vector2(x,y);
-	}
-
-	public boolean collide(Body b){
-		return bounds.overlaps(b.bounds);
+		return bounds.overlaps(body.bounds);
 	}
 }

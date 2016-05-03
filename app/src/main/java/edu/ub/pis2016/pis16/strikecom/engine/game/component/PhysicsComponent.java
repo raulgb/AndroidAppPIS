@@ -22,7 +22,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.physics.StaticBody;
 public class PhysicsComponent extends Component {
 
 	// TODO Integrate Physics2D
-	public Body body;
+	public Body body = null;
 
 	private static Vector2 tmp = new Vector2();
 	private Vector2 position = new Vector2();
@@ -32,10 +32,12 @@ public class PhysicsComponent extends Component {
 
 	private HashMap<String, Vector2> anchors = new HashMap<>();
 
+	/** Basic Physics, no collisions, no updating every frame. Use for GUI etc. */
 	public PhysicsComponent() {
 		position.set(0, 0);
 	}
 
+	/** Full Physics behavior, collisions, updated automatically etc */
 	public PhysicsComponent(Body body) {
 		this.body = body;
 		body.userData = this;
@@ -56,16 +58,16 @@ public class PhysicsComponent extends Component {
 		else return position;
 	}
 
-	public void setPosition(Vector2 position) {
+	public void setPosition(Vector2 pos) {
 		if (body != null)
-			body.position.set(position);
-		else position.set(position);
+			body.position.set(pos);
+		else position.set(pos);
 	}
 
 	public void setPosition(float x, float y) {
 		if (body != null)
 			body.position.set(x, y);
-		else position.set(position);
+		else position.set(x, y);
 	}
 
 	public Vector2 getVelocity() {

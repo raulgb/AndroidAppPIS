@@ -63,11 +63,6 @@ public class GameObject {
 		components.put(component.getClass(), component);
 	}
 
-	/** Returns true if GameObject has a component of the given type. */
-	public boolean hasComponent(Class type) {
-		return (components.get(type)) == null;
-	}
-
 	/** Remove a Component from the GameObject. */
 	public void removeComponent(Class type) {
 		components.remove(type);
@@ -97,7 +92,7 @@ public class GameObject {
 		this.parent = parent;
 	}
 
-	public String toString(){
-		return new StringBuilder().append("GO: ").append(tag).toString();
+	public String toString() {
+		return "GO: " + tag;
 	}
 }

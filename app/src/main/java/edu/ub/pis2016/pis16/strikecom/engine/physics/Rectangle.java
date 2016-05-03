@@ -28,16 +28,18 @@ public class Rectangle implements Shape {
 		return tmp.set(x, y);
 	}
 
+	/** Move the center of the rectangle */
 	@Override
 	public void setPosition(Vector2 pos) {
 		x = pos.x - width / 2f;
 		y = pos.y - height / 2f;
 	}
 
+	/** Move the center of the rectangle */
 	@Override
 	public void setPosition(float x, float y) {
-		this.x = x;
-		this.y = y;
+		this.x = x - width / 2f;
+		this.y = y - height / 2f;
 	}
 
 	@Override

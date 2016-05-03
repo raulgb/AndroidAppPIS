@@ -52,12 +52,9 @@ public class StrikeBaseTest extends Vehicle {
 		super();
 
 		//  Create Physics component
-		Rectangle rect = new Rectangle(32,32);
-		Body b = new DynamicBody(rect);
-		physics = new PhysicsComponent(b);
+		physics = new PhysicsComponent(new DynamicBody(new Rectangle(32,32)));
 		putComponent(physics);
 
-		// TODO Read config parameters for each modelName from a file or something
 		String model = cfg.modelName;
 
 		sbmk1_hull = new TextureRegion[cfg.animHullFrames];
@@ -95,9 +92,9 @@ public class StrikeBaseTest extends Vehicle {
 
 	@Override
 	public void update(float delta) {
+		// Animations
 		threadAnim[0].setFrameSpeed(leftThreadVel);
 		threadAnim[1].setFrameSpeed(rightThreadVel);
-
 		for (Animation a : threadAnim)
 			a.update(delta);
 
@@ -109,32 +106,31 @@ public class StrikeBaseTest extends Vehicle {
 		// Tank-like controls VERSION 2
 		final float width = 28;
 		float rotDelta = (-leftThreadVel + rightThreadVel) / width;
+
 		Vector2 pos = physics.getPosition();
 		float rotation = physics.getRotation();
 
-		leftThread.set(0, width / 2f).rotate(physics.getRotation()).add(pos);
-		rightThread.set(0, -width / 2f).rotate(physics.getRotation()).add(pos);
+		leftThread.set(0, width / 2f).rotate(rotation).add(pos);
+		rightThread.set(0, -width / 2f).rotate(rotation).add(pos);
 
 		if (rightThreadVel > leftThreadVel)
 			pivot.set(leftThread);
 		else if (leftThreadVel > rightThreadVel)
 			pivot.set(rightThread);
 		else
-			pivot.set(physics.getPosition());
+			pivot.set(pos);
 
-		Vector2 threadToCenter = new Vector2(physics.getPosition()).sub(pivot);
+		Vector2 threadToCenter = new Vector2(pos).sub(pivot);
 		threadToCenter.rotate(rotDelta * delta);
 		pos.set(pivot).add(threadToCenter);
 
+		// Average thread velocity and rotate to get a velocity vector
 		tmp.set(leftThreadVel + rightThreadVel, 0).scl(0.5f).rotate(rotation);
 		pos.add(tmp.scl(delta));
 
 		rotation = (rotation + rotDelta) % 360;
 		if (rotation < 0)
 			rotation = 360 + rotation;
-
-		// Commit rotation changes
-		physics.setRotation(rotation);
 
 		// TODO Make this more universal, range 0-1 and depending on actual size (game units)
 		turret_0.set(-8, 8).scl(hull.getScale()).rotate(rotation).add(pos);
@@ -144,7 +140,7 @@ public class StrikeBaseTest extends Vehicle {
 
 		// Commit rotation changes
 		physics.setRotation(rotation);
-		physics.setVelocity(5,0);
+		physics.setPosition(pos);
 
 		super.update(delta);
 	}

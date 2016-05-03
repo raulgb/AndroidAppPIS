@@ -17,6 +17,7 @@ public abstract class Screen implements Disposable {
 	public static final int LAYER_2 = 2;
 	public static final int LAYER_3 = 3;
 	public static final int LAYER_4 = 4;
+	public static final int LAYER_GUI = 99;
 
 
 	protected final Game game;

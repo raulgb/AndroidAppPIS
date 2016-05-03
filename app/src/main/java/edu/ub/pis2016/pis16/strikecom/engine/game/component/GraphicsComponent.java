@@ -1,5 +1,7 @@
 package edu.ub.pis2016.pis16.strikecom.engine.game.component;
 
+import android.util.Log;
+
 import edu.ub.pis2016.pis16.strikecom.engine.game.Component;
 import edu.ub.pis2016.pis16.strikecom.engine.game.DrawableComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
@@ -37,7 +39,7 @@ public class GraphicsComponent extends Component implements DrawableComponent {
 		sprite.draw(batch, x, y);
 	}
 
-	public void setRegion(TextureRegion region){
+	public void setRegion(TextureRegion region) {
 		sprite.setRegion(region);
 	}
 
