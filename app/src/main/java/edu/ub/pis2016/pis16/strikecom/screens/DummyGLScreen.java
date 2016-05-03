@@ -6,6 +6,7 @@ import android.util.Log;
 import javax.microedition.khronos.opengles.GL10;
 
 import edu.ub.pis2016.pis16.strikecom.StrikeComGLGame;
+import edu.ub.pis2016.pis16.strikecom.controller.VehicleMovementController;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Game;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.InputProcessor;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
@@ -20,12 +21,15 @@ import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Texture;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureRegion;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureSprite;
+import edu.ub.pis2016.pis16.strikecom.engine.physics.Body;
+import edu.ub.pis2016.pis16.strikecom.engine.physics.Circle;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.ContactListener;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.DynamicBody;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Physics2D;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Rectangle;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Pool;
+import edu.ub.pis2016.pis16.strikecom.gameplay.EnemyTest;
 import edu.ub.pis2016.pis16.strikecom.gameplay.StrikeBaseTest;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.ProjectileBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.VehicleFollowBehavior;
@@ -85,10 +89,11 @@ public class DummyGLScreen extends Screen {
 				// Create a Bullet gameObject
 				GameObject projectile = new GameObject();
 				projectile.setLayer(Screen.LAYER_2);
-				projectile.putComponent(new PhysicsComponent());
+				Body projBody = new DynamicBody(new Rectangle(1, 1));
+				projectile.putComponent(new PhysicsComponent(projBody));
+				projectile.putComponent(new ProjectileBehavior());
 				projectile.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("bullet")));
 				projectile.getComponent(GraphicsComponent.class).getSprite().setScale(0.3f);
-				projectile.putComponent(new ProjectileBehavior());
 				return projectile;
 			}
 		}, 64);
@@ -97,7 +102,7 @@ public class DummyGLScreen extends Screen {
 		strikeBase.putComponent(new VehicleFollowBehavior());
 		strikeBase.setTag("player");
 		strikeBase.setLayer(LAYER_1);
-		strikeBase.getComponent(PhysicsComponent.class).body.position.set(10, 10);
+		strikeBase.getComponent(PhysicsComponent.class).body.position.set(20, 20);
 		physics2D.addBody(strikeBase.getComponent(PhysicsComponent.class).body);
 		addGameObject("StrikeBase", strikeBase);
 
@@ -107,6 +112,10 @@ public class DummyGLScreen extends Screen {
 		moveIcon.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("cursor_move")));
 		moveIcon.getComponent(GraphicsComponent.class).getSprite().setScale(0.3f);
 		addGameObject("MoveIcon", moveIcon);
+
+		EnemyTest enemy = new EnemyTest();
+		enemy.setTag("enemy");
+		addGameObject("EnemyTest", enemy);
 
 		grass = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("grass"));
 
@@ -144,6 +153,9 @@ public class DummyGLScreen extends Screen {
 	public void update(float delta) {
 		super.update(delta);
 		secondsElapsed += delta;
+
+		getGameObject("EnemyTest").getComponent(VehicleFollowBehavior.class)
+				.setTarget(strikeBase.getComponent(PhysicsComponent.class).getPosition());
 
 		// Step physics simulation
 		physics2D.update(delta);

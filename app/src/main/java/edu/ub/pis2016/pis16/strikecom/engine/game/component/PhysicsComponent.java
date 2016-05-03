@@ -43,14 +43,14 @@ public class PhysicsComponent extends Component {
 		body.userData = this.gameObject;
 	}
 
-	/** Returns a Vector2 anchor for usage with anchored entities */
-	public Vector2 getAnchor(String name) {
-		return anchors.get(name);
-	}
-
-	protected Vector2 putAnchor(String name, Vector2 anchor) {
-		return anchors.put(name, anchor);
-	}
+//	/** Returns a Vector2 anchor for usage with anchored entities */
+//	public Vector2 getAnchor(String name) {
+//		return anchors.get(name);
+//	}
+//
+//	protected Vector2 putAnchor(String name, Vector2 anchor) {
+//		return anchors.put(name, anchor);
+//	}
 
 	public Vector2 getPosition() {
 		if (body != null)

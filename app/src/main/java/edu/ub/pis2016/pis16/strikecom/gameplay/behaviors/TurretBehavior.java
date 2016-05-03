@@ -13,6 +13,7 @@ import edu.ub.pis2016.pis16.strikecom.screens.DummyGLScreen;
  */
 public class TurretBehavior extends BehaviorComponent {
 
+	String targetTag = null;
 	GameObject target = null;
 
 	Vector2 tmp = new Vector2();
@@ -22,13 +23,14 @@ public class TurretBehavior extends BehaviorComponent {
 	@Override
 	public void update(float delta) {
 		counter += delta;
+		if(targetTag == null) return;
 
 		PhysicsComponent physics = gameObject.getComponent(PhysicsComponent.class);
 
 		// If we have no target, try to find our next target
 		if (target == null || isTooFar(target))
 			for (GameObject go : gameObject.getScreen().getGameObjects())
-				if (go.getTag().equals("enemy") && !isTooFar(go)) {
+				if (go.getTag().equals(targetTag) && !isTooFar(go)) {
 					target = go;
 					break;
 				}
@@ -54,13 +56,15 @@ public class TurretBehavior extends BehaviorComponent {
 				projPhys.getPosition().set(physics.getPosition());
 				projPhys.getVelocity().set(90f, 0).rotate(physics.getRotation());
 
-				projectile.setTag("player");
+				//projectile.setTag("player");
 				projectile.setLayer(Screen.LAYER_1);
 				gameObject.getScreen().addGameObject(projectile);
 			}
 		}
+	}
 
-
+	public void setTargetTag(String tag){
+		this.targetTag = tag;
 	}
 
 	private boolean isTooFar(GameObject o) {

@@ -14,12 +14,7 @@ public class ProjectileBehavior extends BehaviorComponent {
 	@Override
 	public void update(float delta) {
 		PhysicsComponent physics = gameObject.getComponent(PhysicsComponent.class);
-		// Update Position
-		tmp.set(physics.getVelocity());
-		physics.getPosition().add(tmp.scl(delta));
-		physics.setRotation(tmp.angle());
-
-		// TODO Add collision detection here
+		if (physics == null) return;
 
 		// Delete bullet if it's too far from parent object (Object that shot it)
 		tmp.set(gameObject.getParent().getComponent(PhysicsComponent.class).getPosition());

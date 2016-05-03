@@ -13,9 +13,7 @@ public class Circle implements Shape {
 	public float x, y;
 	public float radius, rotation;
 
-	public Circle(float x, float y, float radius) {
-		this.x = x;
-		this.y = y;
+	public Circle(float radius) {
 		this.radius = radius;
 	}
 

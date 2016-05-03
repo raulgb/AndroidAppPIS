@@ -9,6 +9,7 @@ import java.util.Map;
 
 import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Physics2D;
+import edu.ub.pis2016.pis16.strikecom.gameplay.Turret;
 
 public abstract class Screen implements Disposable {
 	public static final int LAYER_TERRAIN = -1;
@@ -184,4 +185,7 @@ public abstract class Screen implements Disposable {
 		});
 	}
 
+	public boolean hasGameObject(GameObject go) {
+		return(goOrderedList.contains(go));
+	}
 }

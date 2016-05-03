@@ -52,6 +52,14 @@ public final class MathUtils {
 	static public final float degreesToRadians = PI / 180;
 	static public final float degRad = degreesToRadians;
 
+	public static float max(float a, float b) {
+		return a > b ? a : b;
+	}
+
+	public static float min(float a, float b) {
+		return a > b ? b : a;
+	}
+
 	static private class Sin {
 		static final float[] table = new float[SIN_COUNT];
 
