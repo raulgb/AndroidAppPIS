@@ -49,8 +49,7 @@ public class Rectangle implements Shape {
 
 	@Override
 	public void setRotation(float r) {
-		// TODO Enable Rectangle rotation
-		rotation = r;
+		rotation = r % 360;
 	}
 
 	@Override

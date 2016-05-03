@@ -11,6 +11,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.physics.Rectangle;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Animation;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
+import edu.ub.pis2016.pis16.strikecom.gameplay.items.UpgradeItem;
 
 public class StrikeBaseTest extends Vehicle {
 
@@ -188,6 +189,18 @@ public class StrikeBaseTest extends Vehicle {
 	public void brake() {
 		this.leftThreadVel = Math.max(leftThreadVel - accel, 0);
 		this.rightThreadVel = Math.max(rightThreadVel - accel, 0);
+	}
+
+	public boolean hasUpgrade(UpgradeItem upgrade){
+		return false;
+	}
+
+	public void addUpgrade(UpgradeItem upgrade){
+
+	}
+
+	public void removeUpgrade(UpgradeItem upgrade){
+
 	}
 
 }
