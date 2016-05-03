@@ -10,7 +10,6 @@ public abstract class Vehicle extends GameObject {
 	private HashMap<String, Vector2> anchors;
 
 	public Vehicle(){
-		super();
 		anchors = new HashMap<>(8);
 	}
 
