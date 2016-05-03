@@ -6,11 +6,12 @@ import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
  * A circle defined by its position and radius;
  */
 public class Circle implements Shape {
+
 	Vector2 tmp = new Vector2();
 
 	/** Center coordinates of the Circle */
 	public float x, y;
-	public float radius;
+	public float radius, rotation;
 
 	public Circle(float x, float y, float radius) {
 		this.x = x;
@@ -45,11 +46,12 @@ public class Circle implements Shape {
 
 	@Override
 	public float getRotation() {
-		return 0;
+		return rotation;
 	}
 
 	@Override
 	public void setRotation(float r) {
+		rotation = r % 360;
 	}
 
 	@Override

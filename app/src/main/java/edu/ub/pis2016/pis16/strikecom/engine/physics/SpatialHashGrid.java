@@ -51,7 +51,6 @@ public class SpatialHashGrid {
 	}
 
 	public void insertDynamicObject(Body body) {
-		System.out.println(body.position.toString());
 		int[] cellIds = getCellIds(body); // test
 		int i = 0;
 		int cellId = -1;
