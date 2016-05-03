@@ -152,9 +152,6 @@ public class DummyGLScreen extends Screen {
 		for (GameObject go : this.getGameObjects())
 			go.update(delta);
 
-		Log.i("Pos", strikeBase.getComponent(PhysicsComponent.class).getPosition().toString());
-
-
 		// Move camera to strikebase
 		camera.position.set(strikeBase.getComponent(PhysicsComponent.class).getPosition());
 		camera.position.add(strikeBase.getComponent(PhysicsComponent.class).getVelocity().scl(0.25f));
@@ -176,8 +173,6 @@ public class DummyGLScreen extends Screen {
 				grass.draw(batch, 16 + x * 31.99f, 16 + y * 31.99f);
 			}
 
-
-		strikeBase.getComponent(PhysicsComponent.class).setRotation(90);
 		for (GameObject go : this.getGameObjects())
 			go.draw(batch);
 

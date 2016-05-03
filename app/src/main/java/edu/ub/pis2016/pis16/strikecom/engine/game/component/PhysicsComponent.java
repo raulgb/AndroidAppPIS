@@ -40,7 +40,7 @@ public class PhysicsComponent extends Component {
 	/** Full Physics behavior, collisions, updated automatically etc */
 	public PhysicsComponent(Body body) {
 		this.body = body;
-		body.userData = this;
+		body.userData = this.gameObject;
 	}
 
 	/** Returns a Vector2 anchor for usage with anchored entities */

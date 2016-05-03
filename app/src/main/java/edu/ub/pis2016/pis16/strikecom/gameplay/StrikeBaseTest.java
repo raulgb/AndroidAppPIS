@@ -7,6 +7,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureRegion;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureSprite;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Body;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.DynamicBody;
+import edu.ub.pis2016.pis16.strikecom.engine.physics.KinematicBody;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Rectangle;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Animation;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
@@ -53,7 +54,7 @@ public class StrikeBaseTest extends Vehicle {
 		super();
 
 		//  Create Physics component
-		physics = new PhysicsComponent(new DynamicBody(new Rectangle(32,32)));
+		physics = new PhysicsComponent(new KinematicBody(new Rectangle(32, 32)));
 		putComponent(physics);
 
 		String model = cfg.modelName;
@@ -140,6 +141,7 @@ public class StrikeBaseTest extends Vehicle {
 		turret_3.set(8, -8).scl(hull.getScale()).rotate(rotation).add(pos);
 
 		// Commit rotation changes
+		physics.setVelocity(tmp.set((leftThreadVel + rightThreadVel) / 2f, 0).rotate(rotation));
 		physics.setRotation(rotation);
 		physics.setPosition(pos);
 
@@ -191,15 +193,18 @@ public class StrikeBaseTest extends Vehicle {
 		this.rightThreadVel = Math.max(rightThreadVel - accel, 0);
 	}
 
-	public boolean hasUpgrade(UpgradeItem upgrade){
+	public boolean hasUpgrade(UpgradeItem upgrade) {
+		// TODO implement
 		return false;
 	}
 
-	public void addUpgrade(UpgradeItem upgrade){
+	public void addUpgrade(UpgradeItem upgrade) {
+		// TODO implement
 
 	}
 
-	public void removeUpgrade(UpgradeItem upgrade){
+	public void removeUpgrade(UpgradeItem upgrade) {
+		// TODO implement
 
 	}
 

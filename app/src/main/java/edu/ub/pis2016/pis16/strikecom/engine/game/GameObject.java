@@ -1,5 +1,6 @@
 package edu.ub.pis2016.pis16.strikecom.engine.game;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
@@ -15,6 +16,7 @@ public class GameObject {
 	protected Screen screen;
 	/** A Map of components, using their class as a Key */
 	private HashMap<Class, Component> components = new HashMap<>();
+	private ArrayList<Component> newComponents = new ArrayList<>();
 
 	/** A parent GameObject in a hierarchy */
 	private GameObject parent = null;
@@ -40,6 +42,10 @@ public class GameObject {
 
 	/** Steps the game simulation. Delta is the time passed since the last frame, in seconds. */
 	public void update(float delta) {
+//		for(Component c : newComponents)
+//			c.init();
+//		newComponents.clear();
+
 		for (Component c : components.values())
 			if (c instanceof UpdateableComponent)
 				((UpdateableComponent) c).update(delta);

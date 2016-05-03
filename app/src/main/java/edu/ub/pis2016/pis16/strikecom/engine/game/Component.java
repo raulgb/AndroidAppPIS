@@ -17,6 +17,9 @@ public abstract class Component {
 
 	protected GameObject gameObject;
 
+//	/** Called on the next frame of this component being on the GameObject. */
+//	protected abstract void init();
+
 	/** Called by the GameObject when it takes ownership. DO NOT USE THIS METHOD. */
 	protected void setGameObject(GameObject gameObject) {
 		this.gameObject = gameObject;
