@@ -87,7 +87,7 @@ public class AlexanderScreen extends Screen {
 		camera.zoom = 1 / getZoomConstant();
 		//camera.zoom = 1 / 8f;
 
-		physics2D = new Physics2D(1024, 1024, Vector2.ZERO);
+		physics2D = new Physics2D(1024, 1024);
 		batch = new SpriteBatch(game.getGLGraphics(), 8192);
 
 		projectilePool = new Pool<>(new Pool.PoolObjectFactory<GameObject>() {

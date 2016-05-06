@@ -6,23 +6,19 @@ import android.util.Log;
 import javax.microedition.khronos.opengles.GL10;
 
 import edu.ub.pis2016.pis16.strikecom.StrikeComGLGame;
-import edu.ub.pis2016.pis16.strikecom.controller.VehicleMovementController;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Game;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.InputProcessor;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.GraphicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
-import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.GLGraphics;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.OrthoCamera;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Texture;
-import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureRegion;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureSprite;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Body;
-import edu.ub.pis2016.pis16.strikecom.engine.physics.Circle;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.ContactListener;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.DynamicBody;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Physics2D;
@@ -80,7 +76,7 @@ public class DummyGLScreen extends Screen {
 		camera.zoom = 1 / getZoomConstant();
 		//camera.zoom = 1 / 8f;
 
-		physics2D = new Physics2D(1024, 1024, Vector2.ZERO);
+		physics2D = new Physics2D(1024, 1024);
 		batch = new SpriteBatch(game.getGLGraphics(), 512);
 
 		projectilePool = new Pool<>(new Pool.PoolObjectFactory<GameObject>() {
@@ -89,6 +85,8 @@ public class DummyGLScreen extends Screen {
 				// Create a Bullet gameObject
 				GameObject projectile = new GameObject();
 				projectile.setLayer(Screen.LAYER_2);
+
+				// Init basic preferences
 				Body projBody = new DynamicBody(new Rectangle(1, 1));
 				projectile.putComponent(new PhysicsComponent(projBody));
 				projectile.putComponent(new ProjectileBehavior());
@@ -98,14 +96,16 @@ public class DummyGLScreen extends Screen {
 			}
 		}, 64);
 
+		// ------ STRIKEBASE CONFIG ------------
 		strikeBase = new StrikeBaseTest(new StrikeBaseConfig(StrikeBaseConfig.Model.MKII));
 		strikeBase.putComponent(new VehicleFollowBehavior());
 		strikeBase.setTag("player");
 		strikeBase.setLayer(LAYER_1);
-		strikeBase.getComponent(PhysicsComponent.class).body.position.set(20, 20);
+		strikeBase.getComponent(PhysicsComponent.class).body.position.set(128, 128);
 		physics2D.addBody(strikeBase.getComponent(PhysicsComponent.class).body);
 		addGameObject("StrikeBase", strikeBase);
 
+		// ------ MOVE ICON CONFIG ------------
 		moveIcon = new GameObject();
 		moveIcon.setLayer(LAYER_GUI);
 		moveIcon.putComponent(new PhysicsComponent());
@@ -113,8 +113,10 @@ public class DummyGLScreen extends Screen {
 		moveIcon.getComponent(GraphicsComponent.class).getSprite().setScale(0.3f);
 		addGameObject("MoveIcon", moveIcon);
 
+		// ------ ENEMY TEST CONFIG ------------
 		EnemyTest enemy = new EnemyTest();
 		enemy.setTag("enemy");
+		enemy.getComponent(PhysicsComponent.class).setPosition(64, 86);
 		addGameObject("EnemyTest", enemy);
 
 		grass = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("grass"));
@@ -122,7 +124,7 @@ public class DummyGLScreen extends Screen {
 		physics2D.addContactListener(new ContactListener() {
 			@Override
 			public void onCollision(CollisionEvent ce) {
-				Log.d("Collision", ce.a.userData.toString() + " with " + ce.b.userData.toString());
+				//Log.d("Collision", ce.a.userData.toString() + " with " + ce.b.userData.toString());
 			}
 		});
 
@@ -154,8 +156,14 @@ public class DummyGLScreen extends Screen {
 		super.update(delta);
 		secondsElapsed += delta;
 
-		getGameObject("EnemyTest").getComponent(VehicleFollowBehavior.class)
-				.setTarget(strikeBase.getComponent(PhysicsComponent.class).getPosition());
+		Vector2 sBPos = strikeBase.getComponent(PhysicsComponent.class).getPosition();
+		Vector2 enemyPos = getGameObject("EnemyTest").getComponent(PhysicsComponent.class).getPosition();
+
+		// Follow player if player is +32 units away
+		if (sBPos.dst2(enemyPos) > 32*32)
+			getGameObject("EnemyTest").getComponent(VehicleFollowBehavior.class).setTarget(sBPos);
+		else
+			getGameObject("EnemyTest").getComponent(VehicleFollowBehavior.class).setTarget(null);
 
 		// Step physics simulation
 		physics2D.update(delta);
@@ -166,7 +174,7 @@ public class DummyGLScreen extends Screen {
 
 		// Move camera to strikebase
 		camera.position.set(strikeBase.getComponent(PhysicsComponent.class).getPosition());
-		camera.position.add(strikeBase.getComponent(PhysicsComponent.class).getVelocity().scl(0.25f));
+		//camera.position.add(strikeBase.getComponent(PhysicsComponent.class).getVelocity().scl(0.75f));
 		camera.update();
 	}
 

@@ -20,8 +20,6 @@ import edu.ub.pis2016.pis16.strikecom.engine.physics.StaticBody;
  * @author German
  */
 public class PhysicsComponent extends Component {
-
-	// TODO Integrate Physics2D
 	public Body body = null;
 
 	private static Vector2 tmp = new Vector2();
@@ -40,17 +38,30 @@ public class PhysicsComponent extends Component {
 	/** Full Physics behavior, collisions, updated automatically etc */
 	public PhysicsComponent(Body body) {
 		this.body = body;
-		body.userData = this.gameObject;
 	}
 
-//	/** Returns a Vector2 anchor for usage with anchored entities */
-//	public Vector2 getAnchor(String name) {
-//		return anchors.get(name);
-//	}
-//
-//	protected Vector2 putAnchor(String name, Vector2 anchor) {
-//		return anchors.put(name, anchor);
-//	}
+	protected void init() {
+		if (body != null) {
+			body.userData = this.gameObject;
+			gameObject.getScreen().getPhysics2D().addBody(this.body);
+		}
+	}
+
+	protected void destroy() {
+		if (body != null) {
+			body.userData = null;
+			gameObject.getScreen().getPhysics2D().removeBody(this.body);
+		}
+	}
+
+	/** Returns a Vector2 anchor for usage with anchored entities */
+	public Vector2 getAnchor(String name) {
+		return anchors.get(name);
+	}
+
+	public void putAnchor(String name, Vector2 anchor) {
+		anchors.put(name, anchor);
+	}
 
 	public Vector2 getPosition() {
 		if (body != null)
@@ -125,6 +136,5 @@ public class PhysicsComponent extends Component {
 
 		rotation += angleDelta * lerpSpeed;
 	}
-
 
 }

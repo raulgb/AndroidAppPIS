@@ -74,12 +74,14 @@ public class EnemyTest extends Vehicle {
 
 	@Override
 	public void turnLeft() {
-		rotation += 1;
+		rotation += 0.7f;
+		speed *= 0.95f;
 	}
 
 	@Override
 	public void turnRight() {
-		rotation -= 1;
+		rotation -= 0.7f;
+		speed *= 0.95f;
 	}
 
 	@Override

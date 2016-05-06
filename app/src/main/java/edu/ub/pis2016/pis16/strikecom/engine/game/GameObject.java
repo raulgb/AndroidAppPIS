@@ -42,9 +42,9 @@ public class GameObject {
 
 	/** Steps the game simulation. Delta is the time passed since the last frame, in seconds. */
 	public void update(float delta) {
-//		for(Component c : newComponents)
-//			c.init();
-//		newComponents.clear();
+		for (Component c : newComponents)
+			c.init();
+		newComponents.clear();
 
 		for (Component c : components.values())
 			if (c instanceof UpdateableComponent)
@@ -65,12 +65,17 @@ public class GameObject {
 
 	/** Puts a new component linked to this GameObject. */
 	public void putComponent(Component component) {
-		component.setGameObject(this);
+		component.gameObject = this;
+		newComponents.add(component);
 		components.put(component.getClass(), component);
 	}
 
 	/** Remove a Component from the GameObject. */
 	public void removeComponent(Class type) {
+		Component comp = components.get(type);
+		if (comp == null)
+			return;
+		comp.destroy();
 		components.remove(type);
 	}
 
@@ -96,6 +101,16 @@ public class GameObject {
 
 	public void setParent(GameObject parent) {
 		this.parent = parent;
+	}
+
+	public void destroy() {
+		for (Component c : components.values())
+			c.destroy();
+
+		screen = null;
+		parent = null;
+		components.clear();
+		newComponents.clear();
 	}
 
 	public String toString() {

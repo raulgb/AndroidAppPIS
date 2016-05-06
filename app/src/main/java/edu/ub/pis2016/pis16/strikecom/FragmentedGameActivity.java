@@ -28,7 +28,7 @@ public class FragmentedGameActivity extends Activity {
 	StrikeComGLGame game;
 	SidebarFragment sidebar;
 
-	HashMap<String, Object> playerState;
+	HashMap<String, Object> playerState = new HashMap<>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

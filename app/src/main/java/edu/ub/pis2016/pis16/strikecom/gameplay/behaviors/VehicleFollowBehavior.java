@@ -22,7 +22,7 @@ public class VehicleFollowBehavior extends BehaviorComponent {
 		Vehicle vehicle = (Vehicle) gameObject;
 
 		// Move AI, strikebase follows the move pointer
-		if (tmp.set(target).sub(pos).len2() > 10*10) {
+		if (tmp.set(target).sub(pos).len2() > 10 * 10) {
 			float angleDelta = Angle.angleDelta(rotation, tmp.angle());
 			if (Math.abs(angleDelta) > 5) {
 				if (angleDelta > 0)
@@ -36,12 +36,17 @@ public class VehicleFollowBehavior extends BehaviorComponent {
 			vehicle.brake();
 
 			// If we reach the destination and are stopped, stop following target.
-			if(!gameObject.getComponent(PhysicsComponent.class).getVelocity().notZero())
+			if (!gameObject.getComponent(PhysicsComponent.class).getVelocity().notZero())
 				moveOrder = false;
 		}
 	}
 
+	/** Set the position to go to. if {@code null} is passed, will stop immediately. */
 	public void setTarget(Vector2 target) {
+		if (target == null) {
+			moveOrder = false;
+			return;
+		}
 		this.target.set(target);
 		moveOrder = true;
 	}

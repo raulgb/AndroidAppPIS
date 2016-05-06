@@ -110,13 +110,18 @@ public class Vector2 {
 		return tmp.set(v).sub(this).len();
 	}
 
+	public float dst2(Vector2 v) {
+		return tmp.set(v).sub(this).len2();
+	}
+
 	public float len() {
-		return (float)Math.sqrt(x * x + y * y);
+		return (float) Math.sqrt(x * x + y * y);
 	}
 
 	public float len2() {
 		return x * x + y * y;
 	}
+
 	public float angle() {
 		return MathUtils.radiansToDegrees * MathUtils.atan2(y, x);
 	}
@@ -127,7 +132,6 @@ public class Vector2 {
 		set(ca * x - sa * y, sa * x + ca * y);
 		return this;
 	}
-
 
 
 	public boolean notZero() {
