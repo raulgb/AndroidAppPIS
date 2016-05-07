@@ -51,9 +51,10 @@ public class DummyGLScreen extends Screen {
 
 	float secondsElapsed;
 
-	GLGraphics glGraphics;
+	private GLGraphics glGraphics;
+	private SpriteBatch batch;
+
 	OrthoCamera camera;
-	SpriteBatch batch;
 
 	Physics2D physics2D;
 
@@ -83,8 +84,15 @@ public class DummyGLScreen extends Screen {
 			@Override
 			public GameObject createObject() {
 				// Create a Bullet gameObject
-				GameObject projectile = new GameObject();
-				projectile.setLayer(Screen.LAYER_2);
+				GameObject projectile = new GameObject() {
+					@Override
+					public void destroyInternal() {
+						// TODO Free Bullet on destroy
+						//projectilePool.free(this);
+						super.destroyInternal();
+					}
+				};
+				projectile.setLayer(Screen.LAYER_3);
 
 				// Init basic preferences
 				Body projBody = new DynamicBody(new Rectangle(1, 1));
@@ -99,11 +107,11 @@ public class DummyGLScreen extends Screen {
 		// ------ STRIKEBASE CONFIG ------------
 		strikeBase = new StrikeBaseTest(new StrikeBaseConfig(StrikeBaseConfig.Model.MKII));
 		strikeBase.putComponent(new VehicleFollowBehavior());
-		strikeBase.setTag("player");
+		strikeBase.setTag("playerStrikeBase");
 		strikeBase.setLayer(LAYER_1);
-		strikeBase.getComponent(PhysicsComponent.class).body.position.set(128, 128);
-		physics2D.addBody(strikeBase.getComponent(PhysicsComponent.class).body);
+		strikeBase.getComponent(PhysicsComponent.class).setPosition(128, 128);
 		addGameObject("StrikeBase", strikeBase);
+
 
 		// ------ MOVE ICON CONFIG ------------
 		moveIcon = new GameObject();
@@ -113,18 +121,39 @@ public class DummyGLScreen extends Screen {
 		moveIcon.getComponent(GraphicsComponent.class).getSprite().setScale(0.3f);
 		addGameObject("MoveIcon", moveIcon);
 
+		// Stationary Enemy
+//		GameObject enemy = new GameObject();
+//		enemy.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("enemy")));
+//		enemy.putComponent(new PhysicsComponent(new DynamicBody(new Rectangle(32, 32))));
+//		enemy.getComponent(PhysicsComponent.class).setPosition(64, 128);
+//		enemy.setTag("enemyTank");
+//		addGameObject(enemy);
+
 		// ------ ENEMY TEST CONFIG ------------
 		EnemyTest enemy = new EnemyTest();
-		enemy.setTag("enemy");
+		enemy.setTag("enemyTank");
 		enemy.getComponent(PhysicsComponent.class).setPosition(64, 86);
 		addGameObject("EnemyTest", enemy);
 
 		grass = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("grass"));
 
+		// PHYSICS CONTACT LISTENER
 		physics2D.addContactListener(new ContactListener() {
 			@Override
 			public void onCollision(CollisionEvent ce) {
-				//Log.d("Collision", ce.a.userData.toString() + " with " + ce.b.userData.toString());
+				GameObject goA = (GameObject) ce.a.userData;
+				GameObject goB = (GameObject) ce.b.userData;
+				if (goA.getTag().contains("player"))
+					handlePlayerCollision((StrikeBaseTest)goA, goB);
+				if (goB.getTag().contains("player"))
+					handlePlayerCollision((StrikeBaseTest)goB, goA);
+			}
+
+			private void handlePlayerCollision(StrikeBaseTest player, GameObject other){
+				if(other.getTag().contains("proj")){
+					Log.i("Physics2D", "Player got hit.");
+					other.destroy();
+				}
 			}
 		});
 
@@ -144,7 +173,6 @@ public class DummyGLScreen extends Screen {
 				targetPos.set(x, y);
 				camera.unproject(targetPos);
 				strikeBase.getComponent(VehicleFollowBehavior.class).setTarget(targetPos);
-				Log.i("TOUCH", targetPos.toString());
 				moveIcon.getComponent(PhysicsComponent.class).setPosition(targetPos);
 				return true;
 			}
@@ -156,14 +184,14 @@ public class DummyGLScreen extends Screen {
 		super.update(delta);
 		secondsElapsed += delta;
 
-		Vector2 sBPos = strikeBase.getComponent(PhysicsComponent.class).getPosition();
-		Vector2 enemyPos = getGameObject("EnemyTest").getComponent(PhysicsComponent.class).getPosition();
-
-		// Follow player if player is +32 units away
-		if (sBPos.dst2(enemyPos) > 32*32)
-			getGameObject("EnemyTest").getComponent(VehicleFollowBehavior.class).setTarget(sBPos);
-		else
-			getGameObject("EnemyTest").getComponent(VehicleFollowBehavior.class).setTarget(null);
+//		Vector2 sBPos = strikeBase.getComponent(PhysicsComponent.class).getPosition();
+//		Vector2 enemyPos = getGameObject("EnemyTest").getComponent(PhysicsComponent.class).getPosition();
+//
+//		// Follow player if player is +32 units away
+//		if (sBPos.dst2(enemyPos) > 32 * 32)
+//			getGameObject("EnemyTest").getComponent(VehicleFollowBehavior.class).setTarget(sBPos);
+//		else
+//			getGameObject("EnemyTest").getComponent(VehicleFollowBehavior.class).setTarget(null);
 
 		// Step physics simulation
 		physics2D.update(delta);

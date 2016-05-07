@@ -47,6 +47,8 @@ public class SpriteBatch {
 
 	/** Begin a new batch of sprites, which will all use the same texture. */
 	public void begin(Texture texture) {
+		if(texture == null)
+			throw new IllegalArgumentException("Texture can't be null");
 		if(boundTexture != null)
 			throw new IllegalStateException("Call end() before starting a new batch.");
 

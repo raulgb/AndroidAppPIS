@@ -29,13 +29,13 @@ public class OverlapAlgorithms {
 	 */
 	public static boolean overlapRectangles(Rectangle r1, Rectangle r2) {
 
-		if (MathUtils.isEqual(r1.rotation, 0, 0.1f) && MathUtils.isEqual(r2.rotation, 0, 0.1f))
+		//if (MathUtils.isEqual(r1.rotation, 0, 0.1f) && MathUtils.isEqual(r2.rotation, 0, 0.1f))
 			return (r1.x < r2.x + r2.width) && (r1.x + r1.width > r2.x) && (r1.y < r2.y + r2.height) && (r1.y + r1.height > r2.y);
 
 		// TODO Alexander: Implement collision detection for rotated rectangles
 		// Use coarse Axis-Aligned Bounding Box detecting first and then if that succeeds try more precise detection
 		// See: Separating Axis Theorem http://www.gamedev.net/page/resources/_/technical/game-programming/2d-rotated-rectangle-collision-r2604
-		return false;
+		//return false;
 
 	}
 

@@ -109,7 +109,6 @@ public class AlexanderScreen extends Screen {
 		strikeBase.setTag("player");
 		strikeBase.setLayer(LAYER_1);
 		strikeBase.getComponent(PhysicsComponent.class).body.position.set(10, 10);
-		physics2D.addBody(strikeBase.getComponent(PhysicsComponent.class).body);
 		addGameObject("StrikeBase", strikeBase);
 
 		moveIcon = new GameObject();

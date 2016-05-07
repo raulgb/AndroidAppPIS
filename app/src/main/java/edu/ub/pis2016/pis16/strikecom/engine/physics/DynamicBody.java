@@ -7,8 +7,8 @@ public class DynamicBody extends Body {
 	public Vector2 velocity = new Vector2();
 	public Vector2 acceleration = new Vector2();
 
-	/** 0: no friction */
-	public float friction = 1f;
+	/** 0: no friction, 1: no movement */
+	public float friction = 0f;
 
 	public DynamicBody(Shape bounds) {
 		super(bounds);

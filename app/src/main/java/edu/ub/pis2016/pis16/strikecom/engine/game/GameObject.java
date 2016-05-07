@@ -1,5 +1,7 @@
 package edu.ub.pis2016.pis16.strikecom.engine.game;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -103,7 +105,13 @@ public class GameObject {
 		this.parent = parent;
 	}
 
+	/** Call this method to schedule this object to be removed from the Screen. */
 	public void destroy() {
+		screen.removeGameObject(this);
+	}
+
+	/** Override this method to change what happens when the object is actually destroyed */
+	public void destroyInternal() {
 		for (Component c : components.values())
 			c.destroy();
 

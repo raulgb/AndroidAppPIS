@@ -34,7 +34,6 @@ public class Physics2D {
 	 *
 	 * @param worldWidth  width of world
 	 * @param worldHeight height of world
-	 * @param gravity     gravity vector, not sure if needed
 	 */
 	public Physics2D(float worldWidth, float worldHeight) {
 		this.staticBodies = new ArrayList<>(); //initialize list of staticBodies
@@ -66,17 +65,17 @@ public class Physics2D {
 
 			// Only update Dynamic Bodies
 			if (body instanceof DynamicBody) {
-				Log.i("Physics2D", "Updating " + body.toString());
-
 				DynamicBody dynBody = (DynamicBody) body;
 				// Update vel
 				dynBody.velocity.add(tmp.set(dynBody.acceleration).scl(delta));
 				// Update position
 				dynBody.position.add(tmp.set(dynBody.velocity).scl(delta));
-				// Friction
-				//dynBody.velocity.scl(1f - dynBody.friction * delta);
 
-				// keep in bounds
+				// Friction
+				dynBody.friction = MathUtils.clamp(dynBody.friction, 0, 1);
+				dynBody.velocity.scl(1f - dynBody.friction * delta);
+
+				// keep in world bounds
 				dynBody.position.x = MathUtils.max(0.1f, dynBody.position.x);
 				dynBody.position.x = MathUtils.min(worldWidth - 0.1f, dynBody.position.x);
 				dynBody.position.y = MathUtils.max(0.1f, dynBody.position.y);
@@ -86,19 +85,26 @@ public class Physics2D {
 			this.spatialHashGrid.insertDynamicObject(body); // insert back to  hash grid
 		}
 
+		int tested = 0;
+
 		// Handle collisions
 		collidedBodies.clear();
 		for (Body bodyA : dynamicBodies) {
+			if (collidedBodies.contains(bodyA))
+				continue;
+
 			List<Body> potentials = spatialHashGrid.getPotentialColliders(bodyA);
 
 			for (Body bodyB : potentials) {
-				// Skip already collided
-				if (collidedBodies.contains(bodyB))
+				if (bodyA == bodyB)
 					continue;
+
+				//Log.i("Physics2D", "Testing: " + bodyA.userData + " with " + bodyB.userData);
+				tested++;
 
 				// Detect Collision
 				// todo: every object still checks collision with itself, probably there is a better way to fix this than simple if
-				if (bodyA != bodyB && bodyA.collide(bodyB)) {
+				if (bodyA.collide(bodyB)) {
 					// Create collision event
 					ContactListener.CollisionEvent cEvent = new ContactListener.CollisionEvent();
 					cEvent.a = bodyA;
@@ -116,6 +122,7 @@ public class Physics2D {
 				}
 			}
 		}
+		//Log.i("Physics2D", "Total tested: " + tested);
 	}
 
 	/** Static bodies */
@@ -125,16 +132,16 @@ public class Physics2D {
 	}
 
 	/** Dynamic and Kinematic bodies */
-	public void addDynamicBody(Body b) {//add dynamic body to physics engine
+	protected void addDynamicBody(Body b) {//add dynamic body to physics engine
 		this.dynamicBodies.add(b);
 	}
 
 	public void addContactListener(ContactListener cl) {
-		listeners.add(cl);
+		listeners.add(listeners.size(), cl);
 	}
 
 	public void addBody(Body body) {
-		Log.i("Physics2D", "Added new body: " + body.userData);
+		//Log.d("Physics2D", "Added new body: " + body.userData);
 
 		if (body instanceof StaticBody)
 			addStaticBody(body);
@@ -143,6 +150,8 @@ public class Physics2D {
 	}
 
 	public boolean removeBody(Body body) {
+		//Log.d("Physics2D", "Removed body: " + body.userData);
+
 		spatialHashGrid.removeObject(body);
 		if (staticBodies.remove(body))
 			return true;

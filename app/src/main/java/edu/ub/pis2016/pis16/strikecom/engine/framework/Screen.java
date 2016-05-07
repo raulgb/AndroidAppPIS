@@ -9,7 +9,6 @@ import java.util.Map;
 
 import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Physics2D;
-import edu.ub.pis2016.pis16.strikecom.gameplay.Turret;
 
 public abstract class Screen implements Disposable {
 	public static final int LAYER_TERRAIN = -1;
@@ -27,6 +26,11 @@ public abstract class Screen implements Disposable {
 	private HashMap<String, GameObject> gameObjects;
 	private List<GameObject> goOrderedList;
 	private int uniqueID = 0;
+
+	// GameObject Management
+	private boolean dirty = false;
+	private HashMap<String, GameObject> GOsToAdd = new HashMap<>();
+	private ArrayList<GameObject> GOsToRemove = new ArrayList<>();
 
 	public Screen(Game game) {
 		this.game = game;
@@ -77,8 +81,12 @@ public abstract class Screen implements Disposable {
 		return null;
 	}
 
+	/**
+	 * Add input processor to the end of the Input Queue, input processors are processed in order, if any of them
+	 * return true, it stops the event from propagating
+	 */
 	public void addInputProcessor(InputProcessor ip) {
-		inputProcessors.add(ip);
+		inputProcessors.add(inputProcessors.size(), ip);
 	}
 
 	public void removeInputProcessor(InputProcessor ip) {
@@ -94,39 +102,55 @@ public abstract class Screen implements Disposable {
 	 * All other methods use this method to actually add a GameObject.
 	 */
 	public void addGameObject(String name, GameObject object) {
-		addedGOs.put(name, object);
+		GOsToAdd.put(name, object);
 	}
 
 	/**
-	 * Remove a GameObject by tag. Please note the GameObject will NOT be available until the next frame.
+	 * Use GameObject.destroy() instead.
+	 * Remove a GameObject by tag. Please note the GameObject will NOT be removed until the next frame.
 	 * All other methods use this method to actually remove a GameObject.
 	 */
 	public void removeGameObject(String name) {
-		removedGOs.add(name);
+		GOsToRemove.add(getGameObject(name));
 	}
 
-	private boolean dirty = false;
-	private HashMap<String, GameObject> addedGOs = new HashMap<>();
-	private ArrayList<String> removedGOs = new ArrayList<>();
+	/**
+	 * Use GameObject.destroy() instead.
+	 * Called by GameObjects when they are initially marked for disposal. Do not use unless you know what
+	 * you're doing.
+	 */
+	public void removeGameObject(GameObject go) {
+		GOsToRemove.add(go);
+	}
 
 	/** Commit changes to GameObject Map. Must be called at the begging of update method */
 	protected void commitGameObjectChanges() {
 		// TODO Raul: Usar PriorityQueue para no reordenar cada vez TODO el array
 
 		// Add all pending GOs, link to this screen
-		for (Map.Entry<String, GameObject> entry : addedGOs.entrySet()) {
+		for (Map.Entry<String, GameObject> entry : GOsToAdd.entrySet()) {
 			dirty = true;
 			entry.getValue().setScreen(this);
 			gameObjects.put(entry.getKey(), entry.getValue());
 		}
-		addedGOs.clear();
+		GOsToAdd.clear();
 
 		// Remove all requested GOs, unset the screen
-		for (String name : removedGOs) {
+		for (GameObject go : GOsToRemove) {
 			dirty = true;
-			gameObjects.remove(name)/*.setScreen(null)*/;
+			go.destroyInternal();
+
+			String keyToRemove = null;
+			for (Map.Entry<String, GameObject> e : gameObjects.entrySet())
+				if (e.getValue() == go) {
+					keyToRemove = e.getKey();
+					break;
+				}
+
+			if(keyToRemove != null)
+				gameObjects.remove(keyToRemove);
 		}
-		removedGOs.clear();
+		GOsToRemove.clear();
 
 		if (dirty) {
 			reorderGameObjectsByLayer();
@@ -162,16 +186,6 @@ public abstract class Screen implements Disposable {
 		return goOrderedList;
 	}
 
-	public void removeGameObject(GameObject object) {
-		String keyToRemove = null;
-		for (Map.Entry<String, GameObject> entry : gameObjects.entrySet())
-			if (entry.getValue() == object)
-				keyToRemove = entry.getKey();
-
-		if (keyToRemove != null)
-			removeGameObject(keyToRemove);
-	}
-
 
 	private void reorderGameObjectsByLayer() {
 		goOrderedList.clear();
@@ -186,6 +200,6 @@ public abstract class Screen implements Disposable {
 	}
 
 	public boolean hasGameObject(GameObject go) {
-		return(goOrderedList.contains(go));
+		return (goOrderedList.contains(go));
 	}
 }

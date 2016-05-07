@@ -25,7 +25,7 @@ public class TurretBehavior extends BehaviorComponent {
 		counter += delta;
 		PhysicsComponent turretPhys = gameObject.getComponent(PhysicsComponent.class);
 
-		if(targetTag == null || target == null){
+		if (targetTag == null || target == null) {
 			// If no target, look forward
 			tmp.set(50, 0).rotate(gameObject.getParent().getComponent(PhysicsComponent.class).getRotation());
 			turretPhys.lookAt(tmp, 0.05f);
@@ -34,7 +34,7 @@ public class TurretBehavior extends BehaviorComponent {
 		// If we have no target, try to find our next target
 		if (target == null || isTooFar(target)) {
 			for (GameObject go : gameObject.getScreen().getGameObjects())
-				if (go.getTag().equals(targetTag) && !isTooFar(go)) {
+				if (go.getTag().contains(targetTag) && !isTooFar(go)) {
 					target = go;
 					break;
 				}
@@ -63,7 +63,8 @@ public class TurretBehavior extends BehaviorComponent {
 				projPhys.setVelocity(tmp.set(90f, 0).rotate(turretPhys.getRotation()));
 				projPhys.setRotation(turretPhys.getRotation());
 
-				//projectile.setTag("player");
+				// set the tag to "playerProj" or "enemyProj"
+				projectile.setTag(gameObject.getParent().getTag() + "_proj");
 
 				projectile.setLayer(Screen.LAYER_1);
 				gameObject.getScreen().addGameObject(projectile);

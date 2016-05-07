@@ -99,6 +99,7 @@ public class Vector2 {
 		return x * v.x + y * v.y;
 	}
 
+	/** Normalize vector */
 	public Vector2 nor() {
 		float len = len();
 		this.x /= len;
