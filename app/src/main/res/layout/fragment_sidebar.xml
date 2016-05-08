@@ -90,7 +90,7 @@
         android:layout_margin="3dp">
 
         <Button
-            style="?android:attr/buttonStyleSmall"
+            style="?android:attr/borderlessButtonStyle"
 
             android:layout_width="@dimen/grid_btn_size"
             android:layout_height="@dimen/grid_btn_size"
@@ -99,11 +99,11 @@
             android:layout_row="0"
             android:layout_column="0"
             android:layout_rowWeight="0.3"
-            android:background="@drawable/btn_retro"
+            android:background="@drawable/btn_retro_canv"
             android:layout_margin="2dp" />
 
         <Button
-            style="?android:attr/buttonStyleSmall"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="@dimen/grid_btn_size"
             android:layout_height="@dimen/grid_btn_size"
             android:text="@string/turret2_button"
@@ -111,11 +111,11 @@
             android:layout_row="0"
             android:layout_column="1"
             android:layout_rowWeight="0.3"
-            android:background="@drawable/btn_retro"
+            android:background="@drawable/btn_retro_canv"
             android:layout_margin="2dp" />
 
         <Button
-            style="?android:attr/buttonStyleSmall"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="@dimen/grid_btn_size"
             android:layout_height="@dimen/grid_btn_size"
             android:text="@string/turret3_button"
@@ -123,42 +123,42 @@
             android:layout_row="0"
             android:layout_column="2"
             android:layout_rowWeight="0.3"
-            android:background="@drawable/btn_retro"
+            android:background="@drawable/btn_retro_canv"
             android:layout_margin="2dp" />
 
         <Button
-            style="?android:attr/buttonStyleSmall"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="@dimen/grid_btn_size"
             android:layout_height="@dimen/grid_btn_size"
             android:text="@string/turret4_button"
             android:id="@+id/btnT4"
             android:layout_row="1"
             android:layout_column="0"
-            android:background="@drawable/btn_retro"
+            android:background="@drawable/btn_retro_canv"
             android:layout_margin="2dp"
             android:layout_marginTop="3dp" />
 
         <Button
-            style="?android:attr/buttonStyleSmall"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="@dimen/grid_btn_size"
             android:layout_height="@dimen/grid_btn_size"
             android:text="@string/turret5_button"
             android:id="@+id/btnT5"
             android:layout_row="1"
             android:layout_column="1"
-            android:background="@drawable/btn_retro"
+            android:background="@drawable/btn_retro_canv"
             android:layout_margin="2dp"
             android:layout_marginTop="3dp" />
 
         <Button
-            style="?android:attr/buttonStyleSmall"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="@dimen/grid_btn_size"
             android:layout_height="@dimen/grid_btn_size"
             android:text="@string/turret6_button"
             android:id="@+id/btnT6"
             android:layout_row="1"
             android:layout_column="2"
-            android:background="@drawable/btn_retro"
+            android:background="@drawable/btn_retro_canv"
             android:layout_margin="2dp"
             android:layout_marginTop="3dp" />
     </GridLayout>
@@ -172,7 +172,7 @@
         android:layout_margin="3dp">
 
         <Button
-            style="?android:attr/buttonStyleSmall"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="@dimen/grid_btn_size"
             android:layout_height="@dimen/grid_btn_size"
             android:text="@string/upgrade1_button"
@@ -180,11 +180,11 @@
             android:layout_row="0"
             android:layout_column="0"
             android:layout_rowWeight="0.3"
-            android:background="@drawable/btn_retro"
+            android:background="@drawable/btn_retro_upgrade_canv"
             android:layout_margin="2dp" />
 
         <Button
-            style="?android:attr/buttonStyleSmall"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="@dimen/grid_btn_size"
             android:layout_height="@dimen/grid_btn_size"
             android:text="@string/upgrade2_button"
@@ -192,11 +192,11 @@
             android:layout_row="0"
             android:layout_column="1"
             android:layout_rowWeight="0.3"
-            android:background="@drawable/btn_retro"
+            android:background="@drawable/btn_retro_upgrade_canv"
             android:layout_margin="2dp" />
 
         <Button
-            style="?android:attr/buttonStyleSmall"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="@dimen/grid_btn_size"
             android:layout_height="@dimen/grid_btn_size"
             android:text="@string/upgrade3_button"
@@ -204,7 +204,7 @@
             android:layout_row="0"
             android:layout_column="2"
             android:layout_rowWeight="0.3"
-            android:background="@drawable/btn_retro"
+            android:background="@drawable/btn_retro_upgrade_canv"
             android:layout_margin="2dp" />
 
     </GridLayout>
@@ -214,6 +214,6 @@
         android:layout_height="wrap_content"
         android:text="@string/inventory_button"
         android:id="@+id/btnInventory"
-        android:background="@drawable/btn_retro"
+        android:background="@drawable/btn_retro_canv"
         android:layout_margin="5dp" />
 </LinearLayout>

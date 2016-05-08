@@ -1,13 +1,19 @@
 package edu.ub.pis2016.pis16.strikecom.fragments;
 
 import android.app.Fragment;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import edu.ub.pis2016.pis16.strikecom.R;
 import edu.ub.pis2016.pis16.strikecom.StrikeComGLGame;
+import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 
 
 public class SidebarFragment extends Fragment {
@@ -61,6 +67,14 @@ public class SidebarFragment extends Fragment {
 			@Override
 			public void onClick(View view) {
 				game.getSidebarListener().onClickTurret(2);
+				/*final Button button= (Button) view.findViewById(R.id.btnT3);
+
+				Bitmap original = BitmapFactory.decodeResource(getResources(), R.drawable.turret_mk1_0);
+				Bitmap b = Bitmap.createScaledBitmap(original, button.getWidth()/2, button.getHeight()/2, false);
+				Drawable d = new BitmapDrawable(getResources(), b);
+				button.setCompoundDrawablesWithIntrinsicBounds(null,d,null,null);*/
+
+				//Idea a realitzar para que al apretar el botton se cambie con la imagen deseada
 			}
 		});
 
