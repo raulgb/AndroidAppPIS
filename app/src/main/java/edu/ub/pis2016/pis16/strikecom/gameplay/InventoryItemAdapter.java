@@ -61,7 +61,7 @@ public class InventoryItemAdapter extends BaseAdapter {
 		TextView itemName = (TextView) rowView.findViewById(R.id.itemName);
 
 		Item item = this.items.get(position);
-		itemName.setText(item.getDisplay());
+		itemName.setText(item.getName());
 
 		int imageID = context.getResources().getIdentifier(item.getImage(), "drawable", context.getPackageName());
 		if (imageID > 0) {

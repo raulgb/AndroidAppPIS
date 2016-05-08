@@ -21,7 +21,7 @@ public class InventoryManager {
 	public InventoryManager(Context context, String turretsFile, String upgradesFile) throws IOException{
 		this.master = new Inventory();
 		loadTurrets(context, turretsFile);
-		loadUpgrades(context, upgradesFile);
+		//loadUpgrades(context, upgradesFile);
 	}
 
 	// Loads turret objects from assets to master inventory.

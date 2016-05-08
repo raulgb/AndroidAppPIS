@@ -16,10 +16,14 @@ import edu.ub.pis2016.pis16.strikecom.fragments.InventoryFragment;
 import edu.ub.pis2016.pis16.strikecom.fragments.SidebarFragment;
 import edu.ub.pis2016.pis16.strikecom.controller.SidebarEventListener;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
+import edu.ub.pis2016.pis16.strikecom.fragments.SlotsFragment;
+import edu.ub.pis2016.pis16.strikecom.gameplay.InventoryManager;
 import edu.ub.pis2016.pis16.strikecom.gameplay.StrikeBaseTest;
 import edu.ub.pis2016.pis16.strikecom.gameplay.Turret;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.TurretBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.Inventory;
+import edu.ub.pis2016.pis16.strikecom.gameplay.items.Item;
+import edu.ub.pis2016.pis16.strikecom.gameplay.items.TurretItem;
 
 public class FragmentedGameActivity extends Activity {
 
@@ -54,7 +58,20 @@ public class FragmentedGameActivity extends Activity {
 		playerState.put("SCRAP", Integer.valueOf(getString(R.string.res1_defVal)));
 		playerState.put("FUEL", Integer.valueOf(getString(R.string.res2_defVal)));
 		playerState.put("POINTS",0);
-		playerState.put("INVENTORY", new Inventory());
+
+		InventoryFragment inventoryFragment = new InventoryFragment();
+
+		// TEST INVENTORY ----
+		Inventory inv = new Inventory();
+		inv.addItem(TurretItem.parseTurretItem("Machinegun;machinegun;Weak yet cheap, makes an ideal weapon for a newbie.;100;2;4;1"));
+		inv.addItem(TurretItem.parseTurretItem("Gatling gun;quad;Multi-barreled machinegun with superior firerate.;300;2;6;2"));
+		inv.addItem(TurretItem.parseTurretItem("Battle cannon;railgun;This cannon can punch a hole through most enemies.;1500;4;2;4"));
+		inv.addItem(TurretItem.parseTurretItem("Railgun;railgun;Uses a magnetic field to propel metallic projectiles at astonishing " +
+				"speeds.;9999;10;1;7"));
+		// -------------------
+
+		inventoryFragment.setInventory(inv);
+		playerState.put("INVENTORY", inventoryFragment);
 	}
 
 	@Override
@@ -72,6 +89,8 @@ public class FragmentedGameActivity extends Activity {
 			@Override
 			public void onClickInventory() {
 				// TODO ARNAU: Aqui para meter o quitar el DialogFragment del inventorio
+				showInventoryDialog(-1);
+
 			}
 
 			@Override
@@ -129,6 +148,23 @@ public class FragmentedGameActivity extends Activity {
 		builder.setNegativeButton(getString(R.string.alert_negative), null);
 
 		(builder.create()).show();
+	}
+
+	public void showInventoryDialog(int selectedSlot) {
+		InventoryFragment inventory = (InventoryFragment) playerState.get("INVENTORY");
+		inventory.setSelectedSlot(selectedSlot);
+		inventory.show(getFragmentManager(), "Inventory_Fragment");
+	}
+
+	public void showSlotsDialog(Item selectedItem) {
+		SlotsFragment slots = new SlotsFragment();
+
+		slots.setNewItem(selectedItem);
+		slots.show(getFragmentManager(), "slots");
+	}
+
+	public void equipItem(Item selectedItem, int slot) {
+
 	}
 }
 

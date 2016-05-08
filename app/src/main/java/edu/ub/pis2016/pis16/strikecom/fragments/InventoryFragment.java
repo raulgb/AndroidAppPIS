@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import edu.ub.pis2016.pis16.strikecom.FragmentedGameActivity;
 import edu.ub.pis2016.pis16.strikecom.R;
 import edu.ub.pis2016.pis16.strikecom.StrikeComGLGame;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
@@ -19,12 +20,14 @@ import edu.ub.pis2016.pis16.strikecom.gameplay.InventoryItemAdapter;
 import edu.ub.pis2016.pis16.strikecom.gameplay.StrikeBaseTest;
 import edu.ub.pis2016.pis16.strikecom.gameplay.Turret;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.Inventory;
+import edu.ub.pis2016.pis16.strikecom.gameplay.items.Item;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.TurretItem;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.UpgradeItem;
 
 public class InventoryFragment extends DialogFragment {
 
-	private StrikeComGLGame game;
+	StrikeComGLGame game;
+
 	private Inventory inventory;
 
 	private Button equipBtn;
@@ -43,6 +46,13 @@ public class InventoryFragment extends DialogFragment {
 	public void setInventory(Inventory inventory) { this.inventory = inventory; }
 
 	public void setSelectedSlot(int selectedSlot) { this.selectedSlot = selectedSlot; }
+
+	public Item getSelectedItem() {
+		if (selectedItem >= 0){
+			return inventory.getItem(selectedItem);
+		}
+		return null;
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -66,7 +76,11 @@ public class InventoryFragment extends DialogFragment {
 			@Override
 			public void onClick(View view) {
 				//Item item = inventory.getItem(selectedItem);
-				equipItem((TurretItem)inventory.getItem(selectedItem));
+				//equipItem((TurretItem)inventory.getItem(selectedItem));
+
+				dismiss();
+				FragmentedGameActivity callingActivity = (FragmentedGameActivity) getActivity();
+				callingActivity.showSlotsDialog( inventory.getItem(selectedItem) );
 			}
 		});
 
@@ -86,10 +100,8 @@ public class InventoryFragment extends DialogFragment {
 				if(i>=0){ //valid item is selected
 					selectedItem = i;
 					itemDesc.setText( inventory.getItem(selectedItem).getDisplay() );
+					equipBtn.setEnabled(true);
 
-					if(selectedSlot >= 0) { //valid slot is selected
-						equipBtn.setEnabled(true);
-					}
 				} else {
 					equipBtn.setEnabled(false);
 				}
@@ -97,6 +109,7 @@ public class InventoryFragment extends DialogFragment {
 		});
 	}
 
+	/*
 	private void equipItem(TurretItem turretItem) {
 		Screen screen = game.getCurrentScreen();
 		StrikeBaseTest strikeBase = screen.getGameObject("StrikeBase", StrikeBaseTest.class);
@@ -128,4 +141,5 @@ public class InventoryFragment extends DialogFragment {
 		}
 		isEquipped = !isEquipped;
 	}
+	*/
 }

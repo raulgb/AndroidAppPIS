@@ -1,10 +1,12 @@
 <resources>
     <string name="app_name">StrikeCom</string>
 
+    <!-- Main Menu -->
     <string name="play_button">Play</string>
     <string name="options_button">Options</string>
     <string name="exit_button">Exit</string>
 
+    <!-- Select Menu -->
     <string name="sel_menu_description">Select Strike Base</string>
     <string name="sel_menu_prev">&lt;</string>
     <string name="sel_menu_next">&gt;</string>
@@ -13,7 +15,9 @@
     <string name="sel_menu_startButton">START</string>
     <string name="sel_menu_mk1name">StrikeBase Mark. I</string>
     <string name="sel_menu_mk2name">StrikeBase Mark. II</string>
+    <string name="enter_name_toast">Please enter a name!</string>
 
+    <!-- Sidebar -->
     <string name="minimap">MINIMAP</string>
     <string name="resource_1">Scrap</string>
     <string name="resource_2">Fuel</string>
@@ -28,15 +32,25 @@
     <string name="upgrade1_button">U1</string>
     <string name="upgrade2_button">U2</string>
     <string name="upgrade3_button">U3</string>
+
+    <!-- Inventory -->
     <string name="equip_button">Equip</string>
     <string name="unequip_button">Unequip</string>
     <string name="inventory_button">Inventory</string>
     <string name="cancel_button">Cancel</string>
+    <string name="inventory_description">Inventory</string>
 
-    <string name="enter_name_toast">Please enter a name!</string>
+    <!-- Slots Dialog -->
+    <string name="equipToSlot_button">Equip</string>
+    <string name="backToInventory_button">Back</string>
+
+    <!-- Quit Alert -->
     <string name="quit_alert">Exit the Game?</string>
     <string name="alert_positive">Yes</string>
     <string name="alert_negative">No</string>
 
-    <string name="inventory_description">Inventory</string>
+    <!-- Files -->
+    <string name="turretsFile">turrets</string>
+    <string name="upgradesFile">upgrades</string>
+
 </resources>

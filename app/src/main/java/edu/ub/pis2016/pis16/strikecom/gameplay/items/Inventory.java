@@ -1,6 +1,9 @@
 package edu.ub.pis2016.pis16.strikecom.gameplay.items;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import edu.ub.pis2016.pis16.strikecom.fragments.InventoryFragment;
 
 // I've implemented this class just for the sake of having a sorted list. It might be replaced by a
 // regular ArrayList. Sorting is managed during insertion. Objects sorted by price.
@@ -39,7 +42,7 @@ public class Inventory {
 	}
 
 	// Returns objectList.
-	public ArrayList getInventory() {
+	public List<Item> getInventory() {
 		return objectList;
 	}
 

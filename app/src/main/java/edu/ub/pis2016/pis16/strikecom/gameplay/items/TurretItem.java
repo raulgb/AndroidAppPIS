@@ -39,7 +39,8 @@ public class TurretItem extends Item {
 
 	@Override
 	public String getDisplay() {
-		return  ("attack: " + Float.toString(stats[0]) + "\nspeed: " + Float.toString(stats[0]) + "\nHP: " + Float.toString(stats[0]) +
+		return  (name + "\n\nattack: " + Float.toString(stats[0]) + "\nspeed: " + Float.toString(stats[1]) + "\nHP: " + Float.toString
+				(stats[2]) +
 				"\n\n" + flavour);
 	}
 
