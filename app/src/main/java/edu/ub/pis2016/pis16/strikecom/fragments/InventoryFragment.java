@@ -14,15 +14,9 @@ import android.widget.TextView;
 import edu.ub.pis2016.pis16.strikecom.FragmentedGameActivity;
 import edu.ub.pis2016.pis16.strikecom.R;
 import edu.ub.pis2016.pis16.strikecom.StrikeComGLGame;
-import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
-import edu.ub.pis2016.pis16.strikecom.engine.game.component.GraphicsComponent;
 import edu.ub.pis2016.pis16.strikecom.gameplay.InventoryItemAdapter;
-import edu.ub.pis2016.pis16.strikecom.gameplay.StrikeBaseTest;
-import edu.ub.pis2016.pis16.strikecom.gameplay.Turret;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.Inventory;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.Item;
-import edu.ub.pis2016.pis16.strikecom.gameplay.items.TurretItem;
-import edu.ub.pis2016.pis16.strikecom.gameplay.items.UpgradeItem;
 
 public class InventoryFragment extends DialogFragment {
 
@@ -108,38 +102,4 @@ public class InventoryFragment extends DialogFragment {
 			}
 		});
 	}
-
-	/*
-	private void equipItem(TurretItem turretItem) {
-		Screen screen = game.getCurrentScreen();
-		StrikeBaseTest strikeBase = screen.getGameObject("StrikeBase", StrikeBaseTest.class);
-		String tName = "turret_" + selectedSlot;
-		if (isEquipped) {
-			screen.removeGameObject(tName);
-			equipBtn.setText(R.string.equip_button);
-		} else {
-			Turret newTurret = new Turret(turretItem.getImage(), strikeBase, tName);
-			newTurret.getComponent(GraphicsComponent.class).getSprite().setScale(0.75f);
-			newTurret.setParent(strikeBase);
-			newTurret.putComponent(turretItem.getTurretBehavior());
-			newTurret.setLayer(Screen.LAYER_3);
-			screen.addGameObject(tName, newTurret);
-			equipBtn.setText(R.string.unequip_button);
-		}
-		isEquipped = !isEquipped;
-	}
-
-	private void equipItem(UpgradeItem upgrade) {
-		Screen screen = game.getCurrentScreen();
-		StrikeBaseTest strikeBase = screen.getGameObject("StrikeBase", StrikeBaseTest.class);
-		if (isEquipped) {
-			strikeBase.removeUpgrade(upgrade);
-			equipBtn.setText(getString(R.string.equip_button));
-		} else {
-			strikeBase.addUpgrade(upgrade);
-			equipBtn.setText(getString(R.string.equip_button));
-		}
-		isEquipped = !isEquipped;
-	}
-	*/
 }

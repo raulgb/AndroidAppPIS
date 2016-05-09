@@ -48,6 +48,8 @@ public class StrikeBaseTest extends Vehicle {
 
 	private Animation[] threadAnim;
 
+	private StrikeBaseConfig config;
+
 	public StrikeBaseTest(StrikeBaseConfig cfg) {
 		super();
 
@@ -55,6 +57,7 @@ public class StrikeBaseTest extends Vehicle {
 		physics = new PhysicsComponent(new KinematicBody(new Rectangle(32, 32)));
 		putComponent(physics);
 
+		this.config = cfg;
 		String model = cfg.modelName;
 
 		sbmk1_hull = new TextureRegion[cfg.animHullFrames];
@@ -89,6 +92,8 @@ public class StrikeBaseTest extends Vehicle {
 		this.putAnchor("left_thread", leftThread);
 		this.putAnchor("right_thread", rightThread);
 	}
+
+	public StrikeBaseConfig getCongig() { return this.config; }
 
 	@Override
 	public void update(float delta) {

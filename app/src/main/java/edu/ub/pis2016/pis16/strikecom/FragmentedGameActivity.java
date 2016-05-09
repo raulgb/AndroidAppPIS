@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.view.View;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.GraphicsComponent;
@@ -33,6 +34,7 @@ public class FragmentedGameActivity extends Activity {
 	SidebarFragment sidebar;
 
 	HashMap<String, Object> playerState = new HashMap<>();
+	HashMap<String, Item> masterInventory = new HashMap<>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,19 +61,7 @@ public class FragmentedGameActivity extends Activity {
 		playerState.put("FUEL", Integer.valueOf(getString(R.string.res2_defVal)));
 		playerState.put("POINTS",0);
 
-		InventoryFragment inventoryFragment = new InventoryFragment();
-
-		// TEST INVENTORY ----
-		Inventory inv = new Inventory();
-		inv.addItem(TurretItem.parseTurretItem("Machinegun;machinegun;Weak yet cheap, makes an ideal weapon for a newbie.;100;2;4;1"));
-		inv.addItem(TurretItem.parseTurretItem("Gatling gun;quad;Multi-barreled machinegun with superior firerate.;300;2;6;2"));
-		inv.addItem(TurretItem.parseTurretItem("Battle cannon;railgun;This cannon can punch a hole through most enemies.;1500;4;2;4"));
-		inv.addItem(TurretItem.parseTurretItem("Railgun;railgun;Uses a magnetic field to propel metallic projectiles at astonishing " +
-				"speeds.;9999;10;1;7"));
-		// -------------------
-
-		inventoryFragment.setInventory(inv);
-		playerState.put("INVENTORY", inventoryFragment);
+		generateInventories();
 	}
 
 	@Override
@@ -88,9 +78,7 @@ public class FragmentedGameActivity extends Activity {
 		game.setSidebarListener(new SidebarEventListener(game) {
 			@Override
 			public void onClickInventory() {
-				// TODO ARNAU: Aqui para meter o quitar el DialogFragment del inventorio
 				showInventoryDialog(-1);
-
 			}
 
 			@Override
@@ -151,20 +139,42 @@ public class FragmentedGameActivity extends Activity {
 	}
 
 	public void showInventoryDialog(int selectedSlot) {
-		InventoryFragment inventory = (InventoryFragment) playerState.get("INVENTORY");
-		inventory.setSelectedSlot(selectedSlot);
-		inventory.show(getFragmentManager(), "Inventory_Fragment");
+		InventoryFragment inventoryFrag = new InventoryFragment();
+		inventoryFrag.setInventory( (Inventory) playerState.get("INVENTORY") );
+		inventoryFrag.setSelectedSlot(selectedSlot);
+		inventoryFrag.show(getFragmentManager(), "Inventory_Fragment");
 	}
 
 	public void showSlotsDialog(Item selectedItem) {
-		SlotsFragment slots = new SlotsFragment();
+		Screen screen = game.getCurrentScreen();
+		StrikeBaseTest strikeBase = screen.getGameObject("StrikeBase", StrikeBaseTest.class);
 
+		SlotsFragment slots = new SlotsFragment();
+		slots.setStrikeBaseConfig(strikeBase.getCongig());
 		slots.setNewItem(selectedItem);
 		slots.show(getFragmentManager(), "slots");
 	}
 
 	public void equipItem(Item selectedItem, int slot) {
 
+	}
+
+	public void generateInventories() {
+		String turretsFile = getString(R.string.turretsFile);
+		String upgradesFile = getString(R.string.upgradesFile);
+		try{
+			InventoryManager im = new InventoryManager(this, turretsFile, upgradesFile);
+			masterInventory = im.getMasterInventory();
+			playerState.put("INVENTORY", im.getNewInventory(10));
+
+		} catch (IOException ex){
+			// TEST INVENTORY ----
+			Inventory testInventory = new Inventory();
+			testInventory.addItem(TurretItem.parseTurretItem("Machinegun;machinegun;Weak yet cheap, makes an ideal weapon for a newbie.;100;2;4;1"));
+			testInventory.addItem(TurretItem.parseTurretItem("Gatling gun;gatling;Multi-barreled machinegun with superior firerate.;300;2;6;2"));
+			testInventory.addItem(TurretItem.parseTurretItem("Battle cannon;cannon;This cannon can punch a hole through most enemies.;1500;4;2;4"));
+			playerState.put("INVENTORY", testInventory);
+		}
 	}
 }
 

@@ -7,9 +7,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 import java.util.Random;
 
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.Inventory;
+import edu.ub.pis2016.pis16.strikecom.gameplay.items.Item;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.TurretItem;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.UpgradeItem;
 
@@ -60,5 +62,14 @@ public class InventoryManager {
 			inventory.addItem(master.getItem(r.nextInt(master.getSize())));
 		}
 		return inventory;
+	}
+
+	public HashMap getMasterInventory() {
+		HashMap<String, Item> masterInventory = new HashMap<>();
+		for (int i=0; i<master.getSize(); i++){
+			Item item = master.getItem(i);
+			masterInventory.put(item.getName(), item);
+		}
+		return masterInventory;
 	}
 }

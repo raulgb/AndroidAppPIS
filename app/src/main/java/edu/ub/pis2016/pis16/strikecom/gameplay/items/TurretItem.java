@@ -1,6 +1,9 @@
 package edu.ub.pis2016.pis16.strikecom.gameplay.items;
 
+import java.util.HashMap;
+
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.BehaviorComponent;
+import edu.ub.pis2016.pis16.strikecom.gameplay.Turret;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.CustomTurretBehavior;
 
 public class TurretItem extends Item {
@@ -13,7 +16,7 @@ public class TurretItem extends Item {
 	}
 
 	// Returns a new TurretObject whose parameters are contained on a given string.
-	public static TurretItem parseTurretItem(String seq){
+	public static TurretItem parseTurretItem(String seq) {
 		String param[] = seq.split(";"); // ; used as separator
 
 		if(param.length < 5){ // seq should at least contain name, image, flavour, price and 1 stat.

@@ -9,14 +9,19 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.HashMap;
+
 import edu.ub.pis2016.pis16.strikecom.FragmentedGameActivity;
 import edu.ub.pis2016.pis16.strikecom.R;
 import edu.ub.pis2016.pis16.strikecom.StrikeComGLGame;
+import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
+import edu.ub.pis2016.pis16.strikecom.gameplay.StrikeBaseTest;
+import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.Item;
 
 public class SlotsFragment extends DialogFragment {
 
-	private StrikeComGLGame game;
+	StrikeBaseConfig strikeBaseConfig;
 
 	private Button equipToSlotBtn;
 	private Button backToInventoryBtn;
@@ -25,10 +30,10 @@ public class SlotsFragment extends DialogFragment {
 
 	private Item newItem;
 	private int selectedSlot = -1;
-	//boolean isEquipped = false; //selected item is currently equipped
+	//private HashMap<View, Integer> slotsMap;
 
-	public void setGame(StrikeComGLGame game) {
-		this.game = game;
+	public void setStrikeBaseConfig(StrikeBaseConfig cfg) {
+		this.strikeBaseConfig = cfg;
 	}
 
 	public void setNewItem(Item selectedItem) { this.newItem = selectedItem; }
@@ -69,7 +74,7 @@ public class SlotsFragment extends DialogFragment {
 		slotT1.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				selectedSlot = 1;
+				selectedSlot = 0;
 				equipToSlotBtn.setEnabled(true);
 			}
 		});
@@ -77,7 +82,7 @@ public class SlotsFragment extends DialogFragment {
 		slotT2.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				selectedSlot = 2;
+				selectedSlot = 1;
 				equipToSlotBtn.setEnabled(true);
 			}
 		});
@@ -85,7 +90,7 @@ public class SlotsFragment extends DialogFragment {
 		slotT3.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				selectedSlot = 3;
+				selectedSlot = 2;
 				equipToSlotBtn.setEnabled(true);
 			}
 		});
@@ -93,7 +98,7 @@ public class SlotsFragment extends DialogFragment {
 		slotT4.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				selectedSlot = 4;
+				selectedSlot = 3;
 				equipToSlotBtn.setEnabled(true);
 			}
 		});
@@ -101,7 +106,7 @@ public class SlotsFragment extends DialogFragment {
 		slotT5.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				selectedSlot = 5;
+				selectedSlot = 4;
 				equipToSlotBtn.setEnabled(true);
 			}
 		});
@@ -109,7 +114,7 @@ public class SlotsFragment extends DialogFragment {
 		slotT6.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				selectedSlot = 6;
+				selectedSlot = 5;
 				equipToSlotBtn.setEnabled(true);
 			}
 		});
@@ -117,7 +122,7 @@ public class SlotsFragment extends DialogFragment {
 		slotU1.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				selectedSlot = 7;
+				selectedSlot = 6;
 				equipToSlotBtn.setEnabled(true);
 			}
 		});
@@ -125,7 +130,7 @@ public class SlotsFragment extends DialogFragment {
 		slotU2.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				selectedSlot = 8;
+				selectedSlot = 7;
 				equipToSlotBtn.setEnabled(true);
 			}
 		});
@@ -133,10 +138,29 @@ public class SlotsFragment extends DialogFragment {
 		slotU3.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				selectedSlot = 9;
+				selectedSlot = 8;
 				equipToSlotBtn.setEnabled(true);
 			}
 		});
+
+		switch (strikeBaseConfig.modelName) {
+			case "sbmk1":
+				slotT1.setEnabled(true);
+				slotT2.setEnabled(false);
+				slotT3.setEnabled(true);
+				slotT4.setEnabled(true);
+				slotT5.setEnabled(false);
+				slotT6.setEnabled(true);
+				break;
+			case "sbmk2":
+				slotT1.setEnabled(true);
+				slotT2.setEnabled(false);
+				slotT3.setEnabled(true);
+				slotT4.setEnabled(true);
+				slotT5.setEnabled(false);
+				slotT6.setEnabled(false);
+				break;
+		}
 
 		getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 		return view;

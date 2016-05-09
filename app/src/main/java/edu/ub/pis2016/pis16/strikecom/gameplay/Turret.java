@@ -11,6 +11,8 @@ import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 /** A Generic turret for use with a {@link Vehicle}. */
 public class Turret extends GameObject {
 
+	private String id;
+
 	String model;
 
 	Vector2 tmp;
@@ -32,6 +34,14 @@ public class Turret extends GameObject {
 		putComponent(new PhysicsComponent());
 
 		sprite = new TextureSprite(Assets.SPRITE_ATLAS.getRegion(model, upgradeStatus));
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getId() {
+		return this.id;
 	}
 
 	@Override
