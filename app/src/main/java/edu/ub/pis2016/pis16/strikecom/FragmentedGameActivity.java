@@ -76,6 +76,11 @@ public class FragmentedGameActivity extends Activity {
 
 		game.setSidebarListener(new SidebarEventListener(game) {
 			@Override
+			public void onClickMinimap() {
+				// TODO Alexander
+			}
+
+			@Override
 			public void onClickInventory() {
 				showInventoryDialog(-1);
 			}
