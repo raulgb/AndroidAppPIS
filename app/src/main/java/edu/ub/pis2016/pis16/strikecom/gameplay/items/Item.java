@@ -4,22 +4,32 @@ import android.support.annotation.NonNull;
 
 // Class represents in-game objects, containing all the information relevant to the inventory display.
 public abstract class Item implements Comparable<Item> {
-	String name;    // object name
-	String image;   // name of representative image
-	String flavour; //description, fluff
-	float price;    // price in game resources
+	protected String name;    // object name
+	protected String image;    // item icon
+	protected String model;   // name of representative image on the screen
+	protected String flavour; //description, fluff
+	protected float price;    // price in game resources
+
+	protected boolean visible = true;
 
 	// Builders
-	public Item(String name, String image, String flavour, float price) {
+	public Item(String name, String image, String model, String flavour, float price) {
 		this.name = name;
 		this.image = image;
+		this.model = model;
 		this.flavour = flavour;
 		this.price = price;
 	}
 
+	public void setVisibility(boolean visible) { this.visible = visible; }
+
+	public boolean isVisible() { return this.visible; }
+
 	public String getName(){ return this.name; }
 
 	public String getImage(){ return this.image; }
+
+	public String getModel(){ return this.model; }
 
 	public String getFlavour(){ return this.flavour; }
 

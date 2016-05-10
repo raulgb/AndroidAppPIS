@@ -10,8 +10,8 @@ public class TurretItem extends Item {
 	float[] stats;
 
 	// Builder
-	public TurretItem(String name, String image, String flavour, float price, float[] stats) {
-		super(name, image, flavour, price);
+	public TurretItem(String name, String image, String model, String flavour, float price, float[] stats) {
+		super(name, image, model, flavour, price);
 		this.stats = stats;
 	}
 
@@ -19,21 +19,21 @@ public class TurretItem extends Item {
 	public static TurretItem parseTurretItem(String seq) {
 		String param[] = seq.split(";"); // ; used as separator
 
-		if(param.length < 5){ // seq should at least contain name, image, flavour, price and 1 stat.
+		if(param.length < 6){ // seq should at least contain name, image, flavour, price and 1 stat.
 			return null;
 		}
-		float p = Float.valueOf(param[3]); //price
-		float s[] = new float[param.length - 4]; //stats
+		float p = Float.valueOf(param[4]); //price
+		float s[] = new float[param.length - 5]; //stats
 		for(int i=0; i<s.length; i++){
-			s[i] = Float.valueOf(param[i+4]);
+			s[i] = Float.valueOf(param[i+5]);
 		}
-		return new TurretItem(param[0], param[1], param[2], p, s);
+		return new TurretItem(param[0], param[1], param[2], param[3], p, s);
 	}
 
 	// Returns a string containing all relevant information of the object, using ";" as separator.
 	@Override
 	public String toString(){
-		String seq = (this.name + ";" + this.image + ";" + this.flavour);
+		String seq = (this.name + ";" + this.image + ";" + this.model + ";" + this.flavour);
 		for(float s : this.stats){
 			seq += (";" + Float.toString(s));
 		}

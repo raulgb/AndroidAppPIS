@@ -1,6 +1,7 @@
 package edu.ub.pis2016.pis16.strikecom.fragments;
 
 import android.app.DialogFragment;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,32 +10,21 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.HashMap;
-
 import edu.ub.pis2016.pis16.strikecom.FragmentedGameActivity;
 import edu.ub.pis2016.pis16.strikecom.R;
-import edu.ub.pis2016.pis16.strikecom.StrikeComGLGame;
-import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
-import edu.ub.pis2016.pis16.strikecom.gameplay.StrikeBaseTest;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.Item;
 
 public class SlotsFragment extends DialogFragment {
 
-	StrikeBaseConfig strikeBaseConfig;
+	StrikeBaseConfig.Model strikeBaseModel = StrikeBaseConfig.Model.MKII;
 
 	private Button equipToSlotBtn;
-	private Button backToInventoryBtn;
-	private TextView currentItemDesc;
-	//private TextView newItemDesc;
 
 	private Item newItem;
 	private int selectedSlot = -1;
-	//private HashMap<View, Integer> slotsMap;
 
-	public void setStrikeBaseConfig(StrikeBaseConfig cfg) {
-		this.strikeBaseConfig = cfg;
-	}
+	public void setStrikeBaseModel(StrikeBaseConfig.Model strikeBaseModel) {this.strikeBaseModel = strikeBaseModel; }
 
 	public void setNewItem(Item selectedItem) { this.newItem = selectedItem; }
 
@@ -42,7 +32,7 @@ public class SlotsFragment extends DialogFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.slots_dialog, container);
 
-		currentItemDesc = (TextView) view.findViewById(R.id.currentItemDesc);
+		TextView currentItemDesc = (TextView) view.findViewById(R.id.currentItemDesc);
 
 		// NEW ITEM ATTRIBUTES
 		TextView newItemDesc = (TextView) view.findViewById(R.id.newItemDesc);
@@ -59,7 +49,7 @@ public class SlotsFragment extends DialogFragment {
 				callingActivity.equipItem(newItem, selectedSlot);
 			}
 		});
-		backToInventoryBtn = (Button) view.findViewById(R.id.slotsBtn_2);
+		Button backToInventoryBtn = (Button) view.findViewById(R.id.slotsBtn_2);
 		backToInventoryBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -70,102 +60,100 @@ public class SlotsFragment extends DialogFragment {
 		});
 
 		// SLOTS
-		Button slotT1 = (Button) view.findViewById(R.id.slotT1);
-		slotT1.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				selectedSlot = 0;
-				equipToSlotBtn.setEnabled(true);
-			}
-		});
-		Button slotT2 = (Button) view.findViewById(R.id.slotT2);
-		slotT2.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				selectedSlot = 1;
-				equipToSlotBtn.setEnabled(true);
-			}
-		});
-		Button slotT3 = (Button) view.findViewById(R.id.slotT3);
-		slotT3.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				selectedSlot = 2;
-				equipToSlotBtn.setEnabled(true);
-			}
-		});
-		Button slotT4 = (Button) view.findViewById(R.id.slotT4);
-		slotT4.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				selectedSlot = 3;
-				equipToSlotBtn.setEnabled(true);
-			}
-		});
-		Button slotT5 = (Button) view.findViewById(R.id.slotT5);
-		slotT5.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				selectedSlot = 4;
-				equipToSlotBtn.setEnabled(true);
-			}
-		});
-		Button slotT6 = (Button) view.findViewById(R.id.slotT6);
-		slotT6.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				selectedSlot = 5;
-				equipToSlotBtn.setEnabled(true);
-			}
-		});
-		Button slotU1 = (Button) view.findViewById(R.id.slotU1);
-		slotU1.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				selectedSlot = 6;
-				equipToSlotBtn.setEnabled(true);
-			}
-		});
-		Button slotU2 = (Button) view.findViewById(R.id.slotU2);
-		slotU2.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				selectedSlot = 7;
-				equipToSlotBtn.setEnabled(true);
-			}
-		});
-		Button slotU3 = (Button) view.findViewById(R.id.slotU3);
-		slotU3.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				selectedSlot = 8;
-				equipToSlotBtn.setEnabled(true);
-			}
-		});
+		Button btnT1 = (Button) view.findViewById(R.id.slotT1);
+		Button btnT2 = (Button) view.findViewById(R.id.slotT2);
+		Button btnT3 = (Button) view.findViewById(R.id.slotT3);
+		Button btnT4 = (Button) view.findViewById(R.id.slotT4);
+		Button btnT5 = (Button) view.findViewById(R.id.slotT5);
+		Button btnT6 = (Button) view.findViewById(R.id.slotT6);
+		Button btnU1 = (Button) view.findViewById(R.id.slotU1);
+		Button btnU2 = (Button) view.findViewById(R.id.slotU2);
+		Button btnU3 = (Button) view.findViewById(R.id.slotU3);
 
-		switch (strikeBaseConfig.modelName) {
-			case "sbmk1":
-				slotT1.setEnabled(true);
-				slotT2.setEnabled(false);
-				slotT2.setBackgroundResource(R.drawable.btn_retro_act);
-				slotT3.setEnabled(true);
-				slotT4.setEnabled(true);
-				slotT5.setEnabled(false);
-				slotT5.setBackgroundResource(R.drawable.btn_retro_act);
-				slotT6.setEnabled(true);
+		// Turret slots assignations change between strike base models
+		switch(strikeBaseModel) {
+			case MKI:
+				btnT1.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						selectedSlot = 0;
+						equipToSlotBtn.setEnabled(true);
+					}
+				});
+
+				btnT2.setBackgroundColor(Color.TRANSPARENT);
+				btnT2.setEnabled(false);
+
+				btnT3.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						selectedSlot = 1;
+						equipToSlotBtn.setEnabled(true);
+					}
+				});
+
+				btnT4.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						selectedSlot = 2;
+						equipToSlotBtn.setEnabled(true);
+					}
+				});
+
+				btnT5.setBackgroundColor(Color.TRANSPARENT);
+				btnT5.setEnabled(false);
+
+				btnT6.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						selectedSlot = 3;
+						equipToSlotBtn.setEnabled(true);
+					}
+				});
 				break;
-			case "sbmk2":
-				slotT1.setEnabled(true);
-				slotT2.setEnabled(false);
-				slotT2.setBackgroundResource(R.drawable.btn_retro_act);
-				slotT3.setEnabled(true);
-				slotT4.setEnabled(true);
-				slotT5.setEnabled(false);
-				slotT5.setBackgroundResource(R.drawable.btn_retro_act);
-				slotT6.setEnabled(false);
-				slotT6.setBackgroundResource(R.drawable.btn_retro_act);
+
+			case MKII:
+				btnT1.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						selectedSlot = 0;
+						equipToSlotBtn.setEnabled(true);
+					}
+				});
+
+				btnT2.setBackgroundColor(Color.TRANSPARENT);
+				btnT2.setEnabled(false);
+
+				btnT3.setBackgroundColor(Color.TRANSPARENT);
+				btnT3.setEnabled(false);
+
+				btnT4.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						selectedSlot = 1;
+						equipToSlotBtn.setEnabled(true);
+					}
+				});
+
+				btnT5.setBackgroundColor(Color.TRANSPARENT);
+				btnT5.setEnabled(false);
+
+				btnT6.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						selectedSlot = 2;
+						equipToSlotBtn.setEnabled(true);
+					}
+				});
 				break;
 		}
+
+		btnU1.setEnabled(false);
+		btnU1.setBackgroundResource(R.drawable.btn_retro_act);
+		btnU2.setEnabled(false);
+		btnU2.setBackgroundResource(R.drawable.btn_retro_act);
+		btnU3.setEnabled(false);
+		btnU3.setBackgroundResource(R.drawable.btn_retro_act);
 
 		getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 		return view;

@@ -94,7 +94,7 @@ public class StrikeBaseTest extends Vehicle {
 		this.putAnchor("right_thread", rightThread);
 	}
 
-	public StrikeBaseConfig getCongig() {
+	public StrikeBaseConfig getConfig() {
 		return this.config;
 	}
 

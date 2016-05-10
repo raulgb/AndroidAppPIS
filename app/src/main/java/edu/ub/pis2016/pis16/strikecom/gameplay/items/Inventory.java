@@ -41,9 +41,21 @@ public class Inventory {
 		objectList.remove(i);
 	}
 
-	// Returns objectList.
+	public void removeItem(Item item) {
+		objectList.remove(item);
+	}
+
+	// Returns visible items.
 	public List<Item> getInventory() {
-		return objectList;
+		ArrayList<Item> visibleItems = new ArrayList<>();
+
+		for(int i=0; i<objectList.size(); i++){
+			Item it = objectList.get(i);
+			if (it.isVisible()){
+				visibleItems.add(it);
+			}
+		}
+		return visibleItems;
 	}
 
 }

@@ -1,4 +1,4 @@
-Machinegun;machinegun;Weak yet cheap, makes an ideal weapon for a newbie.;100;2;4;1
-Gatling gun;gatling;Multi-barreled machinegun with superior fire rate.;300;2;6;2
-Battle cannon;cannon;This cannon can punch a hole through most enemies.;1500;6;2;4
-Howitzer;howitzer;Bigger, slower cannon;2500;7;1;5
+Machinegun;machinegun_64;turret_mk1;Weak yet cheap, makes an ideal weapon for a newbie.;100;2;4;1
+Gatling gun;gatling_64;turret_mk1;Multi-barreled machinegun with superior fire rate.;300;2;6;2
+Battle cannon;cannon_64;turret_mk1;This cannon can punch a hole through most enemies.;1500;6;2;4
+Howitzer;howitzer_64;turret_mk1;Bigger, slower cannon;2500;7;1;5

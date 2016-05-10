@@ -5,9 +5,14 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.view.View;
+import android.widget.Button;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -20,8 +25,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.fragments.SlotsFragment;
 import edu.ub.pis2016.pis16.strikecom.gameplay.InventoryManager;
 import edu.ub.pis2016.pis16.strikecom.gameplay.StrikeBaseTest;
-import edu.ub.pis2016.pis16.strikecom.gameplay.Turret;
-import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.TurretBehavior;
+import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.Inventory;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.Item;
 
@@ -144,13 +148,26 @@ public class FragmentedGameActivity extends Activity {
 		StrikeBaseTest strikeBase = screen.getGameObject("StrikeBase", StrikeBaseTest.class);
 
 		SlotsFragment slots = new SlotsFragment();
-		slots.setStrikeBaseConfig(strikeBase.getCongig());
+		slots.setStrikeBaseModel(strikeBase.getConfig().model);
 		slots.setNewItem(selectedItem);
 		slots.show(getFragmentManager(), "slots");
 	}
 
-	public void equipItem(Item selectedItem, int slot) {
-		Screen screen = game.getCurrentScreen();
+	public void equipItem(Item selectedItem, int turretSlot) {
+
+		/*
+		Button slot= (Button) sidebar.getSlot(turretSlot);
+		int imageID = getResources().getIdentifier(selectedItem.getImage(), "drawable", getPackageName());
+		Bitmap original = BitmapFactory.decodeResource(getResources(), imageID);
+		Bitmap b = Bitmap.createScaledBitmap(original, slot.getWidth(), slot.getHeight(), false);
+
+		Drawable d = new BitmapDrawable(getResources(), b);
+		slot.setCompoundDrawablesWithIntrinsicBounds(d, null, null, null);
+		*/
+
+		Inventory inv = (Inventory) playerState.get("INVENTORY");
+		inv.removeItem(selectedItem);
+		playerState.put("INVENTORY", inv);
 	}
 
 	public void generateInventories() {
