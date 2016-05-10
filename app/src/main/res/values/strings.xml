@@ -44,6 +44,10 @@
     <string name="equipToSlot_button">Equip</string>
     <string name="backToInventory_button">Back</string>
 
+    <!-- Shop Dialog -->
+    <string name="buy_button">Purchase</string>
+    <string name="player_scrap">Your scrap: </string>
+
     <!-- Quit Alert -->
     <string name="quit_alert">Exit the Game?</string>
     <string name="alert_positive">Yes</string>

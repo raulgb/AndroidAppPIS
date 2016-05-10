@@ -20,18 +20,18 @@ import edu.ub.pis2016.pis16.strikecom.gameplay.items.Item;
 
 public class InventoryFragment extends DialogFragment {
 
-	StrikeComGLGame game;
+	protected StrikeComGLGame game;
 
-	private Inventory inventory;
+	protected Inventory inventory;
 
-	private Button equipBtn;
-	private Button cancelBtn;
-	private ListView itemList;
-	private TextView itemDesc;
+	protected Button equipBtn;
+	protected Button cancelBtn;
+	protected ListView itemList;
+	protected TextView itemDesc;
 
-	int selectedItem;
-	int selectedSlot = -1;
-	boolean isEquipped = false; //selected item is currently equipped
+	protected int selectedItem;
+	protected int selectedSlot = -1;
+	//boolean isEquipped = false; //selected item is currently equipped
 
 	public void setGame(StrikeComGLGame game) {
 		this.game = game;
@@ -64,7 +64,7 @@ public class InventoryFragment extends DialogFragment {
 		return view;
 	}
 
-	private void initButtons(){
+	protected void initButtons(){
 		equipBtn.setEnabled(false);
 		equipBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -86,7 +86,7 @@ public class InventoryFragment extends DialogFragment {
 		});
 	}
 
-	private void initItemList(){
+	protected void initItemList(){
 		itemList.setAdapter(new InventoryItemAdapter(getActivity(), inventory.getInventory()));
 		itemList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
