@@ -111,8 +111,16 @@ public class Vector2 {
 		return tmp.set(v).sub(this).len();
 	}
 
+	public float dst(float x, float y) {
+		return tmp.set(x, y).sub(this).len();
+	}
+
 	public float dst2(Vector2 v) {
 		return tmp.set(v).sub(this).len2();
+	}
+
+	public float dst2(float x, float y) {
+		return tmp.set(x, y).sub(this).len2();
 	}
 
 	public float len() {

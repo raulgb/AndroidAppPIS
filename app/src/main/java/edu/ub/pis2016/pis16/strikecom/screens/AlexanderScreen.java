@@ -129,7 +129,9 @@ public class AlexanderScreen extends Screen {
 		g5 = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("gray",5));
 		g6 = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("gray",6));
 		g7 = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("gray",7));
-		gameMap = new GameMap(1339, 1024,1024,16,2,0.5f,physics2D,strikeBase);
+
+		// TODO Changed Constructur
+		//gameMap = new GameMap(1339, 1024,1024,16,2,0.5f,physics2D,strikeBase);
 		/*Perlin2D perlin = new Perlin2D(1339);
 		pTable = new float[64][64];
 		pTable = perlin.perlinMap(64,64,8,2,0.5f);*/
@@ -191,6 +193,7 @@ public class AlexanderScreen extends Screen {
 		batch.begin(Assets.SPRITE_ATLAS.getTexture());
 
 		// Draw terrain
+		/*
 		int[] pos= gameMap.getRelativePosition();
 		//Log.d("SB pos in sprites", String.valueOf(pos[0])+" "+String.valueOf(pos[1]));
 		for (int y = 0; y < 32; y++) {
@@ -221,6 +224,7 @@ public class AlexanderScreen extends Screen {
 				}
 			}
 		}
+		*/
 
 		for (GameObject go : this.getGameObjects())
 			go.draw(batch);

@@ -9,10 +9,12 @@ import edu.ub.pis2016.pis16.strikecom.StrikeComGLGame;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Game;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.InputProcessor;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
+import edu.ub.pis2016.pis16.strikecom.engine.game.GameMap;
 import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.GraphicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
+import edu.ub.pis2016.pis16.strikecom.engine.math.WindowedMean;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.GLGraphics;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.OrthoCamera;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
@@ -61,7 +63,7 @@ public class DummyGLScreen extends Screen {
 	GameObject moveIcon;
 	StrikeBaseTest strikeBase;
 
-	TextureSprite grass;
+	GameMap gameMap;
 
 	public Pool<GameObject> projectilePool;
 
@@ -74,26 +76,19 @@ public class DummyGLScreen extends Screen {
 
 		glGraphics = game.getGLGraphics();
 		camera = new OrthoCamera(glGraphics, glGraphics.getWidth(), glGraphics.getHeight());
-		camera.zoom = 1 / getZoomConstant();
+		//camera.zoom = 1 / getZoomConstant();
 		//camera.zoom = 1 / 8f;
 
-		physics2D = new Physics2D(1024, 1024);
-		batch = new SpriteBatch(game.getGLGraphics(), 512);
+		physics2D = new Physics2D(256, 256);
+		batch = new SpriteBatch(game.getGLGraphics(), 2048);
+		gameMap = new GameMap(physics2D, 16, 0L, 16, 3, 0.5f);
 
 		projectilePool = new Pool<>(new Pool.PoolObjectFactory<GameObject>() {
 			@Override
 			public GameObject createObject() {
 				// Create a Bullet gameObject
-				GameObject projectile = new GameObject() {
-					@Override
-					public void destroyInternal() {
-						// TODO Free Bullet on destroy
-						//projectilePool.free(this);
-						super.destroyInternal();
-					}
-				};
+				GameObject projectile = new GameObject();
 				projectile.setLayer(Screen.LAYER_3);
-
 				// Init basic preferences
 				Body projBody = new DynamicBody(new Rectangle(1, 1));
 				projectile.putComponent(new PhysicsComponent(projBody));
@@ -112,7 +107,6 @@ public class DummyGLScreen extends Screen {
 		strikeBase.getComponent(PhysicsComponent.class).setPosition(128, 128);
 		addGameObject("StrikeBase", strikeBase);
 
-
 		// ------ MOVE ICON CONFIG ------------
 		moveIcon = new GameObject();
 		moveIcon.setLayer(LAYER_GUI);
@@ -121,21 +115,11 @@ public class DummyGLScreen extends Screen {
 		moveIcon.getComponent(GraphicsComponent.class).getSprite().setScale(0.3f);
 		addGameObject("MoveIcon", moveIcon);
 
-		// Stationary Enemy
-//		GameObject enemy = new GameObject();
-//		enemy.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("enemy")));
-//		enemy.putComponent(new PhysicsComponent(new DynamicBody(new Rectangle(32, 32))));
-//		enemy.getComponent(PhysicsComponent.class).setPosition(64, 128);
-//		enemy.setTag("enemyTank");
-//		addGameObject(enemy);
-
 		// ------ ENEMY TEST CONFIG ------------
-		EnemyTest enemy = new EnemyTest();
-		enemy.setTag("enemyTank");
-		enemy.getComponent(PhysicsComponent.class).setPosition(64, 86);
-		addGameObject("EnemyTest", enemy);
-
-		grass = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("grass"));
+//		EnemyTest enemy = new EnemyTest();
+//		enemy.setTag("enemyTank");
+//		enemy.getComponent(PhysicsComponent.class).setPosition(64, 86);
+//		addGameObject("EnemyTest", enemy);
 
 		// PHYSICS CONTACT LISTENER
 		physics2D.addContactListener(new ContactListener() {
@@ -144,14 +128,13 @@ public class DummyGLScreen extends Screen {
 				GameObject goA = (GameObject) ce.a.userData;
 				GameObject goB = (GameObject) ce.b.userData;
 				if (goA.getTag().contains("player"))
-					handlePlayerCollision((StrikeBaseTest)goA, goB);
+					handlePlayerCollision((StrikeBaseTest) goA, goB);
 				if (goB.getTag().contains("player"))
-					handlePlayerCollision((StrikeBaseTest)goB, goA);
+					handlePlayerCollision((StrikeBaseTest) goB, goA);
 			}
 
-			private void handlePlayerCollision(StrikeBaseTest player, GameObject other){
-				if(other.getTag().contains("proj")){
-					Log.i("Physics2D", "Player got hit.");
+			private void handlePlayerCollision(StrikeBaseTest player, GameObject other) {
+				if (other.getTag().contains("proj")) {
 					other.destroy();
 				}
 			}
@@ -159,34 +142,71 @@ public class DummyGLScreen extends Screen {
 
 		addInputProcessor(new InputProcessor() {
 			@Override
-			public boolean touchUp(float x, float y, int pointer) {
-				return false;
-			}
-
-			@Override
 			public boolean touchDown(float x, float y, int pointer) {
+				tmp.set(x, glGraphics.getHeight() - y);
+
+				if (tmp.x < glGraphics.getWidth() / 4f) {
+					if (tmp.y > glGraphics.getHeight() / 2f)
+						camera.zoom -= 0.025f;
+					else
+						camera.zoom += 0.025f;
+					return true;
+				}
 				return false;
 			}
 
 			@Override
 			public boolean touchDragged(float x, float y, int pointer) {
+				if (tmp.x < glGraphics.getWidth() / 4f)
+					return true;
+
+				return false;
+			}
+		});
+
+		addInputProcessor(new InputProcessor() {
+			@Override
+			public boolean touchDown(float x, float y, int pointer) {
+				moveOrder(x, y);
+				return true;
+			}
+
+			@Override
+			public boolean touchDragged(float x, float y, int pointer) {
+				moveOrder(x, y);
+				return true;
+			}
+
+			private void moveOrder(float x, float y) {
 				targetPos.set(x, y);
 				camera.unproject(targetPos);
 				strikeBase.getComponent(VehicleFollowBehavior.class).setTarget(targetPos);
 				moveIcon.getComponent(PhysicsComponent.class).setPosition(targetPos);
-				return true;
 			}
 		});
 	}
 
+	WindowedMean fpsMean = new WindowedMean(5);
+	float second = 0;
+
 	@Override
 	public void update(float delta) {
+		if (gamePaused)
+			delta = 0f;
 		super.update(delta);
+
+		// FPS Counter
+		fpsMean.addValue(delta);
+		second += delta;
+		if (second > 5) {
+			second -= 5;
+			Log.i("FPS", "" + 1 / fpsMean.getMean());
+		}
+
 		secondsElapsed += delta;
 
-//		Vector2 sBPos = strikeBase.getComponent(PhysicsComponent.class).getPosition();
-//		Vector2 enemyPos = getGameObject("EnemyTest").getComponent(PhysicsComponent.class).getPosition();
-//
+		Vector2 sBPos = strikeBase.getComponent(PhysicsComponent.class).getPosition();
+
 //		// Follow player if player is +32 units away
 //		if (sBPos.dst2(enemyPos) > 32 * 32)
 //			getGameObject("EnemyTest").getComponent(VehicleFollowBehavior.class).setTarget(sBPos);
@@ -200,8 +220,9 @@ public class DummyGLScreen extends Screen {
 		for (GameObject go : this.getGameObjects())
 			go.update(delta);
 
+
 		// Move camera to strikebase
-		camera.position.set(strikeBase.getComponent(PhysicsComponent.class).getPosition());
+		camera.position.set(sBPos);
 		//camera.position.add(strikeBase.getComponent(PhysicsComponent.class).getVelocity().scl(0.75f));
 		camera.update();
 	}
@@ -213,13 +234,7 @@ public class DummyGLScreen extends Screen {
 
 		batch.begin(Assets.SPRITE_ATLAS.getTexture());
 
-		// Draw terrain
-		for (int y = 0; y < 16; y++)
-			for (int x = 0; x < 16; x++) {
-//				TextureRegion heat = Assets.SPRITE_ATLAS.getRegion("heat", MathUtils.random(0, 3));
-//				grass.setRegion(heat);
-				grass.draw(batch, 16 + x * 31.99f, 16 + y * 31.99f);
-			}
+		gameMap.draw(batch, strikeBase.getComponent(PhysicsComponent.class).getPosition());
 
 		for (GameObject go : this.getGameObjects())
 			go.draw(batch);

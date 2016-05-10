@@ -29,6 +29,7 @@ public abstract class Screen implements Disposable {
 
 	// GameObject Management
 	private boolean dirty = false;
+	protected boolean gamePaused = false;
 	private HashMap<String, GameObject> GOsToAdd = new HashMap<>();
 	private ArrayList<GameObject> GOsToRemove = new ArrayList<>();
 
@@ -79,6 +80,14 @@ public abstract class Screen implements Disposable {
 
 	public Physics2D getPhysics2D() {
 		return null;
+	}
+
+	public void pauseGame(){
+		gamePaused = true;
+	}
+
+	public void resumeGame(){
+		gamePaused = false;
 	}
 
 	/**

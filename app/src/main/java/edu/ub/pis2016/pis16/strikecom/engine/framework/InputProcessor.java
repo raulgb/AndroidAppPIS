@@ -1,12 +1,13 @@
 package edu.ub.pis2016.pis16.strikecom.engine.framework;
 
 /**
- * Template for implementing input processors for a Game.
+ * Adapter class for input processors. Touch only.
+ * All points are top-left corner origin.
  */
-public interface InputProcessor {
-	public boolean touchUp(float x, float y, int pointer);
+public abstract class InputProcessor {
+	public boolean touchUp(float x, float y, int pointer){return false;}
 
-	public boolean touchDown(float x, float y, int pointer);
+	public boolean touchDown(float x, float y, int pointer){return false;}
 
-	public boolean touchDragged(float x, float y, int pointer);
+	public boolean touchDragged(float x, float y, int pointer){return false;}
 }

@@ -32,8 +32,8 @@ public class Physics2D {
 	/**
 	 * creates 2d physics world
 	 *
-	 * @param worldWidth  width of world
-	 * @param worldHeight height of world
+	 * @param worldWidth  width of world in tiles
+	 * @param worldHeight height of world in tiles
 	 */
 	public Physics2D(float worldWidth, float worldHeight) {
 		this.staticBodies = new ArrayList<>(); //initialize list of staticBodies
@@ -42,19 +42,21 @@ public class Physics2D {
 		// HashGrid Init
 		this.worldWidth = worldWidth;
 		this.worldHeight = worldHeight;
-		float cellSize = worldHeight / 16f;
+		float cellSize = 8; // 8 tiles per cell
 		spatialHashGrid = new SpatialHashGrid(worldWidth, worldHeight, cellSize);
 
 		// Listener and EventPool init
 		listeners = new ArrayList<>();
 	}
 
-	public float getWorldWidth() {
-		return worldWidth;
+	/** World width in tiles */
+	public int getWorldWidth() {
+		return MathUtils.roundPositive(worldWidth);
 	}
 
-	public float getWorldHeight() {
-		return worldHeight;
+	/** World height in tiles */
+	public int getWorldHeight() {
+		return MathUtils.roundPositive(worldHeight);
 	}
 
 	public void update(float delta) {//update all Bodies of the game

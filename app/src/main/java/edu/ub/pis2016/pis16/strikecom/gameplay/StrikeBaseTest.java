@@ -10,6 +10,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.physics.Rectangle;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Animation;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
+import edu.ub.pis2016.pis16.strikecom.gameplay.items.TurretItem;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.UpgradeItem;
 
 public class StrikeBaseTest extends Vehicle {
@@ -27,8 +28,6 @@ public class StrikeBaseTest extends Vehicle {
 	private Vector2 tmp = new Vector2();
 
 	// Physics
-	private float health = 1000;
-
 	private float maxSpeed = 25;
 	private float maxTurnSpeed = maxSpeed / 1f;
 	private float maxReverseSpeed = maxSpeed / 2f;
@@ -52,6 +51,8 @@ public class StrikeBaseTest extends Vehicle {
 
 	public StrikeBaseTest(StrikeBaseConfig cfg) {
 		super();
+
+		// TODO Create FuelBehavior
 
 		//  Create Physics component
 		physics = new PhysicsComponent(new KinematicBody(new Rectangle(32, 32)));
@@ -93,7 +94,9 @@ public class StrikeBaseTest extends Vehicle {
 		this.putAnchor("right_thread", rightThread);
 	}
 
-	public StrikeBaseConfig getCongig() { return this.config; }
+	public StrikeBaseConfig getCongig() {
+		return this.config;
+	}
 
 	@Override
 	public void update(float delta) {
@@ -196,9 +199,16 @@ public class StrikeBaseTest extends Vehicle {
 		this.rightThreadVel = Math.max(rightThreadVel - accel, 0);
 	}
 
-	public boolean hasUpgrade(UpgradeItem upgrade) {
+	public void addTurret(TurretItem turret, int slot) {
 		// TODO implement
-		return false;
+	}
+
+	public TurretItem getTurret(int slot) {
+		return null;
+	}
+
+	public void removeTurret(int slot) {
+		// TODO implement
 	}
 
 	public void addUpgrade(UpgradeItem upgrade) {
@@ -206,9 +216,13 @@ public class StrikeBaseTest extends Vehicle {
 
 	}
 
-	public void removeUpgrade(UpgradeItem upgrade) {
+	public UpgradeItem getUpgrade(int slot) {
 		// TODO implement
+		return null;
+	}
 
+	public void removeUpgrade(int slot) {
+		// TODO implement
 	}
 
 }

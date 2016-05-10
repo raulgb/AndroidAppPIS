@@ -58,7 +58,7 @@ public class FragmentedGameActivity extends Activity {
 
 		playerState.put("SCRAP", Integer.valueOf(getString(R.string.res1_defVal)));
 		playerState.put("FUEL", Integer.valueOf(getString(R.string.res2_defVal)));
-		playerState.put("POINTS",0);
+		playerState.put("POINTS", 0);
 
 		generateInventories();
 	}
@@ -87,25 +87,12 @@ public class FragmentedGameActivity extends Activity {
 
 			@Override
 			public void onClickTurret(int index) {
-				if (index > 3 || index == 1)
-					return;
 
-				Screen screen = game.getCurrentScreen();
-				String tName = "Turret" + index;
+				if (index == 0)
+					game.getCurrentScreen().pauseGame();
+				else
+					game.getCurrentScreen().resumeGame();
 
-				if (screen.getGameObject(tName) != null)
-					// remove existing
-					screen.removeGameObject(tName);
-				else {
-					// Create and put new turret
-					StrikeBaseTest strikeBase = screen.getGameObject("StrikeBase", StrikeBaseTest.class);
-					Turret newTurret = new Turret("turret_mk1", strikeBase, "turret_" + index);
-					newTurret.getComponent(GraphicsComponent.class).getSprite().setScale(0.75f);
-					newTurret.setParent(strikeBase);
-					newTurret.putComponent(new TurretBehavior());
-					newTurret.setLayer(Screen.LAYER_3);
-					screen.addGameObject(tName, newTurret);
-				}
 			}
 		});
 	}
@@ -147,7 +134,7 @@ public class FragmentedGameActivity extends Activity {
 		//screen.pause();
 
 		InventoryFragment inventoryFrag = new InventoryFragment();
-		inventoryFrag.setInventory( (Inventory) playerState.get("INVENTORY") );
+		inventoryFrag.setInventory((Inventory) playerState.get("INVENTORY"));
 		inventoryFrag.setSelectedSlot(selectedSlot);
 		inventoryFrag.show(getFragmentManager(), "Inventory_Fragment");
 	}
@@ -169,12 +156,12 @@ public class FragmentedGameActivity extends Activity {
 	public void generateInventories() {
 		String turretsFile = getString(R.string.turretsFile);
 		String upgradesFile = getString(R.string.upgradesFile);
-		try{
+		try {
 			InventoryManager im = new InventoryManager(this, turretsFile, upgradesFile);
 			itemChart = im.getMasterInventory();
 			playerState.put("INVENTORY", im.getNewInventory(10));
 
-		} catch (IOException ex){
+		} catch (IOException ex) {
 			// TEST INVENTORY ----
 			/*
 			Inventory testInventory = new Inventory();

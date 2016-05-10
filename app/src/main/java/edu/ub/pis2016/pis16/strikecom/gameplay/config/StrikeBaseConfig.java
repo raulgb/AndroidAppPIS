@@ -7,13 +7,17 @@ public class StrikeBaseConfig {
 		MKII
 	}
 
+	public Model model;
+
 	public String modelName;
 
 	/**
 	 * TURRET ARRAY CONVENTIONS FOLLOW THIS ORDER FOR STRIKEBASES:
 	 *
 	 * 		1	2
-	 * 	5			6
+	 *
+	 * 	5	  7		6
+	 *
 	 * 		3	4
 	 *
 	 * 	DEPENDING ON TURRET ANCHOR POSITION ON THE SPRITE
@@ -37,6 +41,8 @@ public class StrikeBaseConfig {
 	/** Angle limits, clockwise */
 	public float[][] turretAngleLimit;
 	/** Damage multiplicator per turret */
+	public float[] turretDmg = new float[]{0, 0, 0, 0};
+	/** Damage multiplicator per turret */
 	public float[] turretDmgMult;
 
 	public int animThreadFrames;
@@ -45,6 +51,7 @@ public class StrikeBaseConfig {
 	public StrikeBaseConfig(Model model) {
 		animThreadFrames = 4;
 		animHullFrames = 3;
+		this.model = model;
 
 		switch (model) {
 			case MKI:
