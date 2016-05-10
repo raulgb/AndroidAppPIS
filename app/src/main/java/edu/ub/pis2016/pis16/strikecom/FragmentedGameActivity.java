@@ -138,8 +138,8 @@ public class FragmentedGameActivity extends Activity {
 	}
 
 	public void showInventoryDialog(int selectedSlot) {
-		Screen screen = game.getCurrentScreen();
-		screen.pause();
+		//Screen screen = game.getCurrentScreen();
+		//screen.pause();
 
 		InventoryFragment inventoryFrag = new InventoryFragment();
 		inventoryFrag.setInventory( (Inventory) playerState.get("INVENTORY") );
@@ -159,7 +159,6 @@ public class FragmentedGameActivity extends Activity {
 
 	public void equipItem(Item selectedItem, int slot) {
 		Screen screen = game.getCurrentScreen();
-		screen.resume();
 	}
 
 	public void generateInventories() {
