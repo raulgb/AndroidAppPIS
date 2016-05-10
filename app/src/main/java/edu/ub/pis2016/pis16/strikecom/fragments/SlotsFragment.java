@@ -147,18 +147,23 @@ public class SlotsFragment extends DialogFragment {
 			case "sbmk1":
 				slotT1.setEnabled(true);
 				slotT2.setEnabled(false);
+				slotT2.setBackgroundResource(R.drawable.btn_retro_act);
 				slotT3.setEnabled(true);
 				slotT4.setEnabled(true);
 				slotT5.setEnabled(false);
+				slotT5.setBackgroundResource(R.drawable.btn_retro_act);
 				slotT6.setEnabled(true);
 				break;
 			case "sbmk2":
 				slotT1.setEnabled(true);
 				slotT2.setEnabled(false);
+				slotT2.setBackgroundResource(R.drawable.btn_retro_act);
 				slotT3.setEnabled(true);
 				slotT4.setEnabled(true);
 				slotT5.setEnabled(false);
+				slotT5.setBackgroundResource(R.drawable.btn_retro_act);
 				slotT6.setEnabled(false);
+				slotT6.setBackgroundResource(R.drawable.btn_retro_act);
 				break;
 		}
 

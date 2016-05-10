@@ -24,7 +24,6 @@ import edu.ub.pis2016.pis16.strikecom.gameplay.Turret;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.TurretBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.Inventory;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.Item;
-import edu.ub.pis2016.pis16.strikecom.gameplay.items.TurretItem;
 
 public class FragmentedGameActivity extends Activity {
 
@@ -34,7 +33,7 @@ public class FragmentedGameActivity extends Activity {
 	SidebarFragment sidebar;
 
 	HashMap<String, Object> playerState = new HashMap<>();
-	HashMap<String, Item> masterInventory = new HashMap<>();
+	HashMap<String, Item> itemChart = new HashMap<>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -139,6 +138,9 @@ public class FragmentedGameActivity extends Activity {
 	}
 
 	public void showInventoryDialog(int selectedSlot) {
+		//Screen screen = game.getCurrentScreen();
+		//screen.pause();
+
 		InventoryFragment inventoryFrag = new InventoryFragment();
 		inventoryFrag.setInventory( (Inventory) playerState.get("INVENTORY") );
 		inventoryFrag.setSelectedSlot(selectedSlot);
@@ -156,7 +158,7 @@ public class FragmentedGameActivity extends Activity {
 	}
 
 	public void equipItem(Item selectedItem, int slot) {
-
+		Screen screen = game.getCurrentScreen();
 	}
 
 	public void generateInventories() {
@@ -164,16 +166,18 @@ public class FragmentedGameActivity extends Activity {
 		String upgradesFile = getString(R.string.upgradesFile);
 		try{
 			InventoryManager im = new InventoryManager(this, turretsFile, upgradesFile);
-			masterInventory = im.getMasterInventory();
+			itemChart = im.getMasterInventory();
 			playerState.put("INVENTORY", im.getNewInventory(10));
 
 		} catch (IOException ex){
 			// TEST INVENTORY ----
+			/*
 			Inventory testInventory = new Inventory();
 			testInventory.addItem(TurretItem.parseTurretItem("Machinegun;machinegun;Weak yet cheap, makes an ideal weapon for a newbie.;100;2;4;1"));
 			testInventory.addItem(TurretItem.parseTurretItem("Gatling gun;gatling;Multi-barreled machinegun with superior firerate.;300;2;6;2"));
 			testInventory.addItem(TurretItem.parseTurretItem("Battle cannon;cannon;This cannon can punch a hole through most enemies.;1500;4;2;4"));
 			playerState.put("INVENTORY", testInventory);
+			*/
 		}
 	}
 }
