@@ -9,6 +9,7 @@ import edu.ub.pis2016.pis16.strikecom.StrikeComGLGame;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Game;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.InputProcessor;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
+import edu.ub.pis2016.pis16.strikecom.engine.game.GameMap;
 import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.GraphicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
@@ -71,6 +72,7 @@ public class AlexanderScreen extends Screen {
 	TextureSprite g6;
 	TextureSprite g7;
 	float[][] pTable;
+	GameMap gameMap;
 
 
 	public Pool<GameObject> projectilePool;
@@ -108,7 +110,7 @@ public class AlexanderScreen extends Screen {
 		strikeBase.putComponent(new VehicleFollowBehavior());
 		strikeBase.setTag("player");
 		strikeBase.setLayer(LAYER_1);
-		strikeBase.getComponent(PhysicsComponent.class).body.position.set(10, 10);
+		strikeBase.getComponent(PhysicsComponent.class).body.position.set(512, 512);
 		addGameObject("StrikeBase", strikeBase);
 
 		moveIcon = new GameObject();
@@ -127,9 +129,10 @@ public class AlexanderScreen extends Screen {
 		g5 = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("gray",5));
 		g6 = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("gray",6));
 		g7 = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("gray",7));
-		Perlin2D perlin = new Perlin2D(1331);
+		gameMap = new GameMap(1339, 1024,1024,16,2,0.5f,physics2D,strikeBase);
+		/*Perlin2D perlin = new Perlin2D(1339);
 		pTable = new float[64][64];
-		pTable = perlin.perlinMap(64,64,8,4,0.7f);
+		pTable = perlin.perlinMap(64,64,8,2,0.5f);*/
 
 		physics2D.addContactListener(new ContactListener() {
 			@Override
@@ -183,23 +186,39 @@ public class AlexanderScreen extends Screen {
 	public void present(float delta) {
 		GL10 gl = game.getGLGraphics().getGL();
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-
+		int tmpX;
+		int tmpY;
 		batch.begin(Assets.SPRITE_ATLAS.getTexture());
 
 		// Draw terrain
-		for (int y = 0; y < 64; y++) {
-			for (int x = 0; x < 64; x++) {
-//				TextureRegion heat = Assets.SPRITE_ATLAS.getRegion("heat", MathUtils.random(0, 3));
-//				grass.setRegion(heat);
-				if (pTable[x][y]<-0.25f){
-					g0.draw(batch, 16 + x * 7.99f, 16 + y * 7.99f);
-				}else if (pTable[x][y]<-0.5f){g1.draw(batch, 16 + x * 7.99f, 16 + y * 7.99f);}
-				else if (pTable[x][y]<-0.25f){g2.draw(batch, 16 + x * 7.99f, 16 + y * 7.99f);}
-				else if (pTable[x][y]<0.0f){g3.draw(batch, 16 + x * 7.99f, 16 + y * 7.99f);}
-				else if (pTable[x][y]<0.25f){g4.draw(batch, 16 + x * 7.99f, 16 + y * 7.99f);}
-				else if (pTable[x][y]<0.5f){g5.draw(batch, 16 + x * 7.99f, 16 + y * 7.99f);}
-				else if (pTable[x][y]<0.75f){g6.draw(batch, 16 + x * 7.99f, 16 + y * 7.99f);}
-				else{g7.draw(batch, 16 + x * 7.99f, 16 + y * 7.99f);}
+		int[] pos= gameMap.getRelativePosition();
+		//Log.d("SB pos in sprites", String.valueOf(pos[0])+" "+String.valueOf(pos[1]));
+		for (int y = 0; y < 32; y++) {
+			tmpY=pos[1]-16+y;
+			for (int x = 0; x < 40; x++) {
+				tmpX = pos[0] - 20 + x;
+				if (tmpX < 0 || tmpX>1023 || tmpY<0 || tmpY>1023) {
+					g0.draw(batch, 16 + tmpX * 7.99f, 16 + tmpY * 7.99f);
+				} else {
+					if (gameMap.getPTable()[tmpX][tmpY] < -0.25f) {
+						g0.draw(batch, 16 + tmpX * 7.99f, 16 + tmpY * 7.99f);
+					} else if (gameMap.getPTable()[tmpX][tmpY] < -0.5f) {
+						g1.draw(batch, 16 + tmpX * 7.99f, 16 + tmpY * 7.99f);
+					} else if (gameMap.getPTable()[tmpX][tmpY] < -0.25f) {
+						g2.draw(batch, 16 + tmpX * 7.99f, 16 + tmpY *
+								7.99f);
+					} else if (gameMap.getPTable()[tmpX][tmpY] < 0.0f) {
+						g3.draw(batch, 16 + tmpX * 7.99f, 16 + tmpY * 7.99f);
+					} else if (gameMap.getPTable()[tmpX][tmpY] < 0.25f) {
+						g4.draw(batch, 16 + tmpX * 7.99f, 16 + tmpY * 7.99f);
+					} else if (gameMap.getPTable()[tmpX][tmpY] < 0.5f) {
+						g5.draw(batch, 16 + tmpX * 7.99f, 16 + tmpY * 7.99f);
+					} else if (gameMap.getPTable()[tmpX][tmpY] < 0.75f) {
+						g6.draw(batch, 16 + tmpX * 7.99f, 16 + tmpY * 7.99f);
+					} else {
+						g7.draw(batch, 16 + tmpX * 7.99f, 16 + tmpY * 7.99f);
+					}
+				}
 			}
 		}
 
