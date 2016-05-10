@@ -151,6 +151,7 @@ public class Perlin2D {
 				resultMap[i][j]=this.Noise(cX,cY,octaves,persistence);
 				cY+=increment;
 			}
+			cY=0;
 			cX+=increment;
 		}
 
