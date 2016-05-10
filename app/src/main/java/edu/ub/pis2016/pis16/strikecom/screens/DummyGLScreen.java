@@ -76,7 +76,7 @@ public class DummyGLScreen extends Screen {
 
 		glGraphics = game.getGLGraphics();
 		camera = new OrthoCamera(glGraphics, glGraphics.getWidth(), glGraphics.getHeight());
-		//camera.zoom = 1 / getZoomConstant();
+		camera.zoom = 1 / getZoomConstant();
 		//camera.zoom = 1 / 8f;
 
 		physics2D = new Physics2D(256, 256);
