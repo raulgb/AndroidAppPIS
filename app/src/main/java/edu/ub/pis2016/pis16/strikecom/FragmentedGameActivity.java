@@ -154,43 +154,76 @@ public class FragmentedGameActivity extends Activity {
 	}
 
 	public void equipTurret(TurretItem item, int slot) {
-		// TODO Find a better way to display equipped items on the sidebar
+		StrikeBaseTest strikeBase = (game.getCurrentScreen()).getGameObject("StrikeBase", StrikeBaseTest.class);
+		retrieveTurret(slot);
+		strikeBase.addTurret(item, slot);
 
+		Inventory inv = (Inventory) playerState.get("INVENTORY");
+		inv.removeItem(item);
+		playerState.put("INVENTORY", inv);
+
+		// TODO Find a better way to display equipped items on the sidebar
 		Button slotBtn = (Button) sidebar.getTurretSlot(slot);
 		int imageID = getResources().getIdentifier(item.getImage(), "drawable", getPackageName());
 		Bitmap original = BitmapFactory.decodeResource(getResources(), imageID);
 		Bitmap b = Bitmap.createScaledBitmap(original, slotBtn.getWidth(), slotBtn.getHeight(), false);
 		Drawable d = new BitmapDrawable(getResources(), b);
 		slotBtn.setCompoundDrawablesWithIntrinsicBounds(d, null, null, null);
+	}
+
+	public void equipUpgrade(UpgradeItem item, int slot) {
+		StrikeBaseTest strikeBase = (game.getCurrentScreen()).getGameObject("StrikeBase", StrikeBaseTest.class);
+		retrieveUpgrade(slot);
+		strikeBase.addUpgrade(item, slot);
 
 		Inventory inv = (Inventory) playerState.get("INVENTORY");
 		inv.removeItem(item);
 		playerState.put("INVENTORY", inv);
-	}
 
-	public void equipUpgrade(UpgradeItem item, int slot) {
 		// TODO Find a better way to display equipped items on the sidebar
 
-		if(slot >= 0) {
-			Button slotBtn = (Button) sidebar.getUpgradeSlot(slot);
-			int imageID = getResources().getIdentifier(item.getImage(), "drawable", getPackageName());
-			Bitmap original = BitmapFactory.decodeResource(getResources(), imageID);
-			Bitmap b = Bitmap.createScaledBitmap(original, slotBtn.getWidth(), slotBtn.getHeight(), false);
-			Drawable d = new BitmapDrawable(getResources(), b);
-			slotBtn.setCompoundDrawablesWithIntrinsicBounds(d, null, null, null);
-		}
+		Button slotBtn = (Button) sidebar.getUpgradeSlot(slot);
+		int imageID = getResources().getIdentifier(item.getImage(), "drawable", getPackageName());
+		Bitmap original = BitmapFactory.decodeResource(getResources(), imageID);
+		Bitmap b = Bitmap.createScaledBitmap(original, slotBtn.getWidth(), slotBtn.getHeight(), false);
+		Drawable d = new BitmapDrawable(getResources(), b);
+		slotBtn.setCompoundDrawablesWithIntrinsicBounds(d, null, null, null);
+	}
 
+	public void useFuel(UpgradeItem fuel){
 		Inventory inv = (Inventory) playerState.get("INVENTORY");
-		inv.removeItem(item);
+		inv.removeItem(fuel);
 		playerState.put("INVENTORY", inv);
 	}
 
 	private void retrieveTurret(int slot) {
+		StrikeBaseTest strikeBase = (game.getCurrentScreen()).getGameObject("StrikeBase", StrikeBaseTest.class);
+		TurretItem turret = strikeBase.getTurret(slot);
 
+		if(turret != null){
+			strikeBase.removeTurret(slot);
+			Inventory inv = (Inventory) playerState.get("INVENTORY");
+			inv.addItem(turret);
+			playerState.put("INVENTORY", inv);
+
+			Button view = (Button) sidebar.getTurretSlot(slot);
+			//view.setCompoundDrawables(null, null, null, null);
+		}
 	}
 
 	private void retrieveUpgrade(int slot) {
+		StrikeBaseTest strikeBase = (game.getCurrentScreen()).getGameObject("StrikeBase", StrikeBaseTest.class);
+		UpgradeItem upgrade = strikeBase.getUpgrade(slot);
 
+		if(upgrade != null){
+			strikeBase.removeUpgrade(slot);
+			Inventory inv = (Inventory) playerState.get("INVENTORY");
+			inv.addItem(upgrade);
+			playerState.put("INVENTORY", inv);
+
+			Button view = (Button) sidebar.getTurretSlot(slot);
+			//view.setCompoundDrawables(null, null, null, null);
+		}
 	}
 
 	public void generateInventories() {

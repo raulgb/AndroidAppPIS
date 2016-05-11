@@ -36,6 +36,7 @@
     <!-- Inventory -->
     <string name="equip_button">Equip</string>
     <string name="unequip_button">Unequip</string>
+    <string name="use_item">Use</string>
     <string name="inventory_button">Inventory</string>
     <string name="cancel_button">Cancel</string>
     <string name="inventory_description">Inventory</string>

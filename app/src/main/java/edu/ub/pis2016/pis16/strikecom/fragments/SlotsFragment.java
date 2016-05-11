@@ -10,6 +10,8 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.HashMap;
+
 import edu.ub.pis2016.pis16.strikecom.FragmentedGameActivity;
 import edu.ub.pis2016.pis16.strikecom.R;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
@@ -21,11 +23,11 @@ public class SlotsFragment extends DialogFragment {
 
 	StrikeBaseConfig.Model strikeBaseModel = StrikeBaseConfig.Model.MKII;
 
-	private Button equipToSlotBtn;
-
 	private Item newItem;
 	private int selectedSlot = -1;
 	private boolean turretIsSelected = true;
+	//private HashMap<Integer, TurretItem> equippedTurrets = new HashMap<>();
+	//private HashMap<Integer, UpgradeItem> equippedUpgrades = new HashMap<>();
 
 	public void setStrikeBaseModel(StrikeBaseConfig.Model strikeBaseModel) {this.strikeBaseModel = strikeBaseModel; }
 
@@ -35,7 +37,7 @@ public class SlotsFragment extends DialogFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.slots_dialog, container);
+		View view = inflater.inflate(R.layout.fragment_slots, container);
 
 		TextView currentItemDesc = (TextView) view.findViewById(R.id.currentItemDesc);
 
@@ -44,8 +46,7 @@ public class SlotsFragment extends DialogFragment {
 		newItemDesc.setText(newItem.getDisplay());
 
 		// BUTTONS
-		equipToSlotBtn = (Button) view.findViewById(R.id.slotsBtn_1);
-		//equipToSlotBtn.setEnabled(false);
+		Button equipToSlotBtn = (Button) view.findViewById(R.id.slotsBtn_1);
 		equipToSlotBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -109,7 +110,6 @@ public class SlotsFragment extends DialogFragment {
 					@Override
 					public void onClick(View view) {
 						selectedSlot = 0;
-						equipToSlotBtn.setEnabled(true);
 					}
 				});
 
@@ -120,7 +120,6 @@ public class SlotsFragment extends DialogFragment {
 					@Override
 					public void onClick(View view) {
 						selectedSlot = 1;
-						equipToSlotBtn.setEnabled(true);
 					}
 				});
 
@@ -128,7 +127,6 @@ public class SlotsFragment extends DialogFragment {
 					@Override
 					public void onClick(View view) {
 						selectedSlot = 2;
-						equipToSlotBtn.setEnabled(true);
 					}
 				});
 
@@ -139,7 +137,6 @@ public class SlotsFragment extends DialogFragment {
 					@Override
 					public void onClick(View view) {
 						selectedSlot = 3;
-						equipToSlotBtn.setEnabled(true);
 					}
 				});
 				break;
@@ -149,7 +146,6 @@ public class SlotsFragment extends DialogFragment {
 					@Override
 					public void onClick(View view) {
 						selectedSlot = 0;
-						equipToSlotBtn.setEnabled(true);
 					}
 				});
 
@@ -163,7 +159,6 @@ public class SlotsFragment extends DialogFragment {
 					@Override
 					public void onClick(View view) {
 						selectedSlot = 1;
-						equipToSlotBtn.setEnabled(true);
 					}
 				});
 
@@ -174,11 +169,30 @@ public class SlotsFragment extends DialogFragment {
 					@Override
 					public void onClick(View view) {
 						selectedSlot = 2;
-						equipToSlotBtn.setEnabled(true);
 					}
 				});
 				break;
 		}
+
+		// Assignations for the upgrade slots are the same regardless the configuration
+		btnU1.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				selectedSlot = 0;
+			}
+		});
+		btnU2.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				selectedSlot = 1;
+			}
+		});
+		btnU3.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				selectedSlot = 2;
+			}
+		});
 
 		getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 		return view;

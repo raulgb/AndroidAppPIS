@@ -1,5 +1,7 @@
 package edu.ub.pis2016.pis16.strikecom.gameplay;
 
+import java.util.HashMap;
+
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
@@ -48,6 +50,9 @@ public class StrikeBaseTest extends Vehicle {
 	private Animation[] threadAnim;
 
 	private StrikeBaseConfig config;
+
+	private HashMap<Integer, TurretItem> equippedTurrets = new HashMap<>();
+	private HashMap<Integer, UpgradeItem> equippedUpgrades = new HashMap<>();
 
 	public StrikeBaseTest(StrikeBaseConfig cfg) {
 		super();
@@ -201,28 +206,34 @@ public class StrikeBaseTest extends Vehicle {
 
 	public void addTurret(TurretItem turret, int slot) {
 		// TODO implement
-	}
 
-	public TurretItem getTurret(int slot) {
-		return null;
+		equippedTurrets.put(slot, turret);
 	}
 
 	public void removeTurret(int slot) {
 		// TODO implement
+
+		equippedTurrets.remove(slot);
 	}
 
-	public void addUpgrade(UpgradeItem upgrade) {
+	public void addUpgrade(UpgradeItem upgrade, int slot) {
 		// TODO implement
 
-	}
-
-	public UpgradeItem getUpgrade(int slot) {
-		// TODO implement
-		return null;
+		equippedUpgrades.put(slot, upgrade);
 	}
 
 	public void removeUpgrade(int slot) {
 		// TODO implement
+
+		equippedUpgrades.remove(slot);
+	}
+
+	public TurretItem getTurret(int slot) {
+		return equippedTurrets.get(slot);
+	}
+
+	public UpgradeItem getUpgrade(int slot) {
+		return equippedUpgrades.get(slot);
 	}
 
 }

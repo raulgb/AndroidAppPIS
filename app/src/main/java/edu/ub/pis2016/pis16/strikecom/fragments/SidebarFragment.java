@@ -30,7 +30,7 @@ public class SidebarFragment extends Fragment {
 
 	public View getTurretSlot(int key) { return turretSlotsMap.get(key); }
 
-	public View getUpgradeSlot(int key) { return turretSlotsMap.get(key); }
+	public View getUpgradeSlot(int key) { return upgradeSlotsMap.get(key); }
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

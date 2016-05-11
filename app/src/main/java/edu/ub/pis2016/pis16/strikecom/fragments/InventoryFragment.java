@@ -124,7 +124,7 @@ public class InventoryFragment extends DialogFragment {
 						} else {
 							UpgradeItem item = inventory.getUpgrade(selectedItem);
 							if(item.isFuel()){
-								callingActivity.equipUpgrade(item, -1);
+								callingActivity.useFuel(item);
 							} else {
 								callingActivity.showSlotsDialog(false, item);
 							}
@@ -153,6 +153,7 @@ public class InventoryFragment extends DialogFragment {
 		itemList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+				equipBtn.setText( getString(R.string.equip_button) );
 				if(i>=0){ //valid item is selected
 					selectedItem = i;
 
@@ -160,6 +161,9 @@ public class InventoryFragment extends DialogFragment {
 						itemDesc.setText( inventory.getTurret(selectedItem).getDisplay() );
 					} else {
 						itemDesc.setText( inventory.getUpgrade(selectedItem).getDisplay() );
+						if( inventory.getUpgrade(selectedItem).isFuel() ){
+							equipBtn.setText( getString(R.string.use_item) );
+						}
 					}
 				}
 			}
