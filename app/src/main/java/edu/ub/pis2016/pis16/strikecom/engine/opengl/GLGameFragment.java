@@ -103,6 +103,9 @@ public abstract class GLGameFragment extends Fragment implements Game, GLSurface
 	public void onResume() {
 		super.onResume();
 		glView.onResume();
+
+		// TODO Test if this works
+		Texture.reloadManagedTextures();
 	}
 
 	@Override
@@ -159,12 +162,9 @@ public abstract class GLGameFragment extends Fragment implements Game, GLSurface
 			case Running:
 				// Run any pending runnables
 				if (runnables.size() > 0) {
-					Iterator<Runnable> iter = runnables.iterator();
-					while (iter.hasNext()) {
-						Runnable r = iter.next();
+					for (Runnable r : runnables)
 						r.run();
-						iter.remove();
-					}
+					runnables.clear();
 				}
 
 				// Game is running normally, calculate delta time

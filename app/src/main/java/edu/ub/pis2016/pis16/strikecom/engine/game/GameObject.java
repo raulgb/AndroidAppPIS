@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
+import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
+import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
 
 /**
@@ -27,9 +29,12 @@ public class GameObject {
 	/** Tags are used internally for BehaviorComponents to identify certain GameObject as part of the scenery, allied, enemy, etc. */
 	private String tag = "";
 
+	/** Health Related */
+	public int hitpoints = 0, maxHitpoints = 0;
+
 	/**
 	 * Sets the layer ordering, lowest values get rendered first.
-	 * <p/>
+	 * <p>
 	 * <b>WARNING:</b> Set the layer BEFORE adding to a Screen. To change layer if already inside, remove from
 	 * Screen, change layer, and add back.
 	 */
@@ -81,6 +86,10 @@ public class GameObject {
 		components.remove(type);
 	}
 
+	public boolean hasComponent(Class type) {
+		return components.containsKey(type);
+	}
+
 	public void setTag(String tag) {
 		this.tag = tag;
 	}
@@ -119,6 +128,29 @@ public class GameObject {
 		parent = null;
 		components.clear();
 		newComponents.clear();
+	}
+
+	// --- ACCELERATOR METHODS --- //
+
+	/** Depends on the object having a PhysicsComponent */
+	public void setPosition(float x, float y) {
+		PhysicsComponent phys;
+		if ((phys = getComponent(PhysicsComponent.class)) != null)
+			phys.setPosition(x, y);
+	}
+
+	/** Depends on the object having a PhysicsComponent */
+	public void setPosition(Vector2 pos) {
+		PhysicsComponent phys;
+		if ((phys = getComponent(PhysicsComponent.class)) != null)
+			phys.setPosition(pos);
+	}
+
+	public Vector2 getPosition() {
+		PhysicsComponent phys;
+		if ((phys = getComponent(PhysicsComponent.class)) != null)
+			return phys.getPosition();
+		throw new IllegalStateException("Can't get the position of a GameObject without PhysicsComponent: " + this.toString());
 	}
 
 	public String toString() {

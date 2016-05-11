@@ -24,7 +24,7 @@ public class EnemyTest extends Vehicle {
 	PhysicsComponent physics;
 
 	private float speed, maxSpeed = 10f;
-	private float rotation;
+	private float rotation = 0, rotationVel = 0;
 	private Vector2 tmp = new Vector2();
 
 	Turret turret;
@@ -55,8 +55,10 @@ public class EnemyTest extends Vehicle {
 	}
 
 	public void update(float delta) {
-		if(!screen.hasGameObject(turret))
+		if (!screen.hasGameObject(turret))
 			screen.addGameObject(turret);
+
+		rotation += rotationVel * delta;
 
 		Vector2 position = physics.getPosition();
 		tmp.set(speed, 0).rotate(rotation);
@@ -74,19 +76,20 @@ public class EnemyTest extends Vehicle {
 
 	@Override
 	public void turnLeft() {
-		rotation += 0.7f;
-		speed *= 0.95f;
+		rotationVel += 0.25f;
+		speed *= 0.99f;
 	}
 
 	@Override
 	public void turnRight() {
-		rotation -= 0.7f;
-		speed *= 0.95f;
+		rotationVel -= 0.25f;
+		speed *= 0.99f;
 	}
 
 	@Override
 	public void accelerate() {
 		speed = MathUtils.min(speed + 0.1f, maxSpeed);
+		rotationVel *= 0.95f;
 	}
 
 	@Override

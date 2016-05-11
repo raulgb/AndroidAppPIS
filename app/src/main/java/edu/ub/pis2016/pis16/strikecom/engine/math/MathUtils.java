@@ -2,13 +2,13 @@
  * Copyright 2011
  * Mario Zechner <badlogicgames@gmail.com>
  * Nathan Sweet <nathan.sweet@gmail.com>
- * <p/>
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * <p/>
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- * <p/>
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -56,6 +56,10 @@ public final class MathUtils {
 		return a > b ? a : b;
 	}
 
+	public static int max(int a, int b) {
+		return a > b ? a : b;
+	}
+
 	public static float min(float a, float b) {
 		return a > b ? b : a;
 	}
@@ -65,30 +69,30 @@ public final class MathUtils {
 
 		static {
 			for (int i = 0; i < SIN_COUNT; i++)
-				table[i] = (float)Math.sin((i + 0.5f) / SIN_COUNT * radFull);
+				table[i] = (float) Math.sin((i + 0.5f) / SIN_COUNT * radFull);
 			for (int i = 0; i < 360; i += 90)
-				table[(int)(i * degToIndex) & SIN_MASK] = (float)Math.sin(i * degreesToRadians);
+				table[(int) (i * degToIndex) & SIN_MASK] = (float) Math.sin(i * degreesToRadians);
 		}
 	}
 
 	/** Returns the sine in radians from a lookup table. */
 	static public float sin(float radians) {
-		return Sin.table[(int)(radians * radToIndex) & SIN_MASK];
+		return Sin.table[(int) (radians * radToIndex) & SIN_MASK];
 	}
 
 	/** Returns the cosine in radians from a lookup table. */
 	static public float cos(float radians) {
-		return Sin.table[(int)((radians + PI / 2) * radToIndex) & SIN_MASK];
+		return Sin.table[(int) ((radians + PI / 2) * radToIndex) & SIN_MASK];
 	}
 
 	/** Returns the sine in degrees from a lookup table. */
 	static public float sinDeg(float degrees) {
-		return Sin.table[(int)(degrees * degToIndex) & SIN_MASK];
+		return Sin.table[(int) (degrees * degToIndex) & SIN_MASK];
 	}
 
 	/** Returns the cosine in degrees from a lookup table. */
 	static public float cosDeg(float degrees) {
-		return Sin.table[(int)((degrees + 90) * degToIndex) & SIN_MASK];
+		return Sin.table[(int) ((degrees + 90) * degToIndex) & SIN_MASK];
 	}
 
 	// ---
@@ -129,12 +133,12 @@ public final class MathUtils {
 
 	/** Returns a random number between 0 (inclusive) and the specified value (inclusive). */
 	static public long random(long range) {
-		return (long)(random.nextDouble() * range);
+		return (long) (random.nextDouble() * range);
 	}
 
 	/** Returns a random number between start (inclusive) and end (inclusive). */
 	static public long random(long start, long end) {
-		return start + (long)(random.nextDouble() * (end - start));
+		return start + (long) (random.nextDouble() * (end - start));
 	}
 
 	/** Returns a random boolean value. */
@@ -213,8 +217,8 @@ public final class MathUtils {
 	public static float randomTriangular(float min, float max, float mode) {
 		float u = random.nextFloat();
 		float d = max - min;
-		if (u <= (mode - min) / d) return min + (float)Math.sqrt(u * d * (mode - min));
-		return max - (float)Math.sqrt((1 - u) * d * (max - mode));
+		if (u <= (mode - min) / d) return min + (float) Math.sqrt(u * d * (mode - min));
+		return max - (float) Math.sqrt((1 - u) * d * (max - mode));
 	}
 
 	// ---
@@ -315,7 +319,7 @@ public final class MathUtils {
 	 * -(2^14) to (Float.MAX_VALUE - 2^14).
 	 */
 	static public int floor(float value) {
-		return (int)(value + BIG_ENOUGH_FLOOR) - BIG_ENOUGH_INT;
+		return (int) (value + BIG_ENOUGH_FLOOR) - BIG_ENOUGH_INT;
 	}
 
 	/**
@@ -323,7 +327,7 @@ public final class MathUtils {
 	 * positive. Note this method simply casts the float to int.
 	 */
 	static public int floorPositive(float value) {
-		return (int)value;
+		return (int) value;
 	}
 
 	/**
@@ -331,7 +335,7 @@ public final class MathUtils {
 	 * -(2^14) to (Float.MAX_VALUE - 2^14).
 	 */
 	static public int ceil(float value) {
-		return (int)(value + BIG_ENOUGH_CEIL) - BIG_ENOUGH_INT;
+		return (int) (value + BIG_ENOUGH_CEIL) - BIG_ENOUGH_INT;
 	}
 
 	/**
@@ -339,7 +343,7 @@ public final class MathUtils {
 	 * are positive.
 	 */
 	static public int ceilPositive(float value) {
-		return (int)(value + CEIL);
+		return (int) (value + CEIL);
 	}
 
 	/**
@@ -347,12 +351,12 @@ public final class MathUtils {
 	 * (Float.MAX_VALUE - 2^14).
 	 */
 	static public int round(float value) {
-		return (int)(value + BIG_ENOUGH_ROUND) - BIG_ENOUGH_INT;
+		return (int) (value + BIG_ENOUGH_ROUND) - BIG_ENOUGH_INT;
 	}
 
 	/** Returns the closest integer to the specified float. This method will only properly round floats that are positive. */
 	static public int roundPositive(float value) {
-		return (int)(value + 0.5f);
+		return (int) (value + 0.5f);
 	}
 
 	/** Returns true if the value is zero (using the default tolerance as upper bound) */
@@ -399,7 +403,7 @@ public final class MathUtils {
 
 	/** @return the logarithm of value with base a */
 	static public float log(float a, float value) {
-		return (float)(Math.log(value) / Math.log(a));
+		return (float) (Math.log(value) / Math.log(a));
 	}
 
 	/** @return the logarithm of value with base 2 */

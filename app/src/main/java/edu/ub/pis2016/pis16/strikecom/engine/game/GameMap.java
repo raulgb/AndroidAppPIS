@@ -30,6 +30,7 @@ public class GameMap {
 	TextureSprite[] gray;
 
 	HashMap<String, TextureSprite> dryToGrass = new HashMap<>();
+	HashMap<String, TextureSprite> sandToDry = new HashMap<>();
 
 	ArrayList<TextureSprite> allSprites = new ArrayList<>();
 
@@ -48,8 +49,8 @@ public class GameMap {
 		this.tileSize = tileSize;
 		this.physics2D = physics2D;
 
-		width = physics2D.getWorldWidth();
-		height = physics2D.getWorldHeight();
+		width = physics2D.getWorldWidth() / tileSize;
+		height = physics2D.getWorldHeight() / tileSize;
 
 		pTable = new float[width][height];
 		tTable = new TextureSprite[width][height];
@@ -73,7 +74,6 @@ public class GameMap {
 		allSprites.add(sand[0]);
 		allSprites.add(sand[1]);
 
-
 		dryToGrass.put("dry_grass_nw", new TextureSprite(Assets.SPRITE_ATLAS.getRegion("dry_grass_nw")));
 		dryToGrass.put("dry_grass_n", new TextureSprite(Assets.SPRITE_ATLAS.getRegion("dry_grass_n")));
 		dryToGrass.put("dry_grass_ne", new TextureSprite(Assets.SPRITE_ATLAS.getRegion("dry_grass_ne")));
@@ -82,8 +82,17 @@ public class GameMap {
 		dryToGrass.put("dry_grass_s", new TextureSprite(Assets.SPRITE_ATLAS.getRegion("dry_grass_s")));
 		dryToGrass.put("dry_grass_sw", new TextureSprite(Assets.SPRITE_ATLAS.getRegion("dry_grass_sw")));
 		dryToGrass.put("dry_grass_w", new TextureSprite(Assets.SPRITE_ATLAS.getRegion("dry_grass_w")));
-
 		allSprites.addAll(dryToGrass.values());
+
+//		sandToDry.put("sand_dry_nw", new TextureSprite(Assets.SPRITE_ATLAS.getRegion("sand_dry_nw")));
+//		sandToDry.put("sand_dry_n", new TextureSprite(Assets.SPRITE_ATLAS.getRegion("sand_dry_n")));
+//		sandToDry.put("sand_dry_ne", new TextureSprite(Assets.SPRITE_ATLAS.getRegion("sand_dry_ne")));
+//		sandToDry.put("sand_dry_e", new TextureSprite(Assets.SPRITE_ATLAS.getRegion("sand_dry_e")));
+//		sandToDry.put("sand_dry_se", new TextureSprite(Assets.SPRITE_ATLAS.getRegion("sand_dry_se")));
+//		sandToDry.put("sand_dry_s", new TextureSprite(Assets.SPRITE_ATLAS.getRegion("sand_dry_s")));
+//		sandToDry.put("sand_dry_sw", new TextureSprite(Assets.SPRITE_ATLAS.getRegion("sand_dry_sw")));
+//		sandToDry.put("sand_dry_w", new TextureSprite(Assets.SPRITE_ATLAS.getRegion("sand_dry_w")));
+//		allSprites.addAll(sandToDry.values());
 
 		// Scale all sprites to same dimensions
 		for (TextureSprite tp : allSprites) {
@@ -148,8 +157,10 @@ public class GameMap {
 			return grass;
 		else if (value > 0.4f)
 			return dry;
+		else if (MathUtils.random() < 0.8)
+			return sand[0];
 		else
-			return sand[MathUtils.random(0, 1)];
+			return sand[1];
 	}
 
 	public float[][] getPTable() {
@@ -159,16 +170,23 @@ public class GameMap {
 	/** Draw the map around the given position, by default 8 tiles in each direction */
 	public void draw(SpriteBatch batch, Vector2 center) {
 		int row, col;
+		// Change this to increase view distance
+		int squareRad = 7 * tileSize;
 
+		// Test all map positions to draw a tile
 		for (row = 0; row < height; row++) {
 			for (col = 0; col < width; col++) {
 
-				float x = col * (tileSize);
-				float y = row * (tileSize);
-				if (center.dst2(x, y) > 128 * 128)
-					continue;
+				// Calcula x,y coordinates
+				float x = tileSize / 2f + col * tileSize;
+				float y = tileSize / 2f + row * tileSize;
 
-				tTable[row][col].draw(batch, col * tileSize, row * tileSize);
+				if (x < center.x - squareRad || x > center.x + squareRad || y < center.y - squareRad || y > center.y + squareRad)
+					continue;
+//				if (center.dst2(x, y) > 8 * tileSize * 8 * tileSize)
+//					continue;
+
+				tTable[row][col].draw(batch, x, y);
 			}
 		}
 

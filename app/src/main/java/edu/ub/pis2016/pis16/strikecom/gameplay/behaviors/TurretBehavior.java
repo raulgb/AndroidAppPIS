@@ -28,13 +28,13 @@ public class TurretBehavior extends BehaviorComponent {
 		if (targetTag == null || target == null) {
 			// If no target, look forward
 			tmp.set(50, 0).rotate(gameObject.getParent().getComponent(PhysicsComponent.class).getRotation());
-			turretPhys.lookAt(tmp, 0.05f);
+			turretPhys.lookAt(tmp, 0.075f);
 		}
 
 		// If we have no target, try to find our next target
 		if (target == null || isTooFar(target)) {
 			for (GameObject go : gameObject.getScreen().getGameObjects())
-				if (go.getTag().contains(targetTag) && !isTooFar(go)) {
+				if (go.getTag() != null && go.getTag().contains(targetTag) && !isTooFar(go)) {
 					target = go;
 					break;
 				}

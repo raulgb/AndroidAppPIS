@@ -255,100 +255,128 @@ sbmk2_threads_right
   orig: 32, 32
   offset: 0, 0
   index: 3
-heat
+healthbar
   rotate: false
   xy: 496, 106
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: 0
-heat
+healthbar
   rotate: false
   xy: 496, 88
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: 1
-heat
+healthbar
   rotate: false
   xy: 496, 70
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: 2
-heat
+healthbar
   rotate: false
   xy: 496, 52
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: 3
-turret_mk1
+heat
   rotate: false
   xy: 0, 6
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: 0
+heat
+  rotate: false
+  xy: 208, 38
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 1
+heat
+  rotate: false
+  xy: 16, 6
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 2
+heat
+  rotate: false
+  xy: 32, 6
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 3
 turret_mk1
   rotate: false
-  xy: 0, 6
+  xy: 224, 38
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 0
+turret_mk1
+  rotate: false
+  xy: 224, 38
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: 1
 gray
   rotate: false
-  xy: 208, 46
+  xy: 208, 28
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: 0
 gray
   rotate: false
-  xy: 16, 14
+  xy: 48, 12
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: 1
 gray
   rotate: false
-  xy: 208, 36
+  xy: 240, 46
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: 2
 gray
   rotate: false
-  xy: 216, 46
+  xy: 216, 28
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: 3
 gray
   rotate: false
-  xy: 24, 14
+  xy: 56, 12
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: 4
 gray
   rotate: false
-  xy: 208, 26
+  xy: 248, 46
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: 5
 gray
   rotate: false
-  xy: 216, 36
+  xy: 224, 28
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: 6
 gray
   rotate: false
-  xy: 224, 46
+  xy: 64, 12
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
@@ -362,7 +390,7 @@ bullet
   index: -1
 dot
   rotate: false
-  xy: 16, 9
+  xy: 208, 23
   size: 3, 3
   orig: 3, 3
   offset: 0, 0

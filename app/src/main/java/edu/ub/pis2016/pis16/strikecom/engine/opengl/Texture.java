@@ -29,8 +29,8 @@ public class Texture implements Disposable {
 	FileIO fileIO;
 	String fileName;
 	int textureId;
-	int minFilter;
-	int magFilter;
+	int minFilter = GL10.GL_NEAREST;
+	int magFilter = GL10.GL_NEAREST;
 	int width;
 	int height;
 
@@ -56,13 +56,16 @@ public class Texture implements Disposable {
 			height = bitmap.getHeight();
 			gl.glBindTexture(GL10.GL_TEXTURE_2D, textureId);
 			GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
-			setFilters(GL10.GL_NEAREST, GL10.GL_NEAREST);
+			setFilters(minFilter, magFilter);
 			gl.glBindTexture(GL10.GL_TEXTURE_2D, 0);
 		} catch (Exception e) {
 			throw new RuntimeException("Couldn't load texture '" + fileName + "'", e);
 		} finally {
 			if (in != null)
-				try { in.close(); } catch (IOException e) { }
+				try {
+					in.close();
+				} catch (IOException e) {
+				}
 		}
 	}
 
@@ -73,6 +76,7 @@ public class Texture implements Disposable {
 		glGraphics.getGL().glBindTexture(GL10.GL_TEXTURE_2D, 0);
 	}
 
+	/** Must be called after Texture.bind() */
 	public void setFilters(int minFilter, int magFilter) {
 		this.minFilter = minFilter;
 		this.magFilter = magFilter;
