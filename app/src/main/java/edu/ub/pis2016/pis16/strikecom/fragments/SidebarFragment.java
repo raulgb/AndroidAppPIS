@@ -19,8 +19,8 @@ public class SidebarFragment extends Fragment {
 	private StrikeBaseConfig.Model strikeBaseModel = StrikeBaseConfig.Model.MKII;
 	private StrikeComGLGame game;
 
-	private HashMap<Integer, View> slotsMap = new HashMap<>();
-
+	private HashMap<Integer, View> turretSlotsMap = new HashMap<>();
+	private HashMap<Integer, View> upgradeSlotsMap = new HashMap<>();
 
 	public void setGame(StrikeComGLGame game) {
 		this.game = game;
@@ -28,7 +28,9 @@ public class SidebarFragment extends Fragment {
 
 	public void setStrikeBaseModel(StrikeBaseConfig.Model strikeBaseModel) {this.strikeBaseModel = strikeBaseModel; }
 
-	public View getSlot(int key) { return slotsMap.get(key); }
+	public View getTurretSlot(int key) { return turretSlotsMap.get(key); }
+
+	public View getUpgradeSlot(int key) { return turretSlotsMap.get(key); }
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -50,10 +52,10 @@ public class SidebarFragment extends Fragment {
 		// Each strike base model has its own turret slots assignation.
 		switch(strikeBaseModel) {
 			case MKI:
-				slotsMap.put(0, btnT1);
-				slotsMap.put(1, btnT3);
-				slotsMap.put(2, btnT4);
-				slotsMap.put(3, btnT5);
+				turretSlotsMap.put(0, btnT1);
+				turretSlotsMap.put(1, btnT3);
+				turretSlotsMap.put(2, btnT4);
+				turretSlotsMap.put(3, btnT5);
 
 				btnT1.setOnClickListener(new View.OnClickListener() {
 					@Override
@@ -94,9 +96,9 @@ public class SidebarFragment extends Fragment {
 				break;
 
 			case MKII:
-				slotsMap.put(0, btnT1);
-				slotsMap.put(1, btnT4);
-				slotsMap.put(2, btnT6);
+				turretSlotsMap.put(0, btnT1);
+				turretSlotsMap.put(1, btnT4);
+				turretSlotsMap.put(2, btnT6);
 
 				btnT1.setOnClickListener(new View.OnClickListener() {
 					@Override
@@ -143,24 +145,32 @@ public class SidebarFragment extends Fragment {
 				game.getSidebarListener().onClickInventory();
 			}
 		});
-		view.findViewById(R.id.btnU1).setOnClickListener(new View.OnClickListener() {
+		View btnU1 = view.findViewById(R.id.btnU1);
+		View btnU2 = view.findViewById(R.id.btnU2);
+		View btnU3 = view.findViewById(R.id.btnU3);
+
+		btnU1.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				game.getSidebarListener().onClickUpgrade(0);
 			}
 		});
-		view.findViewById(R.id.btnU2).setOnClickListener(new View.OnClickListener() {
+		btnU2.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				game.getSidebarListener().onClickUpgrade(1);
 			}
 		});
-		view.findViewById(R.id.btnU3).setOnClickListener(new View.OnClickListener() {
+		btnU3.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				game.getSidebarListener().onClickUpgrade(2);
 			}
 		});
+
+		upgradeSlotsMap.put(0, btnU1);
+		upgradeSlotsMap.put(1, btnU2);
+		upgradeSlotsMap.put(2, btnU3);
 
 		return view;
 	}

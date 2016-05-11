@@ -17,6 +17,8 @@ import edu.ub.pis2016.pis16.strikecom.StrikeComGLGame;
 import edu.ub.pis2016.pis16.strikecom.gameplay.InventoryItemAdapter;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.Inventory;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.Item;
+import edu.ub.pis2016.pis16.strikecom.gameplay.items.TurretItem;
+import edu.ub.pis2016.pis16.strikecom.gameplay.items.UpgradeItem;
 
 public class InventoryFragment extends DialogFragment {
 
@@ -31,7 +33,8 @@ public class InventoryFragment extends DialogFragment {
 
 	protected int selectedItem;
 	protected int selectedSlot = -1;
-	//boolean isEquipped = false; //selected item is currently equipped
+
+	protected boolean turretIsSelected = true;
 
 	public void setGame(StrikeComGLGame game) {
 		this.game = game;
@@ -41,43 +44,97 @@ public class InventoryFragment extends DialogFragment {
 
 	public void setSelectedSlot(int selectedSlot) { this.selectedSlot = selectedSlot; }
 
-	public Item getSelectedItem() {
-		if (selectedItem >= 0){
-			return inventory.getItem(selectedItem);
+	public void setTurretSelection(boolean turretIsSelected) {
+		this.turretIsSelected = turretIsSelected;
+	}
+
+	public TurretItem getSelectedTurretItem() {
+		if (selectedItem < 0){
+			return null;
+
 		}
-		return null;
+		return inventory.getTurret(selectedItem);
+	}
+
+	public UpgradeItem getSelectedUpgradeItem() {
+		if (selectedItem < 0){
+			return null;
+		}
+		return inventory.getUpgrade(selectedItem);
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.inventory, container);
+		View view = inflater.inflate(R.layout.fragment_inventory, container);
 
+		itemList = (ListView) view.findViewById(R.id.itemList); // list of items
+		itemDesc = (TextView) view.findViewById(R.id.itemDesc); // description of the item selected from the list
+
+		// Equip/unequip button
 		equipBtn = (Button) view.findViewById(R.id.inventoryBtn_1);
+		// Cancel button
 		cancelBtn = (Button) view.findViewById(R.id.inventoryBtn_2);
-		itemList = (ListView) view.findViewById(R.id.itemList);
-		itemDesc = (TextView) view.findViewById(R.id.itemDesc);
+		configButtons();
 
-		initButtons();
-		initItemList();
+		// Switch to turret selection
+		final Button turretSelectionBtn = (Button) view.findViewById(R.id.turretSelectionBtn);
+		turretSelectionBtn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				if(!turretIsSelected) {
+					turretIsSelected = true;
+					itemDesc.setText("");
+					selectedItem = -1;
+					fillItemList();
+				}
+			}
+		});
+
+		// Switch to upgrades selection
+		final Button upgradeSelectionBtn = (Button) view.findViewById(R.id.upgradeSelectionBtn);
+		upgradeSelectionBtn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				if(turretIsSelected) {
+					turretIsSelected = false;
+					itemDesc.setText("");
+					selectedItem = -1;
+					fillItemList();
+				}
+			}
+		});
+
+		fillItemList();
 
 		getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 		return view;
 	}
 
-	protected void initButtons(){
-		equipBtn.setEnabled(false);
+	protected void configButtons() {
+		// Equip/unequip button
 		equipBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				//Item item = inventory.getItem(selectedItem);
-				//equipItem((TurretItem)inventory.getItem(selectedItem));
-
-				dismiss();
-				FragmentedGameActivity callingActivity = (FragmentedGameActivity) getActivity();
-				callingActivity.showSlotsDialog( inventory.getItem(selectedItem) );
+				if(selectedItem >= 0) { // valid item selected
+					dismiss();
+					FragmentedGameActivity callingActivity = (FragmentedGameActivity) getActivity();
+					if(selectedItem >= 0) { // valid item selection
+						if (turretIsSelected) {
+							callingActivity.showSlotsDialog(true, inventory.getTurret(selectedItem));
+						} else {
+							UpgradeItem item = inventory.getUpgrade(selectedItem);
+							if(item.isFuel()){
+								callingActivity.equipUpgrade(item, -1);
+							} else {
+								callingActivity.showSlotsDialog(false, item);
+							}
+						}
+					}
+				}
 			}
 		});
 
+		// Cancel button
 		cancelBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -86,18 +143,24 @@ public class InventoryFragment extends DialogFragment {
 		});
 	}
 
-	protected void initItemList(){
-		itemList.setAdapter(new InventoryItemAdapter(getActivity(), inventory.getInventory()));
+	protected void fillItemList() {
+		if(turretIsSelected) {
+			itemList.setAdapter(new InventoryItemAdapter(getActivity(), inventory.getTurretInventory()));
+		} else {
+			itemList.setAdapter(new InventoryItemAdapter(getActivity(), inventory.getUpgradeInventory()));
+		}
+
 		itemList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 				if(i>=0){ //valid item is selected
 					selectedItem = i;
-					itemDesc.setText( inventory.getItem(selectedItem).getDisplay() );
-					equipBtn.setEnabled(true);
 
-				} else {
-					equipBtn.setEnabled(false);
+					if(turretIsSelected) {
+						itemDesc.setText( inventory.getTurret(selectedItem).getDisplay() );
+					} else {
+						itemDesc.setText( inventory.getUpgrade(selectedItem).getDisplay() );
+					}
 				}
 			}
 		});

@@ -68,7 +68,7 @@ public class InventoryItemAdapter extends BaseAdapter {
 			// Item has an associated image in drawables
 			itemImage.setImageResource(imageID);
 		} else {
-			itemImage.setImageResource(R.drawable.scrap64x64);
+			itemImage.setImageResource(R.drawable.scrap_64);
 		}
 
 		return rowView;

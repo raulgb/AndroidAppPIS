@@ -17,7 +17,6 @@ import android.widget.Button;
 import java.io.IOException;
 import java.util.HashMap;
 
-import edu.ub.pis2016.pis16.strikecom.engine.game.component.GraphicsComponent;
 import edu.ub.pis2016.pis16.strikecom.fragments.InventoryFragment;
 import edu.ub.pis2016.pis16.strikecom.fragments.SidebarFragment;
 import edu.ub.pis2016.pis16.strikecom.controller.SidebarEventListener;
@@ -28,6 +27,8 @@ import edu.ub.pis2016.pis16.strikecom.gameplay.StrikeBaseTest;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.Inventory;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.Item;
+import edu.ub.pis2016.pis16.strikecom.gameplay.items.TurretItem;
+import edu.ub.pis2016.pis16.strikecom.gameplay.items.UpgradeItem;
 
 public class FragmentedGameActivity extends Activity {
 
@@ -37,7 +38,6 @@ public class FragmentedGameActivity extends Activity {
 	SidebarFragment sidebar;
 
 	HashMap<String, Object> playerState = new HashMap<>();
-	HashMap<String, Item> itemChart = new HashMap<>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +63,7 @@ public class FragmentedGameActivity extends Activity {
 		playerState.put("SCRAP", Integer.valueOf(getString(R.string.res1_defVal)));
 		playerState.put("FUEL", Integer.valueOf(getString(R.string.res2_defVal)));
 		playerState.put("POINTS", 0);
+		//playerState.put("INVENTORY", new Inventory());
 
 		generateInventories();
 	}
@@ -86,7 +87,7 @@ public class FragmentedGameActivity extends Activity {
 
 			@Override
 			public void onClickInventory() {
-				showInventoryDialog(-1);
+				showInventoryDialog(true, -1);
 			}
 
 			@Override
@@ -133,41 +134,63 @@ public class FragmentedGameActivity extends Activity {
 		(builder.create()).show();
 	}
 
-	public void showInventoryDialog(int selectedSlot) {
-		//Screen screen = game.getCurrentScreen();
-		//screen.pause();
-
+	public void showInventoryDialog(boolean turretIsSelected, int selectedSlot) {
 		InventoryFragment inventoryFrag = new InventoryFragment();
 		inventoryFrag.setInventory((Inventory) playerState.get("INVENTORY"));
 		inventoryFrag.setSelectedSlot(selectedSlot);
+		inventoryFrag.setTurretSelection(turretIsSelected);
 		inventoryFrag.show(getFragmentManager(), "Inventory_Fragment");
 	}
 
-	public void showSlotsDialog(Item selectedItem) {
+	public void showSlotsDialog(boolean turretIsSelected, Item selectedItem) {
 		Screen screen = game.getCurrentScreen();
 		StrikeBaseTest strikeBase = screen.getGameObject("StrikeBase", StrikeBaseTest.class);
 
 		SlotsFragment slots = new SlotsFragment();
 		slots.setStrikeBaseModel(strikeBase.getConfig().model);
 		slots.setNewItem(selectedItem);
+		slots.setTurretSelection(turretIsSelected);
 		slots.show(getFragmentManager(), "slots");
 	}
 
-	public void equipItem(Item selectedItem, int turretSlot) {
+	public void equipTurret(TurretItem item, int slot) {
+		// TODO Find a better way to display equipped items on the sidebar
 
-		/*
-		Button slot= (Button) sidebar.getSlot(turretSlot);
-		int imageID = getResources().getIdentifier(selectedItem.getImage(), "drawable", getPackageName());
+		Button slotBtn = (Button) sidebar.getTurretSlot(slot);
+		int imageID = getResources().getIdentifier(item.getImage(), "drawable", getPackageName());
 		Bitmap original = BitmapFactory.decodeResource(getResources(), imageID);
-		Bitmap b = Bitmap.createScaledBitmap(original, slot.getWidth(), slot.getHeight(), false);
-
+		Bitmap b = Bitmap.createScaledBitmap(original, slotBtn.getWidth(), slotBtn.getHeight(), false);
 		Drawable d = new BitmapDrawable(getResources(), b);
-		slot.setCompoundDrawablesWithIntrinsicBounds(d, null, null, null);
-		*/
+		slotBtn.setCompoundDrawablesWithIntrinsicBounds(d, null, null, null);
 
 		Inventory inv = (Inventory) playerState.get("INVENTORY");
-		inv.removeItem(selectedItem);
+		inv.removeItem(item);
 		playerState.put("INVENTORY", inv);
+	}
+
+	public void equipUpgrade(UpgradeItem item, int slot) {
+		// TODO Find a better way to display equipped items on the sidebar
+
+		if(slot >= 0) {
+			Button slotBtn = (Button) sidebar.getUpgradeSlot(slot);
+			int imageID = getResources().getIdentifier(item.getImage(), "drawable", getPackageName());
+			Bitmap original = BitmapFactory.decodeResource(getResources(), imageID);
+			Bitmap b = Bitmap.createScaledBitmap(original, slotBtn.getWidth(), slotBtn.getHeight(), false);
+			Drawable d = new BitmapDrawable(getResources(), b);
+			slotBtn.setCompoundDrawablesWithIntrinsicBounds(d, null, null, null);
+		}
+
+		Inventory inv = (Inventory) playerState.get("INVENTORY");
+		inv.removeItem(item);
+		playerState.put("INVENTORY", inv);
+	}
+
+	private void retrieveTurret(int slot) {
+
+	}
+
+	private void retrieveUpgrade(int slot) {
+
 	}
 
 	public void generateInventories() {
@@ -175,18 +198,14 @@ public class FragmentedGameActivity extends Activity {
 		String upgradesFile = getString(R.string.upgradesFile);
 		try {
 			InventoryManager im = new InventoryManager(this, turretsFile, upgradesFile);
-			itemChart = im.getMasterInventory();
-			playerState.put("INVENTORY", im.getNewInventory(10));
+			playerState.put("INVENTORY", im.getShopInventory(10, 1));
 
-		} catch (IOException ex) {
-			// TEST INVENTORY ----
-			/*
+		} catch (IOException ex){
 			Inventory testInventory = new Inventory();
-			testInventory.addItem(TurretItem.parseTurretItem("Machinegun;machinegun;Weak yet cheap, makes an ideal weapon for a newbie.;100;2;4;1"));
-			testInventory.addItem(TurretItem.parseTurretItem("Gatling gun;gatling;Multi-barreled machinegun with superior firerate.;300;2;6;2"));
-			testInventory.addItem(TurretItem.parseTurretItem("Battle cannon;cannon;This cannon can punch a hole through most enemies.;1500;4;2;4"));
+			testInventory.addItem( TurretItem.parseTurretItem("Machinegun;machinegun_64;turret_mk1;Weak yet cheap, makes an ideal weapon for a newbie.;100;2;4;1"));
+			testInventory.addItem( UpgradeItem.parseUpgradeItem("Composite armour;composite_64;turret_mk1;Advanced plating made from a " +
+					"variety of metals and ceramics.;COMPOSITE;4000"));
 			playerState.put("INVENTORY", testInventory);
-			*/
 		}
 	}
 }

@@ -13,15 +13,11 @@ public class ShopFragment extends InventoryFragment {
 	public void setPlayerScrap(float playerScrap) { this.playerScrap = playerScrap; }
 
 	@Override
-	protected void initButtons(){
-		equipBtn.setEnabled(false);
+	protected void configButtons(){
 		equipBtn.setText(getString(R.string.buy_button));
 		equipBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				//Item item = inventory.getItem(selectedItem);
-				//equipItem((TurretItem)inventory.getItem(selectedItem));
-
 				dismiss();
 			}
 		});
@@ -35,20 +31,25 @@ public class ShopFragment extends InventoryFragment {
 	}
 
 	@Override
-	protected void initItemList(){
-		itemList.setAdapter(new InventoryItemAdapter(getActivity(), inventory.getInventory()));
+	protected void fillItemList(){
+		if(turretIsSelected) {
+			itemList.setAdapter(new InventoryItemAdapter(getActivity(), inventory.getTurretInventory()));
+		} else {
+			itemList.setAdapter(new InventoryItemAdapter(getActivity(), inventory.getUpgradeInventory()));
+		}
+
 		itemList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 				if(i>=0){ //valid item is selected
 					selectedItem = i;
-					String desc = inventory.getItem(selectedItem).getDisplay() + "\n\n" + getString(R.string.player_scrap) + Float
-							.toString(playerScrap);
+					String desc;
+					if(turretIsSelected) {
+						desc = inventory.getTurret(selectedItem).getDisplay() + "\n\n" + getString(R.string.player_scrap) + Float.toString(playerScrap);
+					} else {
+						desc = inventory.getTurret(selectedItem).getDisplay() + "\n\n" + getString(R.string.player_scrap) + Float.toString(playerScrap);
+					}
 					itemDesc.setText( desc );
-					equipBtn.setEnabled(true);
-
-				} else {
-					equipBtn.setEnabled(false);
 				}
 			}
 		});

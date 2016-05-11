@@ -42,7 +42,7 @@
                 <ImageView
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:src="@drawable/scrap64x64"
+                    android:src="@drawable/scrap_64"
                     android:id="@+id/scrap_icon"/>
                 <TextView
                     android:layout_width="wrap_content"
@@ -65,7 +65,7 @@
                 <ImageView
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:src="@drawable/fuel64x64"
+                    android:src="@drawable/fuel_64"
                     android:id="@+id/fuel_icon"/>
                 <TextView
                     android:layout_width="wrap_content"

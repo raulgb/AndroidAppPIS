@@ -1,61 +1,94 @@
 package edu.ub.pis2016.pis16.strikecom.gameplay.items;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import edu.ub.pis2016.pis16.strikecom.fragments.InventoryFragment;
 
-// I've implemented this class just for the sake of having a sorted list. It might be replaced by a
-// regular ArrayList. Sorting is managed during insertion. Objects sorted by price.
 public class Inventory {
-	private ArrayList<Item> objectList;
+	private ArrayList<Item> turretList;
+	private ArrayList<Item> upgradeList;
 
 	// Builder
 	public Inventory(){
-		objectList = new ArrayList<>();
+		turretList = new ArrayList<>();
+		upgradeList = new ArrayList<>();
 	}
 
-	// Addition
-	public void addItem(Item o){
-		for(int i=0; i<objectList.size(); i++) {
-			if(o.compareTo(objectList.get(i)) < 0){
-				objectList.add(i, o);
-				return;
-			}
-		}
-		objectList.add(o);
+	// Length
+	public int getSize() {
+		return turretList.size() + upgradeList.size();
 	}
-
-	// Length.
-	public int getSize(){
-		return objectList.size();
+	public int getTurretSize() {
+		return turretList.size();
+	}
+	public int getUpgradeSize() {
+		return upgradeList.size();
 	}
 
 	// Get the item occupying given position.
-	public Item getItem(int i) {
-		return objectList.get(i);
+	public TurretItem getTurret(int i) {
+		if (i >= getTurretSize()){
+			return null;
+		}
+		return (TurretItem) turretList.get(i);
+	}
+	public UpgradeItem getUpgrade(int i) {
+		if (i >= getUpgradeSize()){
+			return null;
+		}
+		return (UpgradeItem) upgradeList.get(i);
+	}
+
+	// Sorted addition
+	public void addItem(TurretItem item) {
+		if (item == null){
+			return;
+		}
+		for(int i=0; i<turretList.size(); i++) {
+			if(item.compareTo(turretList.get(i)) < 0){
+				turretList.add(i, item);
+				return;
+			}
+		}
+		turretList.add(item);
+	}
+	public void addItem(UpgradeItem item) {
+		if (item == null){
+			return;
+		}
+		// upgrades sorted backwards, so fuel stays at the end of the list
+		for(int i=0; i<upgradeList.size(); i++) {
+			if(item.compareTo(upgradeList.get(i)) >= 0){
+				upgradeList.add(i, item);
+				return;
+			}
+		}
+		upgradeList.add(item);
 	}
 
 	// Subtraction
-	public void removeItem(int i) {
-		objectList.remove(i);
+	public void removeTurret(int i) {
+		turretList.remove(i);
+	}
+	public void removeUpgrade(int i) {
+		upgradeList.remove(i);
+	}
+	public void removeItem(TurretItem item) {
+		turretList.remove(item);
+	}
+	public void removeItem(UpgradeItem item) {
+		upgradeList.remove(item);
 	}
 
-	public void removeItem(Item item) {
-		objectList.remove(item);
+
+	// Return lists
+	public List<Item> getTurretInventory() {
+		return turretList;
 	}
-
-	// Returns visible items.
-	public List<Item> getInventory() {
-		ArrayList<Item> visibleItems = new ArrayList<>();
-
-		for(int i=0; i<objectList.size(); i++){
-			Item it = objectList.get(i);
-			if (it.isVisible()){
-				visibleItems.add(it);
-			}
-		}
-		return visibleItems;
+	public List<Item> getUpgradeInventory() {
+		return upgradeList;
 	}
 
 }
