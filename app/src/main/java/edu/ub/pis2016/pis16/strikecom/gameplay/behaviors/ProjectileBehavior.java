@@ -23,7 +23,7 @@ public class ProjectileBehavior extends BehaviorComponent {
 		// TODO Activate this
 		//tmp.set(gameObject.getScreen().getGameObject("StrikeBase").getComponent(PhysicsComponent.class).getPosition());
 
-		// Desroy bullet if too far
+		// Destroy bullet if too far
 		tmp.sub(physics.getPosition());
 		if (tmp.len2() > 200 * 200)
 			gameObject.destroy();

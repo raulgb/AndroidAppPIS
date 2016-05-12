@@ -58,6 +58,9 @@ public class Inventory {
 		if (item == null){
 			return;
 		}
+		if (!UpgradeItem.functionIsSupported(item.getFunction())){
+			return;
+		}
 		// upgrades sorted backwards, so fuel stays at the end of the list
 		for(int i=0; i<upgradeList.size(); i++) {
 			if(item.compareTo(upgradeList.get(i)) >= 0){

@@ -4,6 +4,16 @@ import edu.ub.pis2016.pis16.strikecom.engine.game.Component;
 
 public class UpgradeItem extends Item{
 
+	public enum AVAILABLE_FUNCTIONS {
+		FUEL,
+		ARMOUR_PLATE,
+		ARMOUR_COMPOSITE,
+		AI,
+		ENGINE_EFFICIENCY,
+		ENGINE_SPEED
+
+	}
+
 	private String function;
 
 	public UpgradeItem(String name, String image, String model, String flavour, String function, float price) {
@@ -11,7 +21,7 @@ public class UpgradeItem extends Item{
 		this.function = function;
 	}
 
-	public String getFuncion(){
+	public String getFunction(){
 		return this.function;
 	}
 
@@ -27,6 +37,15 @@ public class UpgradeItem extends Item{
 		return new UpgradeItem(param[0], param[1], param[2], param[3], param[4], Float.valueOf(param[5]));
 	}
 
+	public static boolean functionIsSupported(String f) {
+		for( AVAILABLE_FUNCTIONS FUNCTION : AVAILABLE_FUNCTIONS.values() ){
+			if (FUNCTION.name().equals(f)){
+				return true;
+			}
+		}
+		return false;
+	}
+
 	@Override
 	public String getDisplay() {
 		return this.flavour;
@@ -36,9 +55,5 @@ public class UpgradeItem extends Item{
 	@Override
 	public String toString(){
 		return (this.name + ";" + this.image + ";" + this.model + ";" + this.flavour + ";" + this.function + ";" + Float.toString(this.price));
-	}
-
-	public Component getUpgrade(){
-		return null;
 	}
 }

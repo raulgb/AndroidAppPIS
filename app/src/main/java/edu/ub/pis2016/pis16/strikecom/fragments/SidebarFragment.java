@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.HashMap;
 
@@ -21,6 +22,9 @@ public class SidebarFragment extends Fragment {
 
 	private HashMap<Integer, View> turretSlotsMap = new HashMap<>();
 	private HashMap<Integer, View> upgradeSlotsMap = new HashMap<>();
+
+	private TextView scrapText;
+	private TextView fuelText;
 
 	public void setGame(StrikeComGLGame game) {
 		this.game = game;
@@ -40,6 +44,10 @@ public class SidebarFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_sidebar, container, false);
+
+		// Resources display
+		scrapText = (TextView) view.findViewById(R.id.textScrap);
+		fuelText = (TextView) view.findViewById(R.id.textFuel);
 
 		// Turret slots
 		View btnT1 = view.findViewById(R.id.btnT1);
@@ -173,6 +181,14 @@ public class SidebarFragment extends Fragment {
 		upgradeSlotsMap.put(2, btnU3);
 
 		return view;
+	}
+
+	public void updateScrap(int scrap){
+		scrapText.setText(Integer.toString(scrap));
+	}
+
+	public void updateFuel(int fuel){
+		fuelText.setText(Integer.toString(fuel));
 	}
 
 }

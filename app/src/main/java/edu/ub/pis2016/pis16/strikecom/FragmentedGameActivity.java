@@ -92,12 +92,12 @@ public class FragmentedGameActivity extends Activity {
 
 			@Override
 			public void onClickTurret(int index) {
+				showInventoryDialog(true, index);
+			}
 
-				if (index == 0)
-					game.getCurrentScreen().pauseGame();
-				else
-					game.getCurrentScreen().resumeGame();
-
+			@Override
+			public void onClickUpgrade(int index) {
+				showInventoryDialog(false, index);
 			}
 		});
 	}
@@ -135,6 +135,8 @@ public class FragmentedGameActivity extends Activity {
 	}
 
 	public void showInventoryDialog(boolean turretIsSelected, int selectedSlot) {
+		game.getCurrentScreen().pauseGame(); // pause game
+
 		InventoryFragment inventoryFrag = new InventoryFragment();
 		inventoryFrag.setInventory((Inventory) playerState.get("INVENTORY"));
 		inventoryFrag.setSelectedSlot(selectedSlot);
@@ -146,6 +148,8 @@ public class FragmentedGameActivity extends Activity {
 		Screen screen = game.getCurrentScreen();
 		StrikeBaseTest strikeBase = screen.getGameObject("StrikeBase", StrikeBaseTest.class);
 
+		screen.pauseGame(); // pause game
+
 		SlotsFragment slots = new SlotsFragment();
 		slots.setStrikeBaseModel(strikeBase.getConfig().model);
 		slots.setNewItem(selectedItem);
@@ -154,7 +158,8 @@ public class FragmentedGameActivity extends Activity {
 	}
 
 	public void equipTurret(TurretItem item, int slot) {
-		StrikeBaseTest strikeBase = (game.getCurrentScreen()).getGameObject("StrikeBase", StrikeBaseTest.class);
+		Screen screen = game.getCurrentScreen();
+		StrikeBaseTest strikeBase = screen.getGameObject("StrikeBase", StrikeBaseTest.class);
 		retrieveTurret(slot);
 		strikeBase.addTurret(item, slot);
 
@@ -169,10 +174,13 @@ public class FragmentedGameActivity extends Activity {
 		Bitmap b = Bitmap.createScaledBitmap(original, slotBtn.getWidth(), slotBtn.getHeight(), false);
 		Drawable d = new BitmapDrawable(getResources(), b);
 		slotBtn.setCompoundDrawablesWithIntrinsicBounds(d, null, null, null);
+
+		screen.resumeGame(); // resume game
 	}
 
 	public void equipUpgrade(UpgradeItem item, int slot) {
-		StrikeBaseTest strikeBase = (game.getCurrentScreen()).getGameObject("StrikeBase", StrikeBaseTest.class);
+		Screen screen = game.getCurrentScreen();
+		StrikeBaseTest strikeBase = screen.getGameObject("StrikeBase", StrikeBaseTest.class);
 		retrieveUpgrade(slot);
 		strikeBase.addUpgrade(item, slot);
 
@@ -188,12 +196,18 @@ public class FragmentedGameActivity extends Activity {
 		Bitmap b = Bitmap.createScaledBitmap(original, slotBtn.getWidth(), slotBtn.getHeight(), false);
 		Drawable d = new BitmapDrawable(getResources(), b);
 		slotBtn.setCompoundDrawablesWithIntrinsicBounds(d, null, null, null);
+
+		screen.resumeGame(); // resume game
 	}
 
 	public void useFuel(UpgradeItem fuel){
 		Inventory inv = (Inventory) playerState.get("INVENTORY");
 		inv.removeItem(fuel);
 		playerState.put("INVENTORY", inv);
+		playerState.put("FUEL", (Integer)playerState.get("FUEL") + 250);
+
+		sidebar.updateFuel( (Integer)playerState.get("FUEL")  );
+		game.getCurrentScreen().resumeGame(); // resume game
 	}
 
 	private void retrieveTurret(int slot) {

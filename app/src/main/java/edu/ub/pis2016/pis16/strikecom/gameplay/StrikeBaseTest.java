@@ -2,6 +2,8 @@ package edu.ub.pis2016.pis16.strikecom.gameplay;
 
 import java.util.HashMap;
 
+import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
+import edu.ub.pis2016.pis16.strikecom.engine.game.component.GraphicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
@@ -11,6 +13,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.physics.KinematicBody;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Rectangle;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Animation;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
+import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.TurretBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.TurretItem;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.UpgradeItem;
@@ -204,10 +207,10 @@ public class StrikeBaseTest extends Vehicle {
 		this.rightThreadVel = Math.max(rightThreadVel - accel, 0);
 	}
 
-	public void addTurret(TurretItem turret, int slot) {
+	public void addTurret(TurretItem item, int slot) {
 		// TODO implement
 
-		equippedTurrets.put(slot, turret);
+		equippedTurrets.put(slot, item);
 	}
 
 	public void removeTurret(int slot) {
@@ -216,10 +219,30 @@ public class StrikeBaseTest extends Vehicle {
 		equippedTurrets.remove(slot);
 	}
 
-	public void addUpgrade(UpgradeItem upgrade, int slot) {
+	public void addUpgrade(UpgradeItem item, int slot) {
 		// TODO implement
 
-		equippedUpgrades.put(slot, upgrade);
+		switch(UpgradeItem.AVAILABLE_FUNCTIONS.valueOf(item.getFunction())){
+			case AI:
+				// Smart turrets
+				break;
+			case ARMOUR_COMPOSITE:
+				// Increases endurance
+				break;
+			case ARMOUR_PLATE:
+				// Slightly increases endurance
+				break;
+			case ENGINE_EFFICIENCY:
+				// Reduces fuel consumption
+				break;
+			case ENGINE_SPEED:
+				// Increases speed
+				break;
+			case FUEL:
+				break;
+		}
+
+		equippedUpgrades.put(slot, item);
 	}
 
 	public void removeUpgrade(int slot) {

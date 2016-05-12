@@ -115,18 +115,26 @@ public class InventoryFragment extends DialogFragment {
 		equipBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				if(selectedItem >= 0) { // valid item selected
+				if (selectedItem >= 0) { // valid item selected
 					dismiss();
 					FragmentedGameActivity callingActivity = (FragmentedGameActivity) getActivity();
-					if(selectedItem >= 0) { // valid item selection
-						if (turretIsSelected) {
-							callingActivity.showSlotsDialog(true, inventory.getTurret(selectedItem));
+
+					if (turretIsSelected) { // selected item is a turret
+						TurretItem turret = inventory.getTurret(selectedItem);
+						if (selectedSlot < 0) { // show slots dialog if no valid slot has been selected
+							callingActivity.showSlotsDialog(true, turret);
+						} else { // equip if slot already selected
+							callingActivity.equipTurret(turret, selectedSlot);
+						}
+					} else {// selected item is an upgrade
+						UpgradeItem upgrade = inventory.getUpgrade(selectedItem);
+						if (upgrade.isFuel()) { // use fuel if selected
+							callingActivity.useFuel(upgrade);
 						} else {
-							UpgradeItem item = inventory.getUpgrade(selectedItem);
-							if(item.isFuel()){
-								callingActivity.useFuel(item);
-							} else {
-								callingActivity.showSlotsDialog(false, item);
+							if (selectedSlot < 0) { // show slots dialog if no valid slot has been selected
+								callingActivity.showSlotsDialog(false, upgrade);
+							} else { // equip if slot already selected
+								callingActivity.equipUpgrade(upgrade, selectedSlot);
 							}
 						}
 					}
