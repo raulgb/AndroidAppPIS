@@ -13,13 +13,11 @@ import edu.ub.pis2016.pis16.strikecom.engine.game.GameMap;
 import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.GraphicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
-import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.GLGraphics;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.OrthoCamera;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Texture;
-import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureRegion;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureSprite;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.ContactListener;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Physics2D;
@@ -223,8 +221,8 @@ public class AlexanderScreen extends Screen {
 
 		for (GameObject go : this.getGameObjects())
 			go.draw(batch);
-
-		gameMap.drawMap(batch, strikeBase.getPosition());
+		//todo control minimap drawing by a button from  sidebar
+		gameMap.drawMiniMap(batch, strikeBase.getPosition());
 
 		batch.end();
 	}
