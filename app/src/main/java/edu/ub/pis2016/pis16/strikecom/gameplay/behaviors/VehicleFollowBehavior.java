@@ -36,15 +36,17 @@ public class VehicleFollowBehavior extends BehaviorComponent {
 			vehicle.brake();
 
 			// If we reach the destination and are stopped, stop following target.
-			if (!gameObject.getComponent(PhysicsComponent.class).getVelocity().notZero())
+			if (gameObject.getComponent(PhysicsComponent.class).getVelocity().isZero()) {
+				gameObject.getComponent(PhysicsComponent.class).setVelocity(0, 0);
 				moveOrder = false;
+			}
 		}
 	}
 
 	/** Set the position to go to. if {@code null} is passed, will stop immediately. */
 	public void setTarget(Vector2 target) {
 		if (target == null) {
-			moveOrder = false;
+			this.target.set(gameObject.getPosition());
 			return;
 		}
 		this.target.set(target);

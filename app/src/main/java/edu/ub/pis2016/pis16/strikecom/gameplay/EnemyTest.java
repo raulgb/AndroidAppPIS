@@ -23,8 +23,15 @@ public class EnemyTest extends Vehicle {
 
 	PhysicsComponent physics;
 
-	private float speed, maxSpeed = 10f;
-	private float rotation = 0, rotationVel = 0;
+	private float accel = 0f;
+	private float rotAccel = 0f;
+
+	private float speed = 0f;
+	private float rotation = 0;
+	private float rotSpeed = 0f;
+
+	private float maxSpeed = 10f; /* Tiles per second */
+	private float maxRotSpeed = 30f; /* degrees per second */
 	private Vector2 tmp = new Vector2();
 
 	Turret turret;
@@ -58,7 +65,12 @@ public class EnemyTest extends Vehicle {
 		if (!screen.hasGameObject(turret))
 			screen.addGameObject(turret);
 
-		rotation += rotationVel * delta;
+		rotSpeed += rotAccel * delta;
+		rotSpeed = MathUtils.min(maxRotSpeed, rotSpeed);
+		rotation += rotSpeed * delta;
+
+		speed += accel * delta;
+		speed = MathUtils.min(maxSpeed, speed);
 
 		Vector2 position = physics.getPosition();
 		tmp.set(speed, 0).rotate(rotation);
@@ -76,24 +88,26 @@ public class EnemyTest extends Vehicle {
 
 	@Override
 	public void turnLeft() {
-		rotationVel += 0.25f;
-		speed *= 0.99f;
+		rotAccel = 10f;
 	}
 
 	@Override
 	public void turnRight() {
-		rotationVel -= 0.25f;
-		speed *= 0.99f;
+		rotAccel = -10f;
 	}
 
 	@Override
 	public void accelerate() {
 		speed = MathUtils.min(speed + 0.1f, maxSpeed);
-		rotationVel *= 0.95f;
 	}
 
 	@Override
 	public void brake() {
-		speed = MathUtils.max(speed - 0.2f, 0);
+		if (speed > 0)
+			accel = -Math.abs(accel) * 0.99f;
+		else
+			accel = Math.abs(accel) * 0.99f;
+
+		rotAccel *= 0.95f;
 	}
 }

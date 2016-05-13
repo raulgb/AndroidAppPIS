@@ -6,7 +6,8 @@
 /build
 .gradle/
 *.iml
-/local.properties
+local.properties
+
 *.log
 
 # Crashlytics configuations and log files

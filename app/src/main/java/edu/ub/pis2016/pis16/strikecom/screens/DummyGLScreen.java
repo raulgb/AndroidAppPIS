@@ -7,13 +7,10 @@ import javax.microedition.khronos.opengles.GL10;
 
 import edu.ub.pis2016.pis16.strikecom.StrikeComGLGame;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Game;
-import edu.ub.pis2016.pis16.strikecom.engine.framework.Graphics;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.InputProcessor;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
-import edu.ub.pis2016.pis16.strikecom.engine.framework.graphics.Sprite;
 import edu.ub.pis2016.pis16.strikecom.engine.game.GameMap;
 import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
-import edu.ub.pis2016.pis16.strikecom.engine.game.component.BehaviorComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.GraphicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
@@ -31,24 +28,25 @@ import edu.ub.pis2016.pis16.strikecom.engine.physics.Physics2D;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Rectangle;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Pool;
-import edu.ub.pis2016.pis16.strikecom.gameplay.EnemyTest;
 import edu.ub.pis2016.pis16.strikecom.gameplay.StrikeBaseTest;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.ProjectileBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.VehicleFollowBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
 
+import static edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig.*;
+
 /**
  * Dummy OpenGL screen.
- * <p/>
+ * <p>
  * Order of calls:
  * - Created
  * - Resumed
  * - Resized
- * <p/>
+ * <p>
  * Loop:
  * - Update
  * - Presented
- * <p/>
+ * <p>
  * On back:
  * - Paused
  * - Disposed
@@ -62,20 +60,13 @@ public class DummyGLScreen extends Screen {
 
 	OrthoCamera camera;
 
-	/** Size of tiles in pixels */
-	private final int TILE_SIZE = 16;
-	/** Size of map in tiles */
-	private final int MAP_SIZE = 16;
-
 	Physics2D physics2D;
 	GameMap gameMap;
 
 	GameObject moveIcon;
 	StrikeBaseTest strikeBase;
 
-
 	public Pool<GameObject> projectilePool;
-
 	private Vector2 targetPos = new Vector2();
 	private Vector2 tmp = new Vector2();
 
@@ -84,13 +75,14 @@ public class DummyGLScreen extends Screen {
 		Log.i("DUMMY_SCREEN", "Created");
 
 		glGraphics = game.getGLGraphics();
-		camera = new OrthoCamera(glGraphics, glGraphics.getWidth(), glGraphics.getHeight());
-		camera.zoom = 1 / getZoomConstant();
-		//camera.zoom = 1 / 8f;
 
-		physics2D = new Physics2D(MAP_SIZE * TILE_SIZE, MAP_SIZE * TILE_SIZE);
-		batch = new SpriteBatch(game.getGLGraphics(), 2048);
-		gameMap = new GameMap(physics2D, 16, 0L, 16, 3, 0.5f);
+		// Create camera, set zoom to fit TILES_ON_SCREEN
+		camera = new OrthoCamera(glGraphics, glGraphics.getWidth(), glGraphics.getHeight());
+		camera.zoom = (float) (TILES_ON_SCREEN * TILE_SIZE) / glGraphics.getWidth();
+
+		physics2D = new Physics2D(MAP_SIZE, MAP_SIZE);
+		batch = new SpriteBatch(game.getGLGraphics(), 512);
+		gameMap = new GameMap(physics2D, TILE_SIZE, 0L, 16, 3, 0.5f);
 
 		projectilePool = new Pool<>(new Pool.PoolObjectFactory<GameObject>() {
 			@Override
@@ -108,52 +100,56 @@ public class DummyGLScreen extends Screen {
 			}
 		}, 64);
 
+
 		// ------ STRIKEBASE CONFIG ------------
 		strikeBase = new StrikeBaseTest(new StrikeBaseConfig(StrikeBaseConfig.Model.MKII));
 		strikeBase.putComponent(new VehicleFollowBehavior());
 		strikeBase.setTag("playerStrikeBase");
 		strikeBase.setLayer(LAYER_1);
-		strikeBase.setPosition(128, 128);
-		strikeBase.hitpoints = 20;
-		strikeBase.maxHitpoints = 20;
+		strikeBase.setPosition(MAP_SIZE / 2f, MAP_SIZE / 2f);
+		strikeBase.hitpoints = 50;
+		strikeBase.maxHitpoints = 50;
 		addGameObject("StrikeBase", strikeBase);
 
-		// HealthBar
-		GameObject healthBar = new GameObject();
-		healthBar.putComponent(new PhysicsComponent());
-		healthBar.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("healthbar", 0)));
-		healthBar.setLayer(LAYER_GUI);
-		healthBar.putComponent(new BehaviorComponent() {
-			@Override
-			public void update(float delta) {
-				gameObject.setPosition(strikeBase.getPosition().add(0, 24));
-				gameObject.getComponent(GraphicsComponent.class).getSprite().setScale(2f * ((float) strikeBase.hitpoints / strikeBase.maxHitpoints), 0.20f);
-			}
-		});
-		addGameObject("HealthBar", healthBar);
+//		// HealthBar
+//		GameObject healthBar = new GameObject();
+//		healthBar.putComponent(new PhysicsComponent());
+//		healthBar.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("healthbar", 0)));
+//		healthBar.setLayer(LAYER_GUI);
+//		healthBar.putComponent(new BehaviorComponent() {
+//			@Override
+//			public void update(float delta) {
+//				gameObject.setPosition(strikeBase.getPosition().add(0, 24));
+//				gameObject.getComponent(GraphicsComponent.class).getSprite().setScale(2f * ((float) strikeBase.hitpoints / strikeBase.maxHitpoints), 0.20f);
+//			}
+//		});
+//		addGameObject("HealthBar", healthBar);
 
-		// ------ MOVE ICON CONFIG ------------
-		moveIcon = new GameObject();
-		moveIcon.setLayer(LAYER_GUI);
-		moveIcon.putComponent(new PhysicsComponent());
-		moveIcon.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("cursor_move")));
-		moveIcon.getComponent(GraphicsComponent.class).getSprite().setScale(0.3f);
-		addGameObject("MoveIcon", moveIcon);
+//		// ------ MOVE ICON CONFIG ------------
+//		moveIcon = new GameObject();
+//		moveIcon.setLayer(LAYER_GUI);
+//		moveIcon.putComponent(new PhysicsComponent());
+//		moveIcon.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("cursor_move")));
+//		moveIcon.getComponent(GraphicsComponent.class).getSprite().setScale(0.3f);
+//		addGameObject("MoveIcon", moveIcon);
 
-		// ------ ENEMY TEST CONFIG ------------
-		EnemyTest enemy = new EnemyTest();
-		enemy.setTag("enemyTank");
-		enemy.getComponent(PhysicsComponent.class).setPosition(64, 86);
-		enemy.putComponent(new BehaviorComponent() {
-			@Override
-			public void update(float delta) {
-				if (strikeBase.getPosition().dst2(gameObject.getPosition()) > 32 * 32)
-					gameObject.getComponent(VehicleFollowBehavior.class).setTarget(strikeBase.getPosition());
-				else
-					gameObject.getComponent(VehicleFollowBehavior.class).setTarget(null);
-			}
-		});
-		addGameObject("EnemyTest", enemy);
+//		// ------ ENEMY TEST CONFIG ------------
+//		EnemyTest enemy = new EnemyTest();
+//		enemy.setTag("enemyTank");
+//		enemy.getComponent(PhysicsComponent.class)
+//				.setPosition(strikeBase.getPosition().add(-4, 0));
+//		enemy.putComponent(new BehaviorComponent() {
+//			@Override
+//			public void update(float delta) {
+//				float range = 4 * GameConfig.TILE_SIZE;
+//
+//				if (strikeBase.getPosition().dst2(gameObject.getPosition()) > range * range)
+//					gameObject.getComponent(VehicleFollowBehavior.class).setTarget(strikeBase.getPosition());
+//				else
+//					gameObject.getComponent(VehicleFollowBehavior.class).setTarget(null);
+//			}
+//		});
+//		addGameObject("EnemyTest", enemy);
 
 		Texture.reloadManagedTextures();
 
@@ -214,35 +210,36 @@ public class DummyGLScreen extends Screen {
 			}
 		});
 
-		addInputProcessor(new InputProcessor() {
-			@Override
-			public boolean touchDown(float x, float y, int pointer) {
-				moveOrder(x, y);
-				return true;
-			}
-
-			@Override
-			public boolean touchDragged(float x, float y, int pointer) {
-				moveOrder(x, y);
-				return true;
-			}
-
-			private void moveOrder(float x, float y) {
-				targetPos.set(x, y);
-				camera.unproject(targetPos);
-				strikeBase.getComponent(VehicleFollowBehavior.class).setTarget(targetPos);
-				moveIcon.getComponent(PhysicsComponent.class).setPosition(targetPos);
-			}
-		});
+//		addInputProcessor(new InputProcessor() {
+//			@Override
+//			public boolean touchDown(float x, float y, int pointer) {
+//				moveOrder(x, y);
+//				return true;
+//			}
+//
+//			@Override
+//			public boolean touchDragged(float x, float y, int pointer) {
+//				moveOrder(x, y);
+//				return true;
+//			}
+//
+//			private void moveOrder(float x, float y) {
+//				targetPos.set(x, y);
+//				camera.unproject(targetPos);
+//				strikeBase.getComponent(VehicleFollowBehavior.class).setTarget(targetPos);
+//				moveIcon.getComponent(PhysicsComponent.class).setPosition(targetPos);
+//			}
+//		});
 	}
 
-	WindowedMean fpsMean = new WindowedMean(5);
+	WindowedMean fpsMean = new WindowedMean(10);
 	float second = 0;
 
 	@Override
 	public void update(float delta) {
 		if (gamePaused)
-			delta = 0f;
+			return;
+
 		super.update(delta);
 
 		// FPS Counter
@@ -263,8 +260,7 @@ public class DummyGLScreen extends Screen {
 			go.update(delta);
 
 		// Move camera to strikebase
-		camera.position.set(strikeBase.getPosition());
-		//camera.position.add(strikeBase.getComponent(PhysicsComponent.class).getVelocity().scl(0.75f));
+		camera.position.set(getGameObject("TestObject").getPosition());
 		camera.update();
 	}
 
@@ -275,7 +271,7 @@ public class DummyGLScreen extends Screen {
 
 		batch.begin(Assets.SPRITE_ATLAS.getTexture());
 
-		gameMap.draw(batch, strikeBase.getComponent(PhysicsComponent.class).getPosition());
+		gameMap.draw(batch, camera.position);
 
 		for (GameObject go : this.getGameObjects())
 			go.draw(batch);

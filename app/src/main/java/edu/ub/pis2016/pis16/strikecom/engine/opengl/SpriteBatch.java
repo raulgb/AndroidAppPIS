@@ -35,21 +35,21 @@ public class SpriteBatch {
 		int len = indices.length;
 		short j = 0;
 		for (int i = 0; i < len; i += 6, j += 4) {
-			indices[i + 0] = (short)(j + 0);
-			indices[i + 1] = (short)(j + 1);
-			indices[i + 2] = (short)(j + 2);
-			indices[i + 3] = (short)(j + 2);
-			indices[i + 4] = (short)(j + 3);
-			indices[i + 5] = (short)(j + 0);
+			indices[i + 0] = (short) (j + 0);
+			indices[i + 1] = (short) (j + 1);
+			indices[i + 2] = (short) (j + 2);
+			indices[i + 3] = (short) (j + 2);
+			indices[i + 4] = (short) (j + 3);
+			indices[i + 5] = (short) (j + 0);
 		}
 		vertices.setIndices(indices, 0, indices.length);
 	}
 
 	/** Begin a new batch of sprites, which will all use the same texture. */
 	public void begin(Texture texture) {
-		if(texture == null)
+		if (texture == null)
 			throw new IllegalArgumentException("Texture can't be null");
-		if(boundTexture != null)
+		if (boundTexture != null)
 			throw new IllegalStateException("Call end() before starting a new batch.");
 
 		// Enable blend and texturing
@@ -66,13 +66,17 @@ public class SpriteBatch {
 
 	/** Drawing will actually occur here. */
 	public void end() {
-		// Load the temp buffer onto the VBO and bind to OpenGL
-		vertices.setVertices(verticesBuffer, 0, bufferIndex);
-		vertices.bind();
-		// Draw the vertices to the screen, using numSprite*6 as lenght for the number of vertices
-		vertices.draw(GL10.GL_TRIANGLES, 0, numSprites * 6);
-		vertices.unbind();
 		boundTexture = null;
+
+		// Draw only if we sent at least one sprite
+		if (numSprites > 0) {
+			// Load the temp buffer onto the VBO and bind to OpenGL
+			vertices.setVertices(verticesBuffer, 0, bufferIndex);
+			vertices.bind();
+			// Draw the vertices to the screen, using numSprite*6 as lenght for the number of vertices
+			vertices.draw(GL10.GL_TRIANGLES, 0, numSprites * 6);
+			vertices.unbind();
+		}
 
 		// Cleanup gl states
 		GL10 gl = glGraphics.getGL();
@@ -85,7 +89,7 @@ public class SpriteBatch {
 	}
 
 	public void drawSprite(float x, float y, float angle, TextureRegion region) {
-		drawSprite(x, y, region.width, region.height, angle,  region);
+		drawSprite(x, y, region.width, region.height, angle, region);
 	}
 
 	public void drawSprite(float x, float y, float width, float height, TextureRegion region) {
@@ -124,12 +128,12 @@ public class SpriteBatch {
 	 * Draw a sprite at the given coordinates, scaled to fit the width and height and rotated to the
 	 * given angle.
 	 *
-	 * @param x      Horizontal Position
-	 * @param y      Vertical Position
-	 * @param width  Final width
-	 * @param height Final height
-	 * @param angleDeg  Rotation angle
-	 * @param region TextureRegion to draw
+	 * @param x        Horizontal Position
+	 * @param y        Vertical Position
+	 * @param width    Final width
+	 * @param height   Final height
+	 * @param angleDeg Rotation angle
+	 * @param region   TextureRegion to draw
 	 */
 	public void drawSprite(float x, float y, float width, float height, float angleDeg, TextureRegion region) {
 		checkTexture(region.texture);
@@ -184,8 +188,8 @@ public class SpriteBatch {
 	}
 
 	/** Checks if the texture is the same as was called in the begin() method. */
-	private void checkTexture(Texture texture){
-		if(boundTexture != texture)
+	private void checkTexture(Texture texture) {
+		if (boundTexture != texture)
 			throw new IllegalArgumentException("Send a different texture since begin();");
 	}
 }

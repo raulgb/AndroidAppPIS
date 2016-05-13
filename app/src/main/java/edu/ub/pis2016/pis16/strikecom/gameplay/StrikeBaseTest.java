@@ -14,6 +14,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.physics.Rectangle;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Animation;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.TurretBehavior;
+import edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.TurretItem;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.UpgradeItem;
@@ -81,8 +82,11 @@ public class StrikeBaseTest extends Vehicle {
 
 		// Create sprites
 		hull = new TextureSprite(sbmk1_hull[0]);
+		hull.setSize(GameConfig.TILE_SIZE * 2);
 		leftThreads = new TextureSprite(sbmk1_threads[LEFT][0]);
+		leftThreads.setSize(GameConfig.TILE_SIZE * 2);
 		rightThreads = new TextureSprite(sbmk1_threads[RIGHT][0]);
+		rightThreads.setSize(GameConfig.TILE_SIZE * 2);
 
 		// Animations
 		threadAnim = new Animation[2];
@@ -114,11 +118,6 @@ public class StrikeBaseTest extends Vehicle {
 		for (Animation a : threadAnim)
 			a.update(delta);
 
-		// Tank-like controls VERSION 1
-//		rotation += (-leftThreadVel + rightThreadVel) / (32) * delta;
-//		vel.set(leftThreadVel + rightThreadVel, 0).rotate(rotation);
-//		pos.add(vel.scl(0.5f * delta));
-
 		// Tank-like controls VERSION 2
 		final float width = 28;
 		float rotDelta = (-leftThreadVel + rightThreadVel) / width;
@@ -129,6 +128,7 @@ public class StrikeBaseTest extends Vehicle {
 		leftThread.set(0, width / 2f).rotate(rotation).add(pos);
 		rightThread.set(0, -width / 2f).rotate(rotation).add(pos);
 
+		// Pivot around either threads or center
 		if (rightThreadVel > leftThreadVel)
 			pivot.set(leftThread);
 		else if (leftThreadVel > rightThreadVel)
@@ -150,7 +150,7 @@ public class StrikeBaseTest extends Vehicle {
 
 		// TODO Make this more universal, range 0-1 and depending on actual size (game units)
 
-		switch(config.modelName) {
+		switch (config.modelName) {
 			case "sbmk1":
 				turret_0.set(-8, 8).scl(hull.getScale()).rotate(rotation).add(pos);
 				turret_1.set(8, 8).scl(hull.getScale()).rotate(rotation).add(pos);
@@ -234,7 +234,7 @@ public class StrikeBaseTest extends Vehicle {
 	public void addUpgrade(UpgradeItem item, int slot) {
 		// TODO implement
 
-		switch(UpgradeItem.AVAILABLE_FUNCTIONS.valueOf(item.getFunction())){
+		switch (UpgradeItem.AVAILABLE_FUNCTIONS.valueOf(item.getFunction())) {
 			case AI:
 				// Smart turrets
 				break;

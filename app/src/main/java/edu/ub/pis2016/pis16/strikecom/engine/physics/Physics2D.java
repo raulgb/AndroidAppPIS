@@ -1,7 +1,5 @@
 package edu.ub.pis2016.pis16.strikecom.engine.physics;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -42,7 +40,7 @@ public class Physics2D {
 		// HashGrid Init
 		this.worldWidth = worldWidth;
 		this.worldHeight = worldHeight;
-		float cellSize = 8; // 8 tiles per cell
+		float cellSize = 4; // 4x4 tiles per cell
 		spatialHashGrid = new SpatialHashGrid(worldWidth, worldHeight, cellSize);
 
 		// Listener and EventPool init

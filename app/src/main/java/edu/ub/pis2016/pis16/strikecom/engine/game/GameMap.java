@@ -10,6 +10,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureSprite;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Physics2D;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Perlin2D;
+import edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig;
 
 /**
  * Created by Alexander Bevzenko on 10/05/16.
@@ -50,8 +51,8 @@ public class GameMap {
 		this.tileSize = tileSize;
 		this.physics2D = physics2D;
 
-		width = physics2D.getWorldWidth() / tileSize;
-		height = physics2D.getWorldHeight() / tileSize;
+		width = physics2D.getWorldWidth();
+		height = physics2D.getWorldHeight();
 
 		pTable = new float[width][height];
 		discoveredTable = new boolean[width][height]; // minimap purposes
@@ -98,8 +99,9 @@ public class GameMap {
 
 		// Scale all sprites to same dimensions
 		for (TextureSprite tp : allSprites) {
-			float texSize = tp.getRegion().width;
-			tp.setScale(1.1f * (tileSize / texSize));
+			tp.setSize(tileSize);
+//			float texSize = tp.getRegion().width;
+//			tp.setScale(1.1f * (tileSize / texSize));
 		}
 
 		// Gen map
@@ -155,6 +157,8 @@ public class GameMap {
 	}
 
 	private TextureSprite getTile(float value) {
+//		if (true)
+//			return gray[(int) (MathUtils.lerp(0, 8, value))];
 		if (value > 0.5f)
 			return grass;
 		else if (value > 0.4f)

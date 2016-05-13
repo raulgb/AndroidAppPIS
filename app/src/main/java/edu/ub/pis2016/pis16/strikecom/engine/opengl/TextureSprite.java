@@ -59,6 +59,17 @@ public class TextureSprite {
 		position.set(x, y);
 	}
 
+	/** Set the pixel width and height */
+	public void setSize(float xy) {
+		setSize(xy, xy);
+	}
+
+	/** Set the pixel width and height */
+	public void setSize(float w, float h) {
+		float scalex = w / region.width;
+		float scaley = h / region.height;
+		setScale(scalex, scaley);
+	}
 
 	public void setScale(float s) {
 		this.scaleX = this.scaleY = s;

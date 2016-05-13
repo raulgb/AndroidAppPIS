@@ -27,11 +27,6 @@
         </activity>
 
         <activity
-            android:name=".Canvas2DGame"
-            android:screenOrientation="landscape">
-        </activity>
-
-        <activity
             android:name=".FragmentedGameActivity"
             android:screenOrientation="landscape">
         </activity>

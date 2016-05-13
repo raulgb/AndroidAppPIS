@@ -12,6 +12,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.physics.KinematicBody;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Rectangle;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Shape;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.StaticBody;
+import edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig;
 
 /**
  * A Component in charge of keeping the velocity, position and acceleration of a GameObject, as well as managing the
@@ -65,8 +66,8 @@ public class PhysicsComponent extends Component {
 
 	public Vector2 getPosition() {
 		if (body != null)
-			return position.set(body.position);
-		else return position;
+			return position.set(body.position).scl(GameConfig.TILE_SIZE);
+		else return position.scl(GameConfig.TILE_SIZE);
 	}
 
 	public void setPosition(Vector2 pos) {

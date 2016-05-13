@@ -142,9 +142,12 @@ public class Vector2 {
 		return this;
 	}
 
+	public boolean isZero() {
+		return Math.abs(x) < 0.01f && Math.abs(y) < 0.01f;
+	}
 
 	public boolean notZero() {
-		return Math.abs(x) > 0.001f && Math.abs(y) > 0.001f;
+		return Math.abs(x) > 0.01f && Math.abs(y) > 0.01f;
 	}
 
 	public Vector2 cpy() {
