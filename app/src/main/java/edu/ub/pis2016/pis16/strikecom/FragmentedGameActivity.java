@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import edu.ub.pis2016.pis16.strikecom.fragments.InventoryFragment;
+import edu.ub.pis2016.pis16.strikecom.fragments.MiniMapFragment;
 import edu.ub.pis2016.pis16.strikecom.fragments.SidebarFragment;
 import edu.ub.pis2016.pis16.strikecom.controller.SidebarEventListener;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
@@ -83,6 +84,7 @@ public class FragmentedGameActivity extends Activity {
 			@Override
 			public void onClickMinimap() {
 				// TODO Alexander
+				showMiniMapDialog();
 			}
 
 			@Override
@@ -132,6 +134,21 @@ public class FragmentedGameActivity extends Activity {
 		builder.setNegativeButton(getString(R.string.alert_negative), null);
 
 		(builder.create()).show();
+	}
+
+	/**
+	 * shows minimap dialogue window
+	 */
+	public void showMiniMapDialog() {
+		game.getCurrentScreen().pauseGame(); // pause game
+
+
+		MiniMapFragment miniMapFrag = new MiniMapFragment();
+		/*inventoryFrag.setInventory((Inventory) playerState.get("INVENTORY"));
+		inventoryFrag.setSelectedSlot(selectedSlot);
+		inventoryFrag.setTurretSelection(turretIsSelected);
+		inventoryFrag.show(getFragmentManager(), "Inventory_Fragment");*/
+		miniMapFrag.show(getFragmentManager(), "MiniMap");
 	}
 
 	public void showInventoryDialog(boolean turretIsSelected, int selectedSlot) {

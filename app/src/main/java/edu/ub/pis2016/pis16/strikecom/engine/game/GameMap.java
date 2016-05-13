@@ -19,6 +19,7 @@ public class GameMap {
 
 	private Perlin2D perlin;
 	private float[][] pTable;
+	private boolean[][] discoveredTable; // to show discovered terrain on minimap
 	private TextureSprite[][] tTable;
 	private Physics2D physics2D;
 	private int tileSize;
@@ -53,6 +54,7 @@ public class GameMap {
 		height = physics2D.getWorldHeight() / tileSize;
 
 		pTable = new float[width][height];
+		discoveredTable = new boolean[width][height]; // minimap purposes
 		tTable = new TextureSprite[width][height];
 		pTable = perlin.perlinMap(width, height, squareSize, octaves, persistence);
 
@@ -185,12 +187,56 @@ public class GameMap {
 					continue;
 //				if (center.dst2(x, y) > 8 * tileSize * 8 * tileSize)
 //					continue;
-
+				discoveredTable[row][col]=true;
 				tTable[row][col].draw(batch, x, y);
 			}
 		}
 
 
+	}
+
+	/**
+	 * for minimap rendering purposes
+	 * @param value perlin noise value
+	 * @return
+	 */
+	private TextureSprite getGray(float value) {
+		if (value > 0.5f)
+			return gray[5]; //equvalent of grass
+		else if (value > 0.4f)
+			return gray[3]; // equivalent of dry
+		else
+			return gray[0]; // equivalent of sand
+	}
+
+	/**
+	 * draws minimap on GL screen centered on desired position - currently 2x2 pixels for  a tile using gray tiles
+	 *
+	 * @param batch SpriteBatch
+	 * @param center position where map will be drawn
+	 */
+	public void drawMap(SpriteBatch batch, Vector2 center){
+		float tmpY;
+		float tmpX;
+		TextureSprite tmp;
+
+		for (int y = 0; y < height; y++) {
+			tmpY=(center.y-height+y*2);
+			for (int x = 0; x < width; x++) {
+				tmpX=(center.x - width+x*2);
+				if(discoveredTable[y][x]){
+					tmp= getGray(pTable[x][y]);
+					tmp.setScale(0.25f); //warning: resize works for other instances of this sprites
+					tmp.draw(batch,tmpX,tmpY);
+				}else{
+					tmp= gray[6];
+					tmp.setScale(0.25f); //warning: resize works for other instances of this sprites
+					tmp.draw(batch,tmpX,tmpY);
+				}
+
+
+			}
+		}
 	}
 
 }

@@ -22,11 +22,8 @@ import edu.ub.pis2016.pis16.strikecom.engine.opengl.Texture;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureRegion;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureSprite;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.ContactListener;
-import edu.ub.pis2016.pis16.strikecom.engine.physics.DynamicBody;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Physics2D;
-import edu.ub.pis2016.pis16.strikecom.engine.physics.Rectangle;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
-import edu.ub.pis2016.pis16.strikecom.engine.util.Perlin2D;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Pool;
 import edu.ub.pis2016.pis16.strikecom.gameplay.StrikeBaseTest;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.ProjectileBehavior;
@@ -71,7 +68,6 @@ public class AlexanderScreen extends Screen {
 	TextureSprite g5;
 	TextureSprite g6;
 	TextureSprite g7;
-	float[][] pTable;
 	GameMap gameMap;
 
 
@@ -90,7 +86,7 @@ public class AlexanderScreen extends Screen {
 		//camera.zoom = 1 / 8f;
 
 		physics2D = new Physics2D(1024, 1024);
-		batch = new SpriteBatch(game.getGLGraphics(), 8192);
+		batch = new SpriteBatch(game.getGLGraphics(), 8192*2);
 
 		projectilePool = new Pool<>(new Pool.PoolObjectFactory<GameObject>() {
 			@Override
@@ -131,10 +127,7 @@ public class AlexanderScreen extends Screen {
 		g7 = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("gray",7));
 
 		// TODO Changed Constructur
-		//gameMap = new GameMap(1339, 1024,1024,16,2,0.5f,physics2D,strikeBase);
-		/*Perlin2D perlin = new Perlin2D(1339);
-		pTable = new float[64][64];
-		pTable = perlin.perlinMap(64,64,8,2,0.5f);*/
+		gameMap = new GameMap(physics2D,16,1337,16,2,0.5f);
 
 		physics2D.addContactListener(new ContactListener() {
 			@Override
@@ -225,12 +218,17 @@ public class AlexanderScreen extends Screen {
 			}
 		}
 		*/
+		gameMap.draw(batch, strikeBase.getPosition());
+
 
 		for (GameObject go : this.getGameObjects())
 			go.draw(batch);
 
+		gameMap.drawMap(batch, strikeBase.getPosition());
+
 		batch.end();
 	}
+
 
 	@Override
 	public void resume() {
