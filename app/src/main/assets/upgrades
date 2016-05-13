@@ -1,1 +1,4 @@
-Composite armour;composite_64;turret_mk1;Enhances your base endurance;ARMOUR_COMPOSITE;4000
+Composite armour;composite_64;composite;Increases your base endurance;ARMOUR_COMPOSITE;4000
+Advanced A.I.;ai_64;ai;Improves your turrets accuracy;AI;8000
+Plated armour;plate_64;plate;Slightly increases your base endurance;ARMOUR_PLATE;2000
+Advanced power cells;engine_64;engine;Reduces fuel consumption;ENGINE_EFFICIENCY;6000

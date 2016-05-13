@@ -63,7 +63,7 @@ public class SidebarFragment extends Fragment {
 				turretSlotsMap.put(0, btnT1);
 				turretSlotsMap.put(1, btnT3);
 				turretSlotsMap.put(2, btnT4);
-				turretSlotsMap.put(3, btnT5);
+				turretSlotsMap.put(3, btnT6);
 
 				btnT1.setOnClickListener(new View.OnClickListener() {
 					@Override
@@ -71,34 +71,31 @@ public class SidebarFragment extends Fragment {
 						game.getSidebarListener().onClickTurret(0);
 					}
 				});
-				btnT2.setOnClickListener(new View.OnClickListener() {
+
+				btnT2.setBackgroundColor(Color.TRANSPARENT);
+				btnT2.setEnabled(false);
+
+				btnT3.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View view) {
 						game.getSidebarListener().onClickTurret(1);
 					}
 				});
-				btnT3.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						game.getSidebarListener().onClickTurret(2);
-					}
-				});
+
 				btnT4.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View view) {
-						game.getSidebarListener().onClickTurret(3);
-					}
-				});
-				btnT5.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
 						game.getSidebarListener().onClickTurret(2);
 					}
 				});
+
+				btnT5.setBackgroundColor(Color.TRANSPARENT);
+				btnT5.setEnabled(false);
+
 				btnT6.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View view) {
-						game.getSidebarListener().onClickTurret(2);
+						game.getSidebarListener().onClickTurret(3);
 					}
 				});
 				break;

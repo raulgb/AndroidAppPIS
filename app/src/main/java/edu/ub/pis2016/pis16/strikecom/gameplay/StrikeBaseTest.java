@@ -149,10 +149,22 @@ public class StrikeBaseTest extends Vehicle {
 			rotation = 360 + rotation;
 
 		// TODO Make this more universal, range 0-1 and depending on actual size (game units)
-		turret_0.set(-8, 8).scl(hull.getScale()).rotate(rotation).add(pos);
-		turret_1.set(8, 8).scl(hull.getScale()).rotate(rotation).add(pos);
-		turret_2.set(-8, -8).scl(hull.getScale()).rotate(rotation).add(pos);
-		turret_3.set(8, -8).scl(hull.getScale()).rotate(rotation).add(pos);
+
+		switch(config.modelName) {
+			case "sbmk1":
+				turret_0.set(-8, 8).scl(hull.getScale()).rotate(rotation).add(pos);
+				turret_1.set(8, 8).scl(hull.getScale()).rotate(rotation).add(pos);
+				turret_2.set(-8, -8).scl(hull.getScale()).rotate(rotation).add(pos);
+				turret_3.set(8, -8).scl(hull.getScale()).rotate(rotation).add(pos);
+				break;
+			case "sbmk2":
+				turret_0.set(-8, 8).scl(hull.getScale()).rotate(rotation).add(pos);
+				turret_1.set(-8, -8).scl(hull.getScale()).rotate(rotation).add(pos);
+				turret_2.set(8, -8).scl(hull.getScale()).rotate(rotation).add(pos);
+				turret_3.set(8, 8).scl(hull.getScale()).rotate(rotation).add(pos);
+				break;
+		}
+
 
 		// Commit rotation changes
 		physics.setVelocity(tmp.set((leftThreadVel + rightThreadVel) / 2f, 0).rotate(rotation));
@@ -235,13 +247,9 @@ public class StrikeBaseTest extends Vehicle {
 			case ENGINE_EFFICIENCY:
 				// Reduces fuel consumption
 				break;
-			case ENGINE_SPEED:
-				// Increases speed
-				break;
 			case FUEL:
 				break;
 		}
-
 		equippedUpgrades.put(slot, item);
 	}
 

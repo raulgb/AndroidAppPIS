@@ -2,9 +2,17 @@ package edu.ub.pis2016.pis16.strikecom.gameplay.items;
 
 import java.util.HashMap;
 
+import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
+import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.BehaviorComponent;
+import edu.ub.pis2016.pis16.strikecom.engine.game.component.GraphicsComponent;
+import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
+import edu.ub.pis2016.pis16.strikecom.engine.math.Angle;
+import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 import edu.ub.pis2016.pis16.strikecom.gameplay.Turret;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.CustomTurretBehavior;
+import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.TurretBehavior;
+import edu.ub.pis2016.pis16.strikecom.screens.DummyGLScreen;
 
 public class TurretItem extends Item {
 	float[] stats;
@@ -47,7 +55,11 @@ public class TurretItem extends Item {
 				"\n\n" + flavour);
 	}
 
-	public BehaviorComponent getTurretBehavior() {
-		return new CustomTurretBehavior(stats[2], 0.15f);
+	public BehaviorComponent getBehavior() {
+		return null;
+	}
+
+	public GraphicsComponent getGraphics() {
+		return new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion(this.image));
 	}
 }

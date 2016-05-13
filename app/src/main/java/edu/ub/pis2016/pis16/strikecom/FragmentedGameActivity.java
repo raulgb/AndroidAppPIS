@@ -17,6 +17,8 @@ import android.widget.Button;
 import java.io.IOException;
 import java.util.HashMap;
 
+import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
+import edu.ub.pis2016.pis16.strikecom.engine.game.component.BehaviorComponent;
 import edu.ub.pis2016.pis16.strikecom.fragments.InventoryFragment;
 import edu.ub.pis2016.pis16.strikecom.fragments.MiniMapFragment;
 import edu.ub.pis2016.pis16.strikecom.fragments.SidebarFragment;
@@ -25,6 +27,8 @@ import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.fragments.SlotsFragment;
 import edu.ub.pis2016.pis16.strikecom.gameplay.InventoryManager;
 import edu.ub.pis2016.pis16.strikecom.gameplay.StrikeBaseTest;
+import edu.ub.pis2016.pis16.strikecom.gameplay.Turret;
+import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.VehicleFollowBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.Inventory;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.Item;
@@ -140,14 +144,9 @@ public class FragmentedGameActivity extends Activity {
 	 * shows minimap dialogue window
 	 */
 	public void showMiniMapDialog() {
-		game.getCurrentScreen().pauseGame(); // pause game
-
+		//game.getCurrentScreen().pauseGame(); // pause game
 
 		MiniMapFragment miniMapFrag = new MiniMapFragment();
-		/*inventoryFrag.setInventory((Inventory) playerState.get("INVENTORY"));
-		inventoryFrag.setSelectedSlot(selectedSlot);
-		inventoryFrag.setTurretSelection(turretIsSelected);
-		inventoryFrag.show(getFragmentManager(), "Inventory_Fragment");*/
 		miniMapFrag.show(getFragmentManager(), "MiniMap");
 	}
 
@@ -191,6 +190,13 @@ public class FragmentedGameActivity extends Activity {
 		Bitmap b = Bitmap.createScaledBitmap(original, slotBtn.getWidth(), slotBtn.getHeight(), false);
 		Drawable d = new BitmapDrawable(getResources(), b);
 		slotBtn.setCompoundDrawablesWithIntrinsicBounds(d, null, null, null);
+
+		String tName = "turret_"+Integer.toString(slot);
+		Turret turret = new Turret(item.getModel(), strikeBase, tName);
+		turret.setParent(strikeBase);
+		//turret.putComponent( item.getTurretBehavior() );
+		turret.setLayer(Screen.LAYER_3);
+		screen.addGameObject(tName, turret);
 
 		screen.resumeGame(); // resume game
 	}
@@ -236,9 +242,6 @@ public class FragmentedGameActivity extends Activity {
 			Inventory inv = (Inventory) playerState.get("INVENTORY");
 			inv.addItem(turret);
 			playerState.put("INVENTORY", inv);
-
-			Button view = (Button) sidebar.getTurretSlot(slot);
-			//view.setCompoundDrawables(null, null, null, null);
 		}
 	}
 
@@ -251,9 +254,6 @@ public class FragmentedGameActivity extends Activity {
 			Inventory inv = (Inventory) playerState.get("INVENTORY");
 			inv.addItem(upgrade);
 			playerState.put("INVENTORY", inv);
-
-			Button view = (Button) sidebar.getTurretSlot(slot);
-			//view.setCompoundDrawables(null, null, null, null);
 		}
 	}
 
@@ -262,7 +262,7 @@ public class FragmentedGameActivity extends Activity {
 		String upgradesFile = getString(R.string.upgradesFile);
 		try {
 			InventoryManager im = new InventoryManager(this, turretsFile, upgradesFile);
-			playerState.put("INVENTORY", im.getShopInventory(10, 1));
+			playerState.put("INVENTORY", im.getShopInventory(10, 5));
 
 		} catch (IOException ex){
 			Inventory testInventory = new Inventory();

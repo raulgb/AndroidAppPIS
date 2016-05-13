@@ -1,6 +1,8 @@
 package edu.ub.pis2016.pis16.strikecom.gameplay.items;
 
 import edu.ub.pis2016.pis16.strikecom.engine.game.Component;
+import edu.ub.pis2016.pis16.strikecom.engine.game.component.GraphicsComponent;
+import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 
 public class UpgradeItem extends Item{
 
@@ -9,8 +11,7 @@ public class UpgradeItem extends Item{
 		ARMOUR_PLATE,
 		ARMOUR_COMPOSITE,
 		AI,
-		ENGINE_EFFICIENCY,
-		ENGINE_SPEED
+		ENGINE_EFFICIENCY
 
 	}
 
@@ -55,5 +56,10 @@ public class UpgradeItem extends Item{
 	@Override
 	public String toString(){
 		return (this.name + ";" + this.image + ";" + this.model + ";" + this.flavour + ";" + this.function + ";" + Float.toString(this.price));
+	}
+
+	// Requires model name of the strikebase configuration
+	public GraphicsComponent getGraphics(String modelName) {
+		return new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion(this.model + "_" + modelName));
 	}
 }
