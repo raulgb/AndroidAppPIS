@@ -89,7 +89,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 style="?android:attr/borderlessButtonStyle"
-                android:text="@string/cancel_button"
+                android:text="@string/exit_button"
                 android:background="@drawable/btn_retro_canv"/>
         </LinearLayout>
 

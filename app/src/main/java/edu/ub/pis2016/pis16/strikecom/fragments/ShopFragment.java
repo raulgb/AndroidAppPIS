@@ -6,8 +6,13 @@ import android.widget.AdapterView;
 import edu.ub.pis2016.pis16.strikecom.FragmentedGameActivity;
 import edu.ub.pis2016.pis16.strikecom.R;
 import edu.ub.pis2016.pis16.strikecom.gameplay.InventoryItemAdapter;
+import edu.ub.pis2016.pis16.strikecom.gameplay.items.TurretItem;
 
 public class ShopFragment extends InventoryFragment {
+
+	private String shopID;
+
+	public void setId(String shopID) { this.shopID = shopID; }
 
 	@Override
 	protected void configButtons(){
@@ -15,21 +20,26 @@ public class ShopFragment extends InventoryFragment {
 		equipBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				dismiss();
+				//dismiss();
 				FragmentedGameActivity callingActivity = (FragmentedGameActivity) getActivity();
 				if(turretIsSelected) {
-					callingActivity.buyItem(inventory.getTurret(selectedItem));
+					callingActivity.buyItem(shopID, inventory.getTurret(selectedItem));
+					fillItemList();
 				} else {
-					callingActivity.buyItem(inventory.getUpgrade(selectedItem));
+					callingActivity.buyItem(shopID, inventory.getUpgrade(selectedItem));
+					fillItemList();
 				}
 			}
 		});
 
+		cancelBtn.setText(getString(R.string.exit_button));
 		cancelBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				dismiss();
 				FragmentedGameActivity callingActivity = (FragmentedGameActivity) getActivity();
+				callingActivity.updateScrapCounter();
+				callingActivity.updateFuelCounter();
 				callingActivity.resumeGame();
 			}
 		});
@@ -46,7 +56,7 @@ public class ShopFragment extends InventoryFragment {
 		itemList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-				equipBtn.setText( getString(R.string.equip_button) );
+				//equipBtn.setText( getString(R.string.equip_button) );
 				if(i>=0){ //valid item is selected
 					selectedItem = i;
 
