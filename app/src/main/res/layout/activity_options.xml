@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/select_bg"
+    android:baselineAligned="false">
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="20dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/Options"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/options_Options"
+            android:layout_weight="0.2"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="40sp"
+            android:textStyle="bold"
+            android:textColor="#000"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/Music"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="80dp"
+            android:text="@string/options_Music"
+            android:layout_weight="0.2"
+            android:gravity="center"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
+
+        <SeekBar
+            android:id="@+id/seekBarMusic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:progressDrawable="@drawable/seekbar_progressbar"
+            android:layout_weight="0.7"
+            android:layout_marginTop="80dp"
+            android:progress="100"
+            android:thumbTintMode="multiply"
+            android:thumb="@drawable/seekbar_thumb"
+            android:max="100" />
+
+        <TextView
+            android:id="@+id/percentMusic"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="80dp"
+            android:gravity="center"
+            android:text="@string/options_percentMusic"
+            android:layout_weight="0.1"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/Sound"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="80dp"
+            android:gravity="center"
+            android:text="@string/options_Sound"
+            android:layout_weight="0.2"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
+
+        <SeekBar
+            android:id="@+id/seekBarSound"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:progressDrawable="@drawable/seekbar_progressbar"
+            android:layout_weight="0.7"
+            android:layout_marginTop="80dp"
+            android:progress="100"
+            android:thumbTintMode="multiply"
+            android:thumb="@drawable/seekbar_thumb"
+            android:max="100" />
+
+        <TextView
+            android:id="@+id/percentSound"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="80dp"
+            android:gravity="center"
+            android:text="@string/options_percentSound"
+            android:layout_weight="0.1"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="20dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/options_exit"
+            android:id="@+id/btnExit2"
+            android:textSize="35dp"
+            android:layout_weight="0.5"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="30dp"
+            style="?android:attr/borderlessButtonStyle"
+            android:background="@drawable/btn_retro_canv"
+            android:layout_marginRight="10dp"
+            android:textColor="@color/black"/>
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/options_Save"
+            android:id="@+id/btnSave"
+            android:textSize="35dp"
+            android:layout_weight="0.5"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="30dp"
+            style="?android:attr/borderlessButtonStyle"
+            android:background="@drawable/btn_retro_canv"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/black"/>
+    </LinearLayout>
+
+</LinearLayout>

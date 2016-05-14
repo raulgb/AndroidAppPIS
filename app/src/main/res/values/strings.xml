@@ -17,6 +17,15 @@
     <string name="sel_menu_mk2name">StrikeBase Mark. II</string>
     <string name="enter_name_toast">Please enter a name!</string>
 
+    <!-- Optins -->
+    <string name="options_Options">Options</string>
+    <string name="options_Music">Music</string>
+    <string name="options_Sound">Sound</string>
+    <string name="options_percentMusic">100%</string>
+    <string name="options_percentSound">100%</string>
+    <string name="options_Save">Save</string>
+    <string name="options_exit">Exit</string>
+
     <!-- Sidebar -->
     <string name="minimap">MINIMAP</string>
     <string name="resource_1">Scrap</string>
