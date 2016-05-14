@@ -32,12 +32,13 @@
     <string name="upgrade1_button"></string>
     <string name="upgrade2_button"></string>
     <string name="upgrade3_button"></string>
+    <string name="inventory_button">Inventory</string>
+    <string name="shop_button">Depot</string>
 
     <!-- Inventory -->
     <string name="equip_button">Equip</string>
     <string name="unequip_button">Unequip</string>
     <string name="use_item">Use</string>
-    <string name="inventory_button">Inventory</string>
     <string name="cancel_button">Cancel</string>
     <string name="inventory_description">Inventory</string>
     <string name="turrets_selection">Turrets</string>

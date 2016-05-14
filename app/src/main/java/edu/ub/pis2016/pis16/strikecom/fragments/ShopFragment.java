@@ -1,16 +1,13 @@
 package edu.ub.pis2016.pis16.strikecom.fragments;
-
+;
 import android.view.View;
 import android.widget.AdapterView;
 
+import edu.ub.pis2016.pis16.strikecom.FragmentedGameActivity;
 import edu.ub.pis2016.pis16.strikecom.R;
 import edu.ub.pis2016.pis16.strikecom.gameplay.InventoryItemAdapter;
 
 public class ShopFragment extends InventoryFragment {
-
-	private float playerScrap;
-
-	public void setPlayerScrap(float playerScrap) { this.playerScrap = playerScrap; }
 
 	@Override
 	protected void configButtons(){
@@ -19,6 +16,12 @@ public class ShopFragment extends InventoryFragment {
 			@Override
 			public void onClick(View view) {
 				dismiss();
+				FragmentedGameActivity callingActivity = (FragmentedGameActivity) getActivity();
+				if(turretIsSelected) {
+					callingActivity.buyItem(inventory.getTurret(selectedItem));
+				} else {
+					callingActivity.buyItem(inventory.getUpgrade(selectedItem));
+				}
 			}
 		});
 
@@ -26,12 +29,14 @@ public class ShopFragment extends InventoryFragment {
 			@Override
 			public void onClick(View view) {
 				dismiss();
+				FragmentedGameActivity callingActivity = (FragmentedGameActivity) getActivity();
+				callingActivity.resumeGame();
 			}
 		});
 	}
 
 	@Override
-	protected void fillItemList(){
+	protected void fillItemList() {
 		if(turretIsSelected) {
 			itemList.setAdapter(new InventoryItemAdapter(getActivity(), inventory.getTurretInventory()));
 		} else {
@@ -41,15 +46,15 @@ public class ShopFragment extends InventoryFragment {
 		itemList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+				equipBtn.setText( getString(R.string.equip_button) );
 				if(i>=0){ //valid item is selected
 					selectedItem = i;
-					String desc;
+
 					if(turretIsSelected) {
-						desc = inventory.getTurret(selectedItem).getDisplay() + "\n\n" + getString(R.string.player_scrap) + Float.toString(playerScrap);
+						itemDesc.setText( inventory.getTurret(selectedItem).getDisplay() );
 					} else {
-						desc = inventory.getTurret(selectedItem).getDisplay() + "\n\n" + getString(R.string.player_scrap) + Float.toString(playerScrap);
+						itemDesc.setText( inventory.getUpgrade(selectedItem).getDisplay() );
 					}
-					itemDesc.setText( desc );
 				}
 			}
 		});

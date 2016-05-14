@@ -7,7 +7,6 @@ import javax.microedition.khronos.opengles.GL10;
 
 import edu.ub.pis2016.pis16.strikecom.StrikeComGLGame;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Game;
-import edu.ub.pis2016.pis16.strikecom.engine.framework.Graphics;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.InputProcessor;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.graphics.Sprite;
@@ -107,6 +106,14 @@ public class DummyGLScreen extends Screen {
 				return projectile;
 			}
 		}, 64);
+
+		// ------ SHOP -----------------
+		GameObject shop = new GameObject();
+		shop.putComponent(new PhysicsComponent());
+		shop.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("healthbar", 0)));
+		shop.setLayer(LAYER_1);
+		shop.setPosition(200,200);
+		addGameObject("shop_1", shop);
 
 		// ------ STRIKEBASE CONFIG ------------
 		strikeBase = new StrikeBaseTest(new StrikeBaseConfig(StrikeBaseConfig.Model.MKII));

@@ -26,8 +26,6 @@ public class SlotsFragment extends DialogFragment {
 	private Item newItem;
 	private int selectedSlot = -1;
 	private boolean turretIsSelected = true;
-	//private HashMap<Integer, TurretItem> equippedTurrets = new HashMap<>();
-	//private HashMap<Integer, UpgradeItem> equippedUpgrades = new HashMap<>();
 
 	public void setStrikeBaseModel(StrikeBaseConfig.Model strikeBaseModel) {this.strikeBaseModel = strikeBaseModel; }
 
@@ -39,7 +37,7 @@ public class SlotsFragment extends DialogFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_slots, container);
 
-		TextView currentItemDesc = (TextView) view.findViewById(R.id.currentItemDesc);
+		final TextView currentItemDesc = (TextView) view.findViewById(R.id.currentItemDesc);
 
 		// NEW ITEM ATTRIBUTES
 		TextView newItemDesc = (TextView) view.findViewById(R.id.newItemDesc);
@@ -66,7 +64,7 @@ public class SlotsFragment extends DialogFragment {
 			public void onClick(View view) {
 				dismiss();
 				FragmentedGameActivity callingActivity = (FragmentedGameActivity) getActivity();
-				callingActivity.showInventoryDialog(turretIsSelected, -1);
+				callingActivity.showInventoryDialog(-1, turretIsSelected, true);
 			}
 		});
 

@@ -220,13 +220,19 @@ public class StrikeBaseTest extends Vehicle {
 	}
 
 	public void addTurret(TurretItem item, int slot) {
-		// TODO implement
+		String tName = "turret_"+Integer.toString(slot);
+		Turret turret = new Turret(item.getModel(), this, tName);
+		turret.setParent(this);
+		//turret.putComponent( item.getTurretBehavior() );
+		turret.setLayer(Screen.LAYER_3);
+		screen.addGameObject(tName, turret);
 
 		equippedTurrets.put(slot, item);
 	}
 
 	public void removeTurret(int slot) {
-		// TODO implement
+		String tName = "turret_"+Integer.toString(slot);
+		screen.removeGameObject(screen.getGameObject(tName));
 
 		equippedTurrets.remove(slot);
 	}

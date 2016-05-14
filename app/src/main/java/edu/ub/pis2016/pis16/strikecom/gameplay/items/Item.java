@@ -36,6 +36,8 @@ public abstract class Item implements Comparable<Item> {
 
 	public String getFlavour(){ return this.flavour; }
 
+	public float getPrice(){ return this.price; }
+
 	// Returns negative integer if object price is smaller than that of a given object, positive
 	// integer if price is bigger and zero if both have equal price.
 	@Override

@@ -1,7 +1,9 @@
 package edu.ub.pis2016.pis16.strikecom.fragments;
 
 import android.app.DialogFragment;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.ColorRes;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,31 +24,32 @@ import edu.ub.pis2016.pis16.strikecom.gameplay.items.UpgradeItem;
 
 public class InventoryFragment extends DialogFragment {
 
-	protected StrikeComGLGame game;
-
 	protected Inventory inventory;
 
 	protected Button equipBtn;
 	protected Button cancelBtn;
 	protected ListView itemList;
 	protected TextView itemDesc;
+	protected TextView scrapText;
 
+	protected int playerScrap = 0;
 	protected int selectedItem;
 	protected int selectedSlot = -1;
 
 	protected boolean turretIsSelected = true;
-
-	public void setGame(StrikeComGLGame game) {
-		this.game = game;
-	}
+	protected boolean switchListEnabled = true;
 
 	public void setInventory(Inventory inventory) { this.inventory = inventory; }
+
+	public void setPlayerScrap(int playerScrap) { this.playerScrap = playerScrap; }
 
 	public void setSelectedSlot(int selectedSlot) { this.selectedSlot = selectedSlot; }
 
 	public void setTurretSelection(boolean turretIsSelected) {
 		this.turretIsSelected = turretIsSelected;
 	}
+
+	public void setSwitchListEnabled(boolean isEnabled) { this.switchListEnabled = isEnabled; }
 
 	public TurretItem getSelectedTurretItem() {
 		if (selectedItem < 0){
@@ -69,6 +72,8 @@ public class InventoryFragment extends DialogFragment {
 
 		itemList = (ListView) view.findViewById(R.id.itemList); // list of items
 		itemDesc = (TextView) view.findViewById(R.id.itemDesc); // description of the item selected from the list
+		scrapText = (TextView) view.findViewById(R.id.playerScrap);
+		scrapText.setText(Integer.toString(playerScrap));
 
 		// Equip/unequip button
 		equipBtn = (Button) view.findViewById(R.id.inventoryBtn_1);
@@ -104,6 +109,15 @@ public class InventoryFragment extends DialogFragment {
 			}
 		});
 
+		if(!switchListEnabled) {
+			turretSelectionBtn.setEnabled(false);
+			turretSelectionBtn.setText("");
+			turretSelectionBtn.setBackgroundColor(Color.TRANSPARENT);
+			upgradeSelectionBtn.setEnabled(false);
+			upgradeSelectionBtn.setText("");
+			upgradeSelectionBtn.setBackgroundColor(Color.TRANSPARENT);
+		}
+
 		fillItemList();
 
 		getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
@@ -122,7 +136,7 @@ public class InventoryFragment extends DialogFragment {
 					if (turretIsSelected) { // selected item is a turret
 						TurretItem turret = inventory.getTurret(selectedItem);
 						if (selectedSlot < 0) { // show slots dialog if no valid slot has been selected
-							callingActivity.showSlotsDialog(true, turret);
+							callingActivity.showSlotsDialog(turret,true);
 						} else { // equip if slot already selected
 							callingActivity.equipTurret(turret, selectedSlot);
 						}
@@ -132,7 +146,7 @@ public class InventoryFragment extends DialogFragment {
 							callingActivity.useFuel(upgrade);
 						} else {
 							if (selectedSlot < 0) { // show slots dialog if no valid slot has been selected
-								callingActivity.showSlotsDialog(false, upgrade);
+								callingActivity.showSlotsDialog(upgrade, false);
 							} else { // equip if slot already selected
 								callingActivity.equipUpgrade(upgrade, selectedSlot);
 							}
@@ -147,6 +161,8 @@ public class InventoryFragment extends DialogFragment {
 			@Override
 			public void onClick(View view) {
 				dismiss();
+				FragmentedGameActivity callingActivity = (FragmentedGameActivity) getActivity();
+				callingActivity.resumeGame();
 			}
 		});
 	}
