@@ -36,7 +36,7 @@ public abstract class GLGameFragment extends Fragment implements Game, GLSurface
 
 	// Interface objects
 	GLGraphics glGraphics;
-	Audio audio;
+	AndroidAudio audio;
 	Input input;
 	FileIO fileIO;
 	Screen screen;
@@ -72,6 +72,8 @@ public abstract class GLGameFragment extends Fragment implements Game, GLSurface
 		// Return the GLSurfaceView object, same as setContentView();
 		return glView;
 	}
+
+
 
 	@Override
 	public void onPause() {
@@ -237,7 +239,7 @@ public abstract class GLGameFragment extends Fragment implements Game, GLSurface
 	}
 
 	@Override
-	public Audio getAudio() {
+	public AndroidAudio getAudio() {
 		return audio;
 	}
 }

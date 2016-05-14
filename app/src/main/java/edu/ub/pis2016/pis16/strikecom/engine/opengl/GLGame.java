@@ -37,7 +37,7 @@ public abstract class GLGame extends Activity implements Game, GLSurfaceView.Ren
 	GLSurfaceView glView;
 	GLGraphics glGraphics;
 
-	Audio audio;
+	AndroidAudio audio;
 	Input input;
 	FileIO fileIO;
 	Screen screen;
@@ -171,7 +171,7 @@ public abstract class GLGame extends Activity implements Game, GLSurfaceView.Ren
 	}
 
 	@Override
-	public Audio getAudio() {
+	public AndroidAudio getAudio() {
 		return audio;
 	}
 

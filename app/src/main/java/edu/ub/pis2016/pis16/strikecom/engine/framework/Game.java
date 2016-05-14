@@ -1,5 +1,6 @@
 package edu.ub.pis2016.pis16.strikecom.engine.framework;
 
+import edu.ub.pis2016.pis16.strikecom.engine.android.AndroidAudio;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.GLGraphics;
 
 /** Methods to allow for a gameFrag life-cycle */
@@ -12,7 +13,7 @@ public interface Game {
 
 	public GLGraphics getGLGraphics();
 
-	public Audio getAudio();
+	public AndroidAudio getAudio();
 
 	public void setScreen(Screen screen);
 

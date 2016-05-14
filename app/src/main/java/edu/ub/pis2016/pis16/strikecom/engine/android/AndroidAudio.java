@@ -22,7 +22,7 @@ public class AndroidAudio implements Audio {
 		this.soundPool = new SoundPool(20, AudioManager.STREAM_MUSIC, 0);
 	}
 
-	public Music newMusic(String filename) {
+	public AndroidMusic newMusic(String filename) {
 		try {
 			AssetFileDescriptor assetDescriptor = assets.openFd(filename);
 			return new AndroidMusic(assetDescriptor);
@@ -31,7 +31,7 @@ public class AndroidAudio implements Audio {
 		}
 	}
 
-	public Sound newSound(String filename) {
+	public AndroidSound newSound(String filename) {
 		try {
 			AssetFileDescriptor assetDescriptor = assets.openFd(filename);
 			int soundId = soundPool.load(assetDescriptor, 0);

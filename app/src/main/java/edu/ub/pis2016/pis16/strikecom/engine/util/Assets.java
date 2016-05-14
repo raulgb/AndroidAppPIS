@@ -2,8 +2,10 @@ package edu.ub.pis2016.pis16.strikecom.engine.util;
 
 import android.util.Log;
 
+import edu.ub.pis2016.pis16.strikecom.engine.android.AndroidMusic;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Game;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.audio.Sound;
+import edu.ub.pis2016.pis16.strikecom.engine.framework.audio.Music;
 
 /** Utility class for async resource loading */
 public class Assets {
@@ -17,6 +19,7 @@ public class Assets {
 	public static TextureAtlas SPRITE_ATLAS;
 
 	// Sounds and Music
+	public static AndroidMusic music;
 	public static Sound sfxShoot;
 
 	/** Launches the assetloader thread, using a Game instace to access the various underlying systems */
@@ -52,11 +55,15 @@ public class Assets {
 				// Global sprite atlas
 				SPRITE_ATLAS = new TextureAtlas(game, "sprites/sprites.atlas");
 
+				music = game.getAudio().newMusic("music.mp3");
+				music.setLooping(true);
+				music.setVolume(1f);
+				music.play();
 				Thread.sleep(500);
+
 				// Set flags
 				progress = 1;
 				ready = true;
-
 				Log.i("Assets", "Finished Loading");
 
 			}catch ( Exception e){
@@ -68,6 +75,7 @@ public class Assets {
 	/** Disposes of all managed assets */
 	public static void disposeAll() {
 		ready = false;
+		music.dispose();
 
 		SPRITE_ATLAS.dispose();
 	}
