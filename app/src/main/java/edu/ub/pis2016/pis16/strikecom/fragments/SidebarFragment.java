@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.HashMap;
@@ -25,6 +26,7 @@ public class SidebarFragment extends Fragment {
 
 	private TextView scrapText;
 	private TextView fuelText;
+	private Button btnInventory;
 
 	public void setGame(StrikeComGLGame game) {
 		this.game = game;
@@ -44,6 +46,8 @@ public class SidebarFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_sidebar, container, false);
+
+		btnInventory = (Button) view.findViewById(R.id.btnInventory);
 
 		// Resources display
 		scrapText = (TextView) view.findViewById(R.id.textScrap);
@@ -144,7 +148,7 @@ public class SidebarFragment extends Fragment {
 				game.getSidebarListener().onClickMinimap();
 			}
 		});
-		view.findViewById(R.id.btnInventory).setOnClickListener(new View.OnClickListener() {
+		btnInventory.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				game.getSidebarListener().onClickInventory();
@@ -188,4 +192,7 @@ public class SidebarFragment extends Fragment {
 		fuelText.setText(Integer.toString(fuel));
 	}
 
+	public void setInventoyText(String text){
+		btnInventory.setText(text);
+	}
 }

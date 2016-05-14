@@ -17,19 +17,15 @@ import android.widget.Button;
 import java.io.IOException;
 import java.util.HashMap;
 
-import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
-import edu.ub.pis2016.pis16.strikecom.engine.game.component.BehaviorComponent;
 import edu.ub.pis2016.pis16.strikecom.fragments.InventoryFragment;
 import edu.ub.pis2016.pis16.strikecom.fragments.MiniMapFragment;
+import edu.ub.pis2016.pis16.strikecom.fragments.ShopFragment;
 import edu.ub.pis2016.pis16.strikecom.fragments.SidebarFragment;
 import edu.ub.pis2016.pis16.strikecom.controller.SidebarEventListener;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.fragments.SlotsFragment;
 import edu.ub.pis2016.pis16.strikecom.gameplay.InventoryManager;
 import edu.ub.pis2016.pis16.strikecom.gameplay.StrikeBaseTest;
-import edu.ub.pis2016.pis16.strikecom.gameplay.Turret;
-import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.VehicleFollowBehavior;
-import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.Inventory;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.Item;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.TurretItem;
@@ -43,6 +39,7 @@ public class FragmentedGameActivity extends Activity {
 	SidebarFragment sidebar;
 
 	HashMap<String, Object> playerState = new HashMap<>();
+	HashMap<String, Inventory> shopMap = new HashMap<>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +67,7 @@ public class FragmentedGameActivity extends Activity {
 		playerState.put("POINTS", 0);
 		//playerState.put("INVENTORY", new Inventory());
 
+		shopMap.put("shop_1", null);
 		generateInventories();
 	}
 
@@ -93,17 +91,18 @@ public class FragmentedGameActivity extends Activity {
 
 			@Override
 			public void onClickInventory() {
-				showInventoryDialog(true, -1);
+				//showShopDialog(shopMap.get("shop_1"));
+				showInventoryDialog(-1, true, true);
 			}
 
 			@Override
 			public void onClickTurret(int index) {
-				showInventoryDialog(true, index);
+				showInventoryDialog(index, true, false);
 			}
 
 			@Override
 			public void onClickUpgrade(int index) {
-				showInventoryDialog(false, index);
+				showInventoryDialog(index, false, false);
 			}
 		});
 	}
@@ -150,27 +149,38 @@ public class FragmentedGameActivity extends Activity {
 		miniMapFrag.show(getFragmentManager(), "MiniMap");
 	}
 
-	public void showInventoryDialog(boolean turretIsSelected, int selectedSlot) {
-		game.getCurrentScreen().pauseGame(); // pause game
+	public void showInventoryDialog(int selectedSlot, boolean turretIsSelected, boolean switchIsEnabled) {
+		pauseGame();
 
 		InventoryFragment inventoryFrag = new InventoryFragment();
 		inventoryFrag.setInventory((Inventory) playerState.get("INVENTORY"));
 		inventoryFrag.setSelectedSlot(selectedSlot);
+		inventoryFrag.setSwitchListEnabled(switchIsEnabled);
 		inventoryFrag.setTurretSelection(turretIsSelected);
+		inventoryFrag.setPlayerScrap((Integer) playerState.get("SCRAP"));
 		inventoryFrag.show(getFragmentManager(), "Inventory_Fragment");
 	}
 
-	public void showSlotsDialog(boolean turretIsSelected, Item selectedItem) {
+	public void showSlotsDialog(Item selectedItem, boolean turretIsSelected) {
+		pauseGame();
+
 		Screen screen = game.getCurrentScreen();
 		StrikeBaseTest strikeBase = screen.getGameObject("StrikeBase", StrikeBaseTest.class);
-
-		screen.pauseGame(); // pause game
 
 		SlotsFragment slots = new SlotsFragment();
 		slots.setStrikeBaseModel(strikeBase.getConfig().model);
 		slots.setNewItem(selectedItem);
 		slots.setTurretSelection(turretIsSelected);
 		slots.show(getFragmentManager(), "slots");
+	}
+
+	public void showShopDialog(String shopID) {
+		pauseGame();
+
+		ShopFragment shopFragment = new ShopFragment();
+		shopFragment.setInventory( shopMap.get(shopID) );
+		shopFragment.setPlayerScrap( (Integer)playerState.get("SCRAP") );
+		shopFragment.show(getFragmentManager(), "shop");
 	}
 
 	public void equipTurret(TurretItem item, int slot) {
@@ -191,14 +201,7 @@ public class FragmentedGameActivity extends Activity {
 		Drawable d = new BitmapDrawable(getResources(), b);
 		slotBtn.setCompoundDrawablesWithIntrinsicBounds(d, null, null, null);
 
-		String tName = "turret_"+Integer.toString(slot);
-		Turret turret = new Turret(item.getModel(), strikeBase, tName);
-		turret.setParent(strikeBase);
-		//turret.putComponent( item.getTurretBehavior() );
-		turret.setLayer(Screen.LAYER_3);
-		screen.addGameObject(tName, turret);
-
-		screen.resumeGame(); // resume game
+		resumeGame();
 	}
 
 	public void equipUpgrade(UpgradeItem item, int slot) {
@@ -220,7 +223,7 @@ public class FragmentedGameActivity extends Activity {
 		Drawable d = new BitmapDrawable(getResources(), b);
 		slotBtn.setCompoundDrawablesWithIntrinsicBounds(d, null, null, null);
 
-		screen.resumeGame(); // resume game
+		resumeGame();
 	}
 
 	public void useFuel(UpgradeItem fuel){
@@ -231,6 +234,28 @@ public class FragmentedGameActivity extends Activity {
 
 		sidebar.updateFuel( (Integer)playerState.get("FUEL")  );
 		game.getCurrentScreen().resumeGame(); // resume game
+	}
+
+	public void buyItem(TurretItem item) {
+		Inventory inv = (Inventory) playerState.get("INVENTORY");
+		int scrap = (Integer) playerState.get("SCRAP");
+		inv.addItem(item);
+		scrap -= Math.round(item.getPrice());
+		playerState.put("INVENTORY", inv);
+		playerState.put("SCRAP", scrap);
+
+		resumeGame();
+	}
+
+	public void buyItem(UpgradeItem item) {
+		Inventory inv = (Inventory) playerState.get("INVENTORY");
+		int scrap = (Integer) playerState.get("SCRAP");
+		inv.addItem(item);
+		scrap -= Math.round(item.getPrice());
+		playerState.put("INVENTORY", inv);
+		playerState.put("SCRAP", scrap);
+
+		resumeGame();
 	}
 
 	private void retrieveTurret(int slot) {
@@ -264,6 +289,10 @@ public class FragmentedGameActivity extends Activity {
 			InventoryManager im = new InventoryManager(this, turretsFile, upgradesFile);
 			playerState.put("INVENTORY", im.getShopInventory(10, 5));
 
+			for(String key : shopMap.keySet()){
+				shopMap.put(key, im.getShopInventory(20, 2));
+			}
+
 		} catch (IOException ex){
 			Inventory testInventory = new Inventory();
 			testInventory.addItem( TurretItem.parseTurretItem("Machinegun;machinegun_64;turret_mk1;Weak yet cheap, makes an ideal weapon for a newbie.;100;2;4;1"));
@@ -271,6 +300,14 @@ public class FragmentedGameActivity extends Activity {
 					"variety of metals and ceramics.;COMPOSITE;4000"));
 			playerState.put("INVENTORY", testInventory);
 		}
+	}
+
+	public void pauseGame() {
+		game.getCurrentScreen().pauseGame(); // pause game
+	}
+
+	public void resumeGame() {
+		game.getCurrentScreen().resumeGame();
 	}
 }
 
