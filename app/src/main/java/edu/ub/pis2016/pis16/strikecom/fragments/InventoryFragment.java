@@ -1,12 +1,9 @@
 package edu.ub.pis2016.pis16.strikecom.fragments;
 
-import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.ColorRes;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,12 +14,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import edu.ub.pis2016.pis16.strikecom.FragmentedGameActivity;
-import edu.ub.pis2016.pis16.strikecom.MainMenuActivity;
 import edu.ub.pis2016.pis16.strikecom.R;
-import edu.ub.pis2016.pis16.strikecom.StrikeComGLGame;
+import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.gameplay.InventoryItemAdapter;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.Inventory;
-import edu.ub.pis2016.pis16.strikecom.gameplay.items.Item;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.TurretItem;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.UpgradeItem;
 
@@ -36,8 +31,10 @@ public class InventoryFragment extends DialogFragment {
 	protected ListView itemList;
 	protected TextView itemDesc;
 	protected TextView scrapText;
+	protected TextView fuelText;
 
 	protected int playerScrap = 0;
+	protected int playerFuel = 0;
 	protected int selectedItem;
 	protected int selectedSlot = -1;
 
@@ -47,6 +44,8 @@ public class InventoryFragment extends DialogFragment {
 	public void setInventory(Inventory inventory) { this.inventory = inventory; }
 
 	public void setPlayerScrap(int playerScrap) { this.playerScrap = playerScrap; }
+
+	public void setPlayerFuel(int playerFuel) { this.playerFuel = playerFuel; }
 
 	public void setSelectedSlot(int selectedSlot) { this.selectedSlot = selectedSlot; }
 
@@ -77,7 +76,9 @@ public class InventoryFragment extends DialogFragment {
 		itemList = (ListView) view.findViewById(R.id.itemList); // list of items
 		itemDesc = (TextView) view.findViewById(R.id.itemDesc); // description of the item selected from the list
 		scrapText = (TextView) view.findViewById(R.id.playerScrap);
+		fuelText = (TextView) view.findViewById(R.id.playerFuel);
 		scrapText.setText(Integer.toString(playerScrap));
+		fuelText.setText(Integer.toString(playerFuel));
 
 		// Equip/unequip button
 		equipBtn = (Button) view.findViewById(R.id.inventoryBtn_1);
@@ -138,8 +139,6 @@ public class InventoryFragment extends DialogFragment {
 		callingActivity.resumeGame();
 	}
 
-
-
 	protected void configButtons() {
 		// Equip/unequip button
 		equipBtn.setOnClickListener(new View.OnClickListener() {
@@ -182,8 +181,6 @@ public class InventoryFragment extends DialogFragment {
 			}
 		});
 	}
-
-
 
 	protected void fillItemList() {
 		if(turretIsSelected) {

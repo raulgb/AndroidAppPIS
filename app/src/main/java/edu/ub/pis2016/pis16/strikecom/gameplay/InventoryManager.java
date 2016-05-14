@@ -88,4 +88,11 @@ public class InventoryManager {
 
 		return shop;
 	}
+
+	// Returns and inventory intended to be used as the starting one for the player.
+	public Inventory getStartingInventory() {
+		Inventory startInventory = new Inventory();
+		startInventory.addItem( master.getTurret(0) );
+		return startInventory;
+	}
 }

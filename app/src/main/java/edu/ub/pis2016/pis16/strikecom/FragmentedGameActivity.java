@@ -198,6 +198,7 @@ public class FragmentedGameActivity extends Activity {
 		shopFragment.setId(shopID);
 		shopFragment.setInventory( shopMap.get(shopID) );
 		shopFragment.setPlayerScrap( (Integer)playerState.get("SCRAP") );
+		shopFragment.setPlayerFuel( (Integer)playerState.get("FUEL") );
 		shopFragment.show(getFragmentManager(), "shop");
 	}
 
@@ -313,7 +314,7 @@ public class FragmentedGameActivity extends Activity {
 		String upgradesFile = getString(R.string.upgradesFile);
 		try {
 			InventoryManager im = new InventoryManager(this, turretsFile, upgradesFile);
-			//playerState.put("INVENTORY", im.getShopInventory(10, 5));
+			playerState.put("INVENTORY", im.getStartingInventory());
 
 			for(String key : shopMap.keySet()){
 				shopMap.put(key, im.getShopInventory(20, 2));

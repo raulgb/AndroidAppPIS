@@ -7,6 +7,7 @@ import edu.ub.pis2016.pis16.strikecom.FragmentedGameActivity;
 import edu.ub.pis2016.pis16.strikecom.R;
 import edu.ub.pis2016.pis16.strikecom.gameplay.InventoryItemAdapter;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.TurretItem;
+import edu.ub.pis2016.pis16.strikecom.gameplay.items.UpgradeItem;
 
 public class ShopFragment extends InventoryFragment {
 
@@ -20,15 +21,40 @@ public class ShopFragment extends InventoryFragment {
 		equipBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				//dismiss();
-				FragmentedGameActivity callingActivity = (FragmentedGameActivity) getActivity();
-				if(turretIsSelected) {
-					callingActivity.buyItem(shopID, inventory.getTurret(selectedItem));
-					fillItemList();
-				} else {
-					callingActivity.buyItem(shopID, inventory.getUpgrade(selectedItem));
-					fillItemList();
+				if(selectedItem > -1){
+					FragmentedGameActivity callingActivity = (FragmentedGameActivity) getActivity();
+					int itemPrice;
+
+					if(turretIsSelected) {
+						TurretItem item = inventory.getTurret(selectedItem);
+						itemPrice = Math.round(item.getPrice());
+						if(itemPrice <= playerScrap) {
+							callingActivity.buyItem(shopID, item);
+							fillItemList();
+							playerScrap -= itemPrice;
+							selectedItem = -1;
+							itemDesc.setText("");
+						}
+
+					} else {
+						UpgradeItem item = inventory.getUpgrade(selectedItem);
+						itemPrice = Math.round(item.getPrice());
+						if(itemPrice <= playerScrap){
+							callingActivity.buyItem(shopID, item);
+							fillItemList();
+							playerScrap -= itemPrice;
+							selectedItem = -1;
+							itemDesc.setText("");
+
+							if(item.isFuel()){
+								playerFuel += 250;
+								fuelText.setText(Integer.toString(playerFuel));
+							}
+						}
+					}
+					scrapText.setText(Integer.toString(playerScrap));
 				}
+
 			}
 		});
 
