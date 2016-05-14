@@ -11,4 +11,13 @@ public class GameConfig {
 
 	/** Speed of bullets in tiles/second */
 	public static final float BULLET_SPEED = 4f;
+
+
+	// Groups
+	// TODO Implement this in place of Tag-testing
+	public static final int GROUP_NEUTRAL = 0x00;
+	public static final int GROUP_PLAYER = 0x01;
+	public static final int GROUP_RAIDERS = 0x02;
+	public static final int GROUP_MECHANICS = 0x04;
+
 }

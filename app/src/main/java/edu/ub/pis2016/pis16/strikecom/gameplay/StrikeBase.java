@@ -19,7 +19,7 @@ import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.TurretItem;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.UpgradeItem;
 
-public class StrikeBaseTest extends Vehicle {
+public class StrikeBase extends Vehicle {
 
 	private static final int LEFT = 0, RIGHT = 1;
 
@@ -45,7 +45,6 @@ public class StrikeBaseTest extends Vehicle {
 	private float leftThreadVel;
 	private float rightThreadVel;
 
-
 	// Anchors
 	private Vector2 turret_0 = new Vector2();
 	private Vector2 turret_1 = new Vector2();
@@ -64,7 +63,7 @@ public class StrikeBaseTest extends Vehicle {
 	private HashMap<Integer, TurretItem> equippedTurrets = new HashMap<>();
 	private HashMap<Integer, UpgradeItem> equippedUpgrades = new HashMap<>();
 
-	public StrikeBaseTest(StrikeBaseConfig cfg) {
+	public StrikeBase(StrikeBaseConfig cfg) {
 		super();
 
 		// TODO Create FuelBehavior
@@ -124,25 +123,39 @@ public class StrikeBaseTest extends Vehicle {
 		for (Animation a : threadAnim)
 			a.update(delta);
 
-		// Tank-like controls VERSION 2
+		updatePhysics(delta);
 
+		float rotation = physics.getRotation();
+		Vector2 pos = physics.getPosition();
+
+		// TODO Make this more universal, range 0-1 and depending on actual size (game units)
+		switch (cfg.modelName) {
+			case "sbmk1":
+				turret_0.set(-8, 8).scl(hull.getScale()).rotate(rotation).add(pos);
+				turret_1.set(8, 8).scl(hull.getScale()).rotate(rotation).add(pos);
+				turret_2.set(-8, -8).scl(hull.getScale()).rotate(rotation).add(pos);
+				turret_3.set(8, -8).scl(hull.getScale()).rotate(rotation).add(pos);
+				break;
+			case "sbmk2":
+				turret_0.set(-8, 8).scl(hull.getScale()).rotate(rotation).add(pos);
+				turret_1.set(-8, -8).scl(hull.getScale()).rotate(rotation).add(pos);
+				turret_2.set(8, -8).scl(hull.getScale()).rotate(rotation).add(pos);
+				turret_3.set(8, 8).scl(hull.getScale()).rotate(rotation).add(pos);
+				break;
+		}
+
+		super.update(delta);
+	}
+
+	@Override
+	protected void updatePhysics(float delta) {
+		// Tank-like controls VERSION 2
 		// Update speeds
 		leftThreadVel = MathUtils.clamp(leftThreadVel + leftThreadAccel * delta, -cfg.maxSpeed, cfg.maxSpeed);
 		rightThreadVel = MathUtils.clamp(rightThreadVel + rightThreadAccel * delta, -cfg.maxSpeed, cfg.maxSpeed);
 
-//		if (leftThreadAccel > 0)
-//			leftThreadVel = Math.min(leftThreadVel + leftThreadAccel * delta, cfg.maxSpeed);
-//		else if (leftThreadAccel < 0)
-//			leftThreadVel = Math.max(leftThreadVel + leftThreadAccel * delta, -cfg.maxSpeed);
-//
-//		if (rightThreadAccel > 0)
-//			rightThreadVel = Math.min(rightThreadVel + rightThreadAccel * delta, cfg.maxSpeed);
-//		else if (rightThreadAccel < 0)
-//			rightThreadVel = Math.max(rightThreadVel + rightThreadAccel * delta, -cfg.maxSpeed);
-
 		rightThreadVel *= 1 - rightThreadDampening * delta;
 		leftThreadVel *= 1 - leftThreadDampening * delta;
-
 
 		final float width = 1.8f * hull.getSize();
 		float rotSpeed = (-leftThreadVel + rightThreadVel) / width;
@@ -173,31 +186,12 @@ public class StrikeBaseTest extends Vehicle {
 		if (rotation < 0)
 			rotation = 360 + rotation;
 
-		// TODO Make this more universal, range 0-1 and depending on actual size (game units)
-
-		switch (cfg.modelName) {
-			case "sbmk1":
-				turret_0.set(-8, 8).scl(hull.getScale()).rotate(rotation).add(pos);
-				turret_1.set(8, 8).scl(hull.getScale()).rotate(rotation).add(pos);
-				turret_2.set(-8, -8).scl(hull.getScale()).rotate(rotation).add(pos);
-				turret_3.set(8, -8).scl(hull.getScale()).rotate(rotation).add(pos);
-				break;
-			case "sbmk2":
-				turret_0.set(-8, 8).scl(hull.getScale()).rotate(rotation).add(pos);
-				turret_1.set(-8, -8).scl(hull.getScale()).rotate(rotation).add(pos);
-				turret_2.set(8, -8).scl(hull.getScale()).rotate(rotation).add(pos);
-				turret_3.set(8, 8).scl(hull.getScale()).rotate(rotation).add(pos);
-				break;
-		}
-
-
-		// Commit rotation changes
+		// Commit Physics changes
 		physics.setVelocity(tmp.set((leftThreadVel + rightThreadVel) / 2f, 0).rotate(rotation));
 		physics.setRotation(rotation);
 		physics.setPosition(pos);
-
-		super.update(delta);
 	}
+
 
 	@Override
 	public void draw(SpriteBatch batch) {
@@ -217,9 +211,7 @@ public class StrikeBaseTest extends Vehicle {
 		hull.draw(batch, pos.x, pos.y);
 	}
 
-	/**
-	 * Turn the strikebase counter-clock wise, accelerating the right thread forward
-	 */
+
 	@Override
 	public void turnLeft() {
 		this.rightThreadAccel = cfg.accel * 0.75f;
@@ -254,6 +246,10 @@ public class StrikeBaseTest extends Vehicle {
 
 		this.leftThreadDampening = 0.95f;
 		this.rightThreadDampening = 0.95f;
+	}
+
+	public void reverse() {
+
 	}
 
 	public void addTurret(TurretItem item, int slot) {

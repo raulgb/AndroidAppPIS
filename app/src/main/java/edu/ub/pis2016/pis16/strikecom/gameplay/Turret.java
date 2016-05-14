@@ -28,7 +28,11 @@ public class Turret extends GameObject {
 		this.tmp = new Vector2();
 
 		this.owner = owner;
+		this.group = owner.group;
 		this.anchor = owner.getAnchor(anchor);
+
+		this.setParent(owner);
+		this.setTag(owner.getTag() + "_turret");
 
 		putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion(model, upgradeStatus)));
 		putComponent(new PhysicsComponent());

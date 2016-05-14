@@ -23,7 +23,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.physics.ContactListener;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Physics2D;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Pool;
-import edu.ub.pis2016.pis16.strikecom.gameplay.StrikeBaseTest;
+import edu.ub.pis2016.pis16.strikecom.gameplay.StrikeBase;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.ProjectileBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.VehicleFollowBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
@@ -55,7 +55,7 @@ public class AlexanderScreen extends Screen {
 	Physics2D physics2D;
 
 	GameObject moveIcon;
-	StrikeBaseTest strikeBase;
+	StrikeBase strikeBase;
 
 	TextureSprite grass;
 	TextureSprite g0;
@@ -100,7 +100,7 @@ public class AlexanderScreen extends Screen {
 			}
 		}, 64);
 
-		strikeBase = new StrikeBaseTest(new StrikeBaseConfig(StrikeBaseConfig.Model.MKII));
+		strikeBase = new StrikeBase(new StrikeBaseConfig(StrikeBaseConfig.Model.MKII));
 		strikeBase.putComponent(new VehicleFollowBehavior());
 		strikeBase.setTag("player");
 		strikeBase.setLayer(LAYER_VEHICLES);

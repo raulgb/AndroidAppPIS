@@ -193,9 +193,11 @@ public abstract class Screen implements Disposable {
 		}
 	}
 
-	/** Add a new untagged gameObject */
-	public void addGameObject(GameObject object) {
-		addGameObject("go" + (uniqueID++), object);
+	/** Add a new anonymous object. Returns it's automatically generated tag for usage if needed. */
+	public String addGameObject(GameObject object) {
+		String unique = "go" + uniqueID++;
+		addGameObject(unique, object);
+		return unique;
 	}
 
 	/** Lightweight method to get a named game object. Does not check for existence. */

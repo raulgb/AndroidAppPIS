@@ -11,7 +11,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.PowerManager;
-import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.widget.Button;
 
@@ -26,7 +25,7 @@ import edu.ub.pis2016.pis16.strikecom.controller.SidebarEventListener;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.fragments.SlotsFragment;
 import edu.ub.pis2016.pis16.strikecom.gameplay.InventoryManager;
-import edu.ub.pis2016.pis16.strikecom.gameplay.StrikeBaseTest;
+import edu.ub.pis2016.pis16.strikecom.gameplay.StrikeBase;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.Inventory;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.Item;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.TurretItem;
@@ -182,7 +181,7 @@ public class FragmentedGameActivity extends Activity {
 		pauseGame();
 
 		Screen screen = game.getCurrentScreen();
-		StrikeBaseTest strikeBase = screen.getGameObject("StrikeBase", StrikeBaseTest.class);
+		StrikeBase strikeBase = screen.getGameObject("StrikeBase", StrikeBase.class);
 
 		SlotsFragment slots = new SlotsFragment();
 		slots.setStrikeBaseModel(strikeBase.getCfg().model);
@@ -204,7 +203,7 @@ public class FragmentedGameActivity extends Activity {
 
 	public void equipTurret(TurretItem item, int slot) {
 		Screen screen = game.getCurrentScreen();
-		StrikeBaseTest strikeBase = screen.getGameObject("StrikeBase", StrikeBaseTest.class);
+		StrikeBase strikeBase = screen.getGameObject("StrikeBase", StrikeBase.class);
 		retrieveTurret(slot);
 		strikeBase.addTurret(item, slot);
 
@@ -225,7 +224,7 @@ public class FragmentedGameActivity extends Activity {
 
 	public void equipUpgrade(UpgradeItem item, int slot) {
 		Screen screen = game.getCurrentScreen();
-		StrikeBaseTest strikeBase = screen.getGameObject("StrikeBase", StrikeBaseTest.class);
+		StrikeBase strikeBase = screen.getGameObject("StrikeBase", StrikeBase.class);
 		retrieveUpgrade(slot);
 		strikeBase.addUpgrade(item, slot);
 
@@ -286,7 +285,7 @@ public class FragmentedGameActivity extends Activity {
 	}
 
 	private void retrieveTurret(int slot) {
-		StrikeBaseTest strikeBase = (game.getCurrentScreen()).getGameObject("StrikeBase", StrikeBaseTest.class);
+		StrikeBase strikeBase = (game.getCurrentScreen()).getGameObject("StrikeBase", StrikeBase.class);
 		TurretItem turret = strikeBase.getTurret(slot);
 
 		if(turret != null){
@@ -298,7 +297,7 @@ public class FragmentedGameActivity extends Activity {
 	}
 
 	private void retrieveUpgrade(int slot) {
-		StrikeBaseTest strikeBase = (game.getCurrentScreen()).getGameObject("StrikeBase", StrikeBaseTest.class);
+		StrikeBase strikeBase = (game.getCurrentScreen()).getGameObject("StrikeBase", StrikeBase.class);
 		UpgradeItem upgrade = strikeBase.getUpgrade(slot);
 
 		if(upgrade != null){

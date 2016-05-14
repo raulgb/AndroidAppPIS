@@ -29,7 +29,6 @@ public class StrikeBaseConfig {
 	 *
 	 * 		2	3
 	 */
-
 	// Velocity Config
 	/** Tiles/second */
 	public float maxSpeed = 1f * GameConfig.TILE_SIZE;
@@ -47,8 +46,6 @@ public class StrikeBaseConfig {
 	public float[][] turretOffsets;
 	/** Angle limits, clockwise */
 	public float[][] turretAngleLimit;
-	/** Damage multiplicator per turret */
-	public float[] turretDmg = new float[]{0, 0, 0, 0};
 	/** Damage multiplicator per turret */
 	public float[] turretDmgMult;
 

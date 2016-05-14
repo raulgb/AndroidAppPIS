@@ -6,6 +6,8 @@ import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 
 public abstract class Vehicle extends GameObject {
 
+	protected abstract void updatePhysics(float delta);
+
 	public abstract void turnLeft();
 
 	public abstract void turnRight();
@@ -13,6 +15,8 @@ public abstract class Vehicle extends GameObject {
 	public abstract void accelerate();
 
 	public abstract void brake();
+
+	public abstract void reverse();
 
 	public Vector2 getAnchor(String name) {
 		return getComponent(PhysicsComponent.class).getAnchor(name);

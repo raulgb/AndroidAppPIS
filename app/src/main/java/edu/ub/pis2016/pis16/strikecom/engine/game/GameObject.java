@@ -1,7 +1,5 @@
 package edu.ub.pis2016.pis16.strikecom.engine.game;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -28,13 +26,16 @@ public class GameObject {
 	private int layerID = 0;
 	/** Tags are used internally for BehaviorComponents to identify certain GameObject as part of the scenery, allied, enemy, etc. */
 	private String tag = "";
+	/** Groups for factions or whatever. Testing is done A.group & B.group */
+	public int group = 0;
+
 
 	/** Health Related */
 	public int hitpoints = 0, maxHitpoints = 0;
 
 	/**
 	 * Sets the layer ordering, lowest values get rendered first.
-	 * <p>
+	 * <p/>
 	 * <b>WARNING:</b> Set the layer BEFORE adding to a Screen. To change layer if already inside, remove from
 	 * Screen, change layer, and add back.
 	 */
@@ -49,9 +50,11 @@ public class GameObject {
 
 	/** Steps the game simulation. Delta is the time passed since the last frame, in seconds. */
 	public void update(float delta) {
-		for (Component c : newComponents)
-			c.init();
-		newComponents.clear();
+		if (newComponents.size() > 0) {
+			for (Component c : newComponents)
+				c.init();
+			newComponents.clear();
+		}
 
 		for (Component c : components.values())
 			if (c instanceof UpdateableComponent)
