@@ -11,6 +11,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.widget.Button;
 
@@ -121,22 +122,35 @@ public class FragmentedGameActivity extends Activity {
 	public void onBackPressed() {
 		//Ask the user if he/she really wants to exit game
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setIcon(android.R.drawable.ic_dialog_alert);
-		builder.setTitle(getString(R.string.quit_alert));
-		builder.setPositiveButton(getString(R.string.alert_positive), new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				// return to main menu
-				Intent intent = new Intent(getApplicationContext(), MainMenuActivity.class);
-				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				startActivity(intent);
 
-			}
-		});
-		builder.setNegativeButton(getString(R.string.alert_negative), null);
+/*
 
-		(builder.create()).show();
+		InventoryFragment inventoryFrag= new InventoryFragment();
+		//Falta codigo
+		if (inventoryFrag != null && inventoryFrag.isVisible()){
+			inventoryFrag.dismiss();
+			finish();
+			resumeGame();
+		} else {
+*/
+
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setIcon(android.R.drawable.ic_dialog_alert);
+			builder.setTitle(getString(R.string.quit_alert));
+			builder.setPositiveButton(getString(R.string.alert_positive), new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// return to main menu
+					Intent intent = new Intent(getApplicationContext(), MainMenuActivity.class);
+					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					startActivity(intent);
+
+				}
+			});
+			builder.setNegativeButton(getString(R.string.alert_negative), null);
+
+			(builder.create()).show();
+		/*}*/
 	}
 
 	/**
