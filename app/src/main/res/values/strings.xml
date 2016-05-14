@@ -58,7 +58,7 @@
     <string name="backToInventory_button">Back</string>
 
     <!-- Shop Dialog -->
-    <string name="buy_button">Purchase</string>
+    <string name="buy_button">Buy</string>
     <string name="player_scrap">Your scrap: </string>
 
     <!-- Quit Alert -->
