@@ -1,6 +1,9 @@
 package edu.ub.pis2016.pis16.strikecom.fragments;
 
+import android.app.AlertDialog;
 import android.app.DialogFragment;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.ColorRes;
@@ -14,6 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import edu.ub.pis2016.pis16.strikecom.FragmentedGameActivity;
+import edu.ub.pis2016.pis16.strikecom.MainMenuActivity;
 import edu.ub.pis2016.pis16.strikecom.R;
 import edu.ub.pis2016.pis16.strikecom.StrikeComGLGame;
 import edu.ub.pis2016.pis16.strikecom.gameplay.InventoryItemAdapter;
@@ -21,6 +25,7 @@ import edu.ub.pis2016.pis16.strikecom.gameplay.items.Inventory;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.Item;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.TurretItem;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.UpgradeItem;
+
 
 public class InventoryFragment extends DialogFragment {
 
@@ -65,7 +70,6 @@ public class InventoryFragment extends DialogFragment {
 		}
 		return inventory.getUpgrade(selectedItem);
 	}
-
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_inventory, container);
@@ -95,12 +99,14 @@ public class InventoryFragment extends DialogFragment {
 			}
 		});
 
+
+
 		// Switch to upgrades selection
 		final Button upgradeSelectionBtn = (Button) view.findViewById(R.id.upgradeSelectionBtn);
 		upgradeSelectionBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				if(turretIsSelected) {
+				if (turretIsSelected) {
 					turretIsSelected = false;
 					itemDesc.setText("");
 					selectedItem = -1;
@@ -120,9 +126,19 @@ public class InventoryFragment extends DialogFragment {
 
 		fillItemList();
 
+
+
 		getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 		return view;
 	}
+
+	public void onCancel (DialogInterface dialog){
+		dismiss();
+		FragmentedGameActivity callingActivity = (FragmentedGameActivity) getActivity();
+		callingActivity.resumeGame();
+	}
+
+
 
 	protected void configButtons() {
 		// Equip/unequip button
@@ -167,6 +183,8 @@ public class InventoryFragment extends DialogFragment {
 		});
 	}
 
+
+
 	protected void fillItemList() {
 		if(turretIsSelected) {
 			itemList.setAdapter(new InventoryItemAdapter(getActivity(), inventory.getTurretInventory()));
@@ -193,4 +211,5 @@ public class InventoryFragment extends DialogFragment {
 			}
 		});
 	}
+
 }

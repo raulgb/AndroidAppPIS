@@ -11,6 +11,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.widget.Button;
 
@@ -62,10 +63,13 @@ public class FragmentedGameActivity extends Activity {
 		// Give the sidebar fragment a reference to the game fragment.
 		sidebar.setGame(game);
 
-		playerState.put("SCRAP", Integer.valueOf(getString(R.string.res1_defVal)));
-		playerState.put("FUEL", Integer.valueOf(getString(R.string.res2_defVal)));
+		playerState.put("SCRAP", 9999);
+		playerState.put("FUEL", 4000);
 		playerState.put("POINTS", 0);
-		//playerState.put("INVENTORY", new Inventory());
+		playerState.put("INVENTORY", new Inventory());
+
+		sidebar.updateScrap((Integer)playerState.get("SCRAP"));
+		sidebar.updateFuel((Integer)playerState.get("FUEL"));
 
 		shopMap.put("shop_1", null);
 		generateInventories();
@@ -91,8 +95,8 @@ public class FragmentedGameActivity extends Activity {
 
 			@Override
 			public void onClickInventory() {
-				//showShopDialog(shopMap.get("shop_1"));
-				showInventoryDialog(-1, true, true);
+				showShopDialog("shop_1");
+				//showInventoryDialog(-1, true, true);
 			}
 
 			@Override
@@ -121,22 +125,35 @@ public class FragmentedGameActivity extends Activity {
 	public void onBackPressed() {
 		//Ask the user if he/she really wants to exit game
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setIcon(android.R.drawable.ic_dialog_alert);
-		builder.setTitle(getString(R.string.quit_alert));
-		builder.setPositiveButton(getString(R.string.alert_positive), new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				// return to main menu
-				Intent intent = new Intent(getApplicationContext(), MainMenuActivity.class);
-				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				startActivity(intent);
 
-			}
-		});
-		builder.setNegativeButton(getString(R.string.alert_negative), null);
+/*
 
-		(builder.create()).show();
+		InventoryFragment inventoryFrag= new InventoryFragment();
+		//Falta codigo
+		if (inventoryFrag != null && inventoryFrag.isVisible()){
+			inventoryFrag.dismiss();
+			finish();
+			resumeGame();
+		} else {
+*/
+
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setIcon(android.R.drawable.ic_dialog_alert);
+			builder.setTitle(getString(R.string.quit_alert));
+			builder.setPositiveButton(getString(R.string.alert_positive), new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// return to main menu
+					Intent intent = new Intent(getApplicationContext(), MainMenuActivity.class);
+					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					startActivity(intent);
+
+				}
+			});
+			builder.setNegativeButton(getString(R.string.alert_negative), null);
+
+			(builder.create()).show();
+		/*}*/
 	}
 
 	/**
@@ -178,6 +195,7 @@ public class FragmentedGameActivity extends Activity {
 		pauseGame();
 
 		ShopFragment shopFragment = new ShopFragment();
+		shopFragment.setId(shopID);
 		shopFragment.setInventory( shopMap.get(shopID) );
 		shopFragment.setPlayerScrap( (Integer)playerState.get("SCRAP") );
 		shopFragment.show(getFragmentManager(), "shop");
@@ -232,30 +250,38 @@ public class FragmentedGameActivity extends Activity {
 		playerState.put("INVENTORY", inv);
 		playerState.put("FUEL", (Integer)playerState.get("FUEL") + 250);
 
-		sidebar.updateFuel( (Integer)playerState.get("FUEL")  );
-		game.getCurrentScreen().resumeGame(); // resume game
-	}
-
-	public void buyItem(TurretItem item) {
-		Inventory inv = (Inventory) playerState.get("INVENTORY");
-		int scrap = (Integer) playerState.get("SCRAP");
-		inv.addItem(item);
-		scrap -= Math.round(item.getPrice());
-		playerState.put("INVENTORY", inv);
-		playerState.put("SCRAP", scrap);
-
+		updateFuelCounter();
 		resumeGame();
 	}
 
-	public void buyItem(UpgradeItem item) {
-		Inventory inv = (Inventory) playerState.get("INVENTORY");
+	public void buyItem(String shopID, TurretItem item) {
+		Inventory playerInventory = (Inventory) playerState.get("INVENTORY");
+		Inventory shopInventory = shopMap.get(shopID);
 		int scrap = (Integer) playerState.get("SCRAP");
-		inv.addItem(item);
-		scrap -= Math.round(item.getPrice());
-		playerState.put("INVENTORY", inv);
-		playerState.put("SCRAP", scrap);
 
-		resumeGame();
+		shopInventory.removeItem(item);
+		scrap -= Math.round(item.getPrice());
+		playerInventory.addItem(item);
+
+		playerState.put("INVENTORY", playerInventory);
+		playerState.put("SCRAP", scrap);
+	}
+
+	public void buyItem(String shopID, UpgradeItem item) {
+		Inventory playerInventory = (Inventory) playerState.get("INVENTORY");
+		Inventory shopInventory = shopMap.get(shopID);
+		int scrap = (Integer) playerState.get("SCRAP");
+
+		shopInventory.removeItem(item);
+		scrap -= Math.round(item.getPrice());
+
+		if(item.isFuel()){
+			playerState.put("FUEL", (Integer)playerState.get("FUEL") + 250);
+		}else{
+			playerInventory.addItem(item);
+			playerState.put("INVENTORY", playerInventory);
+		}
+		playerState.put("SCRAP", scrap);
 	}
 
 	private void retrieveTurret(int slot) {
@@ -287,7 +313,7 @@ public class FragmentedGameActivity extends Activity {
 		String upgradesFile = getString(R.string.upgradesFile);
 		try {
 			InventoryManager im = new InventoryManager(this, turretsFile, upgradesFile);
-			playerState.put("INVENTORY", im.getShopInventory(10, 5));
+			//playerState.put("INVENTORY", im.getShopInventory(10, 5));
 
 			for(String key : shopMap.keySet()){
 				shopMap.put(key, im.getShopInventory(20, 2));
@@ -308,6 +334,14 @@ public class FragmentedGameActivity extends Activity {
 
 	public void resumeGame() {
 		game.getCurrentScreen().resumeGame();
+	}
+
+	public void updateScrapCounter(){
+		sidebar.updateScrap((Integer) playerState.get("SCRAP"));
+	}
+
+	public void updateFuelCounter(){
+		sidebar.updateFuel((Integer) playerState.get("FUEL"));
 	}
 }
 
