@@ -8,4 +8,7 @@ public class GameConfig {
 	public static final int MAP_SIZE = 32;
 	/** Width of screen in tiles */
 	public static final int TILES_ON_SCREEN = 10;
+
+	/** Speed of bullets in tiles/second */
+	public static final float BULLET_SPEED = 4f;
 }

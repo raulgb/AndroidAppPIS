@@ -5,21 +5,19 @@ import edu.ub.pis2016.pis16.strikecom.engine.game.component.GraphicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
-import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
-import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureSprite;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.KinematicBody;
-import edu.ub.pis2016.pis16.strikecom.engine.physics.Physics2D;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Rectangle;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.TurretBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.VehicleFollowBehavior;
+import edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig;
 
 /**
  * First test of a working enemy
  * <p/>
  * Created by German Dempere on 03/05/2016.
  */
-public class EnemyTest extends Vehicle {
+public class TankVehicle extends Vehicle {
 
 	PhysicsComponent physics;
 
@@ -38,11 +36,11 @@ public class EnemyTest extends Vehicle {
 	// Anchors
 	private Vector2 turret_0 = new Vector2();
 
-	public EnemyTest() {
+	public TankVehicle() {
 		super();
 
-		this.setLayer(Screen.LAYER_1);
-		physics = new PhysicsComponent(new KinematicBody(new Rectangle(32, 32)));
+		this.setLayer(Screen.LAYER_VEHICLES);
+		physics = new PhysicsComponent(new KinematicBody(new Rectangle(1, 1)));
 		putComponent(physics);
 		putComponent(new VehicleFollowBehavior());
 
@@ -50,15 +48,18 @@ public class EnemyTest extends Vehicle {
 		// Config turret
 		putAnchor("turret_0", turret_0);
 		turret = new Turret("enemy_turret", this, "turret_0");
-		turret.setParent(this);
+		turret.getComponent(GraphicsComponent.class).getSprite().setSize(1f * GameConfig.TILE_SIZE);
 		turret.putComponent(new TurretBehavior());
 		turret.getComponent(TurretBehavior.class).setTargetTag("player");
-		turret.setLayer(Screen.LAYER_3);
+
+		turret.setTag("enemy_tank_turret");
+		turret.setParent(this);
+		turret.setLayer(Screen.LAYER_VEHICLE_TURRET);
 
 		// Sprites
-		putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("enemy")));
-		getComponent(GraphicsComponent.class).getSprite().setScale(0.75f);
-		turret.getComponent(GraphicsComponent.class).getSprite().setScale(0.75f);
+		GraphicsComponent graphics = new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("enemy"));
+		graphics.getSprite().setSize(1f * GameConfig.TILE_SIZE);
+		putComponent(graphics);
 	}
 
 	public void update(float delta) {
@@ -88,12 +89,12 @@ public class EnemyTest extends Vehicle {
 
 	@Override
 	public void turnLeft() {
-		rotAccel = 10f;
+		rotAccel = 2f;
 	}
 
 	@Override
 	public void turnRight() {
-		rotAccel = -10f;
+		rotAccel = -2f;
 	}
 
 	@Override

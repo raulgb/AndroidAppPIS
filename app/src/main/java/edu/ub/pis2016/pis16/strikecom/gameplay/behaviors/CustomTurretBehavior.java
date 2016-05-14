@@ -83,7 +83,7 @@ public class CustomTurretBehavior extends BehaviorComponent {
 				projPhys.getVelocity().set(90f, 0).rotate(physics.getRotation());
 
 				projectile.setTag("player");
-				projectile.setLayer(Screen.LAYER_1);
+				projectile.setLayer(Screen.LAYER_STRIKEBASE);
 				gameObject.getScreen().addGameObject(projectile);
 			}
 		}

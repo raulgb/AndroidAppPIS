@@ -29,6 +29,8 @@ public class GameMap {
 	TextureSprite grass;
 	TextureSprite dry;
 	TextureSprite[] sand;
+	TextureSprite water;
+
 	TextureSprite[] gray;
 
 	HashMap<String, TextureSprite> dryToGrass = new HashMap<>();
@@ -163,10 +165,10 @@ public class GameMap {
 			return grass;
 		else if (value > 0.4f)
 			return dry;
-		else if (MathUtils.random() < 0.8)
-			return sand[0];
+		else if (value > 0.2f)
+			return sand[MathUtils.random(0, 1)];
 		else
-			return sand[1];
+			return water;
 	}
 
 	public float[][] getPTable() {
@@ -180,18 +182,18 @@ public class GameMap {
 		int squareRad = 7 * tileSize;
 
 		// Test all map positions to draw a tile
+		// TODO optimize
 		for (row = 0; row < height; row++) {
 			for (col = 0; col < width; col++) {
 
-				// Calcula x,y coordinates
+				// Calculate x,y coordinates
 				float x = tileSize / 2f + col * tileSize;
 				float y = tileSize / 2f + row * tileSize;
 
 				if (x < center.x - squareRad || x > center.x + squareRad || y < center.y - squareRad || y > center.y + squareRad)
 					continue;
-//				if (center.dst2(x, y) > 8 * tileSize * 8 * tileSize)
-//					continue;
-				discoveredTable[col][row]=true; // mark this point as wisited
+
+				discoveredTable[col][row] = true; // mark this point as wisited
 				tTable[row][col].draw(batch, x, y);
 			}
 		}
@@ -202,6 +204,7 @@ public class GameMap {
 	/**
 	 * for minimap rendering purposes
 	 * WARNING resized sptites will continue be resized even after
+	 *
 	 * @param value perlin noise value
 	 * @return
 	 */
@@ -214,37 +217,38 @@ public class GameMap {
 			return gray[0]; // equivalent of sand
 	}
 	//TODO add sprites for minimap (player pointer, shops, tiles - to avoid resize operations)
+
 	/**
 	 * draws minimap on GL screen centered on desired position - currently 2x2 pixels for  a tile, using gray tiles
 	 * WARNING this will give batch buffer overflow IF map is quite big
-	 * @param batch SpriteBatch
+	 *
+	 * @param batch  SpriteBatch
 	 * @param center position where map will be drawn
 	 */
-	public void drawMiniMap(SpriteBatch batch, Vector2 center){
+	public void drawMiniMap(SpriteBatch batch, Vector2 center) {
 		float tmpY;
 		float tmpX;
 		TextureSprite tmp;
 
 		for (int y = 0; y < height; y++) {
-			tmpY=(int)(center.y-height+y*2);
+			tmpY = (int) (center.y - height + y * 2);
 			for (int x = 0; x < width; x++) {
-				tmpX=(int)(center.x - width+x*2);
-				if (discoveredTable[x][y]){	//discovered terrain
-					tmp= getGray(pTable[x][y]);
+				tmpX = (int) (center.x - width + x * 2);
+				if (discoveredTable[x][y]) {    //discovered terrain
+					tmp = getGray(pTable[x][y]);
 					tmp.setScale(0.25f); //warning: resize works for other instances of this sprites
 					tmp.draw(batch, tmpX, tmpY);
-					if(x==(int)(center.x)/tileSize&&y==(int)(center.y)/tileSize) {//player position marker
+					if (x == (int) (center.x) / tileSize && y == (int) (center.y) / tileSize) {//player position marker
 						tmp = gray[7];
 						tmp.setScale(0.3f);
 						tmp.draw(batch, tmpX, tmpY);
 						tmp.setScale(2.1f);
 					}
 
-				}
-				else{ 						//undiscovered terrain
-					tmp= gray[6];
+				} else {                        //undiscovered terrain
+					tmp = gray[6];
 					tmp.setScale(0.25f); //warning: resize works for other instances of this sprites
-					tmp.draw(batch,tmpX,tmpY);
+					tmp.draw(batch, tmpX, tmpY);
 				}
 
 

@@ -2,6 +2,7 @@ package edu.ub.pis2016.pis16.strikecom.gameplay.config;
 
 public class StrikeBaseConfig {
 
+
 	public enum Model {
 		MKI,
 		MKII
@@ -29,11 +30,17 @@ public class StrikeBaseConfig {
 	 * 		2	3
 	 */
 
-	/** Engine stuff */
-	public float maxSpeed = 25f;
-	public float maxTurnSpeed = maxSpeed / 1f;
-	public float maxReverseSpeed = maxSpeed / 2f;
-	public float accel = 2;
+	// Velocity Config
+	/** Tiles/second */
+	public float maxSpeed = 1f * GameConfig.TILE_SIZE;
+	/** Accel in tiles/s^2 */
+	public float accel = 2f * GameConfig.TILE_SIZE;
+	public float maxReverseSpeed = -maxSpeed / 2f;
+
+	// FUEL Consumption
+	/** Fuel used per second moving */
+	public float fuelUsage = 1f;
+	public float fuelUsageMultiplier = 1;
 
 	public int turretNum;
 	/** Turret position offsets */

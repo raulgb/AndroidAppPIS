@@ -3,8 +3,8 @@ package edu.ub.pis2016.pis16.strikecom.gameplay;
 import java.util.HashMap;
 
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
-import edu.ub.pis2016.pis16.strikecom.engine.game.component.GraphicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
+import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureRegion;
@@ -21,7 +21,7 @@ import edu.ub.pis2016.pis16.strikecom.gameplay.items.UpgradeItem;
 
 public class StrikeBaseTest extends Vehicle {
 
-	private final int LEFT = 0, RIGHT = 1;
+	private static final int LEFT = 0, RIGHT = 1;
 
 	private TextureSprite hull;
 	private TextureSprite leftThreads;
@@ -33,13 +33,18 @@ public class StrikeBaseTest extends Vehicle {
 	private PhysicsComponent physics;
 	private Vector2 tmp = new Vector2();
 
-	// Physics
-	private float maxSpeed = 25;
-	private float maxTurnSpeed = maxSpeed / 1f;
-	private float maxReverseSpeed = maxSpeed / 2f;
-	private float accel = 2;
+	// Current accel
+	private float leftThreadAccel = 0;
+	private float rightThreadAccel = 0;
+
+	// Current Dampening
+	private float leftThreadDampening = 0;
+	private float rightThreadDampening = 0;
+
+	// Current Speed
 	private float leftThreadVel;
 	private float rightThreadVel;
+
 
 	// Anchors
 	private Vector2 turret_0 = new Vector2();
@@ -53,7 +58,8 @@ public class StrikeBaseTest extends Vehicle {
 
 	private Animation[] threadAnim;
 
-	private StrikeBaseConfig config;
+	/** Config instance to modify this StrikeBase's properties */
+	private StrikeBaseConfig cfg;
 
 	private HashMap<Integer, TurretItem> equippedTurrets = new HashMap<>();
 	private HashMap<Integer, UpgradeItem> equippedUpgrades = new HashMap<>();
@@ -64,10 +70,10 @@ public class StrikeBaseTest extends Vehicle {
 		// TODO Create FuelBehavior
 
 		//  Create Physics component
-		physics = new PhysicsComponent(new KinematicBody(new Rectangle(32, 32)));
+		physics = new PhysicsComponent(new KinematicBody(new Rectangle(1.8f, 1.8f)));
 		putComponent(physics);
 
-		this.config = cfg;
+		this.cfg = cfg;
 		String model = cfg.modelName;
 
 		sbmk1_hull = new TextureRegion[cfg.animHullFrames];
@@ -106,8 +112,8 @@ public class StrikeBaseTest extends Vehicle {
 		this.putAnchor("right_thread", rightThread);
 	}
 
-	public StrikeBaseConfig getConfig() {
-		return this.config;
+	public StrikeBaseConfig getCfg() {
+		return this.cfg;
 	}
 
 	@Override
@@ -119,8 +125,27 @@ public class StrikeBaseTest extends Vehicle {
 			a.update(delta);
 
 		// Tank-like controls VERSION 2
-		final float width = 28;
-		float rotDelta = (-leftThreadVel + rightThreadVel) / width;
+
+		// Update speeds
+		leftThreadVel = MathUtils.clamp(leftThreadVel + leftThreadAccel * delta, -cfg.maxSpeed, cfg.maxSpeed);
+		rightThreadVel = MathUtils.clamp(rightThreadVel + rightThreadAccel * delta, -cfg.maxSpeed, cfg.maxSpeed);
+
+//		if (leftThreadAccel > 0)
+//			leftThreadVel = Math.min(leftThreadVel + leftThreadAccel * delta, cfg.maxSpeed);
+//		else if (leftThreadAccel < 0)
+//			leftThreadVel = Math.max(leftThreadVel + leftThreadAccel * delta, -cfg.maxSpeed);
+//
+//		if (rightThreadAccel > 0)
+//			rightThreadVel = Math.min(rightThreadVel + rightThreadAccel * delta, cfg.maxSpeed);
+//		else if (rightThreadAccel < 0)
+//			rightThreadVel = Math.max(rightThreadVel + rightThreadAccel * delta, -cfg.maxSpeed);
+
+		rightThreadVel *= 1 - rightThreadDampening * delta;
+		leftThreadVel *= 1 - leftThreadDampening * delta;
+
+
+		final float width = 1.8f * hull.getSize();
+		float rotSpeed = (-leftThreadVel + rightThreadVel) / width;
 
 		Vector2 pos = physics.getPosition();
 		float rotation = physics.getRotation();
@@ -137,20 +162,20 @@ public class StrikeBaseTest extends Vehicle {
 			pivot.set(pos);
 
 		Vector2 threadToCenter = new Vector2(pos).sub(pivot);
-		threadToCenter.rotate(rotDelta * delta);
+		threadToCenter.rotate(rotSpeed * delta);
 		pos.set(pivot).add(threadToCenter);
 
 		// Average thread velocity and rotate to get a velocity vector
 		tmp.set(leftThreadVel + rightThreadVel, 0).scl(0.5f).rotate(rotation);
 		pos.add(tmp.scl(delta));
 
-		rotation = (rotation + rotDelta) % 360;
+		rotation = (rotation + rotSpeed) % 360;
 		if (rotation < 0)
 			rotation = 360 + rotation;
 
 		// TODO Make this more universal, range 0-1 and depending on actual size (game units)
 
-		switch (config.modelName) {
+		switch (cfg.modelName) {
 			case "sbmk1":
 				turret_0.set(-8, 8).scl(hull.getScale()).rotate(rotation).add(pos);
 				turret_1.set(8, 8).scl(hull.getScale()).rotate(rotation).add(pos);
@@ -197,41 +222,57 @@ public class StrikeBaseTest extends Vehicle {
 	 */
 	@Override
 	public void turnLeft() {
-		this.rightThreadVel = Math.min(rightThreadVel + accel, maxTurnSpeed);
-		this.leftThreadVel = Math.min(Math.max(leftThreadVel - accel / 2f, -maxReverseSpeed), maxTurnSpeed);
+		this.rightThreadAccel = cfg.accel * 0.75f;
+		this.leftThreadAccel = -cfg.accel * 0.25f;
+
+		this.leftThreadDampening = 0f;
+		this.rightThreadDampening = 0f;
 	}
 
 	@Override
 	public void turnRight() {
-		this.leftThreadVel = Math.min(leftThreadVel + accel, maxTurnSpeed);
-		this.rightThreadVel = Math.min(Math.max(rightThreadVel - accel / 2f, -maxReverseSpeed), maxTurnSpeed);
+		this.leftThreadAccel = cfg.accel * 0.75f;
+		this.rightThreadAccel = -cfg.accel * 0.25f;
+
+		this.leftThreadDampening = 0f;
+		this.rightThreadDampening = 0f;
 	}
 
 	@Override
 	public void accelerate() {
-		this.leftThreadVel = Math.min(leftThreadVel + accel, maxSpeed);
-		this.rightThreadVel = Math.min(rightThreadVel + accel, maxSpeed);
+		this.leftThreadAccel = cfg.accel;
+		this.rightThreadAccel = cfg.accel;
+
+		this.leftThreadDampening = 0f;
+		this.rightThreadDampening = 0f;
 	}
 
 	@Override
 	public void brake() {
-		this.leftThreadVel = Math.max(leftThreadVel - accel, 0);
-		this.rightThreadVel = Math.max(rightThreadVel - accel, 0);
+		this.leftThreadAccel = 0;
+		this.rightThreadAccel = 0;
+
+		this.leftThreadDampening = 0.95f;
+		this.rightThreadDampening = 0.95f;
 	}
 
 	public void addTurret(TurretItem item, int slot) {
-		String tName = "turret_"+Integer.toString(slot);
+		String tName = "turret_" + Integer.toString(slot);
 		Turret turret = new Turret(item.getModel(), this, tName);
 		turret.setParent(this);
-		//turret.putComponent( item.getTurretBehavior() );
-		turret.setLayer(Screen.LAYER_3);
+		turret.setLayer(Screen.LAYER_STRIKEBASE_TURRETS);
+
+		turret.setTag(getTag() + "_" + tName);
+		turret.putComponent(new TurretBehavior());
+		turret.getComponent(TurretBehavior.class).setTargetTag("enemy");
+
 		screen.addGameObject(tName, turret);
 
 		equippedTurrets.put(slot, item);
 	}
 
 	public void removeTurret(int slot) {
-		String tName = "turret_"+Integer.toString(slot);
+		String tName = "turret_" + Integer.toString(slot);
 		screen.removeGameObject(screen.getGameObject(tName));
 
 		equippedTurrets.remove(slot);
@@ -252,6 +293,7 @@ public class StrikeBaseTest extends Vehicle {
 				break;
 			case ENGINE_EFFICIENCY:
 				// Reduces fuel consumption
+				cfg.fuelUsageMultiplier = 0.75f;
 				break;
 			case FUEL:
 				break;

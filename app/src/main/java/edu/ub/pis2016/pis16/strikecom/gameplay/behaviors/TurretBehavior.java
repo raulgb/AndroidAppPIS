@@ -3,9 +3,12 @@ package edu.ub.pis2016.pis16.strikecom.gameplay.behaviors;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.BehaviorComponent;
+import edu.ub.pis2016.pis16.strikecom.engine.game.component.GraphicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Angle;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
+import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureSprite;
+import edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig;
 import edu.ub.pis2016.pis16.strikecom.screens.DummyGLScreen;
 
 /**
@@ -43,6 +46,9 @@ public class TurretBehavior extends BehaviorComponent {
 		// If we have a target, aim at it
 		if (target != null) {
 			PhysicsComponent targetPhys = target.getComponent(PhysicsComponent.class);
+			if(targetPhys == null)
+				return;
+
 			turretPhys.lookAt(targetPhys.getPosition(), 0.1f);
 
 			// Shooting timeout
@@ -55,18 +61,22 @@ public class TurretBehavior extends BehaviorComponent {
 			if (Math.abs(Angle.angleDelta(turretPhys.getRotation(), shootAngle)) < 3f) {
 				GameObject projectile = ((DummyGLScreen) gameObject.getScreen()).projectilePool.newObject();
 
-				projectile.setParent(gameObject);
 				PhysicsComponent projPhys = projectile.getComponent(PhysicsComponent.class);
 
-				// Set position, velocity and rotation;
-				projPhys.setPosition(turretPhys.getPosition());
-				projPhys.setVelocity(tmp.set(90f, 0).rotate(turretPhys.getRotation()));
+				// Set position
+				TextureSprite turretSprite = gameObject.getComponent(GraphicsComponent.class).getSprite();
+				tmp.set(turretSprite.getSize() / 2f, 0).rotate(turretPhys.getRotation());
+				tmp.add(turretPhys.getPosition());
+				projPhys.setPosition(tmp);
+
+				// set velocity and rotation
+				projPhys.setVelocity(tmp.set(GameConfig.BULLET_SPEED, 0).rotate(turretPhys.getRotation()));
 				projPhys.setRotation(turretPhys.getRotation());
 
 				// set the tag to "playerProj" or "enemyProj"
 				projectile.setTag(gameObject.getParent().getTag() + "_proj");
 
-				projectile.setLayer(Screen.LAYER_1);
+				projectile.setLayer(Screen.LAYER_PROJECTILES);
 				gameObject.getScreen().addGameObject(projectile);
 			}
 		}

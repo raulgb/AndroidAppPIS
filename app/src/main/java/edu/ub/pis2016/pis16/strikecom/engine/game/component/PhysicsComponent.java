@@ -67,18 +67,18 @@ public class PhysicsComponent extends Component {
 	public Vector2 getPosition() {
 		if (body != null)
 			return position.set(body.position).scl(GameConfig.TILE_SIZE);
-		else return position.scl(GameConfig.TILE_SIZE);
+		else return position;
 	}
 
 	public void setPosition(Vector2 pos) {
 		if (body != null)
-			body.position.set(pos);
+			body.position.set(tmp.set(pos).scl(1f / GameConfig.TILE_SIZE));
 		else position.set(pos);
 	}
 
 	public void setPosition(float x, float y) {
 		if (body != null)
-			body.position.set(x, y);
+			body.position.set(tmp.set(x, y).scl(1f / GameConfig.TILE_SIZE));
 		else position.set(x, y);
 	}
 

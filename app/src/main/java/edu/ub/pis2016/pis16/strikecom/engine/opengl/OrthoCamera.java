@@ -11,7 +11,7 @@ public class OrthoCamera {
 	private GLGraphics glGraphics;
 
 	public Vector2 position;
-	public float zoom;
+	public float zoom = 1;
 	private float frustumWidth;
 	private float frustumHeight;
 
@@ -21,7 +21,6 @@ public class OrthoCamera {
 		this.frustumHeight = frustumHeight;
 
 		position = new Vector2(frustumWidth / 2f, frustumHeight / 2f);
-		zoom = 1;
 
 		// Setup viewport
 		GL10 gl = glGraphics.getGL();

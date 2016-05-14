@@ -91,7 +91,7 @@ public class AlexanderScreen extends Screen {
 			public GameObject createObject() {
 				// Create a Bullet gameObject
 				GameObject projectile = new GameObject();
-				projectile.setLayer(Screen.LAYER_2);
+				projectile.setLayer(Screen.LAYER_PROJECTILES);
 				projectile.putComponent(new PhysicsComponent());
 				projectile.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("bullet")));
 				projectile.getComponent(GraphicsComponent.class).getSprite().setScale(0.3f);
@@ -103,7 +103,7 @@ public class AlexanderScreen extends Screen {
 		strikeBase = new StrikeBaseTest(new StrikeBaseConfig(StrikeBaseConfig.Model.MKII));
 		strikeBase.putComponent(new VehicleFollowBehavior());
 		strikeBase.setTag("player");
-		strikeBase.setLayer(LAYER_1);
+		strikeBase.setLayer(LAYER_VEHICLES);
 		strikeBase.getComponent(PhysicsComponent.class).body.position.set(512, 512);
 		addGameObject("StrikeBase", strikeBase);
 

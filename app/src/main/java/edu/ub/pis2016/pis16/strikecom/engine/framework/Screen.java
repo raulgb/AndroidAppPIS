@@ -13,10 +13,31 @@ import edu.ub.pis2016.pis16.strikecom.engine.physics.Physics2D;
 public abstract class Screen implements Disposable {
 	public static final int LAYER_TERRAIN = -1;
 	public static final int LAYER_BACKGROUND = 0;
-	public static final int LAYER_1 = 1;
-	public static final int LAYER_2 = 2;
-	public static final int LAYER_3 = 3;
-	public static final int LAYER_4 = 4;
+
+	/** Building Bottoms */
+	public static final int LAYER_BUILDING_BOTTOM = 1;
+
+	/** All vehicles except strikebase */
+	public static final int LAYER_VEHICLES = 5;
+	/** Turrets on top vehicles except strikebase */
+	public static final int LAYER_VEHICLE_TURRET = 6;
+
+	/** Strikebase Base Layer */
+	public static final int LAYER_STRIKEBASE = 10;
+	public static final int LAYER_STRIKEBASE_UPGRADES = 11;
+	public static final int LAYER_STRIKEBASE_UPGRADES_TOP = 12;
+	public static final int LAYER_STRIKEBASE_TURRETS = 15;
+	public static final int LAYER_STRIKEBASE_TURRET_UPGRADES = 16;
+
+	/** Projectiles */
+	public static final int LAYER_PROJECTILES = 20;
+
+
+	/** Building tops */
+	public static final int LAYER_BUILDING_TOP = 5;
+
+	/** Terrain overlaping everithing else */
+	public static final int LAYER_TALL_TERRAIN = 50;
 	public static final int LAYER_GUI = 99;
 
 
@@ -82,11 +103,11 @@ public abstract class Screen implements Disposable {
 		return null;
 	}
 
-	public void pauseGame(){
+	public void pauseGame() {
 		gamePaused = true;
 	}
 
-	public void resumeGame(){
+	public void resumeGame() {
 		gamePaused = false;
 	}
 
@@ -127,8 +148,13 @@ public abstract class Screen implements Disposable {
 	 * Use GameObject.destroy() instead.
 	 * Called by GameObjects when they are initially marked for disposal. Do not use unless you know what
 	 * you're doing.
+	 * <p/>
+	 * This method also removes any children of the destroyed object, recursively.
 	 */
 	public void removeGameObject(GameObject go) {
+		for (GameObject child : goOrderedList)
+			if (child.getParent() == go)
+				removeGameObject(child);
 		GOsToRemove.add(go);
 	}
 
@@ -156,7 +182,7 @@ public abstract class Screen implements Disposable {
 					break;
 				}
 
-			if(keyToRemove != null)
+			if (keyToRemove != null)
 				gameObjects.remove(keyToRemove);
 		}
 		GOsToRemove.clear();

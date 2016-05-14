@@ -185,7 +185,7 @@ public class FragmentedGameActivity extends Activity {
 		StrikeBaseTest strikeBase = screen.getGameObject("StrikeBase", StrikeBaseTest.class);
 
 		SlotsFragment slots = new SlotsFragment();
-		slots.setStrikeBaseModel(strikeBase.getConfig().model);
+		slots.setStrikeBaseModel(strikeBase.getCfg().model);
 		slots.setNewItem(selectedItem);
 		slots.setTurretSelection(turretIsSelected);
 		slots.show(getFragmentManager(), "slots");
