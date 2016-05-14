@@ -25,7 +25,7 @@ public abstract class AndroidGame extends Activity implements Game {
 
 	AndroidFastRenderView renderView;
 	Graphics graphics;
-	Audio audio;
+	AndroidAudio audio;
 	Input input;
 	FileIO fileIO;
 	Screen screen;
@@ -100,7 +100,7 @@ public abstract class AndroidGame extends Activity implements Game {
 		throw new IllegalStateException("Using Canvas API to draw.");
 	}
 
-	public Audio getAudio() {
+	public AndroidAudio getAudio() {
 		return audio;
 	}
 

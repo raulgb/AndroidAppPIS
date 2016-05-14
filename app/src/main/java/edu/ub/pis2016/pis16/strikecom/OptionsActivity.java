@@ -57,6 +57,7 @@ public class OptionsActivity extends Activity {
 
             public void onProgressChanged(SeekBar seekBarMusic, int percent, boolean fromUser){
                 seekBarPercent=percent;
+
             }
 
             public void onStartTrackingTouch(SeekBar seekBarMusic) {

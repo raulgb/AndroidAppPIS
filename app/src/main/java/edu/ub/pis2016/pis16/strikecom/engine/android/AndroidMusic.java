@@ -11,6 +11,8 @@ public class AndroidMusic implements Music, MediaPlayer.OnCompletionListener {
 	MediaPlayer mediaPlayer;
 	boolean isPrepared = false;
 
+
+
 	public AndroidMusic(AssetFileDescriptor assetDescriptor) {
 		mediaPlayer = new MediaPlayer();
 		try {

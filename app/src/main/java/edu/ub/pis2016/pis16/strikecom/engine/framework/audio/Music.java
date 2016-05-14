@@ -1,6 +1,7 @@
 package edu.ub.pis2016.pis16.strikecom.engine.framework.audio;
 
 public interface Music {
+
 	public void play();
 
 	public void stop();
