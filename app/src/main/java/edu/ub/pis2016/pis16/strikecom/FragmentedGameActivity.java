@@ -125,16 +125,6 @@ public class FragmentedGameActivity extends Activity {
 		//Ask the user if he/she really wants to exit game
 
 
-/*
-
-		InventoryFragment inventoryFrag= new InventoryFragment();
-		//Falta codigo
-		if (inventoryFrag != null && inventoryFrag.isVisible()){
-			inventoryFrag.dismiss();
-			finish();
-			resumeGame();
-		} else {
-*/
 
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setIcon(android.R.drawable.ic_dialog_alert);
@@ -143,6 +133,7 @@ public class FragmentedGameActivity extends Activity {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					// return to main menu
+
 					Intent intent = new Intent(getApplicationContext(), MainMenuActivity.class);
 					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					startActivity(intent);

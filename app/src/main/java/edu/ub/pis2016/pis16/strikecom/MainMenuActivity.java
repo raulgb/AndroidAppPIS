@@ -4,17 +4,19 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class MainMenuActivity extends AppCompatActivity {
+public class MainMenuActivity extends AppCompatActivity{
 
 	Activity mainMenu;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+
 
 		super.onCreate(savedInstanceState);
 		mainMenu = this;
@@ -32,6 +34,7 @@ public class MainMenuActivity extends AppCompatActivity {
 			@Override
 			public void onClick(View view) {
 				Intent changeToGame = new Intent(mainMenu, SelectMenuActivity.class);
+
 				startActivity(changeToGame);
 			}
 		});

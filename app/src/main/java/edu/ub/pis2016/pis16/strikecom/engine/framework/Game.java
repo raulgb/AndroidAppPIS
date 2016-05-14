@@ -15,6 +15,8 @@ public interface Game {
 
 	public AndroidAudio getAudio();
 
+	public int getValueMusic();
+
 	public void setScreen(Screen screen);
 
 	public Screen getCurrentScreen();

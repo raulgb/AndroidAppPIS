@@ -1,13 +1,20 @@
 package edu.ub.pis2016.pis16.strikecom;
 
 import android.app.Activity;
+import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
+import edu.ub.pis2016.pis16.strikecom.engine.opengl.GLGameFragment;
 
 /**
  * Created by root on 13/05/16.
@@ -75,9 +82,24 @@ public class OptionsActivity extends Activity {
             @Override
             public void onClick(View v){
                 percentMusic=seekBarMusic.getProgress();
-                percentSound=seekBarSound.getProgress();
-                Intent changeToGame = new Intent(Options, MainMenuActivity.class);
-                startActivity(changeToGame);
+                percentSound=seekBarSound.getProgress();/*
+                Bundle bundle = new Bundle();
+                bundle.putInt("percentMusic", percentMusic);
+                StrikeComGLGame fragObj = new StrikeComGLGame();
+                fragObj.newInstance(bundle);
+                FragmentTransaction transaction= getFragmentManager().beginTransaction();
+                transaction.replace(R.id.gameFragment, fragObj);
+                transaction.commit();*/
+
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Options);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putInt("percentMusic",percentMusic);
+                editor.commit();
+
+                finish();
+
+                /*Intent changeToGame = new Intent(Options, MainMenuActivity.class);
+                startActivity(changeToGame);*/
             }
         });
 
@@ -85,11 +107,20 @@ public class OptionsActivity extends Activity {
         btnExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent changeToGame = new Intent(Options, MainMenuActivity.class);
-                startActivity(changeToGame);
+                finish();
+                /*Intent changeToGame = new Intent(Options, MainMenuActivity.class);
+                startActivity(changeToGame);*/
             }
         });
 
 
+    }
+
+    public int getPercentMusic(){
+        return percentMusic;
+    }
+
+    public int getPercentSound(){
+        return percentSound;
     }
 }

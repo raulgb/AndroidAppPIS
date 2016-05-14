@@ -18,7 +18,9 @@ public class Assets {
 	/** Contains all of the game's sprites */
 	public static TextureAtlas SPRITE_ATLAS;
 
+
 	// Sounds and Music
+	public static int percentMusic;
 	public static AndroidMusic music;
 	public static Sound sfxShoot;
 
@@ -26,6 +28,7 @@ public class Assets {
 	public static void loadAssets(Game game) {
 		progress = 0;
 		ready = false;
+		percentMusic= game.getValueMusic();
 
 		// Start a new async thread to load assets while the game does other stuff
 		new Thread(new AssetLoaderRunnable(game)).start();
@@ -57,7 +60,9 @@ public class Assets {
 
 				music = game.getAudio().newMusic("music.mp3");
 				music.setLooping(true);
-				music.setVolume(1f);
+				music.setVolume((((float)percentMusic))/100.0f);
+/*				music.setVolume(1f);
+				System.out.printf("Musica: "+percentMusic);*/
 				music.play();
 				Thread.sleep(500);
 
@@ -75,8 +80,8 @@ public class Assets {
 	/** Disposes of all managed assets */
 	public static void disposeAll() {
 		ready = false;
+		music.stop();
 		music.dispose();
-
 		SPRITE_ATLAS.dispose();
 	}
 }

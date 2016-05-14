@@ -1,8 +1,12 @@
 package edu.ub.pis2016.pis16.strikecom.engine.opengl;
 
 import android.app.Fragment;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +17,8 @@ import java.util.Iterator;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import edu.ub.pis2016.pis16.strikecom.OptionsActivity;
+import edu.ub.pis2016.pis16.strikecom.R;
 import edu.ub.pis2016.pis16.strikecom.engine.android.AndroidAudio;
 import edu.ub.pis2016.pis16.strikecom.engine.android.AndroidFileIO;
 import edu.ub.pis2016.pis16.strikecom.engine.android.AndroidInput;
@@ -34,9 +40,11 @@ public abstract class GLGameFragment extends Fragment implements Game, GLSurface
 	/** Android GL view object. */
 	GLSurfaceView glView;
 
+
 	// Interface objects
 	GLGraphics glGraphics;
 	AndroidAudio audio;
+	int valueMusic;
 	Input input;
 	FileIO fileIO;
 	Screen screen;
@@ -59,6 +67,19 @@ public abstract class GLGameFragment extends Fragment implements Game, GLSurface
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+/*		OptionsActivity activity =(OptionsActivity) getActivity();
+
+		valueMusic=activity.getPercentMusic();*/
+		Bundle args = getArguments();
+/*		if(args!=null) {
+			valueMusic = args.getInt("percentMusic", 100);
+		}else{
+			valueMusic=0;
+		}*/
+
+		SharedPreferences sharedPreferences = 	PreferenceManager.getDefaultSharedPreferences(getActivity().getBaseContext());;
+		valueMusic = sharedPreferences.getInt("percentMusic", 100);
+
 		// Create OpenGL objects
 		glView = new GLSurfaceView(getActivity());
 		glView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
@@ -73,6 +94,10 @@ public abstract class GLGameFragment extends Fragment implements Game, GLSurface
 		return glView;
 	}
 
+	@Override
+	public int getValueMusic(){
+		return valueMusic;
+	}
 
 
 	@Override
@@ -99,6 +124,18 @@ public abstract class GLGameFragment extends Fragment implements Game, GLSurface
 		}
 		glView.onPause();
 		super.onPause();
+	}
+
+	public void newInstance(Bundle b) {
+		/*GLGameFragment fragment = new GLGameFragment() {
+			@Override
+			public Screen getStartScreen() {
+				return null;
+			}
+		};
+*/
+		setArguments(b);
+		/*return fragment;*/
 	}
 
 	@Override
@@ -160,12 +197,16 @@ public abstract class GLGameFragment extends Fragment implements Game, GLSurface
 			state = this.state;
 		}
 
+
+
 		switch (state) {
 			case Running:
 				// Run any pending runnables
 				if (runnables.size() > 0) {
-					for (Runnable r : runnables)
+					for (Runnable r : runnables) {
 						r.run();
+
+					}
 					runnables.clear();
 				}
 
