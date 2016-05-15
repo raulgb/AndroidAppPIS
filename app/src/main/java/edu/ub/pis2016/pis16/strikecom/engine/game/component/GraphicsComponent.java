@@ -1,12 +1,10 @@
 package edu.ub.pis2016.pis16.strikecom.engine.game.component;
 
-import android.util.Log;
-
 import edu.ub.pis2016.pis16.strikecom.engine.game.Component;
 import edu.ub.pis2016.pis16.strikecom.engine.game.DrawableComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureRegion;
-import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureSprite;
+import edu.ub.pis2016.pis16.strikecom.engine.opengl.Sprite;
 
 /**
  * A Component in charge of drawing anything that a GameObject might need to draw.
@@ -15,10 +13,10 @@ import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureSprite;
  */
 public class GraphicsComponent extends Component implements DrawableComponent {
 
-	private TextureSprite sprite;
+	private Sprite sprite;
 
 	public GraphicsComponent(TextureRegion region) {
-		this.sprite = new TextureSprite(region);
+		this.sprite = new Sprite(region);
 	}
 
 	/** Draws the associated Drawable. If the GameObject has a PhysicsComponent, it will pull position data from it. */
@@ -43,7 +41,7 @@ public class GraphicsComponent extends Component implements DrawableComponent {
 		sprite.setRegion(region);
 	}
 
-	public TextureSprite getSprite() {
+	public Sprite getSprite() {
 		return sprite;
 	}
 

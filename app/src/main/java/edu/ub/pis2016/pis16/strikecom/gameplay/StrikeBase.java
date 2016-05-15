@@ -6,9 +6,9 @@ import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
+import edu.ub.pis2016.pis16.strikecom.engine.opengl.Sprite;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureRegion;
-import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureSprite;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.KinematicBody;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Rectangle;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Animation;
@@ -23,9 +23,9 @@ public class StrikeBase extends Vehicle {
 
 	private static final int LEFT = 0, RIGHT = 1;
 
-	private TextureSprite hull;
-	private TextureSprite leftThreads;
-	private TextureSprite rightThreads;
+	private Sprite hull;
+	private Sprite leftThreads;
+	private Sprite rightThreads;
 
 	private TextureRegion[] sbmk1_hull;
 	private TextureRegion[][] sbmk1_threads;
@@ -86,11 +86,11 @@ public class StrikeBase extends Vehicle {
 		}
 
 		// Create sprites
-		hull = new TextureSprite(sbmk1_hull[0]);
+		hull = new Sprite(sbmk1_hull[0]);
 		hull.setSize(GameConfig.TILE_SIZE * 2);
-		leftThreads = new TextureSprite(sbmk1_threads[LEFT][0]);
+		leftThreads = new Sprite(sbmk1_threads[LEFT][0]);
 		leftThreads.setSize(GameConfig.TILE_SIZE * 2);
-		rightThreads = new TextureSprite(sbmk1_threads[RIGHT][0]);
+		rightThreads = new Sprite(sbmk1_threads[RIGHT][0]);
 		rightThreads.setSize(GameConfig.TILE_SIZE * 2);
 
 		// Animations

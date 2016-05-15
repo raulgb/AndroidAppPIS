@@ -7,7 +7,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
  * Encapsulates a region inside a more convenient container. Keeps track of drawing position, rotation
  * and Scale.
  */
-public class TextureSprite {
+public class Sprite {
 
 	private TextureRegion region;
 
@@ -20,7 +20,7 @@ public class TextureSprite {
 	private Vector2 position;
 
 
-	public TextureSprite(TextureRegion region) {
+	public Sprite(TextureRegion region) {
 		this.region = region;
 
 		this.width = region.width;

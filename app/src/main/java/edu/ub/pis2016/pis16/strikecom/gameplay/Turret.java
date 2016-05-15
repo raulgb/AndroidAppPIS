@@ -3,9 +3,8 @@ package edu.ub.pis2016.pis16.strikecom.gameplay;
 import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.GraphicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
-import edu.ub.pis2016.pis16.strikecom.engine.math.Angle;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
-import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureSprite;
+import edu.ub.pis2016.pis16.strikecom.engine.opengl.Sprite;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 
 /** A Generic turret for use with a {@link Vehicle}. */
@@ -17,7 +16,7 @@ public class Turret extends GameObject {
 
 	Vector2 tmp;
 
-	TextureSprite sprite;
+	Sprite sprite;
 	int upgradeStatus = 0;
 
 	Vector2 anchor;
@@ -37,7 +36,7 @@ public class Turret extends GameObject {
 		putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion(model, upgradeStatus)));
 		putComponent(new PhysicsComponent());
 
-		sprite = new TextureSprite(Assets.SPRITE_ATLAS.getRegion(model, upgradeStatus));
+		sprite = new Sprite(Assets.SPRITE_ATLAS.getRegion(model, upgradeStatus));
 	}
 
 	public void setId(String id) {

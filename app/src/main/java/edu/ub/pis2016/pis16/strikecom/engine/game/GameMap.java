@@ -6,11 +6,10 @@ import java.util.HashMap;
 import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
-import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureSprite;
+import edu.ub.pis2016.pis16.strikecom.engine.opengl.Sprite;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Physics2D;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Perlin2D;
-import edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig;
 
 /**
  * Created by Alexander Bevzenko on 10/05/16.
@@ -21,24 +20,24 @@ public class GameMap {
 	private Perlin2D perlin;
 	private float[][] pTable;
 	private boolean[][] discoveredTable; // to show discovered terrain on minimap
-	private TextureSprite[][] tTable;
+	private Sprite[][] tTable;
 	private Physics2D physics2D;
 
 	private int drawDistance;
 	private int tileSize;
 	private int width, height;
 
-	TextureSprite grass;
-	TextureSprite dry;
-	TextureSprite[] sand;
-	TextureSprite water;
+	Sprite grass;
+	Sprite dry;
+	Sprite[] sand;
+	Sprite water;
 
-	TextureSprite[] gray;
+	Sprite[] gray;
 
-	HashMap<String, TextureSprite> dryToGrass = new HashMap<>();
-	HashMap<String, TextureSprite> sandToDry = new HashMap<>();
+	HashMap<String, Sprite> dryToGrass = new HashMap<>();
+	HashMap<String, Sprite> sandToDry = new HashMap<>();
 
-	ArrayList<TextureSprite> allSprites = new ArrayList<>();
+	ArrayList<Sprite> allSprites = new ArrayList<>();
 
 	/**
 	 * This generates map of desired size and adds borders to physics engine
@@ -60,52 +59,52 @@ public class GameMap {
 
 		pTable = new float[width][height];
 		discoveredTable = new boolean[width][height]; // minimap purposes
-		tTable = new TextureSprite[width][height];
+		tTable = new Sprite[width][height];
 		pTable = perlin.perlinMap(width, height, squareSize, octaves, persistence);
 
-		gray = new TextureSprite[8];
+		gray = new Sprite[8];
 		for (int i = 0; i < gray.length; i++) {
-			gray[i] = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("gray", i));
+			gray[i] = new Sprite(Assets.SPRITE_ATLAS.getRegion("gray", i));
 			allSprites.add(gray[i]);
 		}
 
-		grass = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("grass", 0));
+		grass = new Sprite(Assets.SPRITE_ATLAS.getRegion("grass", 0));
 		allSprites.add(grass);
 
-		dry = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("dry", 0));
+		dry = new Sprite(Assets.SPRITE_ATLAS.getRegion("dry", 0));
 		allSprites.add(dry);
 
-		water = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("water", 0));
+		water = new Sprite(Assets.SPRITE_ATLAS.getRegion("water", 0));
 		allSprites.add(water);
 
-		sand = new TextureSprite[2];
-		sand[0] = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("sand", 0));
-		sand[1] = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("sand", 1));
+		sand = new Sprite[2];
+		sand[0] = new Sprite(Assets.SPRITE_ATLAS.getRegion("sand", 0));
+		sand[1] = new Sprite(Assets.SPRITE_ATLAS.getRegion("sand", 1));
 		allSprites.add(sand[0]);
 		allSprites.add(sand[1]);
 
-		dryToGrass.put("dry_grass_nw", new TextureSprite(Assets.SPRITE_ATLAS.getRegion("dry_grass_nw")));
-		dryToGrass.put("dry_grass_n", new TextureSprite(Assets.SPRITE_ATLAS.getRegion("dry_grass_n")));
-		dryToGrass.put("dry_grass_ne", new TextureSprite(Assets.SPRITE_ATLAS.getRegion("dry_grass_ne")));
-		dryToGrass.put("dry_grass_e", new TextureSprite(Assets.SPRITE_ATLAS.getRegion("dry_grass_e")));
-		dryToGrass.put("dry_grass_se", new TextureSprite(Assets.SPRITE_ATLAS.getRegion("dry_grass_se")));
-		dryToGrass.put("dry_grass_s", new TextureSprite(Assets.SPRITE_ATLAS.getRegion("dry_grass_s")));
-		dryToGrass.put("dry_grass_sw", new TextureSprite(Assets.SPRITE_ATLAS.getRegion("dry_grass_sw")));
-		dryToGrass.put("dry_grass_w", new TextureSprite(Assets.SPRITE_ATLAS.getRegion("dry_grass_w")));
+		dryToGrass.put("dry_grass_nw", new Sprite(Assets.SPRITE_ATLAS.getRegion("dry_grass_nw")));
+		dryToGrass.put("dry_grass_n", new Sprite(Assets.SPRITE_ATLAS.getRegion("dry_grass_n")));
+		dryToGrass.put("dry_grass_ne", new Sprite(Assets.SPRITE_ATLAS.getRegion("dry_grass_ne")));
+		dryToGrass.put("dry_grass_e", new Sprite(Assets.SPRITE_ATLAS.getRegion("dry_grass_e")));
+		dryToGrass.put("dry_grass_se", new Sprite(Assets.SPRITE_ATLAS.getRegion("dry_grass_se")));
+		dryToGrass.put("dry_grass_s", new Sprite(Assets.SPRITE_ATLAS.getRegion("dry_grass_s")));
+		dryToGrass.put("dry_grass_sw", new Sprite(Assets.SPRITE_ATLAS.getRegion("dry_grass_sw")));
+		dryToGrass.put("dry_grass_w", new Sprite(Assets.SPRITE_ATLAS.getRegion("dry_grass_w")));
 		allSprites.addAll(dryToGrass.values());
 
-//		sandToDry.put("sand_dry_nw", new TextureSprite(Assets.SPRITE_ATLAS.getRegion("sand_dry_nw")));
-//		sandToDry.put("sand_dry_n", new TextureSprite(Assets.SPRITE_ATLAS.getRegion("sand_dry_n")));
-//		sandToDry.put("sand_dry_ne", new TextureSprite(Assets.SPRITE_ATLAS.getRegion("sand_dry_ne")));
-//		sandToDry.put("sand_dry_e", new TextureSprite(Assets.SPRITE_ATLAS.getRegion("sand_dry_e")));
-//		sandToDry.put("sand_dry_se", new TextureSprite(Assets.SPRITE_ATLAS.getRegion("sand_dry_se")));
-//		sandToDry.put("sand_dry_s", new TextureSprite(Assets.SPRITE_ATLAS.getRegion("sand_dry_s")));
-//		sandToDry.put("sand_dry_sw", new TextureSprite(Assets.SPRITE_ATLAS.getRegion("sand_dry_sw")));
-//		sandToDry.put("sand_dry_w", new TextureSprite(Assets.SPRITE_ATLAS.getRegion("sand_dry_w")));
+//		sandToDry.put("sand_dry_nw", new Sprite(Assets.SPRITE_ATLAS.getRegion("sand_dry_nw")));
+//		sandToDry.put("sand_dry_n", new Sprite(Assets.SPRITE_ATLAS.getRegion("sand_dry_n")));
+//		sandToDry.put("sand_dry_ne", new Sprite(Assets.SPRITE_ATLAS.getRegion("sand_dry_ne")));
+//		sandToDry.put("sand_dry_e", new Sprite(Assets.SPRITE_ATLAS.getRegion("sand_dry_e")));
+//		sandToDry.put("sand_dry_se", new Sprite(Assets.SPRITE_ATLAS.getRegion("sand_dry_se")));
+//		sandToDry.put("sand_dry_s", new Sprite(Assets.SPRITE_ATLAS.getRegion("sand_dry_s")));
+//		sandToDry.put("sand_dry_sw", new Sprite(Assets.SPRITE_ATLAS.getRegion("sand_dry_sw")));
+//		sandToDry.put("sand_dry_w", new Sprite(Assets.SPRITE_ATLAS.getRegion("sand_dry_w")));
 //		allSprites.addAll(sandToDry.values());
 
 		// Scale all sprites to same dimensions
-		for (TextureSprite tp : allSprites) {
+		for (Sprite tp : allSprites) {
 			tp.setSize(tileSize);
 //			float texSize = tp.getRegion().width;
 //			tp.setScale(1.1f * (tileSize / texSize));
@@ -122,12 +121,12 @@ public class GameMap {
 
 				tTable[row][col] = getTile(pTable[row][col]);
 
-				TextureSprite center = getTile(pTable[row][col]);
+				Sprite center = getTile(pTable[row][col]);
 
-				TextureSprite east = getTile(pTable[row][col + 1]);
-				TextureSprite west = getTile(pTable[row][col - 1]);
-				TextureSprite north = getTile(pTable[row + 1][col]);
-				TextureSprite south = getTile(pTable[row - 1][col]);
+				Sprite east = getTile(pTable[row][col + 1]);
+				Sprite west = getTile(pTable[row][col - 1]);
+				Sprite north = getTile(pTable[row + 1][col]);
+				Sprite south = getTile(pTable[row - 1][col]);
 
 				if (center == dry) {
 					if (north == grass)
@@ -168,7 +167,7 @@ public class GameMap {
 		this.drawDistance = drawDistance;
 	}
 
-	private TextureSprite getTile(float value) {
+	private Sprite getTile(float value) {
 //		if (true)
 //			return gray[(int) (MathUtils.lerp(0, 8, value))];
 		if (value > 0.6f)
@@ -218,7 +217,7 @@ public class GameMap {
 	 * @param value perlin noise value
 	 * @return
 	 */
-	private TextureSprite getGray(float value) {
+	private Sprite getGray(float value) {
 		if (value > 0.5f)
 			return gray[5]; //equvalent of grass
 		else if (value > 0.4f)
@@ -238,7 +237,7 @@ public class GameMap {
 	public void drawMiniMap(SpriteBatch batch, Vector2 center) {
 		float tmpY;
 		float tmpX;
-		TextureSprite tmp;
+		Sprite tmp;
 
 		for (int y = 0; y < height; y++) {
 			tmpY = (int) (center.y - height + y * 2);

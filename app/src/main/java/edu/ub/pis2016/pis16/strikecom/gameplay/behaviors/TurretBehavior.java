@@ -7,8 +7,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.game.component.GraphicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Angle;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
-import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureSprite;
-import edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig;
+import edu.ub.pis2016.pis16.strikecom.engine.opengl.Sprite;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.TurretConfig;
 import edu.ub.pis2016.pis16.strikecom.screens.DummyGLScreen;
 
@@ -121,7 +120,7 @@ public class TurretBehavior extends BehaviorComponent {
 		PhysicsComponent projPhys = projectile.getComponent(PhysicsComponent.class);
 
 		// Set position
-		TextureSprite turretSprite = gameObject.getComponent(GraphicsComponent.class).getSprite();
+		Sprite turretSprite = gameObject.getComponent(GraphicsComponent.class).getSprite();
 		tmp.set(turretSprite.getSize() / 2f, 0).rotate(turretPhys.getRotation());
 		tmp.add(turretPhys.getPosition());
 		projPhys.setPosition(tmp);

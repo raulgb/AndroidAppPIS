@@ -16,9 +16,9 @@ import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.GLGraphics;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.OrthoCamera;
+import edu.ub.pis2016.pis16.strikecom.engine.opengl.Sprite;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Texture;
-import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureSprite;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.ContactListener;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Physics2D;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
@@ -57,15 +57,15 @@ public class AlexanderScreen extends Screen {
 	GameObject moveIcon;
 	StrikeBase strikeBase;
 
-	TextureSprite grass;
-	TextureSprite g0;
-	TextureSprite g1;
-	TextureSprite g2;
-	TextureSprite g3;
-	TextureSprite g4;
-	TextureSprite g5;
-	TextureSprite g6;
-	TextureSprite g7;
+	Sprite grass;
+	Sprite g0;
+	Sprite g1;
+	Sprite g2;
+	Sprite g3;
+	Sprite g4;
+	Sprite g5;
+	Sprite g6;
+	Sprite g7;
 	GameMap gameMap;
 
 
@@ -114,15 +114,15 @@ public class AlexanderScreen extends Screen {
 		moveIcon.getComponent(GraphicsComponent.class).getSprite().setScale(0.3f);
 		addGameObject("MoveIcon", moveIcon);
 
-		grass = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("grass"));
-		g0 = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("gray",0));
-		g1 = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("gray",1));
-		g2 = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("gray",2));
-		g3 = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("gray",3));
-		g4 = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("gray",4));
-		g5 = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("gray",5));
-		g6 = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("gray",6));
-		g7 = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("gray",7));
+		grass = new Sprite(Assets.SPRITE_ATLAS.getRegion("grass"));
+		g0 = new Sprite(Assets.SPRITE_ATLAS.getRegion("gray",0));
+		g1 = new Sprite(Assets.SPRITE_ATLAS.getRegion("gray",1));
+		g2 = new Sprite(Assets.SPRITE_ATLAS.getRegion("gray",2));
+		g3 = new Sprite(Assets.SPRITE_ATLAS.getRegion("gray",3));
+		g4 = new Sprite(Assets.SPRITE_ATLAS.getRegion("gray",4));
+		g5 = new Sprite(Assets.SPRITE_ATLAS.getRegion("gray",5));
+		g6 = new Sprite(Assets.SPRITE_ATLAS.getRegion("gray",6));
+		g7 = new Sprite(Assets.SPRITE_ATLAS.getRegion("gray",7));
 
 		// TODO Changed Constructur
 		gameMap = new GameMap(physics2D,16,1337,16,2,0.5f);
