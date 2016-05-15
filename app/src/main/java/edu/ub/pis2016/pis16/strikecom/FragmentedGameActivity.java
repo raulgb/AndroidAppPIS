@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.PowerManager;
@@ -128,6 +129,7 @@ public class FragmentedGameActivity extends Activity {
 
 			final Dialog dialog = new Dialog(this);
 			dialog.setContentView(R.layout.alert_dialog);
+			dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
 			Button dialogYes = (Button) dialog.findViewById(R.id.btnYes);
 			dialogYes.setOnClickListener(new View.OnClickListener() {
