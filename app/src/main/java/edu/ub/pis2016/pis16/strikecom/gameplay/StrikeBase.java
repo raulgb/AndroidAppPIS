@@ -282,9 +282,13 @@ public class StrikeBase extends Vehicle {
 				// Smart turrets
 				break;
 			case ARMOUR_COMPOSITE:
+				this.hitpoints += 100;
+				this.maxHitpoints += 100;
 				// Increases endurance
 				break;
 			case ARMOUR_PLATE:
+				this.hitpoints += 25;
+				this.maxHitpoints += 25;
 				// Slightly increases endurance
 				break;
 			case ENGINE_EFFICIENCY:
@@ -300,6 +304,27 @@ public class StrikeBase extends Vehicle {
 	public void removeUpgrade(int slot) {
 		// TODO implement
 
+		switch (UpgradeItem.AVAILABLE_FUNCTIONS.valueOf(equippedUpgrades.get(slot).getFunction())) {
+			case AI:
+				// Smart turrets
+				break;
+			case ARMOUR_COMPOSITE:
+				this.maxHitpoints -= 100;
+				this.hitpoints = MathUtils.min( this.hitpoints, this.maxHitpoints  );
+				// Increases endurance
+				break;
+			case ARMOUR_PLATE:
+				this.maxHitpoints -= 25;
+				this.hitpoints = MathUtils.min( this.hitpoints, this.maxHitpoints  );
+				// Slightly increases endurance
+				break;
+			case ENGINE_EFFICIENCY:
+				// Reduces fuel consumption
+				cfg.fuelUsageMultiplier = 1;
+				break;
+			case FUEL:
+				break;
+		}
 		equippedUpgrades.remove(slot);
 	}
 
