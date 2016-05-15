@@ -2,6 +2,7 @@ package edu.ub.pis2016.pis16.strikecom;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -123,10 +124,36 @@ public class FragmentedGameActivity extends Activity {
 	@Override
 	public void onBackPressed() {
 		//Ask the user if he/she really wants to exit game
+			pauseGame();
 
+			final Dialog dialog = new Dialog(this);
+			dialog.setContentView(R.layout.alert_dialog);
 
+			Button dialogYes = (Button) dialog.findViewById(R.id.btnYes);
+			dialogYes.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					// return to main menu
 
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+					Intent intent = new Intent(getApplicationContext(), MainMenuActivity.class);
+					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					startActivity(intent);
+
+				}
+			});
+
+			Button dialogNo = (Button) dialog.findViewById(R.id.btnNo);
+			dialogNo.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+
+					resumeGame();
+					dialog.dismiss();
+				}
+			});
+
+			dialog.show();
+			/*AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setIcon(android.R.drawable.ic_dialog_alert);
 			builder.setTitle(getString(R.string.quit_alert));
 			builder.setPositiveButton(getString(R.string.alert_positive), new DialogInterface.OnClickListener() {
@@ -142,7 +169,7 @@ public class FragmentedGameActivity extends Activity {
 			});
 			builder.setNegativeButton(getString(R.string.alert_negative), null);
 
-			(builder.create()).show();
+			(builder.create()).show();*/
 		/*}*/
 	}
 

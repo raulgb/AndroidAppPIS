@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/btn_retro_act">
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/AlertImage"
+            android:src="@drawable/ic_alert"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="25dp"
+            android:text="@string/alertDialogText"
+            android:textColor="@color/black"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/alertYes"
+            android:id="@+id/btnYes"
+            android:textSize="25dp"
+            android:layout_weight="0.5"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="30dp"
+            style="?android:attr/borderlessButtonStyle"
+            android:background="@drawable/btn_retro_canv"
+            android:layout_marginRight="10dp"
+            android:textColor="@color/black"/>
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/alertNo"
+            android:id="@+id/btnNo"
+            android:textSize="25dp"
+            android:layout_weight="0.5"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="30dp"
+            style="?android:attr/borderlessButtonStyle"
+            android:background="@drawable/btn_retro_canv"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/black"/>
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

@@ -72,4 +72,9 @@
     <string name="fuel_canister">250 fuel&#59;fuel_64&#59;dummy&#59;250 units of hydrocarbon-based combustible used to power the base
         massive engine&#59;FUEL&#59;250</string>
 
+    <!--AlertDialog-->
+    <string name="alertDialogText">Do you want to exit the game?</string>
+    <string name="alertYes">Yes</string>
+    <string name="alertNo">No</string>
+
 </resources>
