@@ -10,18 +10,10 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="20dp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_weight="0.1"
+        android:layout_marginBottom="60dp">
         <TextView
             android:id="@+id/Options"
             android:layout_width="wrap_content"
@@ -38,14 +30,15 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_weight="0.2"
+        android:layout_margin="5dp">
 
         <TextView
             android:id="@+id/Music"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="80dp"
+
             android:text="@string/options_Music"
             android:layout_weight="0.2"
             android:gravity="center"
@@ -57,10 +50,8 @@
             android:id="@+id/seekBarMusic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
             android:progressDrawable="@drawable/seekbar_progressbar"
             android:layout_weight="0.7"
-            android:layout_marginTop="80dp"
             android:progress="100"
             android:thumbTintMode="multiply"
             android:thumb="@drawable/seekbar_thumb"
@@ -71,8 +62,6 @@
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="80dp"
             android:gravity="center"
             android:text="@string/options_percentMusic"
             android:layout_weight="0.1"
@@ -85,14 +74,14 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_weight="0.2"
+        android:layout_margin="5dp">
 
         <TextView
             android:id="@+id/Sound"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="80dp"
             android:gravity="center"
             android:text="@string/options_Sound"
             android:layout_weight="0.2"
@@ -104,10 +93,8 @@
             android:id="@+id/seekBarSound"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
             android:progressDrawable="@drawable/seekbar_progressbar"
             android:layout_weight="0.7"
-            android:layout_marginTop="80dp"
             android:progress="100"
             android:thumbTintMode="multiply"
             android:thumb="@drawable/seekbar_thumb"
@@ -118,8 +105,6 @@
             android:id="@+id/percentSound"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="80dp"
             android:gravity="center"
             android:text="@string/options_percentSound"
             android:layout_weight="0.1"
@@ -132,28 +117,19 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="20dp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp">
 
         <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/options_exit"
             android:id="@+id/btnExit2"
-            android:textSize="35dp"
+            android:textSize="30dp"
             android:layout_weight="0.5"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="30dp"
             style="?android:attr/borderlessButtonStyle"
             android:background="@drawable/btn_retro_canv"
             android:layout_marginRight="10dp"
@@ -164,10 +140,9 @@
             android:layout_height="wrap_content"
             android:text="@string/options_Save"
             android:id="@+id/btnSave"
-            android:textSize="35dp"
+            android:textSize="30dp"
             android:layout_weight="0.5"
             android:layout_gravity="center_vertical"
-            android:layout_marginRight="30dp"
             style="?android:attr/borderlessButtonStyle"
             android:background="@drawable/btn_retro_canv"
             android:layout_marginLeft="10dp"
