@@ -294,7 +294,7 @@ public class DummyGLScreen extends Screen {
 		addGameObject("shop_1", shop);
 
 		// ------ STRIKEBASE CONFIG ------------
-		strikeBase = new StrikeBase(new StrikeBaseConfig(StrikeBaseConfig.Model.MKII));
+		strikeBase = new StrikeBase(new StrikeBaseConfig(strikeBaseModel));
 		strikeBase.putComponent(new VehicleFollowBehavior());
 		strikeBase.getComponent(VehicleFollowBehavior.class).setMinRange(1.5f * TILE_SIZE);
 		strikeBase.setTag("player_strikebase");

@@ -33,6 +33,7 @@ import edu.ub.pis2016.pis16.strikecom.gameplay.items.Inventory;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.Item;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.TurretItem;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.UpgradeItem;
+import edu.ub.pis2016.pis16.strikecom.screens.DummyGLScreen;
 
 public class FragmentedGameActivity extends Activity {
 
@@ -50,6 +51,8 @@ public class FragmentedGameActivity extends Activity {
 
 		int selectedConfig = getIntent().getIntExtra("config", 1);
 		SidebarFragment.strikeBaseModel = StrikeBaseConfig.Model.values()[selectedConfig];
+		SlotsFragment.strikeBaseModel = StrikeBaseConfig.Model.values()[selectedConfig];
+		DummyGLScreen.strikeBaseModel = StrikeBaseConfig.Model.values()[selectedConfig];
 
 		// Hide window decorations
 		hideSystemUI();
@@ -216,7 +219,6 @@ public class FragmentedGameActivity extends Activity {
 		StrikeBase strikeBase = screen.getGameObject("StrikeBase", StrikeBase.class);
 
 		SlotsFragment slots = new SlotsFragment();
-		slots.setStrikeBaseModel(strikeBase.getCfg().model);
 		slots.setNewItem(selectedItem);
 		slots.setTurretSelection(turretIsSelected);
 		slots.show(getFragmentManager(), "slots");

@@ -9,6 +9,7 @@ import java.util.Map;
 
 import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Physics2D;
+import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
 
 public abstract class Screen implements Disposable {
 	public static final int LAYER_TERRAIN = -1;
@@ -40,6 +41,8 @@ public abstract class Screen implements Disposable {
 	public static final int LAYER_TALL_TERRAIN = 50;
 	public static final int LAYER_GUI = 99;
 
+	/** Strikebase model **/
+	public static StrikeBaseConfig.Model strikeBaseModel = StrikeBaseConfig.Model.MKII;
 
 	protected final Game game;
 

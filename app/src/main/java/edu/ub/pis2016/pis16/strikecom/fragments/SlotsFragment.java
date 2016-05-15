@@ -21,13 +21,11 @@ import edu.ub.pis2016.pis16.strikecom.gameplay.items.UpgradeItem;
 
 public class SlotsFragment extends DialogFragment {
 
-	StrikeBaseConfig.Model strikeBaseModel = StrikeBaseConfig.Model.MKII;
+	public static StrikeBaseConfig.Model strikeBaseModel = StrikeBaseConfig.Model.MKII;
 
 	private Item newItem;
 	private int selectedSlot = -1;
 	private boolean turretIsSelected = true;
-
-	public void setStrikeBaseModel(StrikeBaseConfig.Model strikeBaseModel) {this.strikeBaseModel = strikeBaseModel; }
 
 	public void setNewItem(Item selectedItem) { this.newItem = selectedItem; }
 
