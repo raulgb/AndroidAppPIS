@@ -195,4 +195,5 @@ public class SlotsFragment extends DialogFragment {
 		getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 		return view;
 	}
+
 }
