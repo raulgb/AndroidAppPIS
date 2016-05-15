@@ -65,12 +65,17 @@ public class TextureAtlas {
 		if (index < 0) index = 0;
 		TextureRegion region;
 		if ((region = regions.get(name)[index]) == null)
-			throw new IllegalArgumentException("No region with name: "+name+".");
+			throw new IllegalArgumentException("No region with name: " + name + ".");
 		return region;
 	}
 
 	public TextureRegion getRegion(String name) {
 		return getRegion(name, 0);
+	}
+
+	/** Return all regions with the given name, ordered by index */
+	public TextureRegion[] getRegions(String name) {
+		return regions.get(name);
 	}
 
 	public void addRegion(String name, int x, int y, int w, int h) {
@@ -169,7 +174,7 @@ public class TextureAtlas {
 					else
 						addRegion(regionName, x, y, w, h);
 
-					Log.d("TextureAtlas", "New Region: " +regionName + ": "+ getRegion(regionName, index).toString());
+					Log.d("TextureAtlas", "New Region: " + regionName + ": " + getRegion(regionName, index).toString());
 				}
 			}
 

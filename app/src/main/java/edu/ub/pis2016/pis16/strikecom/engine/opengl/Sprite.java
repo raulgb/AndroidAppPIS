@@ -17,8 +17,7 @@ public class Sprite {
 			scaleY,
 			width,
 			height;
-	private Vector2 position;
-
+	private Vector2 position = new Vector2();
 
 	public Sprite(TextureRegion region) {
 		this.region = region;
@@ -27,8 +26,6 @@ public class Sprite {
 		this.height = region.height;
 		this.scaleX = 1;
 		this.scaleY = 1;
-
-		this.position = new Vector2();
 	}
 
 	public void setRegion(TextureRegion region) {
