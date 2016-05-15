@@ -28,6 +28,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.physics.ContactListener;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.DynamicBody;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Physics2D;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Rectangle;
+import edu.ub.pis2016.pis16.strikecom.engine.physics.StaticBody;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Pool;
 import edu.ub.pis2016.pis16.strikecom.gameplay.ThreadVehicle;
@@ -150,6 +151,8 @@ public class DummyGLScreen extends Screen {
 
 			}
 		});
+
+
 
 //		// Zoom in/out Input
 //		addInputProcessor(new InputProcessor() {
@@ -289,7 +292,7 @@ public class DummyGLScreen extends Screen {
 	private void createGameObjects() {
 		// ------ SHOP -----------------
 		GameObject shop = new GameObject();
-		shop.putComponent(new PhysicsComponent());
+		shop.putComponent(new PhysicsComponent( new StaticBody(new Rectangle(1.5f, 1.5f))));
 		shop.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("shop")));
 		shop.setLayer(LAYER_BUILDING_BOTTOM);
 		shop.setPosition((MAP_SIZE / 2f - 4) * TILE_SIZE, MAP_SIZE / 2f * TILE_SIZE);

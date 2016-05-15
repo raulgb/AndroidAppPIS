@@ -9,7 +9,7 @@ public class TurretItem extends Item {
 	float[] stats;
 
 	// Builder
-	public TurretItem(String name, String image, String model, String flavour, float price, float[] stats) {
+	public TurretItem(String name, String image, String model, String flavour, int price, float[] stats) {
 		super(name, image, model, flavour, price);
 		this.stats = stats;
 	}
@@ -21,7 +21,7 @@ public class TurretItem extends Item {
 		if (param.length < 6) { // seq should at least contain name, image, flavour, price and 1 stat.
 			return null;
 		}
-		float p = Float.valueOf(param[4]); //price
+		int p = Integer.valueOf(param[4]); //price
 		float s[] = new float[param.length - 5]; //stats
 		for (int i = 0; i < s.length; i++) {
 			s[i] = Float.valueOf(param[i + 5]);

@@ -19,6 +19,8 @@ import android.widget.Button;
 import java.io.IOException;
 import java.util.HashMap;
 
+import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
+import edu.ub.pis2016.pis16.strikecom.engine.physics.ContactListener;
 import edu.ub.pis2016.pis16.strikecom.fragments.InventoryFragment;
 import edu.ub.pis2016.pis16.strikecom.fragments.MiniMapFragment;
 import edu.ub.pis2016.pis16.strikecom.fragments.ShopFragment;
@@ -71,8 +73,8 @@ public class FragmentedGameActivity extends Activity {
 		// Give the sidebar fragment a reference to the game fragment.
 		sidebar.setGame(game);
 
-		playerState.put("SCRAP", 0);
-		playerState.put("FUEL", 100);
+		playerState.put("SCRAP", 9000);
+		playerState.put("FUEL", 100f);
 		playerState.put("POINTS", 0);
 		playerState.put("INVENTORY", new Inventory());
 
@@ -87,7 +89,7 @@ public class FragmentedGameActivity extends Activity {
 						@Override
 						public void run() {
 							sidebar.updateScrap((Integer) playerState.get("SCRAP"));
-							sidebar.updateFuel((Integer) playerState.get("FUEL"));
+							sidebar.updateFuel((Float) playerState.get("FUEL"));
 						}
 					});
 				}
@@ -97,6 +99,7 @@ public class FragmentedGameActivity extends Activity {
 
 		shopMap.put("shop_1", null);
 		generateInventories();
+
 	}
 
 	@Override
@@ -137,6 +140,7 @@ public class FragmentedGameActivity extends Activity {
 				showInventoryDialog(index, false, false);
 			}
 		});
+
 	}
 
 	private void hideSystemUI() {
@@ -224,7 +228,7 @@ public class FragmentedGameActivity extends Activity {
 		inventoryFrag.setSwitchListEnabled(switchIsEnabled);
 		inventoryFrag.setTurretSelection(turretIsSelected);
 		inventoryFrag.setPlayerScrap((Integer) playerState.get("SCRAP"));
-		inventoryFrag.setPlayerFuel((Integer) playerState.get("FUEL"));
+		inventoryFrag.setPlayerFuel((Float) playerState.get("FUEL"));
 		inventoryFrag.show(getFragmentManager(), "Inventory_Fragment");
 	}
 
@@ -247,7 +251,7 @@ public class FragmentedGameActivity extends Activity {
 		shopFragment.setId(shopID);
 		shopFragment.setInventory(shopMap.get(shopID));
 		shopFragment.setPlayerScrap((Integer) playerState.get("SCRAP"));
-		shopFragment.setPlayerFuel((Integer) playerState.get("FUEL"));
+		shopFragment.setPlayerFuel((Float) playerState.get("FUEL"));
 		shopFragment.show(getFragmentManager(), "shop");
 	}
 
@@ -298,7 +302,7 @@ public class FragmentedGameActivity extends Activity {
 		Inventory inv = (Inventory) playerState.get("INVENTORY");
 		inv.removeItem(fuel);
 		playerState.put("INVENTORY", inv);
-		playerState.put("FUEL", (Integer) playerState.get("FUEL") + 250);
+		playerState.put("FUEL", (Float) playerState.get("FUEL") + 250f);
 
 		updateFuelCounter();
 		resumeGame();
@@ -310,7 +314,7 @@ public class FragmentedGameActivity extends Activity {
 		int scrap = (Integer) playerState.get("SCRAP");
 
 		shopInventory.removeItem(item);
-		scrap -= Math.round(item.getPrice());
+		scrap -= item.getPrice();
 		playerInventory.addItem(item);
 
 		playerState.put("INVENTORY", playerInventory);
@@ -323,10 +327,10 @@ public class FragmentedGameActivity extends Activity {
 		int scrap = (Integer) playerState.get("SCRAP");
 
 		shopInventory.removeItem(item);
-		scrap -= Math.round(item.getPrice());
+		scrap -= item.getPrice();
 
 		if (item.isFuel()) {
-			playerState.put("FUEL", (Integer) playerState.get("FUEL") + 250);
+			playerState.put("FUEL", (Float) playerState.get("FUEL") + 250f);
 		} else {
 			playerInventory.addItem(item);
 			playerState.put("INVENTORY", playerInventory);
@@ -369,13 +373,7 @@ public class FragmentedGameActivity extends Activity {
 				shopMap.put(key, im.getShopInventory(20, 2));
 			}
 
-		} catch (IOException ex) {
-			Inventory testInventory = new Inventory();
-			testInventory.addItem(TurretItem.parseTurretItem("Machinegun;machinegun_64;turret_mk1;Weak yet cheap, makes an ideal weapon for a newbie.;100;2;4;1"));
-			testInventory.addItem(UpgradeItem.parseUpgradeItem("Composite armour;composite_64;turret_mk1;Advanced plating made from a " +
-					"variety of metals and ceramics.;COMPOSITE;4000"));
-			playerState.put("INVENTORY", testInventory);
-		}
+		} catch (IOException ex) {}
 	}
 
 	public void pauseGame() {
@@ -391,7 +389,7 @@ public class FragmentedGameActivity extends Activity {
 	}
 
 	public void updateFuelCounter() {
-		sidebar.updateFuel((Integer) playerState.get("FUEL"));
+		sidebar.updateFuel((Float) playerState.get("FUEL"));
 	}
 
 }

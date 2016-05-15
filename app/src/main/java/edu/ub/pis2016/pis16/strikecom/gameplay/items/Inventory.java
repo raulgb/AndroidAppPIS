@@ -85,7 +85,6 @@ public class Inventory {
 		upgradeList.remove(item);
 	}
 
-
 	// Return lists
 	public List<Item> getTurretInventory() {
 		return turretList;

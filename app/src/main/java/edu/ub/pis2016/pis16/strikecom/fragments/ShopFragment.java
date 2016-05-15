@@ -27,7 +27,7 @@ public class ShopFragment extends InventoryFragment {
 
 					if(turretIsSelected) {
 						TurretItem item = inventory.getTurret(selectedItem);
-						itemPrice = Math.round(item.getPrice());
+						itemPrice = item.getPrice();
 						if(itemPrice <= playerScrap) {
 							callingActivity.buyItem(shopID, item);
 							fillItemList();
@@ -38,7 +38,7 @@ public class ShopFragment extends InventoryFragment {
 
 					} else {
 						UpgradeItem item = inventory.getUpgrade(selectedItem);
-						itemPrice = Math.round(item.getPrice());
+						itemPrice = item.getPrice();
 						if(itemPrice <= playerScrap){
 							callingActivity.buyItem(shopID, item);
 							fillItemList();
@@ -48,7 +48,7 @@ public class ShopFragment extends InventoryFragment {
 
 							if(item.isFuel()){
 								playerFuel += 250;
-								fuelText.setText(Integer.toString(playerFuel));
+								fuelText.setText(Integer.toString(Math.round(playerFuel)));
 							}
 						}
 					}

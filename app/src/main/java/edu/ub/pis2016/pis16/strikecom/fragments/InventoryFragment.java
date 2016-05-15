@@ -33,7 +33,7 @@ public class InventoryFragment extends DialogFragment {
 	protected TextView fuelText;
 
 	protected int playerScrap = 0;
-	protected int playerFuel = 0;
+	protected float playerFuel = 0f;
 	protected int selectedItem;
 	protected int selectedSlot = -1;
 
@@ -48,7 +48,7 @@ public class InventoryFragment extends DialogFragment {
 		this.playerScrap = playerScrap;
 	}
 
-	public void setPlayerFuel(int playerFuel) {
+	public void setPlayerFuel(float playerFuel) {
 		this.playerFuel = playerFuel;
 	}
 
@@ -88,7 +88,7 @@ public class InventoryFragment extends DialogFragment {
 		scrapText = (TextView) view.findViewById(R.id.playerScrap);
 		fuelText = (TextView) view.findViewById(R.id.playerFuel);
 		scrapText.setText("" + playerScrap);
-		fuelText.setText("" + playerFuel);
+		fuelText.setText("" + Math.round(playerFuel));
 
 		// Equip/unequip button
 		equipBtn = (Button) view.findViewById(R.id.inventoryBtn_1);

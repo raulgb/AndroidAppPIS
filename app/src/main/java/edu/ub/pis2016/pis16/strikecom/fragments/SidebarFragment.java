@@ -188,8 +188,8 @@ public class SidebarFragment extends Fragment {
 		scrapText.setText(Integer.toString(scrap));
 	}
 
-	public void updateFuel(int fuel){
-		fuelText.setText(Integer.toString(fuel));
+	public void updateFuel(float fuel){
+		fuelText.setText(Integer.toString(Math.round(fuel)));
 	}
 
 	public void setInventoyText(String text){
