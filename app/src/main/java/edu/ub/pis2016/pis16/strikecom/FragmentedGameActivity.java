@@ -73,7 +73,7 @@ public class FragmentedGameActivity extends Activity {
 		// Give the sidebar fragment a reference to the game fragment.
 		sidebar.setGame(game);
 
-		playerState.put("SCRAP", 9000);
+		playerState.put("SCRAP", 0);
 		playerState.put("FUEL", 100f);
 		playerState.put("POINTS", 0);
 		playerState.put("INVENTORY", new Inventory());
@@ -126,8 +126,7 @@ public class FragmentedGameActivity extends Activity {
 
 			@Override
 			public void onClickInventory() {
-				showShopDialog("shop_1");
-				//showInventoryDialog(-1, true, true);
+				showInventoryDialog(-1, true, true);
 			}
 
 			@Override
@@ -265,7 +264,6 @@ public class FragmentedGameActivity extends Activity {
 		inv.removeItem(item);
 		playerState.put("INVENTORY", inv);
 
-		// TODO Find a better way to display equipped items on the sidebar
 		Button slotBtn = (Button) sidebar.getTurretSlot(slot);
 		int imageID = getResources().getIdentifier(item.getImage(), "drawable", getPackageName());
 		Bitmap original = BitmapFactory.decodeResource(getResources(), imageID);
@@ -285,8 +283,6 @@ public class FragmentedGameActivity extends Activity {
 		Inventory inv = (Inventory) playerState.get("INVENTORY");
 		inv.removeItem(item);
 		playerState.put("INVENTORY", inv);
-
-		// TODO Find a better way to display equipped items on the sidebar
 
 		Button slotBtn = (Button) sidebar.getUpgradeSlot(slot);
 		int imageID = getResources().getIdentifier(item.getImage(), "drawable", getPackageName());

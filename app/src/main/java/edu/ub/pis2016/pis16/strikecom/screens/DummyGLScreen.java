@@ -75,15 +75,21 @@ public class DummyGLScreen extends Screen {
 	GameObject moveIcon;
 	StrikeBase strikeBase;
 
+	FragmentedGameActivity activity;
+
 	public Pool<GameObject> projectilePool;
 	private Vector2 targetPos = new Vector2();
 	private Vector2 tmp = new Vector2();
+	boolean currentShopContact = false;
+	boolean pastShopContact = false;
 
 	public DummyGLScreen(final Game game) {
 		super(game);
 		Log.i("DUMMY_SCREEN", "Created");
 
 		glGraphics = game.getGLGraphics();
+
+		activity = (FragmentedGameActivity) ((StrikeComGLGame)game).getActivity();
 
 		// Create camera, set zoom to fit TILES_ON_SCREEN, rounding to nearest int
 		camera = new OrthoCamera(glGraphics, glGraphics.getWidth(), glGraphics.getHeight());
@@ -121,6 +127,7 @@ public class DummyGLScreen extends Screen {
 
 		// Projectile CONTACT LISTENER
 		physics2D.addContactListener(new ContactListener() {
+
 			@Override
 			public void onCollision(CollisionEvent ce) {
 				GameObject goA = (GameObject) ce.a.userData;
@@ -130,6 +137,7 @@ public class DummyGLScreen extends Screen {
 				if ((goA.group & goB.group) != 0)
 					return;
 
+
 				if (goA.getTag().contains("proj") && !goB.getTag().contains("proj"))
 					if (!goA.getTag().contains(goB.getTag())) {
 						handleProjectileCollision(goA, goB);
@@ -138,6 +146,20 @@ public class DummyGLScreen extends Screen {
 					if (!goB.getTag().contains(goA.getTag())) {
 						handleProjectileCollision(goB, goA);
 					}
+
+				if (goA.getTag().contains("shop") && goB.getTag().contains("player")) {
+					if(!pastShopContact){
+						activity.showShopDialog(goA.getTag());
+					}
+					currentShopContact = true;
+				}
+				if (goB.getTag().contains("shop") && goA.getTag().contains("player")) {
+					if(!pastShopContact){
+						activity.showShopDialog(goB.getTag());
+					}
+					currentShopContact = true;
+				}
+
 			}
 
 			private void handleProjectileCollision(GameObject projectile, GameObject other) {
@@ -218,6 +240,9 @@ public class DummyGLScreen extends Screen {
 
 		super.update(delta);
 
+		pastShopContact = currentShopContact;
+		currentShopContact = false;
+
 		// FPS Counter
 		fpsMean.addValue(delta);
 		second += delta;
@@ -294,6 +319,8 @@ public class DummyGLScreen extends Screen {
 		GameObject shop = new GameObject();
 		shop.putComponent(new PhysicsComponent( new StaticBody(new Rectangle(1.5f, 1.5f))));
 		shop.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("shop")));
+		shop.setTag("shop_1");
+		shop.hitpoints = 9999;
 		shop.setLayer(LAYER_BUILDING_BOTTOM);
 		shop.setPosition((MAP_SIZE / 2f - 4) * TILE_SIZE, MAP_SIZE / 2f * TILE_SIZE);
 		addGameObject("shop_1", shop);
