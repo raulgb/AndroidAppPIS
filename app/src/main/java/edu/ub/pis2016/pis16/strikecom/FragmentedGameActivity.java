@@ -48,7 +48,7 @@ public class FragmentedGameActivity extends Activity {
 		super.onCreate(savedInstanceState);
 
 		// Hide window decorations
-		hideStatusAndNavBar();
+		hideSystemUI();
 
 		// Obtain wakelock (to keep the screen on)
 		PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -69,8 +69,8 @@ public class FragmentedGameActivity extends Activity {
 		playerState.put("POINTS", 0);
 		playerState.put("INVENTORY", new Inventory());
 
-		sidebar.updateScrap((Integer)playerState.get("SCRAP"));
-		sidebar.updateFuel((Integer)playerState.get("FUEL"));
+		sidebar.updateScrap((Integer) playerState.get("SCRAP"));
+		sidebar.updateFuel((Integer) playerState.get("FUEL"));
 
 		shopMap.put("shop_1", null);
 		generateInventories();
@@ -85,6 +85,10 @@ public class FragmentedGameActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+
+		// Hide window decorations
+		hideSystemUI();
+
 		wakeLock.acquire();
 
 		game.setSidebarListener(new SidebarEventListener(game) {
@@ -112,14 +116,17 @@ public class FragmentedGameActivity extends Activity {
 		});
 	}
 
-	private void hideStatusAndNavBar() {
+	private void hideSystemUI() {
+		// Set the IMMERSIVE flag.
+		// Set the content to appear under the system bars so that the content
+		// doesn't resize when the system bars hide and show.
 		getWindow().getDecorView().setSystemUiVisibility(
 				View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 						| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
 						| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-						| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-						| View.SYSTEM_UI_FLAG_FULLSCREEN
-						| View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+						| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+						| View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+						| View.SYSTEM_UI_FLAG_IMMERSIVE);
 	}
 
 	@Override
@@ -216,9 +223,9 @@ public class FragmentedGameActivity extends Activity {
 
 		ShopFragment shopFragment = new ShopFragment();
 		shopFragment.setId(shopID);
-		shopFragment.setInventory( shopMap.get(shopID) );
-		shopFragment.setPlayerScrap( (Integer)playerState.get("SCRAP") );
-		shopFragment.setPlayerFuel( (Integer)playerState.get("FUEL") );
+		shopFragment.setInventory(shopMap.get(shopID));
+		shopFragment.setPlayerScrap((Integer) playerState.get("SCRAP"));
+		shopFragment.setPlayerFuel((Integer) playerState.get("FUEL"));
 		shopFragment.show(getFragmentManager(), "shop");
 	}
 
@@ -269,7 +276,7 @@ public class FragmentedGameActivity extends Activity {
 		Inventory inv = (Inventory) playerState.get("INVENTORY");
 		inv.removeItem(fuel);
 		playerState.put("INVENTORY", inv);
-		playerState.put("FUEL", (Integer)playerState.get("FUEL") + 250);
+		playerState.put("FUEL", (Integer) playerState.get("FUEL") + 250);
 
 		updateFuelCounter();
 		resumeGame();
@@ -364,5 +371,6 @@ public class FragmentedGameActivity extends Activity {
 	public void updateFuelCounter(){
 		sidebar.updateFuel((Integer) playerState.get("FUEL"));
 	}
+
 }
 
