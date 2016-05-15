@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
+import edu.ub.pis2016.pis16.strikecom.engine.opengl.AnimatedSprite;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Sprite;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Physics2D;
@@ -21,8 +22,10 @@ public class GameMap {
 	private float[][] pTable;
 	private boolean[][] discoveredTable; // to show discovered terrain on minimap
 	private Sprite[][] tTable;
-	private Physics2D physics2D;
 
+	private ArrayList<AnimatedSprite> animatedTiles = new ArrayList<>();
+
+	private Physics2D physics2D;
 	private int drawDistance;
 	private int tileSize;
 	private int width, height;
@@ -74,7 +77,7 @@ public class GameMap {
 		dry = new Sprite(Assets.SPRITE_ATLAS.getRegion("dry", 0));
 		allSprites.add(dry);
 
-		water = new Sprite(Assets.SPRITE_ATLAS.getRegion("water", 0));
+		water = new AnimatedSprite(Assets.SPRITE_ATLAS.getRegions("water"), 0.60f);
 		allSprites.add(water);
 
 		sand = new Sprite[2];
@@ -104,8 +107,10 @@ public class GameMap {
 //		allSprites.addAll(sandToDry.values());
 
 		// Scale all sprites to same dimensions
-		for (Sprite tp : allSprites) {
-			tp.setSize(tileSize);
+		for (Sprite sp : allSprites) {
+			sp.setSize(tileSize);
+			if (sp instanceof AnimatedSprite)
+				animatedTiles.add((AnimatedSprite) sp);
 //			float texSize = tp.getRegion().width;
 //			tp.setScale(1.1f * (tileSize / texSize));
 		}
@@ -182,6 +187,12 @@ public class GameMap {
 
 	public float[][] getPTable() {
 		return this.pTable;
+	}
+
+	/** Update all animated tiles */
+	public void update(float delta) {
+		for (AnimatedSprite aSpr : animatedTiles)
+			aSpr.update(delta);
 	}
 
 	/** Draw the map around the given position, by default 8 tiles in each direction */

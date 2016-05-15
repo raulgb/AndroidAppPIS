@@ -1,16 +1,16 @@
 package edu.ub.pis2016.pis16.strikecom.gameplay.config;
 
 /**
- * Created by Arbitro on 15/05/2016.
+ * Created by German Dempere on 15/05/2016.
  */
 public class TurretConfig {
 
 	/** Idle seconds after target not found */
 	public float idle_seconds = 2f;
 	/** Seconds between each shot */
-	public float shoot_freq = 0.5f;
+	public float shoot_freq = 0.25f;
 	/** Moving rotational speed of the turret */
-	public float lerp_speed = 0.075f;
+	public float lerp_speed = 0.050f;
 	/** Range to aim and shoot at targets */
 	public float range = 6 * GameConfig.TILE_SIZE;
 

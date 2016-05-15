@@ -14,7 +14,13 @@ public class AnimatedSprite extends Sprite {
 	public AnimatedSprite(TextureRegion[] regions, float frameTime) {
 		super(regions[0]);
 
-		anim = new Animation(regions.length);
+		this.regions = regions;
+
+		int len = 0;
+		while (regions[len] != null)
+			len++;
+
+		anim = new Animation(len);
 		anim.setFrameTime(frameTime);
 	}
 

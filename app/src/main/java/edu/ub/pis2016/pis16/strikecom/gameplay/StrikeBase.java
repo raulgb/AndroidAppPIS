@@ -24,6 +24,9 @@ public class StrikeBase extends Vehicle {
 	private static final int LEFT = 0, RIGHT = 1;
 
 	private Sprite hull;
+	private Sprite plateArmor;
+	private Sprite compositeArmor;
+
 	private Sprite leftThreads;
 	private Sprite rightThreads;
 
@@ -59,6 +62,8 @@ public class StrikeBase extends Vehicle {
 
 	/** Config instance to modify this StrikeBase's properties */
 	private StrikeBaseConfig cfg;
+	private boolean hasPlateArmor = false;
+	private boolean hasCompositeArmor = false;
 
 	private HashMap<Integer, TurretItem> equippedTurrets = new HashMap<>();
 	private HashMap<Integer, UpgradeItem> equippedUpgrades = new HashMap<>();
@@ -88,6 +93,13 @@ public class StrikeBase extends Vehicle {
 		// Create sprites
 		hull = new Sprite(sbmk1_hull[0]);
 		hull.setSize(GameConfig.TILE_SIZE * 2);
+
+		compositeArmor = new Sprite(Assets.SPRITE_ATLAS.getRegion("composite_" + model));
+		compositeArmor.setSize(GameConfig.TILE_SIZE * 2);
+		plateArmor = new Sprite(Assets.SPRITE_ATLAS.getRegion("plate_" + model));
+		plateArmor.setSize(GameConfig.TILE_SIZE * 2);
+
+
 		leftThreads = new Sprite(sbmk1_threads[LEFT][0]);
 		leftThreads.setSize(GameConfig.TILE_SIZE * 2);
 		rightThreads = new Sprite(sbmk1_threads[RIGHT][0]);
@@ -118,8 +130,8 @@ public class StrikeBase extends Vehicle {
 	@Override
 	public void update(float delta) {
 		// Animations
-		threadAnim[0].setFrameSpeed(leftThreadVel);
-		threadAnim[1].setFrameSpeed(rightThreadVel);
+		threadAnim[0].setFrameSpeed(leftThreadVel / 2f);
+		threadAnim[1].setFrameSpeed(rightThreadVel / 2f);
 		for (Animation a : threadAnim)
 			a.update(delta);
 
@@ -209,6 +221,16 @@ public class StrikeBase extends Vehicle {
 		leftThreads.draw(batch, pos.x, pos.y);
 		rightThreads.draw(batch, pos.x, pos.y);
 		hull.draw(batch, pos.x, pos.y);
+
+		if (hasPlateArmor) {
+			plateArmor.setRotation(rotation);
+			plateArmor.draw(batch, pos.x, pos.y);
+		}
+
+		if (hasCompositeArmor) {
+			compositeArmor.setRotation(rotation);
+			compositeArmor.draw(batch, pos.x, pos.y);
+		}
 	}
 
 
@@ -281,20 +303,26 @@ public class StrikeBase extends Vehicle {
 			case AI:
 				// Smart turrets
 				break;
+
 			case ARMOUR_COMPOSITE:
+				// Increases endurance
 				this.hitpoints += 100;
 				this.maxHitpoints += 100;
-				// Increases endurance
+				hasCompositeArmor = true;
 				break;
+
 			case ARMOUR_PLATE:
+				// Slightly increases endurance
 				this.hitpoints += 25;
 				this.maxHitpoints += 25;
-				// Slightly increases endurance
+				hasPlateArmor = true;
 				break;
+
 			case ENGINE_EFFICIENCY:
 				// Reduces fuel consumption
 				cfg.fuel_usage_mult = 0.75f;
 				break;
+
 			case FUEL:
 				break;
 		}
@@ -310,12 +338,12 @@ public class StrikeBase extends Vehicle {
 				break;
 			case ARMOUR_COMPOSITE:
 				this.maxHitpoints -= 100;
-				this.hitpoints = MathUtils.min( this.hitpoints, this.maxHitpoints  );
+				this.hitpoints = MathUtils.min(this.hitpoints, this.maxHitpoints);
 				// Increases endurance
 				break;
 			case ARMOUR_PLATE:
 				this.maxHitpoints -= 25;
-				this.hitpoints = MathUtils.min( this.hitpoints, this.maxHitpoints  );
+				this.hitpoints = MathUtils.min(this.hitpoints, this.maxHitpoints);
 				// Slightly increases endurance
 				break;
 			case ENGINE_EFFICIENCY:

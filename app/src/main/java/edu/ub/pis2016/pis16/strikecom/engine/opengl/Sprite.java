@@ -108,5 +108,11 @@ public class Sprite {
 		return scaleX;
 	}
 
+	public float getScaleX() {
+		return scaleX;
+	}
 
+	public float getScaleY() {
+		return scaleY;
+	}
 }

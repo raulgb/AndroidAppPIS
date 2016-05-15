@@ -12,8 +12,8 @@ public class VehicleFollowBehavior extends BehaviorComponent {
 	Vector2 target = new Vector2();
 	Vector2 tmp = new Vector2();
 
-	float minRange;
-	float maxRange;
+	float minRange = 0;
+	float maxRange = Float.MAX_VALUE;
 	boolean moveOrder;
 
 	@Override
@@ -26,7 +26,11 @@ public class VehicleFollowBehavior extends BehaviorComponent {
 		Vehicle vehicle = (Vehicle) gameObject;
 
 		// Move AI, strikebase follows the move pointer
-		if (tmp.set(target).sub(pos).len2() > minRange * minRange) {
+		// TODO Not working, vehicles never stop??
+		float distance = tmp.set(target).dst2(pos);
+		if (minRange * minRange < distance || distance < maxRange * maxRange) {
+
+			tmp.set(target).sub(pos);
 			float angleDelta = Angle.angleDelta(rotation, tmp.angle());
 			if (Math.abs(angleDelta) > 5) {
 				if (angleDelta > 0)

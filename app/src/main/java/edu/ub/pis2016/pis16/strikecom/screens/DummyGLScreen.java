@@ -21,6 +21,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.math.WindowedMean;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.GLGameFragment;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.GLGraphics;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.OrthoCamera;
+import edu.ub.pis2016.pis16.strikecom.engine.opengl.Sprite;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Texture;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Body;
@@ -73,6 +74,8 @@ public class DummyGLScreen extends Screen {
 	GameMap gameMap;
 
 	GameObject moveIcon;
+
+	Sprite healthBarSprite;
 	StrikeBase strikeBase;
 
 	FragmentedGameActivity activity;
@@ -89,7 +92,7 @@ public class DummyGLScreen extends Screen {
 
 		glGraphics = game.getGLGraphics();
 
-		activity = (FragmentedGameActivity) ((StrikeComGLGame)game).getActivity();
+		activity = (FragmentedGameActivity) ((StrikeComGLGame) game).getActivity();
 
 		// Create camera, set zoom to fit TILES_ON_SCREEN, rounding to nearest int
 		camera = new OrthoCamera(glGraphics, glGraphics.getWidth(), glGraphics.getHeight());
@@ -117,17 +120,15 @@ public class DummyGLScreen extends Screen {
 			}
 		}, 64);
 
+		healthBarSprite = new Sprite(Assets.SPRITE_ATLAS.getRegion("healthbar", 0));
 
 		createGameObjects();
 		commitGameObjectChanges();
-
-		addHealthBar("StrikeBase");
 
 		Texture.reloadManagedTextures();
 
 		// Projectile CONTACT LISTENER
 		physics2D.addContactListener(new ContactListener() {
-
 			@Override
 			public void onCollision(CollisionEvent ce) {
 				GameObject goA = (GameObject) ce.a.userData;
@@ -136,7 +137,6 @@ public class DummyGLScreen extends Screen {
 				// Skip gameobjects in the same group / same faction
 				if ((goA.group & goB.group) != 0)
 					return;
-
 
 				if (goA.getTag().contains("proj") && !goB.getTag().contains("proj"))
 					if (!goA.getTag().contains(goB.getTag())) {
@@ -148,13 +148,13 @@ public class DummyGLScreen extends Screen {
 					}
 
 				if (goA.getTag().contains("shop") && goB.getTag().contains("player")) {
-					if(!pastShopContact){
+					if (!pastShopContact) {
 						activity.showShopDialog(goA.getTag());
 					}
 					currentShopContact = true;
 				}
 				if (goB.getTag().contains("shop") && goA.getTag().contains("player")) {
-					if(!pastShopContact){
+					if (!pastShopContact) {
 						activity.showShopDialog(goB.getTag());
 					}
 					currentShopContact = true;
@@ -173,8 +173,6 @@ public class DummyGLScreen extends Screen {
 
 			}
 		});
-
-
 
 //		// Zoom in/out Input
 //		addInputProcessor(new InputProcessor() {
@@ -260,6 +258,8 @@ public class DummyGLScreen extends Screen {
 		for (GameObject go : this.getGameObjects())
 			go.update(delta);
 
+		gameMap.update(delta);
+
 		// Sketchy hack to get seamless rendering using the OpenGL camera
 		tmp.set(strikeBase.getPosition());
 		tmp.x = (int) (tmp.x * 10) / 10f;
@@ -279,7 +279,14 @@ public class DummyGLScreen extends Screen {
 
 		for (GameObject go : this.getGameObjects())
 			go.draw(batch);
+		batch.end();
 
+		// Draw healthbar
+		batch.begin(Assets.SPRITE_ATLAS.getTexture());
+		camera.GUIProjection();
+		float HBWidth = glGraphics.getWidth() * 0.8f * ((float) strikeBase.hitpoints / strikeBase.maxHitpoints);
+		healthBarSprite.setSize(HBWidth, 48);
+		healthBarSprite.draw(batch, glGraphics.getWidth() / 2f, glGraphics.getHeight() - 48);
 		batch.end();
 	}
 
@@ -317,7 +324,7 @@ public class DummyGLScreen extends Screen {
 	private void createGameObjects() {
 		// ------ SHOP -----------------
 		GameObject shop = new GameObject();
-		shop.putComponent(new PhysicsComponent( new StaticBody(new Rectangle(1.5f, 1.5f))));
+		shop.putComponent(new PhysicsComponent(new StaticBody(new Rectangle(1.5f, 1.5f))));
 		shop.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("shop")));
 		shop.setTag("shop_1");
 		shop.hitpoints = 9999;
@@ -340,12 +347,13 @@ public class DummyGLScreen extends Screen {
 
 		// ------ MOVE ICON CONFIG ------------
 		moveIcon = new GameObject();
-		moveIcon.setLayer(LAYER_GUI);
+		moveIcon.setLayer(LAYER_BUILDING_BOTTOM);
 		moveIcon.putComponent(new PhysicsComponent());
 		moveIcon.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("cursor_move")));
 		moveIcon.getComponent(GraphicsComponent.class).getSprite().setScale(0.3f);
 		addGameObject("MoveIcon", moveIcon);
 
+		createEnemy();
 		createEnemy();
 	}
 
@@ -357,13 +365,15 @@ public class DummyGLScreen extends Screen {
 			public void destroy() {
 				super.destroy();
 				// Add Scrap to Player
-				FragmentedGameActivity gameActivity = (FragmentedGameActivity)((GLGameFragment)game).getActivity();
+				FragmentedGameActivity gameActivity = (FragmentedGameActivity) ((GLGameFragment) game).getActivity();
 
 				int scrap = (int) gameActivity.playerState.get("SCRAP");
 				gameActivity.playerState.put("SCRAP", scrap + this.maxHitpoints);
 
+				// Spawn one more enemy, and maybe another one
 				createEnemy();
-				createEnemy();
+				if (Math.random() > 0.5f)
+					createEnemy();
 			}
 		};
 		enemyTank.group = GROUP_RAIDERS;
@@ -372,36 +382,53 @@ public class DummyGLScreen extends Screen {
 		enemyTank.killable = true;
 		enemyTank.setTag("enemy_tank");
 		enemyTank.putComponent(new VehicleFollowBehavior());
+		enemyTank.getComponent(VehicleFollowBehavior.class).setMaxRange(16 * TILE_SIZE);
 		enemyTank.getComponent(VehicleFollowBehavior.class).setMinRange(3 * TILE_SIZE);
 		enemyTank.putComponent(new BehaviorComponent() {
 			@Override
 			public void update(float delta) {
+				if (!strikeBase.isValid())
+					return;
 				VehicleFollowBehavior vfb = gameObject.getComponent(VehicleFollowBehavior.class);
 				vfb.setTarget(strikeBase.getPosition());
 			}
 		});
-		enemyTank.cfg.maxSpeed = 0.5f * TILE_SIZE;
-		enemyTank.cfg.accel = 0.1f * TILE_SIZE;
+		enemyTank.cfg.maxSpeed = 0.35f * TILE_SIZE;
+		enemyTank.cfg.accel = 0.075f * TILE_SIZE;
 
 		String tankIdentifier = addGameObject(enemyTank);
 		// ------ TANK TURRET -----
 		GameObject turret = new Turret("enemy_turret", enemyTank, "turret");
-		turret.getComponent(GraphicsComponent.class).getSprite().setSize(1.2f * GameConfig.TILE_SIZE);
-		turret.putComponent(new TurretBehavior(new TurretConfig()));
+
+		// Configure enemy damage and stuff here
+		TurretConfig turretConfig = new TurretConfig();
+		turretConfig.proj_damage = 5;
+		turretConfig.lerp_speed = 0.04f;
+		turretConfig.shoot_freq = 2;
+		turret.putComponent(new TurretBehavior(turretConfig));
+
+		// Bigger cannon
+		turret.getComponent(GraphicsComponent.class).getSprite().setSize(1.4f * GameConfig.TILE_SIZE);
 		turret.getComponent(TurretBehavior.class).setTargetTag("player");
 		turret.setLayer(Screen.LAYER_VEHICLE_TURRET);
 		addGameObject(turret);
 
-		// Spawn it somewhere random
-		tmp.set(MathUtils.random(physics2D.getWorldWidth()) * TILE_SIZE, MathUtils.random(physics2D.getWorldHeight()) * TILE_SIZE);
-		enemyTank.getComponent(PhysicsComponent.class).setPosition(tmp);
+		// Spawn it somewhere random, but not in view of the player, but not too far off the player
+		tmp.set(strikeBase.getPosition());
+		while (tmp.dst(strikeBase.getPosition()) < GameConfig.TILES_ON_SCREEN / 2f * TILE_SIZE
+				|| tmp.dst(strikeBase.getPosition()) > GameConfig.TILES_ON_SCREEN * TILE_SIZE) {
+			float randX = MathUtils.random(physics2D.getWorldWidth() * 0.2f, physics2D.getWorldWidth() * 0.8f) * TILE_SIZE;
+			float randY = MathUtils.random(physics2D.getWorldHeight() * 0.2f, physics2D.getWorldHeight() * 0.8f) * TILE_SIZE;
+			tmp.set(randX, randY);
+		}
 
+		enemyTank.getComponent(PhysicsComponent.class).setPosition(tmp);
 		// Add a healthbar for the new tank
 		addHealthBar(tankIdentifier);
 	}
 
 	private void addHealthBar(final String gameObjIdentifier) {
-		GameObject healthBar = new GameObject();
+		final GameObject healthBar = new GameObject();
 		healthBar.putComponent(new PhysicsComponent());
 		healthBar.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("healthbar", 0)));
 		healthBar.setLayer(LAYER_GUI);
@@ -416,10 +443,28 @@ public class DummyGLScreen extends Screen {
 			@Override
 			public void update(float delta) {
 				GameObject owner = gameObject.getParent();
-				gameObject.setPosition(owner.getPosition().add(0, TILE_SIZE));
-				gameObject.getComponent(GraphicsComponent.class)
-						.getSprite()
-						.setScale(3f * ((float) owner.hitpoints / owner.maxHitpoints), 0.25f);
+				if (!owner.hasComponent(GraphicsComponent.class))
+					return;
+
+				Sprite selfSprite = gameObject.getComponent(GraphicsComponent.class).getSprite();
+				Sprite ownerSprite = owner.getComponent(GraphicsComponent.class).getSprite();
+				gameObject.setPosition(owner.getPosition().add(0, ownerSprite.getSize() * 0.6f));
+
+				float healthPerc = 100 * (float) owner.hitpoints / owner.maxHitpoints;
+
+				if (healthPerc > 75)
+					Assets.SPRITE_ATLAS.getRegion("healthbar", 0);
+				else if (healthPerc > 50)
+					Assets.SPRITE_ATLAS.getRegion("healthbar", 1);
+				else if (healthPerc > 25)
+					Assets.SPRITE_ATLAS.getRegion("healthbar", 2);
+				else
+					Assets.SPRITE_ATLAS.getRegion("healthbar", 3);
+
+				healthPerc /= 100;
+
+				// Set the healthbar width to the parent's width * perc health
+				selfSprite.setSize(healthPerc * ownerSprite.getSize(), 0.15f * TILE_SIZE);
 			}
 		});
 		// Add to Screen

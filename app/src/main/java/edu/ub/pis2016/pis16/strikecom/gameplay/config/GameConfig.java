@@ -5,12 +5,9 @@ public class GameConfig {
 	/** Size of tiles in pixels */
 	public static final int TILE_SIZE = 16;
 	/** Size of map in tiles */
-	public static final int MAP_SIZE = 64;
+	public static final int MAP_SIZE = 128;
 	/** Width of screen in tiles */
 	public static final int TILES_ON_SCREEN = 14;
-
-	/** Speed of bullets in tiles/second */
-	public static final float BULLET_SPEED = 4f;
 
 
 	// Groups for collision testing, collision should occur if A.group & B.group == 0

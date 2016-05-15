@@ -25,7 +25,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureRegion;
  */
 public class TextureAtlas {
 
-	private static final int PAGE_SIZE = 8;
+	private static final int PAGE_SIZE = 16;
 
 	Game game;
 	Texture texture;
@@ -65,7 +65,7 @@ public class TextureAtlas {
 		if (index < 0) index = 0;
 		TextureRegion region;
 		if ((region = regions.get(name)[index]) == null)
-			throw new IllegalArgumentException("No region with name: " + name + ".");
+			throw new IllegalArgumentException("No region with name: " + name + " and index: " + index);
 		return region;
 	}
 
