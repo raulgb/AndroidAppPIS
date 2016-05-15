@@ -57,15 +57,28 @@ public class TurretBehavior extends BehaviorComponent {
 				if (targetTag == null)
 					state = State.IDLE;
 				else {
-					for (GameObject go : gameObject.getScreen().getGameObjects())
+					// Look for the closest gameobject in view
+					float closestDistance = Float.MAX_VALUE;
+					GameObject closestGO = null;
+
+					for (GameObject go : gameObject.getScreen().getGameObjects()) {
 						// Target enemies with the target tag, who are not too far, and are killable
 						if (go.getTag().contains(targetTag) && !isTooFar(go) && go.killable) {
-							target = go;
-							state = State.AIMING;
+							float distance = go.getPosition().dst2(turretPhys.getPosition());
+							if (distance < closestDistance) {
+								closestGO = go;
+								closestDistance = distance;
+							}
 						}
+					}
+
 					// If none found, return to idle
-					if (target == null)
+					if (closestGO == null)
 						state = State.IDLE;
+					else {
+						target = closestGO;
+						state = State.AIMING;
+					}
 				}
 				break;
 			case AIMING:
