@@ -151,8 +151,8 @@ public class StrikeBase extends Vehicle {
 	protected void updatePhysics(float delta) {
 		// Tank-like controls VERSION 2
 		// Update speeds
-		leftThreadVel = MathUtils.clamp(leftThreadVel + leftThreadAccel * delta, -cfg.maxSpeed, cfg.maxSpeed);
-		rightThreadVel = MathUtils.clamp(rightThreadVel + rightThreadAccel * delta, -cfg.maxSpeed, cfg.maxSpeed);
+		leftThreadVel = MathUtils.clamp(leftThreadVel + leftThreadAccel * delta, -cfg.max_speed, cfg.max_speed);
+		rightThreadVel = MathUtils.clamp(rightThreadVel + rightThreadAccel * delta, -cfg.max_speed, cfg.max_speed);
 
 		rightThreadVel *= 1 - rightThreadDampening * delta;
 		leftThreadVel *= 1 - leftThreadDampening * delta;
@@ -293,7 +293,7 @@ public class StrikeBase extends Vehicle {
 				break;
 			case ENGINE_EFFICIENCY:
 				// Reduces fuel consumption
-				cfg.fuelUsageMultiplier = 0.75f;
+				cfg.fuel_usage_mult = 0.75f;
 				break;
 			case FUEL:
 				break;
@@ -320,7 +320,7 @@ public class StrikeBase extends Vehicle {
 				break;
 			case ENGINE_EFFICIENCY:
 				// Reduces fuel consumption
-				cfg.fuelUsageMultiplier = 1;
+				cfg.fuel_usage_mult = 1;
 				break;
 			case FUEL:
 				break;

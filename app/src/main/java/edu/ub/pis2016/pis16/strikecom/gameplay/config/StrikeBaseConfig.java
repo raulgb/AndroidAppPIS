@@ -31,23 +31,23 @@ public class StrikeBaseConfig {
 	 */
 	// Velocity Config
 	/** Tiles/second */
-	public float maxSpeed = 2f * GameConfig.TILE_SIZE;
+	public float max_speed = 1.5f * GameConfig.TILE_SIZE;
 	/** Accel in tiles/s^2 */
 	public float accel = 2f * GameConfig.TILE_SIZE;
-	public float maxReverseSpeed = -maxSpeed / 2f;
+	public float max_reverse_speed = -max_speed / 2f;
 
 	// FUEL Consumption
 	/** Fuel used per second moving */
-	public float fuelUsage = 1f;
-	public float fuelUsageMultiplier = 1;
+	public float fuel_usage = 1f;
+	public float fuel_usage_mult = 1;
 
-	public int turretNum;
+	public int turret_num;
 	/** Turret position offsets */
-	public float[][] turretOffsets;
+	public float[][] turret_offset;
 	/** Angle limits, clockwise */
-	public float[][] turretAngleLimit;
+	public float[][] turret_angle_lim;
 	/** Damage multiplicator per turret */
-	public float[] turretDmgMult;
+	public float[] turret_dmg_mult;
 
 	public int animThreadFrames;
 	public int animHullFrames;
@@ -61,39 +61,39 @@ public class StrikeBaseConfig {
 			case MKI:
 				// StrikeBase Mark. I
 				modelName = "sbmk1";
-				turretNum = 4;
+				turret_num = 4;
 
-				turretDmgMult = new float[]{1, 1, 1, 1};
+				turret_dmg_mult = new float[]{1, 1, 1, 1};
 
-				turretOffsets = new float[turretNum][2];
-				turretOffsets[0] = new float[]{-8, 8};
-				turretOffsets[1] = new float[]{8, 8};
-				turretOffsets[2] = new float[]{-8, -8};
-				turretOffsets[3] = new float[]{8, -8};
+				turret_offset = new float[turret_num][2];
+				turret_offset[0] = new float[]{-8, 8};
+				turret_offset[1] = new float[]{8, 8};
+				turret_offset[2] = new float[]{-8, -8};
+				turret_offset[3] = new float[]{8, -8};
 
-				turretAngleLimit = new float[turretNum][2];
-				turretAngleLimit[0] = new float[]{0, 270};
-				turretAngleLimit[1] = new float[]{270, 180};
-				turretAngleLimit[2] = new float[]{90, 270};
-				turretAngleLimit[3] = new float[]{180, 90};
+				turret_angle_lim = new float[turret_num][2];
+				turret_angle_lim[0] = new float[]{0, 270};
+				turret_angle_lim[1] = new float[]{270, 180};
+				turret_angle_lim[2] = new float[]{90, 270};
+				turret_angle_lim[3] = new float[]{180, 90};
 				break;
 
 			case MKII:
 				// StrikeBase Mark. II
 				modelName = "sbmk2";
-				turretNum = 3;
+				turret_num = 3;
 
-				turretDmgMult = new float[]{1.15f, 1.15f, 1.7f};
+				turret_dmg_mult = new float[]{1.15f, 1.15f, 1.7f};
 
-				turretOffsets = new float[turretNum][2];
-				turretOffsets[0] = new float[]{-8, 8};
-				turretOffsets[1] = new float[]{-8, -8};
-				turretOffsets[2] = new float[]{8, -8};
+				turret_offset = new float[turret_num][2];
+				turret_offset[0] = new float[]{-8, 8};
+				turret_offset[1] = new float[]{-8, -8};
+				turret_offset[2] = new float[]{8, -8};
 
-				turretAngleLimit = new float[turretNum][2];
-				turretAngleLimit[0] = new float[]{0, 270};
-				turretAngleLimit[1] = new float[]{90, 0};
-				turretAngleLimit[2] = new float[]{0, 360};
+				turret_angle_lim = new float[turret_num][2];
+				turret_angle_lim[0] = new float[]{0, 270};
+				turret_angle_lim[1] = new float[]{90, 0};
+				turret_angle_lim[2] = new float[]{0, 360};
 				break;
 		}
 	}

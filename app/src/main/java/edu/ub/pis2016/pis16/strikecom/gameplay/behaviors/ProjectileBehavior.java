@@ -18,7 +18,6 @@ public class ProjectileBehavior extends BehaviorComponent {
 		if (physics == null) return;
 
 		// ALT: Delete if it's outside the player's range
-//		 TODO Activate this
 		tmp.set(gameObject.getScreen().getGameObject("StrikeBase").getComponent(PhysicsComponent.class).getPosition());
 
 		// Destroy bullet if too far

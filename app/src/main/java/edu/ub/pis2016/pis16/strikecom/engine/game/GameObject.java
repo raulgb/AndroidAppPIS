@@ -32,6 +32,7 @@ public class GameObject {
 
 	/** Health Related */
 	public int hitpoints = 0, maxHitpoints = 0;
+	public boolean killable = false;
 
 	/**
 	 * Sets the layer ordering, lowest values get rendered first.
@@ -158,5 +159,9 @@ public class GameObject {
 
 	public String toString() {
 		return "GO: " + tag;
+	}
+
+	public boolean isValid() {
+		return screen != null;
 	}
 }

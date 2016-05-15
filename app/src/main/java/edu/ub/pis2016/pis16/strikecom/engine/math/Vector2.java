@@ -135,6 +135,7 @@ public class Vector2 {
 		return MathUtils.radiansToDegrees * MathUtils.atan2(y, x);
 	}
 
+	/** Rotate any vector by some degrees */
 	public Vector2 rotate(float deg) {
 		final float ca = MathUtils.cosDeg(deg);
 		final float sa = MathUtils.sinDeg(deg);

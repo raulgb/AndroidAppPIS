@@ -9,6 +9,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.math.Angle;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureSprite;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig;
+import edu.ub.pis2016.pis16.strikecom.gameplay.config.TurretConfig;
 import edu.ub.pis2016.pis16.strikecom.screens.DummyGLScreen;
 
 /**
@@ -16,82 +17,114 @@ import edu.ub.pis2016.pis16.strikecom.screens.DummyGLScreen;
  */
 public class TurretBehavior extends BehaviorComponent {
 
-	String targetTag = null;
-	GameObject target = null;
+	private String targetTag = null;
+	private GameObject target = null;
+	private Vector2 tmp = new Vector2();
 
-	Vector2 tmp = new Vector2();
-	public float counter = 0;
-	public float shootFreq = 0.5f;
-	public float lerpSpeed = 0.075f;
-	public int attack = 1;
+	public TurretConfig cfg;
+
+	private State state = State.IDLE;
+	private float counter = 0;
+
+	private enum State {
+		IDLE,
+		SEARCHING,
+		AIMING,
+	}
+
+	public TurretBehavior(TurretConfig cfg) {
+		this.cfg = cfg;
+	}
 
 	@Override
 	public void update(float delta) {
 		counter += delta;
 		PhysicsComponent turretPhys = gameObject.getComponent(PhysicsComponent.class);
+		PhysicsComponent vehiclePhys = gameObject.getParent().getComponent(PhysicsComponent.class);
 
-		if (targetTag == null || target == null) {
-			// If no target, look forward
-			tmp.set(50, 0).rotate(gameObject.getParent().getComponent(PhysicsComponent.class).getRotation());
-			turretPhys.lookAt(tmp, lerpSpeed);
-		}
-
-		// If we have no target, try to find our next target
-		if (target == null || isTooFar(target)) {
-			for (GameObject go : gameObject.getScreen().getGameObjects())
-				if (go.getTag() != null && go.getTag().contains(targetTag) && !isTooFar(go)) {
-					target = go;
-					break;
+		switch (state) {
+			case IDLE:
+				// If we're idling, just look forward
+				if (counter < cfg.idle_seconds) {
+					tmp.set(8, 0).rotate(vehiclePhys.getRotation()).add(turretPhys.getPosition());
+					turretPhys.lookAt(tmp, cfg.lerp_speed * .1f);
+				} else {
+					counter = 0;
+					state = State.SEARCHING;
 				}
+				break;
+			case SEARCHING:
+				if (targetTag == null)
+					state = State.IDLE;
+				else {
+					for (GameObject go : gameObject.getScreen().getGameObjects())
+						// Target enemies with the target tag, who are not too far, and are killable
+						if (go.getTag().contains(targetTag) && !isTooFar(go) && go.killable) {
+							target = go;
+							state = State.AIMING;
+						}
+					// If none found, return to idle
+					if (target == null)
+						state = State.IDLE;
+				}
+				break;
+			case AIMING:
+				if (!target.isValid() || isTooFar(target)) {
+					target = null;
+					state = State.SEARCHING;
+				} else {
+					// Move the turret towards the target position and check if it's within a 3 degree cone, shoot
+					// a projectile towards it
+					turretPhys.lookAt(target.getPosition(), cfg.lerp_speed);
+					float turretRot = turretPhys.getRotation();
+					float targetAngle = tmp.set(target.getPosition()).sub(turretPhys.getPosition()).angle();
+					if (Math.abs(Angle.angleDelta(turretRot, targetAngle)) < 3f && counter > cfg.shoot_freq) {
+						shoot();
+						counter = 0;
+					}
+				}
+				break;
 		}
 
-		// If we have a target, aim at it
-		if (target != null) {
-			PhysicsComponent targetPhys = target.getComponent(PhysicsComponent.class);
-			if(targetPhys == null)
-				return;
-
-			turretPhys.lookAt(targetPhys.getPosition(), 0.1f);
-
-			// Shooting timeout
-			if (counter < shootFreq)
-				return;
-			counter = 0;
-
-			float shootAngle = tmp.set(targetPhys.getPosition()).sub(turretPhys.getPosition()).angle();
-
-			if (Math.abs(Angle.angleDelta(turretPhys.getRotation(), shootAngle)) < 3f) {
-				GameObject projectile = ((DummyGLScreen) gameObject.getScreen()).projectilePool.newObject();
-
-				PhysicsComponent projPhys = projectile.getComponent(PhysicsComponent.class);
-
-				// Set position
-				TextureSprite turretSprite = gameObject.getComponent(GraphicsComponent.class).getSprite();
-				tmp.set(turretSprite.getSize() / 2f, 0).rotate(turretPhys.getRotation());
-				tmp.add(turretPhys.getPosition());
-				projPhys.setPosition(tmp);
-
-				// set velocity and rotation
-				projPhys.setVelocity(tmp.set(GameConfig.BULLET_SPEED, 0).rotate(turretPhys.getRotation()));
-				projPhys.setRotation(turretPhys.getRotation());
-
-				// set the tag to "playerProj" or "enemyProj"
-				projectile.setTag(gameObject.getParent().getTag() + "_proj");
-
-				// set hitpoints as damage made on impact
-				projectile.hitpoints = attack;
-
-				projectile.setLayer(Screen.LAYER_PROJECTILES);
-				gameObject.getScreen().addGameObject(projectile);
-			}
-		}
 	}
+
 
 	public void setTargetTag(String tag) {
 		this.targetTag = tag;
 	}
 
-	private boolean isTooFar(GameObject o) {
-		return false;
+	private boolean isTooFar(GameObject other) {
+		if (!gameObject.hasComponent(PhysicsComponent.class))
+			return true;
+
+		tmp.set(gameObject.getPosition()).sub(other.getPosition());
+		return tmp.len2() > cfg.range * cfg.range;
+	}
+
+	private void shoot() {
+		GameObject projectile = ((DummyGLScreen) gameObject.getScreen()).projectilePool.newObject();
+
+		PhysicsComponent turretPhys = gameObject.getComponent(PhysicsComponent.class);
+		PhysicsComponent projPhys = projectile.getComponent(PhysicsComponent.class);
+
+		// Set position
+		TextureSprite turretSprite = gameObject.getComponent(GraphicsComponent.class).getSprite();
+		tmp.set(turretSprite.getSize() / 2f, 0).rotate(turretPhys.getRotation());
+		tmp.add(turretPhys.getPosition());
+		projPhys.setPosition(tmp);
+
+		// set velocity and rotation
+		projPhys.setVelocity(tmp.set(cfg.proj_speed, 0).rotate(turretPhys.getRotation()));
+		projPhys.setRotation(turretPhys.getRotation());
+
+		// set the tag to "player_proj" or "enemy_proj" and same group as parent
+		projectile.setTag(gameObject.getParent().getTag() + "_proj");
+		projectile.group = gameObject.group;
+
+		// set hitpoints as damage made on impact
+		projectile.hitpoints = cfg.proj_damage;
+
+		projectile.setLayer(Screen.LAYER_PROJECTILES);
+		gameObject.getScreen().addGameObject(projectile);
 	}
 }

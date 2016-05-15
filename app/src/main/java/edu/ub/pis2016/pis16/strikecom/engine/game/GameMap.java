@@ -23,6 +23,8 @@ public class GameMap {
 	private boolean[][] discoveredTable; // to show discovered terrain on minimap
 	private TextureSprite[][] tTable;
 	private Physics2D physics2D;
+
+	private int drawDistance;
 	private int tileSize;
 	private int width, height;
 
@@ -158,6 +160,11 @@ public class GameMap {
 		}
 	}
 
+	/** Set the draw distance IN TILES from the center to the edge of a square */
+	public void setDrawDistance(int drawDistance) {
+		this.drawDistance = drawDistance;
+	}
+
 	private TextureSprite getTile(float value) {
 //		if (true)
 //			return gray[(int) (MathUtils.lerp(0, 8, value))];
@@ -179,7 +186,7 @@ public class GameMap {
 	public void draw(SpriteBatch batch, Vector2 center) {
 		int row, col;
 		// Change this to increase view distance
-		int squareRad = 7 * tileSize;
+		int squareRad = drawDistance * tileSize;
 
 		// Test all map positions to draw a tile
 		// TODO optimize
