@@ -18,7 +18,7 @@ import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
 
 public class SidebarFragment extends Fragment {
 
-	private StrikeBaseConfig.Model strikeBaseModel = StrikeBaseConfig.Model.MKII;
+	public static StrikeBaseConfig.Model strikeBaseModel = StrikeBaseConfig.Model.MKII;
 	private StrikeComGLGame game;
 
 	private HashMap<Integer, View> turretSlotsMap = new HashMap<>();

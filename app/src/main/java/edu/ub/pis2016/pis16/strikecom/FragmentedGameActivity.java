@@ -28,6 +28,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.fragments.SlotsFragment;
 import edu.ub.pis2016.pis16.strikecom.gameplay.InventoryManager;
 import edu.ub.pis2016.pis16.strikecom.gameplay.StrikeBase;
+import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.Inventory;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.Item;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.TurretItem;
@@ -46,6 +47,9 @@ public class FragmentedGameActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		int selectedConfig = getIntent().getIntExtra("config", 1);
+		SidebarFragment.strikeBaseModel = StrikeBaseConfig.Model.values()[selectedConfig];
 
 		// Hide window decorations
 		hideSystemUI();

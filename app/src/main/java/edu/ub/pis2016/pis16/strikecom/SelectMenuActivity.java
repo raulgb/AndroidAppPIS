@@ -9,7 +9,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
 
 /**
  * Created by Akira on 2016-03-08.
@@ -17,6 +21,8 @@ import android.widget.Toast;
 public class SelectMenuActivity extends AppCompatActivity {
 
 	Activity selectMenu;
+
+	int selectedConfig = 1;
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,8 +52,64 @@ public class SelectMenuActivity extends AppCompatActivity {
 
 				} else {
 					Intent changeToGame = new Intent(selectMenu, FragmentedGameActivity.class);
+					changeToGame.putExtra("config", selectedConfig);
 					startActivity(changeToGame);
 				}
+			}
+		});
+
+		findViewById(R.id.btnNext).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				selectedConfig += 1;
+				if (selectedConfig == StrikeBaseConfig.Model.values().length){
+					selectedConfig = 0;
+				}
+
+				TextView text = (TextView)findViewById(R.id.textView2);
+				String model;
+				switch (StrikeBaseConfig.Model.values()[selectedConfig]){
+					case MKI:
+						model = "sbmk1";
+						text.setText(getString(R.string.sel_menu_mk1name));
+						break;
+					case MKII:
+						model = "sbmk2";
+						text.setText(getString(R.string.sel_menu_mk2name));
+						break;
+					default:
+						model = "sbmk2";
+						text.setText(getString(R.string.sel_menu_mk2name));
+				}
+				((ImageView) findViewById(R.id.imgSelectedBase)).setImageResource(getResources().getIdentifier(model, "drawable",
+						getPackageName()));
+			}
+		});
+
+		findViewById(R.id.btnPrev).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				selectedConfig -= 1;
+				if (selectedConfig < 0){
+					selectedConfig = StrikeBaseConfig.Model.values().length -1;
+				}
+
+				TextView text = (TextView)findViewById(R.id.textView2);
+				String model;
+				switch (StrikeBaseConfig.Model.values()[selectedConfig]){
+					case MKI:
+						model = "sbmk1";
+						text.setText(getString(R.string.sel_menu_mk1name));
+						break;
+					case MKII:
+						model = "sbmk2";
+						text.setText(getString(R.string.sel_menu_mk2name));
+						break;
+					default:
+						model = "sbmk2";
+						text.setText(getString(R.string.sel_menu_mk2name));
+				}
+				((ImageView) findViewById(R.id.imgSelectedBase)).setImageResource(getResources().getIdentifier(model, "drawable", getPackageName()));
 			}
 		});
 
