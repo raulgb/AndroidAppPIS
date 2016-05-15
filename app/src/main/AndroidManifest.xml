@@ -22,6 +22,11 @@
         </activity>
 
         <activity
+            android:name=".OptionsActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
             android:name=".SelectMenuActivity"
             android:screenOrientation="landscape">
         </activity>
