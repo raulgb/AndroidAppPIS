@@ -75,6 +75,9 @@ public class GameMap {
 		dry = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("dry", 0));
 		allSprites.add(dry);
 
+		water = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("water", 0));
+		allSprites.add(water);
+
 		sand = new TextureSprite[2];
 		sand[0] = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("sand", 0));
 		sand[1] = new TextureSprite(Assets.SPRITE_ATLAS.getRegion("sand", 1));
@@ -168,11 +171,11 @@ public class GameMap {
 	private TextureSprite getTile(float value) {
 //		if (true)
 //			return gray[(int) (MathUtils.lerp(0, 8, value))];
-		if (value > 0.5f)
+		if (value > 0.6f)
 			return grass;
-		else if (value > 0.4f)
+		else if (value > 0.5f)
 			return dry;
-		else if (value > 0.2f)
+		else if (value > 0.4f)
 			return sand[MathUtils.random(0, 1)];
 		else
 			return water;

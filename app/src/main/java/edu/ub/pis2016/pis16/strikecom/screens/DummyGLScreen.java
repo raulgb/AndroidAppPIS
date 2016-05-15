@@ -89,7 +89,7 @@ public class DummyGLScreen extends Screen {
 
 		physics2D = new Physics2D(MAP_SIZE, MAP_SIZE);
 		batch = new SpriteBatch(game.getGLGraphics(), 512);
-		gameMap = new GameMap(physics2D, TILE_SIZE, 0L, 16, 3, 0.5f);
+		gameMap = new GameMap(physics2D, TILE_SIZE, 0L, 16, 2, 0.5f);
 		gameMap.setDrawDistance(GameConfig.TILES_ON_SCREEN / 2 + 1);
 
 		projectilePool = new Pool<>(new Pool.PoolObjectFactory<GameObject>() {
@@ -289,8 +289,8 @@ public class DummyGLScreen extends Screen {
 		GameObject shop = new GameObject();
 		shop.putComponent(new PhysicsComponent());
 		shop.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("shop")));
-		shop.setLayer(LAYER_BUILDING_TOP);
-		shop.setPosition(200, 200);
+		shop.setLayer(LAYER_BUILDING_BOTTOM);
+		shop.setPosition((MAP_SIZE / 2f - 4) * TILE_SIZE, MAP_SIZE / 2f * TILE_SIZE);
 		addGameObject("shop_1", shop);
 
 		// ------ STRIKEBASE CONFIG ------------

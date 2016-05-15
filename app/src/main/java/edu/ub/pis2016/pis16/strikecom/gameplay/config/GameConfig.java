@@ -5,7 +5,7 @@ public class GameConfig {
 	/** Size of tiles in pixels */
 	public static final int TILE_SIZE = 16;
 	/** Size of map in tiles */
-	public static final int MAP_SIZE = 32;
+	public static final int MAP_SIZE = 64;
 	/** Width of screen in tiles */
 	public static final int TILES_ON_SCREEN = 14;
 
