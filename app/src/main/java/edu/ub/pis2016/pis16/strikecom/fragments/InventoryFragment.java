@@ -40,22 +40,32 @@ public class InventoryFragment extends DialogFragment {
 	protected boolean turretIsSelected = true;
 	protected boolean switchListEnabled = true;
 
-	public void setInventory(Inventory inventory) { this.inventory = inventory; }
+	public void setInventory(Inventory inventory) {
+		this.inventory = inventory;
+	}
 
-	public void setPlayerScrap(int playerScrap) { this.playerScrap = playerScrap; }
+	public void setPlayerScrap(int playerScrap) {
+		this.playerScrap = playerScrap;
+	}
 
-	public void setPlayerFuel(int playerFuel) { this.playerFuel = playerFuel; }
+	public void setPlayerFuel(int playerFuel) {
+		this.playerFuel = playerFuel;
+	}
 
-	public void setSelectedSlot(int selectedSlot) { this.selectedSlot = selectedSlot; }
+	public void setSelectedSlot(int selectedSlot) {
+		this.selectedSlot = selectedSlot;
+	}
 
 	public void setTurretSelection(boolean turretIsSelected) {
 		this.turretIsSelected = turretIsSelected;
 	}
 
-	public void setSwitchListEnabled(boolean isEnabled) { this.switchListEnabled = isEnabled; }
+	public void setSwitchListEnabled(boolean isEnabled) {
+		this.switchListEnabled = isEnabled;
+	}
 
 	public TurretItem getSelectedTurretItem() {
-		if (selectedItem < 0){
+		if (selectedItem < 0) {
 			return null;
 
 		}
@@ -63,7 +73,7 @@ public class InventoryFragment extends DialogFragment {
 	}
 
 	public UpgradeItem getSelectedUpgradeItem() {
-		if (selectedItem < 0){
+		if (selectedItem < 0) {
 			return null;
 		}
 		return inventory.getUpgrade(selectedItem);
@@ -77,8 +87,8 @@ public class InventoryFragment extends DialogFragment {
 		itemDesc = (TextView) view.findViewById(R.id.itemDesc); // description of the item selected from the list
 		scrapText = (TextView) view.findViewById(R.id.playerScrap);
 		fuelText = (TextView) view.findViewById(R.id.playerFuel);
-		scrapText.setText(Integer.toString(playerScrap));
-		fuelText.setText(Integer.toString(playerFuel));
+		scrapText.setText("" + playerScrap);
+		fuelText.setText("" + playerFuel);
 
 		// Equip/unequip button
 		equipBtn = (Button) view.findViewById(R.id.inventoryBtn_1);
@@ -91,7 +101,7 @@ public class InventoryFragment extends DialogFragment {
 		turretSelectionBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				if(!turretIsSelected) {
+				if (!turretIsSelected) {
 					turretIsSelected = true;
 					itemDesc.setText("");
 					selectedItem = -1;
@@ -99,7 +109,6 @@ public class InventoryFragment extends DialogFragment {
 				}
 			}
 		});
-
 
 
 		// Switch to upgrades selection
@@ -116,7 +125,7 @@ public class InventoryFragment extends DialogFragment {
 			}
 		});
 
-		if(!switchListEnabled) {
+		if (!switchListEnabled) {
 			turretSelectionBtn.setEnabled(false);
 			turretSelectionBtn.setText("");
 			turretSelectionBtn.setBackgroundColor(Color.TRANSPARENT);
@@ -128,12 +137,11 @@ public class InventoryFragment extends DialogFragment {
 		fillItemList();
 
 
-
 		getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 		return view;
 	}
 
-	public void onCancel (DialogInterface dialog){
+	public void onCancel(DialogInterface dialog) {
 		dismiss();
 		FragmentedGameActivity callingActivity = (FragmentedGameActivity) getActivity();
 		callingActivity.resumeGame();
@@ -151,7 +159,7 @@ public class InventoryFragment extends DialogFragment {
 					if (turretIsSelected) { // selected item is a turret
 						TurretItem turret = inventory.getTurret(selectedItem);
 						if (selectedSlot < 0) { // show slots dialog if no valid slot has been selected
-							callingActivity.showSlotsDialog(turret,true);
+							callingActivity.showSlotsDialog(turret, true);
 						} else { // equip if slot already selected
 							callingActivity.equipTurret(turret, selectedSlot);
 						}
@@ -183,7 +191,7 @@ public class InventoryFragment extends DialogFragment {
 	}
 
 	protected void fillItemList() {
-		if(turretIsSelected) {
+		if (turretIsSelected) {
 			itemList.setAdapter(new InventoryItemAdapter(getActivity(), inventory.getTurretInventory()));
 		} else {
 			itemList.setAdapter(new InventoryItemAdapter(getActivity(), inventory.getUpgradeInventory()));
@@ -192,16 +200,16 @@ public class InventoryFragment extends DialogFragment {
 		itemList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-				equipBtn.setText( getString(R.string.equip_button) );
-				if(i>=0){ //valid item is selected
+				equipBtn.setText(getString(R.string.equip_button));
+				if (i >= 0) { //valid item is selected
 					selectedItem = i;
 
-					if(turretIsSelected) {
-						itemDesc.setText( inventory.getTurret(selectedItem).getDisplay() );
+					if (turretIsSelected) {
+						itemDesc.setText(inventory.getTurret(selectedItem).getDisplay());
 					} else {
-						itemDesc.setText( inventory.getUpgrade(selectedItem).getDisplay() );
-						if( inventory.getUpgrade(selectedItem).isFuel() ){
-							equipBtn.setText( getString(R.string.use_item) );
+						itemDesc.setText(inventory.getUpgrade(selectedItem).getDisplay());
+						if (inventory.getUpgrade(selectedItem).isFuel()) {
+							equipBtn.setText(getString(R.string.use_item));
 						}
 					}
 				}

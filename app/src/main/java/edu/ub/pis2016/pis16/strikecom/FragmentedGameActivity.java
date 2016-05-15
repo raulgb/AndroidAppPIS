@@ -39,11 +39,11 @@ public class FragmentedGameActivity extends Activity {
 
 	PowerManager.WakeLock wakeLock;
 
-	StrikeComGLGame game;
-	SidebarFragment sidebar;
+	public StrikeComGLGame game;
+	public SidebarFragment sidebar;
 
-	HashMap<String, Object> playerState = new HashMap<>();
-	HashMap<String, Inventory> shopMap = new HashMap<>();
+	public HashMap<String, Object> playerState = new HashMap<>();
+	public HashMap<String, Inventory> shopMap = new HashMap<>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -71,13 +71,29 @@ public class FragmentedGameActivity extends Activity {
 		// Give the sidebar fragment a reference to the game fragment.
 		sidebar.setGame(game);
 
-		playerState.put("SCRAP", 9999);
-		playerState.put("FUEL", 4000);
+		playerState.put("SCRAP", 0);
+		playerState.put("FUEL", 100);
 		playerState.put("POINTS", 0);
 		playerState.put("INVENTORY", new Inventory());
 
-		sidebar.updateScrap((Integer) playerState.get("SCRAP"));
-		sidebar.updateFuel((Integer) playerState.get("FUEL"));
+		// Thread updating sidebar once per second
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				while (true) {
+					try {Thread.sleep(1000);} catch (InterruptedException e) {}
+
+					runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							sidebar.updateScrap((Integer) playerState.get("SCRAP"));
+							sidebar.updateFuel((Integer) playerState.get("FUEL"));
+						}
+					});
+				}
+			}
+		}).start();
+
 
 		shopMap.put("shop_1", null);
 		generateInventories();
@@ -139,36 +155,36 @@ public class FragmentedGameActivity extends Activity {
 	@Override
 	public void onBackPressed() {
 		//Ask the user if he/she really wants to exit game
-			pauseGame();
+		pauseGame();
 
-			final Dialog dialog = new Dialog(this);
-			dialog.setContentView(R.layout.alert_dialog);
-			dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+		final Dialog dialog = new Dialog(this);
+		dialog.setContentView(R.layout.alert_dialog);
+		dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
-			Button dialogYes = (Button) dialog.findViewById(R.id.btnYes);
-			dialogYes.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					// return to main menu
+		Button dialogYes = (Button) dialog.findViewById(R.id.btnYes);
+		dialogYes.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// return to main menu
 
-					Intent intent = new Intent(getApplicationContext(), MainMenuActivity.class);
-					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-					startActivity(intent);
+				Intent intent = new Intent(getApplicationContext(), MainMenuActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
 
-				}
-			});
+			}
+		});
 
-			Button dialogNo = (Button) dialog.findViewById(R.id.btnNo);
-			dialogNo.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
+		Button dialogNo = (Button) dialog.findViewById(R.id.btnNo);
+		dialogNo.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
 
-					resumeGame();
-					dialog.dismiss();
-				}
-			});
+				resumeGame();
+				dialog.dismiss();
+			}
+		});
 
-			dialog.show();
+		dialog.show();
 			/*AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setIcon(android.R.drawable.ic_dialog_alert);
 			builder.setTitle(getString(R.string.quit_alert));
@@ -278,7 +294,7 @@ public class FragmentedGameActivity extends Activity {
 		resumeGame();
 	}
 
-	public void useFuel(UpgradeItem fuel){
+	public void useFuel(UpgradeItem fuel) {
 		Inventory inv = (Inventory) playerState.get("INVENTORY");
 		inv.removeItem(fuel);
 		playerState.put("INVENTORY", inv);
@@ -309,9 +325,9 @@ public class FragmentedGameActivity extends Activity {
 		shopInventory.removeItem(item);
 		scrap -= Math.round(item.getPrice());
 
-		if(item.isFuel()){
-			playerState.put("FUEL", (Integer)playerState.get("FUEL") + 250);
-		}else{
+		if (item.isFuel()) {
+			playerState.put("FUEL", (Integer) playerState.get("FUEL") + 250);
+		} else {
 			playerInventory.addItem(item);
 			playerState.put("INVENTORY", playerInventory);
 		}
@@ -322,7 +338,7 @@ public class FragmentedGameActivity extends Activity {
 		StrikeBase strikeBase = (game.getCurrentScreen()).getGameObject("StrikeBase", StrikeBase.class);
 		TurretItem turret = strikeBase.getTurret(slot);
 
-		if(turret != null){
+		if (turret != null) {
 			strikeBase.removeTurret(slot);
 			Inventory inv = (Inventory) playerState.get("INVENTORY");
 			inv.addItem(turret);
@@ -334,7 +350,7 @@ public class FragmentedGameActivity extends Activity {
 		StrikeBase strikeBase = (game.getCurrentScreen()).getGameObject("StrikeBase", StrikeBase.class);
 		UpgradeItem upgrade = strikeBase.getUpgrade(slot);
 
-		if(upgrade != null){
+		if (upgrade != null) {
 			strikeBase.removeUpgrade(slot);
 			Inventory inv = (Inventory) playerState.get("INVENTORY");
 			inv.addItem(upgrade);
@@ -349,14 +365,14 @@ public class FragmentedGameActivity extends Activity {
 			InventoryManager im = new InventoryManager(this, turretsFile, upgradesFile);
 			playerState.put("INVENTORY", im.getStartingInventory());
 
-			for(String key : shopMap.keySet()){
+			for (String key : shopMap.keySet()) {
 				shopMap.put(key, im.getShopInventory(20, 2));
 			}
 
-		} catch (IOException ex){
+		} catch (IOException ex) {
 			Inventory testInventory = new Inventory();
-			testInventory.addItem( TurretItem.parseTurretItem("Machinegun;machinegun_64;turret_mk1;Weak yet cheap, makes an ideal weapon for a newbie.;100;2;4;1"));
-			testInventory.addItem( UpgradeItem.parseUpgradeItem("Composite armour;composite_64;turret_mk1;Advanced plating made from a " +
+			testInventory.addItem(TurretItem.parseTurretItem("Machinegun;machinegun_64;turret_mk1;Weak yet cheap, makes an ideal weapon for a newbie.;100;2;4;1"));
+			testInventory.addItem(UpgradeItem.parseUpgradeItem("Composite armour;composite_64;turret_mk1;Advanced plating made from a " +
 					"variety of metals and ceramics.;COMPOSITE;4000"));
 			playerState.put("INVENTORY", testInventory);
 		}
@@ -370,11 +386,11 @@ public class FragmentedGameActivity extends Activity {
 		game.getCurrentScreen().resumeGame();
 	}
 
-	public void updateScrapCounter(){
+	public void updateScrapCounter() {
 		sidebar.updateScrap((Integer) playerState.get("SCRAP"));
 	}
 
-	public void updateFuelCounter(){
+	public void updateFuelCounter() {
 		sidebar.updateFuel((Integer) playerState.get("FUEL"));
 	}
 

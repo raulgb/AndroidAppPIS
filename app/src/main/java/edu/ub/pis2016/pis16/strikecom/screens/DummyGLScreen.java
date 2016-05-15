@@ -5,6 +5,7 @@ import android.util.Log;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import edu.ub.pis2016.pis16.strikecom.FragmentedGameActivity;
 import edu.ub.pis2016.pis16.strikecom.StrikeComGLGame;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Game;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.InputProcessor;
@@ -17,6 +18,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.math.WindowedMean;
+import edu.ub.pis2016.pis16.strikecom.engine.opengl.GLGameFragment;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.GLGraphics;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.OrthoCamera;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
@@ -324,6 +326,12 @@ public class DummyGLScreen extends Screen {
 			@Override
 			public void destroy() {
 				super.destroy();
+				// Add Scrap to Player
+				FragmentedGameActivity gameActivity = (FragmentedGameActivity)((GLGameFragment)game).getActivity();
+
+				int scrap = (int) gameActivity.playerState.get("SCRAP");
+				gameActivity.playerState.put("SCRAP", scrap + this.maxHitpoints);
+
 				createEnemy();
 				createEnemy();
 			}
