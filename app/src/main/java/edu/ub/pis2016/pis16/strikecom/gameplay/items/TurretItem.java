@@ -1,18 +1,8 @@
 package edu.ub.pis2016.pis16.strikecom.gameplay.items;
 
-import java.util.HashMap;
-
-import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
-import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
-import edu.ub.pis2016.pis16.strikecom.engine.game.component.BehaviorComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.GraphicsComponent;
-import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
-import edu.ub.pis2016.pis16.strikecom.engine.math.Angle;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
-import edu.ub.pis2016.pis16.strikecom.gameplay.Turret;
-import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.CustomTurretBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.TurretBehavior;
-import edu.ub.pis2016.pis16.strikecom.screens.DummyGLScreen;
 
 public class TurretItem extends Item {
 	float[] stats;
@@ -55,11 +45,19 @@ public class TurretItem extends Item {
 				"\n\n" + flavour);
 	}
 
-	public BehaviorComponent getBehavior() {
-		return null;
+	public TurretBehavior getBehavior() {
+		TurretBehavior behavior = new TurretBehavior();
+		behavior.attack = Math.round(stats[0]);
+		behavior.shootFreq = 1/stats[1];
+		behavior.lerpSpeed = 1/stats[1];
+		return behavior;
 	}
 
 	public GraphicsComponent getGraphics() {
 		return new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion(this.image));
+	}
+
+	public int getHitPoints() {
+		return Math.round(stats[2]);
 	}
 }

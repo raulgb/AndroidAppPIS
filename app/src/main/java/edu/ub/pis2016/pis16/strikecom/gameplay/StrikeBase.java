@@ -259,7 +259,7 @@ public class StrikeBase extends Vehicle {
 		turret.setLayer(Screen.LAYER_STRIKEBASE_TURRETS);
 
 		turret.setTag(getTag() + "_" + tName);
-		turret.putComponent(new TurretBehavior());
+		turret.putComponent(item.getBehavior());
 		turret.getComponent(TurretBehavior.class).setTargetTag("enemy");
 
 		screen.addGameObject(tName, turret);

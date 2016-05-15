@@ -20,8 +20,10 @@ public class TurretBehavior extends BehaviorComponent {
 	GameObject target = null;
 
 	Vector2 tmp = new Vector2();
-	float counter = 0;
-	float shootFreq = 0.5f;
+	public float counter = 0;
+	public float shootFreq = 0.5f;
+	public float lerpSpeed = 0.075f;
+	public int attack = 1;
 
 	@Override
 	public void update(float delta) {
@@ -31,7 +33,7 @@ public class TurretBehavior extends BehaviorComponent {
 		if (targetTag == null || target == null) {
 			// If no target, look forward
 			tmp.set(50, 0).rotate(gameObject.getParent().getComponent(PhysicsComponent.class).getRotation());
-			turretPhys.lookAt(tmp, 0.075f);
+			turretPhys.lookAt(tmp, lerpSpeed);
 		}
 
 		// If we have no target, try to find our next target
@@ -75,6 +77,9 @@ public class TurretBehavior extends BehaviorComponent {
 
 				// set the tag to "playerProj" or "enemyProj"
 				projectile.setTag(gameObject.getParent().getTag() + "_proj");
+
+				// set hitpoints as damage made on impact
+				projectile.hitpoints = attack;
 
 				projectile.setLayer(Screen.LAYER_PROJECTILES);
 				gameObject.getScreen().addGameObject(projectile);

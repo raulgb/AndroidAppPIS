@@ -129,9 +129,13 @@ public class DummyGLScreen extends Screen {
 					return;
 
 				if (goA.getTag().contains("proj") && !goB.getTag().contains("proj"))
-					handleProjectileCollision(goA, goB);
+					if(!goA.getTag().contains(goB.getTag())){
+						handleProjectileCollision(goA, goB);
+					}
 				if (goB.getTag().contains("proj") && !goA.getTag().contains("proj"))
-					handleProjectileCollision(goB, goA);
+					if(!goB.getTag().contains(goA.getTag())){
+						handleProjectileCollision(goB, goA);
+					}
 			}
 
 			private void handleProjectileCollision(GameObject projectile, GameObject other) {
@@ -287,7 +291,7 @@ public class DummyGLScreen extends Screen {
 		// ------ SHOP -----------------
 		GameObject shop = new GameObject();
 		shop.putComponent(new PhysicsComponent());
-		shop.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("healthbar", 0)));
+		shop.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("shop")));
 		shop.setLayer(LAYER_BUILDING_TOP);
 		shop.setPosition(200, 200);
 		addGameObject("shop_1", shop);

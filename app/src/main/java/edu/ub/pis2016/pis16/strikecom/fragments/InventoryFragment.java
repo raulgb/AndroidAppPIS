@@ -14,8 +14,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import edu.ub.pis2016.pis16.strikecom.FragmentedGameActivity;
-import edu.ub.pis2016.pis16.strikecom.R;
-import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
+import edu.ub.pis2016.pis16.strikecom.R;;
 import edu.ub.pis2016.pis16.strikecom.gameplay.InventoryItemAdapter;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.Inventory;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.TurretItem;
@@ -69,6 +68,7 @@ public class InventoryFragment extends DialogFragment {
 		}
 		return inventory.getUpgrade(selectedItem);
 	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_inventory, container);
