@@ -48,7 +48,7 @@ public class TurretItem extends Item {
 	public TurretBehavior getBehavior() {
 		TurretBehavior behavior = new TurretBehavior();
 		behavior.attack = Math.round(stats[0]);
-		behavior.shootFreq = 1/stats[1];
+		behavior.shootFreq = 2/stats[1];
 		behavior.lerpSpeed = 1/stats[1];
 		return behavior;
 	}

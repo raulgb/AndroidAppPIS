@@ -300,7 +300,7 @@ public class DummyGLScreen extends Screen {
 		strikeBase = new StrikeBase(new StrikeBaseConfig(StrikeBaseConfig.Model.MKII));
 		strikeBase.putComponent(new VehicleFollowBehavior());
 		strikeBase.getComponent(VehicleFollowBehavior.class).setRange(1.5f * TILE_SIZE);
-		strikeBase.setTag("strikebase_config");
+		strikeBase.setTag("player_strikebase");
 		strikeBase.setLayer(LAYER_STRIKEBASE);
 		strikeBase.setPosition(MAP_SIZE / 2f, MAP_SIZE / 2f);
 		strikeBase.group = GROUP_PLAYER;
@@ -383,6 +383,10 @@ public class DummyGLScreen extends Screen {
 		});
 		// Add anonymous
 		addGameObject(healthBar);
+	}
+
+	private void removeEnemy(GameObject enemy) {
+
 	}
 
 	@Deprecated

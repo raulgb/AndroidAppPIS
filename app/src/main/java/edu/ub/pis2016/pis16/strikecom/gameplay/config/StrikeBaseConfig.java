@@ -31,7 +31,7 @@ public class StrikeBaseConfig {
 	 */
 	// Velocity Config
 	/** Tiles/second */
-	public float maxSpeed = 1f * GameConfig.TILE_SIZE;
+	public float maxSpeed = 2f * GameConfig.TILE_SIZE;
 	/** Accel in tiles/s^2 */
 	public float accel = 2f * GameConfig.TILE_SIZE;
 	public float maxReverseSpeed = -maxSpeed / 2f;
