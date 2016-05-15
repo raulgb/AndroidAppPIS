@@ -64,6 +64,10 @@ public final class MathUtils {
 		return a > b ? b : a;
 	}
 
+	public static int min(int a, int b){
+		return a > b ? b : a;
+	}
+
 	static private class Sin {
 		static final float[] table = new float[SIN_COUNT];
 

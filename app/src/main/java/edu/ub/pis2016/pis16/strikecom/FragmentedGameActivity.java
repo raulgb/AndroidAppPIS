@@ -194,6 +194,7 @@ public class FragmentedGameActivity extends Activity {
 		inventoryFrag.setSwitchListEnabled(switchIsEnabled);
 		inventoryFrag.setTurretSelection(turretIsSelected);
 		inventoryFrag.setPlayerScrap((Integer) playerState.get("SCRAP"));
+		inventoryFrag.setPlayerFuel((Integer) playerState.get("FUEL"));
 		inventoryFrag.show(getFragmentManager(), "Inventory_Fragment");
 	}
 
