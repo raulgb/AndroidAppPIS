@@ -147,13 +147,13 @@ public class DummyGLScreen extends Screen {
 						handleProjectileCollision(goB, goA);
 					}
 
-				if (goA.getTag().contains("shop") && goB.getTag().contains("player")) {
+				if (goA.getTag().contains("shop") && goB.getTag().equals("player_strikebase")) {
 					if (!pastShopContact) {
 						activity.showShopDialog(goA.getTag());
 					}
 					currentShopContact = true;
 				}
-				if (goB.getTag().contains("shop") && goA.getTag().contains("player")) {
+				if (goB.getTag().contains("shop") && goA.getTag().equals("player_strikebase")) {
 					if (!pastShopContact) {
 						activity.showShopDialog(goB.getTag());
 					}
@@ -282,12 +282,14 @@ public class DummyGLScreen extends Screen {
 		batch.end();
 
 		// Draw healthbar
-		batch.begin(Assets.SPRITE_ATLAS.getTexture());
 		camera.GUIProjection();
+		batch.begin(Assets.SPRITE_ATLAS.getTexture());
 		float HBWidth = glGraphics.getWidth() * 0.8f * ((float) strikeBase.hitpoints / strikeBase.maxHitpoints);
 		healthBarSprite.setSize(HBWidth, 48);
 		healthBarSprite.draw(batch, glGraphics.getWidth() / 2f, glGraphics.getHeight() - 48);
 		batch.end();
+		camera.update();
+
 	}
 
 	@Override

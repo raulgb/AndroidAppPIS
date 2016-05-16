@@ -28,7 +28,7 @@ public class VehicleFollowBehavior extends BehaviorComponent {
 		// Move AI, strikebase follows the move pointer
 		// TODO Not working, vehicles never stop??
 		float distance = tmp.set(target).dst2(pos);
-		if (minRange * minRange < distance || distance < maxRange * maxRange) {
+		if (minRange * minRange < distance && distance < maxRange * maxRange) {
 
 			tmp.set(target).sub(pos);
 			float angleDelta = Angle.angleDelta(rotation, tmp.angle());

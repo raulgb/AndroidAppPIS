@@ -73,7 +73,7 @@ public class FragmentedGameActivity extends Activity {
 		// Give the sidebar fragment a reference to the game fragment.
 		sidebar.setGame(game);
 
-		playerState.put("SCRAP", 0);
+		playerState.put("SCRAP", 50);
 		playerState.put("FUEL", 100f);
 		playerState.put("POINTS", 0);
 		playerState.put("INVENTORY", new Inventory());
@@ -152,7 +152,7 @@ public class FragmentedGameActivity extends Activity {
 						| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 						| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
 						| View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
-						| View.SYSTEM_UI_FLAG_IMMERSIVE);
+						| View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
 	}
 
 	@Override
