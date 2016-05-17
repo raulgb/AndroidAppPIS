@@ -8,6 +8,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Angle;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Sprite;
+import edu.ub.pis2016.pis16.strikecom.gameplay.Turret;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.TurretConfig;
 import edu.ub.pis2016.pis16.strikecom.screens.DummyGLScreen;
 
@@ -20,8 +21,6 @@ public class TurretBehavior extends BehaviorComponent {
 	private GameObject target = null;
 	private Vector2 tmp = new Vector2();
 
-	public TurretConfig cfg;
-
 	private State state = State.IDLE;
 	private float counter = 0;
 
@@ -31,13 +30,10 @@ public class TurretBehavior extends BehaviorComponent {
 		AIMING,
 	}
 
-	public TurretBehavior(TurretConfig cfg) {
-		this.cfg = cfg;
-	}
-
 	@Override
 	public void update(float delta) {
 		counter += delta;
+		TurretConfig cfg = ((Turret) gameObject).cfg;
 		PhysicsComponent turretPhys = gameObject.getComponent(PhysicsComponent.class);
 		PhysicsComponent vehiclePhys = gameObject.getParent().getComponent(PhysicsComponent.class);
 
@@ -106,6 +102,8 @@ public class TurretBehavior extends BehaviorComponent {
 	}
 
 	private boolean isTooFar(GameObject other) {
+		TurretConfig cfg = ((Turret) gameObject).cfg;
+
 		if (!gameObject.hasComponent(PhysicsComponent.class))
 			return true;
 
@@ -114,6 +112,8 @@ public class TurretBehavior extends BehaviorComponent {
 	}
 
 	private void shoot() {
+		TurretConfig cfg = ((Turret) gameObject).cfg;
+
 		GameObject projectile = ((DummyGLScreen) gameObject.getScreen()).projectilePool.newObject();
 
 		PhysicsComponent turretPhys = gameObject.getComponent(PhysicsComponent.class);

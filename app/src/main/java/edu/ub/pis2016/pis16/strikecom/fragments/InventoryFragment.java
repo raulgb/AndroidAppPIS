@@ -1,6 +1,8 @@
 package edu.ub.pis2016.pis16.strikecom.fragments;
 
 import android.app.DialogFragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -8,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
@@ -136,14 +139,19 @@ public class InventoryFragment extends DialogFragment {
 
 		fillItemList();
 
-
 		getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+
 		return view;
 	}
 
-	public void onCancel(DialogInterface dialog) {
-		dismiss();
+//	public void show(FragmentManager manager, String tag) {
+//	}
+
+
+	/** Resume game and enable Immersive mode on activity */
+	public void onDismiss(DialogInterface dialog) {
 		FragmentedGameActivity callingActivity = (FragmentedGameActivity) getActivity();
+		callingActivity.hideSystemUI();
 		callingActivity.resumeGame();
 	}
 
@@ -183,9 +191,7 @@ public class InventoryFragment extends DialogFragment {
 		cancelBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				dismiss();
-				FragmentedGameActivity callingActivity = (FragmentedGameActivity) getActivity();
-				callingActivity.resumeGame();
+				getDialog().dismiss();
 			}
 		});
 	}

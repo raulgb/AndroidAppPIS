@@ -62,11 +62,7 @@ public class ShopFragment extends InventoryFragment {
 		cancelBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				dismiss();
-				FragmentedGameActivity callingActivity = (FragmentedGameActivity) getActivity();
-				callingActivity.updateScrapCounter();
-				callingActivity.updateFuelCounter();
-				callingActivity.resumeGame();
+				getDialog().dismiss();
 			}
 		});
 	}

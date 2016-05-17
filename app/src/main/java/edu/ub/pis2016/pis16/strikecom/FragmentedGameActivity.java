@@ -73,7 +73,7 @@ public class FragmentedGameActivity extends Activity {
 		// Give the sidebar fragment a reference to the game fragment.
 		sidebar.setGame(game);
 
-		playerState.put("SCRAP", 50);
+		playerState.put("SCRAP", 1000);
 		playerState.put("FUEL", 100f);
 		playerState.put("POINTS", 0);
 		playerState.put("INVENTORY", new Inventory());
@@ -83,7 +83,10 @@ public class FragmentedGameActivity extends Activity {
 			@Override
 			public void run() {
 				while (true) {
-					try {Thread.sleep(1000);} catch (InterruptedException e) {}
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+					}
 
 					runOnUiThread(new Runnable() {
 						@Override
@@ -142,7 +145,7 @@ public class FragmentedGameActivity extends Activity {
 
 	}
 
-	private void hideSystemUI() {
+	public void hideSystemUI() {
 		// Set the IMMERSIVE flag.
 		// Set the content to appear under the system bars so that the content
 		// doesn't resize when the system bars hide and show.
@@ -229,6 +232,7 @@ public class FragmentedGameActivity extends Activity {
 		inventoryFrag.setPlayerScrap((Integer) playerState.get("SCRAP"));
 		inventoryFrag.setPlayerFuel((Float) playerState.get("FUEL"));
 		inventoryFrag.show(getFragmentManager(), "Inventory_Fragment");
+
 	}
 
 	public void showSlotsDialog(Item selectedItem, boolean turretIsSelected) {
@@ -241,6 +245,7 @@ public class FragmentedGameActivity extends Activity {
 		slots.setNewItem(selectedItem);
 		slots.setTurretSelection(turretIsSelected);
 		slots.show(getFragmentManager(), "slots");
+
 	}
 
 	public void showShopDialog(String shopID) {
@@ -252,6 +257,7 @@ public class FragmentedGameActivity extends Activity {
 		shopFragment.setPlayerScrap((Integer) playerState.get("SCRAP"));
 		shopFragment.setPlayerFuel((Float) playerState.get("FUEL"));
 		shopFragment.show(getFragmentManager(), "shop");
+
 	}
 
 	public void equipTurret(TurretItem item, int slot) {
@@ -369,7 +375,8 @@ public class FragmentedGameActivity extends Activity {
 				shopMap.put(key, im.getShopInventory(20, 2));
 			}
 
-		} catch (IOException ex) {}
+		} catch (IOException ex) {
+		}
 	}
 
 	public void pauseGame() {

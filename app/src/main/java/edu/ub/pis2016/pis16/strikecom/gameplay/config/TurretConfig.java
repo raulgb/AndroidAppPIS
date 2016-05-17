@@ -20,6 +20,8 @@ public class TurretConfig {
 	/** Bullet Speed in tiles/second */
 	public float proj_speed = 8;
 
+	static public final TurretConfig DEFAULT = new TurretConfig();
+
 	public TurretConfig() {
 		// TODO constructor with an enum parameter
 	}
