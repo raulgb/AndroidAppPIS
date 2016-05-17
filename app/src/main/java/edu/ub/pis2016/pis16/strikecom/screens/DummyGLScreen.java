@@ -106,8 +106,6 @@ public class DummyGLScreen extends Screen {
 		createGameObjects();
 		commitGameObjectChanges();
 
-		Texture.reloadManagedTextures();
-
 		// Projectile CONTACT LISTENER
 		physics2D.addContactListener(new ContactListener() {
 			@Override
@@ -253,7 +251,6 @@ public class DummyGLScreen extends Screen {
 	@Override
 	public void resume() {
 		Log.i("DUMMY_SCREEN", "Resumed");
-		//Texture.reloadManagedTextures();
 
 		GL10 gl = game.getGLGraphics().getGL();
 		gl.glClearColor(.25f, .75f, .25f, 1f);

@@ -19,8 +19,11 @@ import android.widget.Button;
 import java.io.IOException;
 import java.util.HashMap;
 
+import edu.ub.pis2016.pis16.strikecom.engine.android.AndroidMusic;
 import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
+import edu.ub.pis2016.pis16.strikecom.engine.opengl.Texture;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.ContactListener;
+import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 import edu.ub.pis2016.pis16.strikecom.fragments.InventoryFragment;
 import edu.ub.pis2016.pis16.strikecom.fragments.MiniMapFragment;
 import edu.ub.pis2016.pis16.strikecom.fragments.ShopFragment;
@@ -108,12 +111,22 @@ public class FragmentedGameActivity extends Activity {
 	@Override
 	protected void onPause() {
 		super.onPause();
+
+		// Stop all music playback
+		for (AndroidMusic mu : Assets.musicPlaying)
+			mu.pause();
+
 		wakeLock.release();
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
+
+		// Reload textures and resume music
+		Texture.reloadManagedTextures();
+		for (AndroidMusic mu : Assets.musicPlaying)
+			mu.play();
 
 		// Hide window decorations
 		hideSystemUI();

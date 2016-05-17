@@ -23,7 +23,7 @@ public class AndroidMusic implements Music, MediaPlayer.OnCompletionListener {
 			isPrepared = true;
 			mediaPlayer.setOnCompletionListener(this);
 		} catch (Exception e) {
-			throw new RuntimeException("Couldn't load music");
+			throw new RuntimeException("Couldn't load music_bg");
 		}
 	}
 

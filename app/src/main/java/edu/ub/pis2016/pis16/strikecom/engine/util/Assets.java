@@ -2,10 +2,11 @@ package edu.ub.pis2016.pis16.strikecom.engine.util;
 
 import android.util.Log;
 
+import java.util.ArrayList;
+
 import edu.ub.pis2016.pis16.strikecom.engine.android.AndroidMusic;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Game;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.audio.Sound;
-import edu.ub.pis2016.pis16.strikecom.engine.framework.audio.Music;
 
 /** Utility class for async resource loading */
 public class Assets {
@@ -21,14 +22,17 @@ public class Assets {
 
 	// Sounds and Music
 	public static int percentMusic;
-	public static AndroidMusic music;
+	public static AndroidMusic music_bg;
+	public static AndroidMusic music_tense;
 	public static Sound sfxShoot;
+
+	public static ArrayList<AndroidMusic> musicPlaying = new ArrayList<>();
 
 	/** Launches the assetloader thread, using a Game instace to access the various underlying systems */
 	public static void loadAssets(Game game) {
 		progress = 0;
 		ready = false;
-		percentMusic= game.getValueMusic();
+		percentMusic = game.getValueMusic();
 
 		// Start a new async thread to load assets while the game does other stuff
 		new Thread(new AssetLoaderRunnable(game)).start();
@@ -44,6 +48,7 @@ public class Assets {
 
 	private static class AssetLoaderRunnable implements Runnable {
 		Game game;
+
 		public AssetLoaderRunnable(Game game) {
 			this.game = game;
 		}
@@ -58,20 +63,31 @@ public class Assets {
 				// Global sprite atlas
 				SPRITE_ATLAS = new TextureAtlas(game, "sprites/sprites.atlas");
 
-				music = game.getAudio().newMusic("music.mp3");
-				music.setLooping(true);
-				music.setVolume((((float)percentMusic))/100.0f);
-/*				music.setVolume(1f);
-				System.out.printf("Musica: "+percentMusic);*/
-				music.play();
-				Thread.sleep(500);
+				progress = 0.3f;
+
+				music_bg = game.getAudio().newMusic("music/waterflame-final_battle.mp3");
+
+				progress = 0.6f;
+
+				music_tense = game.getAudio().newMusic("music/waterflame-endgame.mp3");
+
+				music_bg.setLooping(true);
+				music_bg.setVolume((((float) percentMusic)) / 100.0f);
+				music_bg.play();
+
+				musicPlaying.add(music_bg);
+
+				music_tense.setVolume((((float) percentMusic)) / 100.0f);
+				music_tense.setLooping(true);
+
+				Thread.sleep(250);
 
 				// Set flags
 				progress = 1;
 				ready = true;
 				Log.i("Assets", "Finished Loading");
 
-			}catch ( Exception e){
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -80,8 +96,8 @@ public class Assets {
 	/** Disposes of all managed assets */
 	public static void disposeAll() {
 		ready = false;
-		music.stop();
-		music.dispose();
+		music_bg.stop();
+		music_bg.dispose();
 		SPRITE_ATLAS.dispose();
 	}
 }
