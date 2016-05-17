@@ -1,5 +1,7 @@
 package edu.ub.pis2016.pis16.strikecom.engine.opengl;
 
+import android.util.Log;
+
 import edu.ub.pis2016.pis16.strikecom.engine.util.Animation;
 
 /**
@@ -10,6 +12,7 @@ public class AnimatedSprite extends Sprite {
 
 	private TextureRegion[] regions = null;
 	private Animation anim;
+
 
 	public AnimatedSprite(TextureRegion[] regions, float frameTime) {
 		super(regions[0]);
@@ -35,5 +38,9 @@ public class AnimatedSprite extends Sprite {
 	public void draw(SpriteBatch batch) {
 		super.setRegion(regions[anim.frame()]);
 		super.draw(batch);
+	}
+
+	public void setOnFinishAction(Runnable runnable) {
+		anim.setOnFinishAction(runnable);
 	}
 }

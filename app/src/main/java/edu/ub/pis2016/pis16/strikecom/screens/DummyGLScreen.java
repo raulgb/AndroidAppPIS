@@ -18,6 +18,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.math.WindowedMean;
+import edu.ub.pis2016.pis16.strikecom.engine.opengl.AnimatedSprite;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.GLGameFragment;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.GLGraphics;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.OrthoCamera;
@@ -32,6 +33,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.physics.Rectangle;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.StaticBody;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Pool;
+import edu.ub.pis2016.pis16.strikecom.gameplay.Explosion;
 import edu.ub.pis2016.pis16.strikecom.gameplay.ThreadVehicle;
 import edu.ub.pis2016.pis16.strikecom.gameplay.StrikeBase;
 import edu.ub.pis2016.pis16.strikecom.gameplay.Turret;
@@ -173,31 +175,6 @@ public class DummyGLScreen extends Screen {
 
 			}
 		});
-
-//		// Zoom in/out Input
-//		addInputProcessor(new InputProcessor() {
-//			@Override
-//			public boolean touchDown(float x, float y, int pointer) {
-//				tmp.set(x, glGraphics.getHeight() - y);
-//
-//				if (tmp.x < glGraphics.getWidth() / 4f) {
-//					if (tmp.y > glGraphics.getHeight() / 2f)
-//						camera.zoom -= 0.025f;
-//					else
-//						camera.zoom += 0.025f;
-//					return true;
-//				}
-//				return false;
-//			}
-//
-//			@Override
-//			public boolean touchDragged(float x, float y, int pointer) {
-//				if (tmp.x < glGraphics.getWidth() / 4f)
-//					return true;
-//
-//				return false;
-//			}
-//		});
 
 		// Move order Input
 		addInputProcessor(new InputProcessor() {
@@ -362,10 +339,15 @@ public class DummyGLScreen extends Screen {
 	/** Create a new tank enemy which spawns somewhere random on the map */
 	private void createEnemy() {
 		// Create 2 new enemies on death
-		ThreadVehicle enemyTank = new ThreadVehicle() {
+		final ThreadVehicle enemyTank = new ThreadVehicle() {
 			@Override
 			public void destroy() {
 				super.destroy();
+
+				Explosion explosion = new Explosion();
+				explosion.setPosition(this.getPosition());
+				addGameObject(explosion);
+
 				// Add Scrap to Player
 				FragmentedGameActivity gameActivity = (FragmentedGameActivity) ((GLGameFragment) game).getActivity();
 

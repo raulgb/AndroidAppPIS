@@ -1,6 +1,8 @@
 package edu.ub.pis2016.pis16.strikecom.engine.util;
 
 
+import android.util.Log;
+
 public class Animation {
 
 	public enum Type {
@@ -17,6 +19,9 @@ public class Animation {
 	private float frameTime;
 	// MODE B
 	private float frameSpeed;
+
+	// Advanced
+	private Runnable onFinish = null;
 
 	public Animation(int frames) {
 		this.frames = frames;
@@ -41,12 +46,18 @@ public class Animation {
 				accum += delta;
 				if (accum >= frameTime) {
 					accum -= frameTime;
+
+					// Execute onfinish action
+					if (frame == (frames-1) && onFinish != null)
+						onFinish.run();
+
 					frame = (frame + 1) % frames;
 				}
 				break;
 			case FRAME_SPEED:
 				accum += frameSpeed * delta;
 				if (accum >= 1) {
+
 					accum -= 1;
 					frame = (frame + 1) % frames;
 				}
@@ -65,5 +76,10 @@ public class Animation {
 	public int frame() {
 		return frame;
 	}
+
+	public void setOnFinishAction(Runnable runnable) {
+		this.onFinish = runnable;
+	}
+
 
 }

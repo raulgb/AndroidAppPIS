@@ -5,6 +5,8 @@ package edu.ub.pis2016.pis16.strikecom.gameplay.config;
  */
 public class TurretConfig {
 
+
+
 	/** Idle seconds after target not found */
 	public float idle_seconds = 2f;
 	/** Seconds between each shot */

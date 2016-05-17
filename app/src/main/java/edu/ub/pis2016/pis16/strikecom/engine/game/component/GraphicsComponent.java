@@ -19,6 +19,10 @@ public class GraphicsComponent extends Component implements DrawableComponent {
 		this.sprite = new Sprite(region);
 	}
 
+	public GraphicsComponent(Sprite sprite){
+		this.sprite = sprite;
+	}
+
 	/** Draws the associated Drawable. If the GameObject has a PhysicsComponent, it will pull position data from it. */
 	public void draw(SpriteBatch batch) {
 		// If entity has a physics component, draw to it
