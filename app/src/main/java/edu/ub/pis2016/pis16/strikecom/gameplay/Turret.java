@@ -6,6 +6,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Sprite;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
+import edu.ub.pis2016.pis16.strikecom.gameplay.config.TurretConfig;
 
 /** A Generic turret for use with a {@link Vehicle}. */
 public class Turret extends GameObject {
@@ -18,6 +19,8 @@ public class Turret extends GameObject {
 
 	Sprite sprite;
 	int upgradeStatus = 0;
+
+	public TurretConfig cfg = TurretConfig.DEFAULT;
 
 	Vector2 anchor;
 	Vehicle owner;

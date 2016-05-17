@@ -139,6 +139,8 @@ public class InventoryFragment extends DialogFragment {
 
 		fillItemList();
 
+		getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+
 		return view;
 	}
 

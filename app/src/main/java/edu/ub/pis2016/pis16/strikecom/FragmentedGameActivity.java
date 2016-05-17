@@ -73,7 +73,7 @@ public class FragmentedGameActivity extends Activity {
 		// Give the sidebar fragment a reference to the game fragment.
 		sidebar.setGame(game);
 
-		playerState.put("SCRAP", 50);
+		playerState.put("SCRAP", 1000);
 		playerState.put("FUEL", 100f);
 		playerState.put("POINTS", 0);
 		playerState.put("INVENTORY", new Inventory());

@@ -46,12 +46,12 @@ public class TurretItem extends Item {
 				"\n\n" + flavour);
 	}
 
-	public TurretBehavior getBehavior() {
-		TurretBehavior behavior = new TurretBehavior(new TurretConfig());
-		behavior.cfg.proj_damage = Math.round(stats[0]);
-		behavior.cfg.shoot_freq = 2 / stats[1];
-		behavior.cfg.lerp_speed = 1 / stats[1];
-		return behavior;
+	public TurretConfig getConfig() {
+		TurretConfig cfg = new TurretConfig();
+		cfg.proj_damage = Math.round(stats[0]);
+		cfg.shoot_freq = 2 / stats[1];
+		cfg.lerp_speed = 1 / stats[1];
+		return cfg;
 	}
 
 	public GraphicsComponent getGraphics() {

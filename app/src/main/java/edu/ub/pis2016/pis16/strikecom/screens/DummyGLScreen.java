@@ -400,14 +400,15 @@ public class DummyGLScreen extends Screen {
 
 		String tankIdentifier = addGameObject(enemyTank);
 		// ------ TANK TURRET -----
-		GameObject turret = new Turret("enemy_turret", enemyTank, "turret");
+		Turret turret = new Turret("enemy_turret", enemyTank, "turret");
 
 		// Configure enemy damage and stuff here
 		TurretConfig turretConfig = new TurretConfig();
 		turretConfig.proj_damage = 5;
 		turretConfig.lerp_speed = 0.04f;
 		turretConfig.shoot_freq = 2;
-		turret.putComponent(new TurretBehavior(turretConfig));
+		turret.cfg = turretConfig;
+		turret.putComponent(new TurretBehavior());
 
 		// Bigger cannon
 		turret.getComponent(GraphicsComponent.class).getSprite().setSize(1.4f * GameConfig.TILE_SIZE);
