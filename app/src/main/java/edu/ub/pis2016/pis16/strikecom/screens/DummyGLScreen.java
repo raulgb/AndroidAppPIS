@@ -18,26 +18,21 @@ import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.math.WindowedMean;
-import edu.ub.pis2016.pis16.strikecom.engine.opengl.AnimatedSprite;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.GLGameFragment;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.GLGraphics;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.OrthoCamera;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Sprite;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Texture;
-import edu.ub.pis2016.pis16.strikecom.engine.physics.Body;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.ContactListener;
-import edu.ub.pis2016.pis16.strikecom.engine.physics.DynamicBody;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Physics2D;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Rectangle;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.StaticBody;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
-import edu.ub.pis2016.pis16.strikecom.engine.util.Pool;
 import edu.ub.pis2016.pis16.strikecom.gameplay.Explosion;
 import edu.ub.pis2016.pis16.strikecom.gameplay.ThreadVehicle;
 import edu.ub.pis2016.pis16.strikecom.gameplay.StrikeBase;
 import edu.ub.pis2016.pis16.strikecom.gameplay.Turret;
-import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.ProjectileBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.TurretBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.VehicleFollowBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig;
@@ -82,7 +77,7 @@ public class DummyGLScreen extends Screen {
 
 	FragmentedGameActivity activity;
 
-	public Pool<GameObject> projectilePool;
+
 	private Vector2 targetPos = new Vector2();
 	private Vector2 tmp = new Vector2();
 	boolean currentShopContact = false;
@@ -105,22 +100,6 @@ public class DummyGLScreen extends Screen {
 		batch = new SpriteBatch(game.getGLGraphics(), 512);
 		gameMap = new GameMap(physics2D, TILE_SIZE, 0L, 16, 2, 0.5f);
 		gameMap.setDrawDistance(GameConfig.TILES_ON_SCREEN / 2 + 1);
-
-		projectilePool = new Pool<>(new Pool.PoolObjectFactory<GameObject>() {
-			@Override
-			public GameObject createObject() {
-				// Create a Bullet gameObject
-				GameObject projectile = new GameObject();
-				projectile.setLayer(Screen.LAYER_PROJECTILES);
-				// Init basic preferences
-				Body projBody = new DynamicBody(new Rectangle(1 / 16f, 1 / 16f));
-				projectile.putComponent(new PhysicsComponent(projBody));
-				projectile.putComponent(new ProjectileBehavior());
-				projectile.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("bullet")));
-				projectile.getComponent(GraphicsComponent.class).getSprite().setScale(0.3f);
-				return projectile;
-			}
-		}, 64);
 
 		healthBarSprite = new Sprite(Assets.SPRITE_ATLAS.getRegion("healthbar", 0));
 
@@ -238,10 +217,12 @@ public class DummyGLScreen extends Screen {
 		gameMap.update(delta);
 
 		// Sketchy hack to get seamless rendering using the OpenGL camera
-		tmp.set(strikeBase.getPosition());
-		tmp.x = (int) (tmp.x * 10) / 10f;
-		tmp.y = (int) (tmp.y * 10) / 10f;
-		camera.position.set(tmp);
+		if (strikeBase.isValid()) {
+			tmp.set(strikeBase.getPosition());
+			tmp.x = (int) (tmp.x * 10) / 10f;
+			tmp.y = (int) (tmp.y * 10) / 10f;
+			camera.position.set(tmp);
+		}
 		camera.update();
 	}
 
@@ -307,7 +288,7 @@ public class DummyGLScreen extends Screen {
 		shop.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("shop")));
 		shop.setTag("shop_1");
 		shop.hitpoints = 9999;
-		shop.setLayer(LAYER_BUILDING_BOTTOM);
+		shop.setLayer(LAYER_BACKGROUND);
 		shop.setPosition((MAP_SIZE / 2f - 4) * TILE_SIZE, MAP_SIZE / 2f * TILE_SIZE);
 		addGameObject("shop_1", shop);
 
@@ -344,7 +325,7 @@ public class DummyGLScreen extends Screen {
 			public void destroy() {
 				super.destroy();
 
-				Explosion explosion = new Explosion();
+				Explosion explosion = new Explosion("explosion_tank");
 				explosion.setPosition(this.getPosition());
 				addGameObject(explosion);
 
@@ -385,11 +366,7 @@ public class DummyGLScreen extends Screen {
 		Turret turret = new Turret("enemy_turret", enemyTank, "turret");
 
 		// Configure enemy damage and stuff here
-		TurretConfig turretConfig = new TurretConfig();
-		turretConfig.proj_damage = 5;
-		turretConfig.lerp_speed = 0.04f;
-		turretConfig.shoot_freq = 2;
-		turret.cfg = turretConfig;
+		turret.cfg = new TurretConfig(TurretConfig.Type.TURRET_CANNON);
 		turret.putComponent(new TurretBehavior());
 
 		// Bigger cannon

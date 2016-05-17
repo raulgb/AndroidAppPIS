@@ -13,20 +13,21 @@ public class Explosion extends GameObject {
 
 	AnimatedSprite sprite;
 
-	public Explosion() {
-		sprite = new AnimatedSprite(Assets.SPRITE_ATLAS.getRegions("explosion_tank"), 0.075f);
-
-		putComponent(new GraphicsComponent(sprite));
-		putComponent(new PhysicsComponent());
-		setLayer(Screen.LAYER_GUI);
-
+	public Explosion(String effectName) {
+		// Construct a new AnimatedSprite, no looping and destroy this gameObject on finish
+		sprite = new AnimatedSprite(Assets.SPRITE_ATLAS.getRegions(effectName), 0.1f);
+		sprite.setLooping(false);
 		sprite.setOnFinishAction(new Runnable() {
 			@Override
 			public void run() {
-				Log.i("Explosion", "onFinish called");
 				destroy();
 			}
 		});
+
+		// Setup
+		putComponent(new GraphicsComponent(sprite));
+		putComponent(new PhysicsComponent());
+		setLayer(Screen.LAYER_EFFECTS);
 	}
 
 	@Override

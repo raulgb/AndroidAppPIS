@@ -605,7 +605,7 @@ gray
   orig: 8, 8
   offset: 0, 0
   index: 0
-bullet
+proj_bullet
   rotate: false
   xy: 32, 0
   size: 8, 4
@@ -661,9 +661,23 @@ gray
   orig: 8, 8
   offset: 0, 0
   index: 7
+proj_gatling_bullet
+  rotate: false
+  xy: 40, 0
+  size: 8, 4
+  orig: 8, 4
+  offset: 0, 0
+  index: -1
+proj_tank_shell
+  rotate: false
+  xy: 224, 114
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: -1
 dot
   rotate: false
-  xy: 224, 119
+  xy: 232, 129
   size: 3, 3
   orig: 3, 3
   offset: 0, 0

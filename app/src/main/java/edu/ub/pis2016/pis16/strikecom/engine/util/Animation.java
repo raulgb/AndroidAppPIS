@@ -1,10 +1,7 @@
 package edu.ub.pis2016.pis16.strikecom.engine.util;
 
 
-import android.util.Log;
-
 public class Animation {
-
 	public enum Type {
 		FRAME_TIME,
 		FRAME_SPEED
@@ -22,6 +19,7 @@ public class Animation {
 
 	// Advanced
 	private Runnable onFinish = null;
+	private boolean looping = true;
 
 	public Animation(int frames) {
 		this.frames = frames;
@@ -48,7 +46,7 @@ public class Animation {
 					accum -= frameTime;
 
 					// Execute onfinish action
-					if (frame == (frames-1) && onFinish != null)
+					if (frame == (frames - 1) && !looping && onFinish != null)
 						onFinish.run();
 
 					frame = (frame + 1) % frames;
@@ -81,5 +79,13 @@ public class Animation {
 		this.onFinish = runnable;
 	}
 
+	public void setLooping(boolean looping) {
+		this.looping = looping;
+	}
+
+	public void play(){
+		frame = 0;
+		accum = 0;
+	}
 
 }

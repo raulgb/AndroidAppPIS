@@ -1,16 +1,16 @@
 package edu.ub.pis2016.pis16.strikecom.gameplay.behaviors;
 
-import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.BehaviorComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.GraphicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Angle;
+import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Sprite;
 import edu.ub.pis2016.pis16.strikecom.gameplay.Turret;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.TurretConfig;
-import edu.ub.pis2016.pis16.strikecom.screens.DummyGLScreen;
+import edu.ub.pis2016.pis16.strikecom.gameplay.factories.ProjectileFactory;
 
 /**
  * Behavior of a generic turret.
@@ -23,6 +23,8 @@ public class TurretBehavior extends BehaviorComponent {
 
 	private State state = State.IDLE;
 	private float counter = 0;
+
+	private float randomAngle = 0f;
 
 	private enum State {
 		IDLE,
@@ -41,7 +43,7 @@ public class TurretBehavior extends BehaviorComponent {
 			case IDLE:
 				// If we're idling, just look forward
 				if (counter < cfg.idle_seconds) {
-					tmp.set(8, 0).rotate(vehiclePhys.getRotation()).add(turretPhys.getPosition());
+					tmp.set(8, 0).rotate(vehiclePhys.getRotation() + randomAngle).add(turretPhys.getPosition());
 					turretPhys.lookAt(tmp, cfg.lerp_speed * .1f);
 				} else {
 					counter = 0;
@@ -49,9 +51,9 @@ public class TurretBehavior extends BehaviorComponent {
 				}
 				break;
 			case SEARCHING:
-				if (targetTag == null)
+				if (targetTag == null) {
 					state = State.IDLE;
-				else {
+				} else {
 					// Look for the closest gameobject in view
 					float closestDistance = Float.MAX_VALUE;
 					GameObject closestGO = null;
@@ -67,10 +69,11 @@ public class TurretBehavior extends BehaviorComponent {
 						}
 					}
 
-					// If none found, return to idle
-					if (closestGO == null)
+					// If none found, return to idle and move around
+					if (closestGO == null) {
 						state = State.IDLE;
-					else {
+						randomAngle += MathUtils.random(-180, 180);
+					} else {
 						target = closestGO;
 						state = State.AIMING;
 					}
@@ -86,7 +89,7 @@ public class TurretBehavior extends BehaviorComponent {
 					turretPhys.lookAt(target.getPosition(), cfg.lerp_speed);
 					float turretRot = turretPhys.getRotation();
 					float targetAngle = tmp.set(target.getPosition()).sub(turretPhys.getPosition()).angle();
-					if (Math.abs(Angle.angleDelta(turretRot, targetAngle)) < 3f && counter > cfg.shoot_freq) {
+					if (Math.abs(Angle.angleDelta(turretRot, targetAngle)) < cfg.fire_cone && counter > cfg.firerate) {
 						shoot();
 						counter = 0;
 					}
@@ -114,7 +117,7 @@ public class TurretBehavior extends BehaviorComponent {
 	private void shoot() {
 		TurretConfig cfg = ((Turret) gameObject).cfg;
 
-		GameObject projectile = ((DummyGLScreen) gameObject.getScreen()).projectilePool.newObject();
+		GameObject projectile = ProjectileFactory.newProjectile(cfg.proj_type);
 
 		PhysicsComponent turretPhys = gameObject.getComponent(PhysicsComponent.class);
 		PhysicsComponent projPhys = projectile.getComponent(PhysicsComponent.class);
@@ -125,8 +128,10 @@ public class TurretBehavior extends BehaviorComponent {
 		tmp.add(turretPhys.getPosition());
 		projPhys.setPosition(tmp);
 
-		// set velocity and rotation
-		projPhys.setVelocity(tmp.set(cfg.proj_speed, 0).rotate(turretPhys.getRotation()));
+		// Set the bullet spread here
+		projPhys.setVelocity(tmp.set(cfg.proj_speed, 0).rotate(
+				turretPhys.getRotation() + MathUtils.random(-1, 1) * cfg.fire_spread
+		));
 		projPhys.setRotation(turretPhys.getRotation());
 
 		// set the tag to "player_proj" or "enemy_proj" and same group as parent
@@ -136,7 +141,6 @@ public class TurretBehavior extends BehaviorComponent {
 		// set hitpoints as damage made on impact
 		projectile.hitpoints = cfg.proj_damage;
 
-		projectile.setLayer(Screen.LAYER_PROJECTILES);
 		gameObject.getScreen().addGameObject(projectile);
 	}
 }

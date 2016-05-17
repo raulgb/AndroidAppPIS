@@ -33,9 +33,10 @@ public abstract class Screen implements Disposable {
 	/** Projectiles */
 	public static final int LAYER_PROJECTILES = 20;
 
+	public static final int LAYER_EFFECTS = 30;
 
 	/** Building tops */
-	public static final int LAYER_BUILDING_TOP = 5;
+	public static final int LAYER_BUILDING_TOP = 40;
 
 	/** Terrain overlaping everithing else */
 	public static final int LAYER_TALL_TERRAIN = 50;
@@ -139,16 +140,17 @@ public abstract class Screen implements Disposable {
 	}
 
 	/**
-	 * Use GameObject.destroy() instead.
+	 * <b>WARNING: Use GameObject.destroy() instead.</b>
+	 * <p/>
 	 * Remove a GameObject by tag. Please note the GameObject will NOT be removed until the next frame.
-	 * All other methods use this method to actually remove a GameObject.
 	 */
 	public void removeGameObject(String name) {
-		GOsToRemove.add(getGameObject(name));
+		removeGameObject(getGameObject(name));
 	}
 
 	/**
-	 * Use GameObject.destroy() instead.
+	 * <b>WARNING: Use GameObject.destroy() instead.</b>
+	 * <p/>
 	 * Called by GameObjects when they are initially marked for disposal. Do not use unless you know what
 	 * you're doing.
 	 * <p/>

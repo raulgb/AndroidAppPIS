@@ -43,4 +43,8 @@ public class AnimatedSprite extends Sprite {
 	public void setOnFinishAction(Runnable runnable) {
 		anim.setOnFinishAction(runnable);
 	}
+
+	public void setLooping(boolean looping) {
+		anim.setLooping(looping);
+	}
 }

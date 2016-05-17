@@ -2,7 +2,6 @@ package edu.ub.pis2016.pis16.strikecom.gameplay.items;
 
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.GraphicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
-import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.TurretBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.TurretConfig;
 
 public class TurretItem extends Item {
@@ -47,10 +46,22 @@ public class TurretItem extends Item {
 	}
 
 	public TurretConfig getConfig() {
-		TurretConfig cfg = new TurretConfig();
-		cfg.proj_damage = Math.round(stats[0]);
-		cfg.shoot_freq = 2 / stats[1];
-		cfg.lerp_speed = 1 / stats[1];
+		TurretConfig cfg = null;
+		if (name.equals("Machinegun")) {
+			cfg = new TurretConfig(TurretConfig.Type.TURRET_MACHINEGUN);
+		} else if (name.equals("Gatling gun")) {
+			cfg = new TurretConfig(TurretConfig.Type.TURRET_GATLING);
+		} else if (name.equals("Battle cannon")) {
+			cfg = new TurretConfig(TurretConfig.Type.TURRET_CANNON);
+		} else if (name.equals("Howitzer")) {
+			cfg = new TurretConfig(TurretConfig.Type.TURRET_HOWITZER);
+		}
+		if (cfg == null)
+			throw new IllegalArgumentException("No turret confing with name " + this.name);
+
+//		cfg.proj_damage = Math.round(stats[0]);
+//		cfg.firerate = 2 / stats[1];
+//		cfg.lerp_speed = 1 / stats[1];
 		return cfg;
 	}
 
