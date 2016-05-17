@@ -1,13 +1,22 @@
 package edu.ub.pis2016.pis16.strikecom.engine.game;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 
 import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.AnimatedSprite;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Sprite;
+import edu.ub.pis2016.pis16.strikecom.engine.opengl.Texture;
+import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureRegion;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Physics2D;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Perlin2D;
@@ -213,7 +222,7 @@ public class GameMap {
 				if (x < center.x - squareRad || x > center.x + squareRad || y < center.y - squareRad || y > center.y + squareRad)
 					continue;
 
-				discoveredTable[col][row] = true; // mark this point as wisited
+				discoveredTable[row][col] = true; // mark this point as visited
 				tTable[row][col].draw(batch, x, y);
 			}
 		}
@@ -251,16 +260,16 @@ public class GameMap {
 		Sprite tmp;
 
 		for (int y = 0; y < height; y++) {
-			tmpY = (int) (center.y - height + y * 2);
+			tmpY =  tileSize / 2f+(center.y - height*2 + y *4);
 			for (int x = 0; x < width; x++) {
-				tmpX = (int) (center.x - width + x * 2);
-				if (discoveredTable[x][y]) {    //discovered terrain
-					tmp = getGray(pTable[x][y]);
-					tmp.setScale(0.25f); //warning: resize works for other instances of this sprites
+				tmpX = tileSize / 2f+(center.x - width*2 + x *4);
+				if (discoveredTable[y][x]) {    //discovered terrain
+					tmp = getGray(pTable[y][x]);
+					tmp.setScale(0.5f); //warning: resize works for other instances of this sprites
 					tmp.draw(batch, tmpX, tmpY);
 					if (x == (int) (center.x) / tileSize && y == (int) (center.y) / tileSize) {//player position marker
 						tmp = gray[7];
-						tmp.setScale(0.3f);
+						tmp.setScale(0.6f);
 						tmp.draw(batch, tmpX, tmpY);
 						tmp.setScale(2.1f);
 					}
@@ -276,4 +285,54 @@ public class GameMap {
 		}
 	}
 
-}
+	public void createMiniMap(Vector2 center){
+		Color color=new Color();
+		Bitmap.Config conf = Bitmap.Config.ARGB_8888; // see other conf types
+		Bitmap bmp = Bitmap.createBitmap(width, height, conf); // this creates a MUTABLE bitmap
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				if (discoveredTable[y][x]) {
+					bmp.setPixel(x,y,calcColor(pTable[y][x]));
+					if (x == (int) (center.x) / tileSize && y == (int) (center.y) / tileSize) {//player position marker
+						bmp.setPixel(x, y, color.BLACK);
+					}
+				}else {
+					bmp.setPixel(x,y,color.WHITE);
+				}
+			}
+
+		}
+
+/*
+		FileOutputStream out = null;
+		try {
+			out = new FileOutputStream();
+			bmp.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+			// PNG is a lossless format, the compression factor (100) is ignored
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (out != null) {
+					out.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}*/
+
+
+	}
+	private int calcColor(float inValue){
+		if (inValue > 0.6f)
+			return  -16711936; //GREEN -grass
+		else if (inValue > 0.5f)
+			return -3355444 ;//LTGRAY-  dry
+		else if (inValue > 0.4f)
+			return  -256; //YELLOW - sand
+		else
+			return -16776961; //BLUE - water
+
+	}
+
+}//android drawables
