@@ -4,9 +4,11 @@ import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.GraphicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
+import edu.ub.pis2016.pis16.strikecom.engine.opengl.AnimatedSprite;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Sprite;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.TurretConfig;
+import edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig;
 
 /** A Generic turret for use with a {@link Vehicle}. */
 public class Turret extends GameObject {
@@ -18,6 +20,7 @@ public class Turret extends GameObject {
 	Vector2 tmp;
 
 	Sprite sprite;
+	AnimatedSprite animatedSprite;
 	int upgradeStatus = 0;
 
 	public TurretConfig cfg = TurretConfig.DEFAULT;
@@ -36,10 +39,15 @@ public class Turret extends GameObject {
 		this.setParent(owner);
 		this.setTag(owner.getTag() + "_turret");
 
-		putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion(model, upgradeStatus)));
+		sprite = new Sprite(Assets.SPRITE_ATLAS.getRegion(model, upgradeStatus));
+		sprite.setSize(GameConfig.TILE_SIZE);
+		animatedSprite = new AnimatedSprite(Assets.SPRITE_ATLAS.getRegions(model), 0.1f);
+		animatedSprite.setSize(GameConfig.TILE_SIZE);
+		animatedSprite.setLooping(true);
+
+		putComponent(new GraphicsComponent(sprite));
 		putComponent(new PhysicsComponent());
 
-		sprite = new Sprite(Assets.SPRITE_ATLAS.getRegion(model, upgradeStatus));
 	}
 
 	public void setId(String id) {
@@ -66,6 +74,7 @@ public class Turret extends GameObject {
 
 	public void setUpgradeStatus(int status) {
 		this.upgradeStatus = status;
+
 		getComponent(GraphicsComponent.class).setRegion(Assets.SPRITE_ATLAS.getRegion(model, upgradeStatus));
 	}
 }

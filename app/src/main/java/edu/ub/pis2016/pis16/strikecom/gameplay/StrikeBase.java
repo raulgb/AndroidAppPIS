@@ -143,16 +143,16 @@ public class StrikeBase extends Vehicle {
 		// TODO Make this more universal, range 0-1 and depending on actual size (game units)
 		switch (cfg.modelName) {
 			case "sbmk1":
-				turret_0.set(-8, 8).scl(hull.getScale()).rotate(rotation).add(pos);
-				turret_1.set(8, 8).scl(hull.getScale()).rotate(rotation).add(pos);
-				turret_2.set(-8, -8).scl(hull.getScale()).rotate(rotation).add(pos);
-				turret_3.set(8, -8).scl(hull.getScale()).rotate(rotation).add(pos);
+				turret_0.set(-16, 16).scl(hull.getScale()).rotate(rotation).add(pos);
+				turret_1.set(16, 16).scl(hull.getScale()).rotate(rotation).add(pos);
+				turret_2.set(-16, -16).scl(hull.getScale()).rotate(rotation).add(pos);
+				turret_3.set(16, -16).scl(hull.getScale()).rotate(rotation).add(pos);
 				break;
 			case "sbmk2":
-				turret_0.set(-8, 8).scl(hull.getScale()).rotate(rotation).add(pos);
-				turret_1.set(-8, -8).scl(hull.getScale()).rotate(rotation).add(pos);
-				turret_2.set(8, -8).scl(hull.getScale()).rotate(rotation).add(pos);
-				turret_3.set(8, 8).scl(hull.getScale()).rotate(rotation).add(pos);
+				turret_0.set(-16, 16).scl(hull.getScale()).rotate(rotation).add(pos);
+				turret_1.set(-16, -16).scl(hull.getScale()).rotate(rotation).add(pos);
+				turret_2.set(16, -16).scl(hull.getScale()).rotate(rotation).add(pos);
+				turret_3.set(16, 16).scl(hull.getScale()).rotate(rotation).add(pos);
 				break;
 		}
 
@@ -284,6 +284,7 @@ public class StrikeBase extends Vehicle {
 		turret.putComponent(new TurretBehavior());
 		turret.cfg = item.getConfig();
 		turret.getComponent(TurretBehavior.class).setTargetTag("enemy");
+		//getComponent(GraphicsComponent.class).getSprite().setSize(GameConfig.TILE_SIZE *2);
 
 		screen.addGameObject(tName, turret);
 

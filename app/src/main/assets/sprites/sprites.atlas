@@ -3,681 +3,814 @@ sprites.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-cursor_attack
+sbmk2_threads_right
   rotate: false
-  xy: 0, 204
-  size: 48, 48
-  orig: 48, 48
+  xy: 0, 444
+  size: 64, 64
+  orig: 64, 64
   offset: 0, 0
-  index: -1
+  index: 0
+sbmk2_threads_right
+  rotate: false
+  xy: 0, 378
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 1
+sbmk2_hull
+  rotate: false
+  xy: 64, 444
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 1
+sbmk2_threads_left
+  rotate: false
+  xy: 0, 312
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 1
+sbmk2_threads_right
+  rotate: false
+  xy: 64, 378
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 3
+sbmk2_threads_left
+  rotate: false
+  xy: 128, 444
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 3
+sbmk2_threads_left
+  rotate: false
+  xy: 0, 246
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 0
+sbmk2_threads_left
+  rotate: false
+  xy: 64, 312
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 2
+sbmk2_hull
+  rotate: false
+  xy: 128, 378
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 2
+sbmk2_hull
+  rotate: false
+  xy: 192, 444
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 0
+sbmk2_threads_right
+  rotate: false
+  xy: 0, 180
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 2
 cursor_move
   rotate: false
-  xy: 0, 154
+  xy: 64, 262
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
-ai_sbmk1
+cursor_attack
   rotate: false
-  xy: 48, 220
-  size: 32, 32
-  orig: 32, 32
+  xy: 128, 328
+  size: 48, 48
+  orig: 48, 48
   offset: 0, 0
   index: -1
 ai_sbmk2
   rotate: false
-  xy: 0, 120
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: -1
-composite_sbmk1
-  rotate: false
-  xy: 48, 186
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: -1
-composite_sbmk2
-  rotate: false
-  xy: 80, 220
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: -1
-default_enemy
-  rotate: false
-  xy: 0, 86
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: -1
-dry
-  rotate: false
-  xy: 80, 186
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: -1
-dry_grass_e
-  rotate: false
-  xy: 112, 220
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: -1
-dry_grass_n
-  rotate: false
-  xy: 0, 52
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: -1
-dry_grass_ne
-  rotate: false
-  xy: 112, 186
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: -1
-dry_grass_nw
-  rotate: false
-  xy: 144, 220
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: -1
-dry_grass_s
-  rotate: false
-  xy: 0, 18
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: -1
-dry_grass_se
-  rotate: false
-  xy: 144, 186
+  xy: 192, 410
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 dry_grass_sw
   rotate: false
-  xy: 176, 220
+  xy: 256, 476
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+sbmk1_threads_left
+  rotate: false
+  xy: 0, 146
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 0
+enemy_turret
+  rotate: false
+  xy: 64, 228
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 2
+turret_machinegun
+  rotate: false
+  xy: 224, 410
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 0
+turret_howitzer
+  rotate: false
+  xy: 256, 442
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 1
+explosion_tank
+  rotate: false
+  xy: 288, 476
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 5
+explosion_tank
+  rotate: false
+  xy: 0, 112
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 4
+dry_grass_e
+  rotate: false
+  xy: 32, 146
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+default_enemy
+  rotate: false
+  xy: 64, 194
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 dry_grass_w
   rotate: false
-  xy: 176, 186
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: -1
-enemy
-  rotate: false
-  xy: 208, 220
+  xy: 288, 442
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 enemy_turret
   rotate: false
-  xy: 208, 186
+  xy: 320, 476
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 3
+enemy_turret
+  rotate: false
+  xy: 320, 476
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 0
+sbmk1_threads_left
+  rotate: false
+  xy: 0, 78
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 2
+enemy
+  rotate: false
+  xy: 32, 112
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
+dry_grass_s
+  rotate: false
+  xy: 64, 160
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+water
+  rotate: false
+  xy: 320, 442
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 1
+shop
+  rotate: false
+  xy: 352, 476
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+ai_sbmk1
+  rotate: false
+  xy: 0, 44
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+mountain
+  rotate: false
+  xy: 32, 78
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 0
 engine_sbmk1
   rotate: false
-  xy: 240, 220
+  xy: 64, 126
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
-engine_sbmk2
+composite_sbmk1
   rotate: false
-  xy: 240, 186
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: -1
-explosion_tank
-  rotate: false
-  xy: 272, 220
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 0
-explosion_tank
-  rotate: false
-  xy: 272, 186
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 1
-explosion_tank
-  rotate: false
-  xy: 304, 220
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 2
-explosion_tank
-  rotate: false
-  xy: 304, 186
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 3
-explosion_tank
-  rotate: false
-  xy: 336, 220
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 4
-explosion_tank
-  rotate: false
-  xy: 336, 186
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 5
-explosion_tank
-  rotate: false
-  xy: 368, 220
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 6
-grass
-  rotate: false
-  xy: 368, 186
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 0
-grid
-  rotate: false
-  xy: 400, 220
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: -1
-mountain
-  rotate: false
-  xy: 400, 186
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 0
-mountain
-  rotate: false
-  xy: 432, 220
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 1
-mountain
-  rotate: false
-  xy: 432, 186
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 2
-mountain
-  rotate: false
-  xy: 464, 220
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 3
-plate_sbmk1
-  rotate: false
-  xy: 464, 186
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: -1
-plate_sbmk2
-  rotate: false
-  xy: 48, 152
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: -1
-sand
-  rotate: false
-  xy: 80, 152
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 0
-sand
-  rotate: false
-  xy: 112, 152
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 1
-sand_dry_e
-  rotate: false
-  xy: 144, 152
+  xy: 352, 442
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 sand_dry_n
   rotate: false
-  xy: 176, 152
+  xy: 384, 476
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
-sand_dry_s
+grid
   rotate: false
-  xy: 208, 152
+  xy: 0, 10
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
-sand_dry_w
+plate_sbmk2
   rotate: false
-  xy: 240, 152
+  xy: 32, 44
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 sbmk1_hull
   rotate: false
-  xy: 272, 152
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 0
-sbmk1_hull
-  rotate: false
-  xy: 304, 152
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 1
-sbmk1_hull
-  rotate: false
-  xy: 336, 152
+  xy: 64, 92
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 2
-sbmk1_threads_left
+turret_gatling
   rotate: false
-  xy: 368, 152
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 0
-sbmk1_threads_left
-  rotate: false
-  xy: 400, 152
+  xy: 384, 442
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 1
-sbmk1_threads_left
+turret_cannon
   rotate: false
-  xy: 432, 152
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 2
-sbmk1_threads_left
-  rotate: false
-  xy: 464, 152
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 3
-explosion_bullet
-  rotate: false
-  xy: 496, 236
-  size: 16, 16
-  orig: 16, 16
-  offset: 0, 0
-  index: 0
-explosion_bullet
-  rotate: false
-  xy: 496, 218
-  size: 16, 16
-  orig: 16, 16
-  offset: 0, 0
-  index: 1
-explosion_bullet
-  rotate: false
-  xy: 496, 200
-  size: 16, 16
-  orig: 16, 16
-  offset: 0, 0
-  index: 2
-healthbar
-  rotate: false
-  xy: 496, 182
-  size: 16, 16
-  orig: 16, 16
-  offset: 0, 0
-  index: 0
-healthbar
-  rotate: false
-  xy: 496, 164
-  size: 16, 16
-  orig: 16, 16
-  offset: 0, 0
-  index: 1
-healthbar
-  rotate: false
-  xy: 0, 0
-  size: 16, 16
-  orig: 16, 16
-  offset: 0, 0
-  index: 2
-healthbar
-  rotate: false
-  xy: 16, 0
-  size: 16, 16
-  orig: 16, 16
-  offset: 0, 0
-  index: 3
-sbmk1_threads_right
-  rotate: false
-  xy: 32, 118
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 0
-sbmk1_threads_right
-  rotate: false
-  xy: 32, 84
+  xy: 416, 476
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 1
-sbmk1_threads_right
+dry
   rotate: false
-  xy: 64, 118
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 2
-sbmk1_threads_right
-  rotate: false
-  xy: 32, 50
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 3
-sbmk2_hull
-  rotate: false
-  xy: 64, 84
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 0
-sbmk2_hull
-  rotate: false
-  xy: 64, 84
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 1
-sbmk2_hull
-  rotate: false
-  xy: 96, 118
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 2
-sbmk2_threads_left
-  rotate: false
-  xy: 32, 16
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 0
-sbmk2_threads_left
-  rotate: false
-  xy: 64, 50
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 1
-sbmk2_threads_left
-  rotate: false
-  xy: 96, 84
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 2
-sbmk2_threads_left
-  rotate: false
-  xy: 128, 118
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 3
-sbmk2_threads_right
-  rotate: false
-  xy: 64, 16
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 0
-sbmk2_threads_right
-  rotate: false
-  xy: 96, 50
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 1
-sbmk2_threads_right
-  rotate: false
-  xy: 128, 84
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 2
-sbmk2_threads_right
-  rotate: false
-  xy: 160, 118
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 3
-shop
-  rotate: false
-  xy: 96, 16
+  xy: 32, 10
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 water
   rotate: false
-  xy: 128, 50
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 0
-water
-  rotate: false
-  xy: 160, 84
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 1
-water
-  rotate: false
-  xy: 192, 118
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 2
-water
-  rotate: false
-  xy: 128, 16
+  xy: 64, 58
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 3
-heat
+sbmk1_threads_left
   rotate: false
-  xy: 496, 146
-  size: 16, 16
-  orig: 16, 16
-  offset: 0, 0
-  index: 0
-heat
-  rotate: false
-  xy: 160, 66
-  size: 16, 16
-  orig: 16, 16
-  offset: 0, 0
-  index: 1
-heat
-  rotate: false
-  xy: 192, 100
-  size: 16, 16
-  orig: 16, 16
-  offset: 0, 0
-  index: 2
-heat
-  rotate: false
-  xy: 224, 134
-  size: 16, 16
-  orig: 16, 16
+  xy: 416, 442
+  size: 32, 32
+  orig: 32, 32
   offset: 0, 0
   index: 3
 turret_cannon
   rotate: false
-  xy: 160, 48
-  size: 16, 16
-  orig: 16, 16
+  xy: 448, 476
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 3
+turret_cannon
+  rotate: false
+  xy: 448, 476
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 0
+engine_sbmk2
+  rotate: false
+  xy: 480, 476
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+dry_grass_se
+  rotate: false
+  xy: 64, 24
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+sbmk1_threads_right
+  rotate: false
+  xy: 448, 442
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 0
+sand_dry_s
+  rotate: false
+  xy: 480, 442
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+sbmk1_threads_right
+  rotate: false
+  xy: 192, 376
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 3
+grass
+  rotate: false
+  xy: 224, 376
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 0
+enemy_turret
+  rotate: false
+  xy: 256, 408
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 1
+dry_grass_n
+  rotate: false
+  xy: 288, 408
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+explosion_tank
+  rotate: false
+  xy: 320, 408
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 2
+turret_machinegun
+  rotate: false
+  xy: 352, 408
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 3
+mountain
+  rotate: false
+  xy: 384, 408
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 2
+turret_gatling
+  rotate: false
+  xy: 416, 408
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 2
+composite_sbmk2
+  rotate: false
+  xy: 448, 408
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+explosion_tank
+  rotate: false
+  xy: 480, 408
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 0
+explosion_tank
+  rotate: false
+  xy: 256, 374
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 3
+mountain
+  rotate: false
+  xy: 288, 374
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 3
+sbmk1_hull
+  rotate: false
+  xy: 320, 374
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 0
+water
+  rotate: false
+  xy: 352, 374
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 0
+plate_sbmk1
+  rotate: false
+  xy: 384, 374
+  size: 32, 32
+  orig: 32, 32
   offset: 0, 0
   index: -1
 turret_gatling
   rotate: false
-  xy: 176, 66
-  size: 16, 16
-  orig: 16, 16
+  xy: 416, 374
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 3
+turret_machinegun
+  rotate: false
+  xy: 448, 374
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 2
+turret_gatling
+  rotate: false
+  xy: 480, 374
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 0
+sand
+  rotate: false
+  xy: 112, 278
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 1
+explosion_tank
+  rotate: false
+  xy: 96, 228
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 1
+explosion_tank
+  rotate: false
+  xy: 96, 194
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 6
+turret_cannon
+  rotate: false
+  xy: 96, 160
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 2
+sbmk1_threads_right
+  rotate: false
+  xy: 96, 126
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 2
+dry_grass_nw
+  rotate: false
+  xy: 96, 92
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+sand_dry_e
+  rotate: false
+  xy: 96, 58
+  size: 32, 32
+  orig: 32, 32
   offset: 0, 0
   index: -1
 turret_howitzer
   rotate: false
-  xy: 192, 82
-  size: 16, 16
-  orig: 16, 16
+  xy: 96, 24
+  size: 32, 32
+  orig: 32, 32
   offset: 0, 0
-  index: -1
+  index: 2
 turret_machinegun
   rotate: false
-  xy: 208, 100
+  xy: 176, 342
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 1
+turret_howitzer
+  rotate: false
+  xy: 208, 342
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 3
+mountain
+  rotate: false
+  xy: 144, 294
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 1
+sbmk1_hull
+  rotate: false
+  xy: 176, 308
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 1
+dry_grass_ne
+  rotate: false
+  xy: 208, 308
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+turret_howitzer
+  rotate: false
+  xy: 240, 340
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 0
+sbmk1_threads_left
+  rotate: false
+  xy: 272, 340
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 1
+water
+  rotate: false
+  xy: 304, 340
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 2
+sbmk1_threads_right
+  rotate: false
+  xy: 336, 340
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 1
+sand_dry_w
+  rotate: false
+  xy: 368, 340
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+sand
+  rotate: false
+  xy: 400, 340
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 0
+sbmk2_threads
+  rotate: false
+  xy: 0, 2
+  size: 40, 6
+  orig: 40, 6
+  offset: 0, 0
+  index: 3
+sbmk2_threads
+  rotate: false
+  xy: 64, 16
+  size: 40, 6
+  orig: 40, 6
+  offset: 0, 0
+  index: 2
+sbmk2_threads
+  rotate: false
+  xy: 176, 300
+  size: 40, 6
+  orig: 40, 6
+  offset: 0, 0
+  index: 0
+sbmk2_threads
+  rotate: false
+  xy: 240, 332
+  size: 40, 6
+  orig: 40, 6
+  offset: 0, 0
+  index: 1
+healthbar
+  rotate: false
+  xy: 432, 356
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
-  index: -1
-turret_mk1
+  index: 3
+heat
   rotate: false
-  xy: 208, 100
+  xy: 240, 314
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 3
+healthbar
+  rotate: false
+  xy: 448, 356
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: 0
-turret_mk1
+explosion_bullet
   rotate: false
-  xy: 208, 100
+  xy: 256, 314
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 0
+healthbar
+  rotate: false
+  xy: 464, 356
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: 1
-gray
+heat
   rotate: false
-  xy: 32, 6
-  size: 8, 8
-  orig: 8, 8
+  xy: 480, 356
+  size: 16, 16
+  orig: 16, 16
   offset: 0, 0
   index: 0
-proj_bullet
+heat
   rotate: false
-  xy: 32, 0
-  size: 8, 4
-  orig: 8, 4
-  offset: 0, 0
-  index: -1
-gray
-  rotate: false
-  xy: 224, 124
-  size: 8, 8
-  orig: 8, 8
+  xy: 496, 356
+  size: 16, 16
+  orig: 16, 16
   offset: 0, 0
   index: 1
+explosion_bullet
+  rotate: false
+  xy: 144, 276
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 2
+explosion_bullet
+  rotate: false
+  xy: 160, 276
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 1
+turret_mk1
+  rotate: false
+  xy: 176, 282
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 1
+turret_mk1
+  rotate: false
+  xy: 176, 282
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 0
+heat
+  rotate: false
+  xy: 192, 282
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 2
+healthbar
+  rotate: false
+  xy: 432, 338
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 2
 gray
   rotate: false
-  xy: 240, 142
+  xy: 40, 0
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: 2
 gray
   rotate: false
-  xy: 160, 38
-  size: 8, 8
-  orig: 8, 8
-  offset: 0, 0
-  index: 3
-gray
-  rotate: false
-  xy: 176, 56
-  size: 8, 8
-  orig: 8, 8
-  offset: 0, 0
-  index: 4
-gray
-  rotate: false
-  xy: 192, 72
+  xy: 48, 0
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: 5
 gray
   rotate: false
-  xy: 208, 90
+  xy: 56, 0
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: 1
+proj_tank_shell
+  rotate: false
+  xy: 128, 318
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: -1
+gray
+  rotate: false
+  xy: 136, 318
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: 6
-gray
-  rotate: false
-  xy: 40, 6
-  size: 8, 8
-  orig: 8, 8
-  offset: 0, 0
-  index: 7
 proj_gatling_bullet
   rotate: false
-  xy: 40, 0
+  xy: 128, 312
   size: 8, 4
   orig: 8, 4
   offset: 0, 0
   index: -1
-proj_tank_shell
+proj_bullet
   rotate: false
-  xy: 224, 114
+  xy: 136, 312
+  size: 8, 4
+  orig: 8, 4
+  offset: 0, 0
+  index: -1
+gray
+  rotate: false
+  xy: 64, 6
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
-  index: -1
+  index: 7
+gray
+  rotate: false
+  xy: 272, 322
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: 3
+gray
+  rotate: false
+  xy: 112, 268
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: 4
+gray
+  rotate: false
+  xy: 208, 290
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: 0
 dot
   rotate: false
-  xy: 232, 129
+  xy: 104, 19
   size: 3, 3
   orig: 3, 3
   offset: 0, 0

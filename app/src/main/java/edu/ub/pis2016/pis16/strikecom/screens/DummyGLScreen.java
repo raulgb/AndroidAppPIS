@@ -177,6 +177,8 @@ public class DummyGLScreen extends Screen {
 					strikeBase.getComponent(VehicleFollowBehavior.class).setTarget(targetPos);
 			}
 		});
+
+		Texture.reloadManagedTextures();
 	}
 
 	WindowedMean fpsMean = new WindowedMean(30);
