@@ -5,63 +5,69 @@ import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.TurretConfig;
 
 public class TurretItem extends Item {
-	float[] stats;
+	private String id;
+
+	TurretConfig cfg = null;
 
 	// Builder
-	public TurretItem(String name, String image, String model, String flavour, int price, float[] stats) {
+	public TurretItem(String id, String name, String image, String model, String flavour, int price) {
 		super(name, image, model, flavour, price);
-		this.stats = stats;
+		this.id = id;
 	}
 
 	// Returns a new TurretObject whose parameters are contained on a given string.
 	public static TurretItem parseTurretItem(String seq) {
-		String param[] = seq.split(";"); // ; used as separator
+		int price;
+		String id;
+		TurretConfig cfg;
+		TurretItem item;
 
-		if (param.length < 6) { // seq should at least contain name, image, flavour, price and 1 stat.
+		try {
+			// string must contain id, name, image, model, flavour, price
+			String param[] = seq.split(";"); // ; used as separator
+			price = Integer.parseInt(param[5]);
+
+			id = param[0];
+			if (id.equals("machinegun")) {
+				cfg = new TurretConfig(TurretConfig.Type.TURRET_MACHINEGUN);
+			} else if (id.contains("gatling")) {
+				cfg = new TurretConfig(TurretConfig.Type.TURRET_GATLING);
+			} else if (id.equals("battle_annon")) {
+				cfg = new TurretConfig(TurretConfig.Type.TURRET_CANNON);
+			} else if (id.equals("howitzer")) {
+				cfg = new TurretConfig(TurretConfig.Type.TURRET_HOWITZER);
+			} else {
+				return null;
+			}
+
+			item = new TurretItem(id, param[1], param[2], param[3], param[4], price);
+			item.cfg = cfg;
+		} catch (Exception ex) {
 			return null;
 		}
-		int p = Integer.valueOf(param[4]); //price
-		float s[] = new float[param.length - 5]; //stats
-		for (int i = 0; i < s.length; i++) {
-			s[i] = Float.valueOf(param[i + 5]);
-		}
-		return new TurretItem(param[0], param[1], param[2], param[3], p, s);
+		return item;
 	}
 
 	// Returns a string containing all relevant information of the object, using ";" as separator.
 	@Override
 	public String toString() {
-		String seq = (this.name + ";" + this.image + ";" + this.model + ";" + this.flavour);
-		for (float s : this.stats) {
-			seq += (";" + Float.toString(s));
-		}
-		return seq;
+		return (this.id + ";" +this.name + ";" + this.image + ";" + this.model + ";" + this.flavour + Integer.toString(price));
 	}
 
 	@Override
 	public String getDisplay() {
-		return (name + "\n\nattack: " + Float.toString(stats[0]) + "\nspeed: " + Float.toString(stats[1]) + "\nHP: " + Float.toString
-				(stats[2]) +
-				"\n\n" + flavour);
+		int attack, firerate, range;
+
+		// TODO adjust these formulas for better reflecting the turret stats
+		attack = cfg.proj_damage;
+		firerate = Math.round( 10f / cfg.firerate );
+		range = Math.round(cfg.range);
+
+		return (name + "\n\n\tattack: " + Integer.toString(attack) + "\n\tfirerate: " + Integer.toString(firerate) + "\n\trange: " + Integer
+				.toString(range) + "\n\n\tprice: " + Integer.toString(price));
 	}
 
 	public TurretConfig getConfig() {
-		TurretConfig cfg = null;
-		if (name.equals("Machinegun")) {
-			cfg = new TurretConfig(TurretConfig.Type.TURRET_MACHINEGUN);
-		} else if (name.equals("Gatling gun")) {
-			cfg = new TurretConfig(TurretConfig.Type.TURRET_GATLING);
-		} else if (name.equals("Battle cannon")) {
-			cfg = new TurretConfig(TurretConfig.Type.TURRET_CANNON);
-		} else if (name.equals("Howitzer")) {
-			cfg = new TurretConfig(TurretConfig.Type.TURRET_HOWITZER);
-		}
-		if (cfg == null)
-			throw new IllegalArgumentException("No turret confing with name " + this.name);
-
-//		cfg.proj_damage = Math.round(stats[0]);
-//		cfg.firerate = 2 / stats[1];
-//		cfg.lerp_speed = 1 / stats[1];
 		return cfg;
 	}
 
@@ -69,7 +75,4 @@ public class TurretItem extends Item {
 		return new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion(this.image));
 	}
 
-	public int getHitPoints() {
-		return Math.round(stats[2]);
-	}
 }
