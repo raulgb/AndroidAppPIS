@@ -38,18 +38,18 @@ import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 public abstract class GLGameFragment extends Fragment implements Game, GLSurfaceView.Renderer {
 
 	/** Android GL view object. */
-	GLSurfaceView glView;
-
+	private GLSurfaceView glView;
 
 	// Interface objects
-	GLGraphics glGraphics;
-	AndroidAudio audio;
-	int valueMusic;
-	Input input;
-	FileIO fileIO;
-	Screen screen;
+	private GLGraphics glGraphics;
+	private AndroidAudio audio;
+	private Input input;
+	private FileIO fileIO;
 
-	int SCREEN_W, SCREEN_H;
+	protected Screen screen;
+	protected int SCREEN_W, SCREEN_H;
+
+	int valueMusic;
 
 	GLGame.GLGameState state = GLGame.GLGameState.Initialized;
 

@@ -64,7 +64,7 @@ public class FragmentedGameActivity extends Activity {
 
 		// Obtain wakelock (to keep the screen on)
 		PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
-		wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, "GLGame");
+		wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, "StrikeComGame");
 
 		// Load layout with both fragments defined
 		setContentView(R.layout.activity_fragmented_game);
@@ -102,7 +102,6 @@ public class FragmentedGameActivity extends Activity {
 			}
 		}).start();
 
-
 		shopMap.put("shop_1", null);
 		generateInventories();
 
@@ -136,8 +135,8 @@ public class FragmentedGameActivity extends Activity {
 		game.setSidebarListener(new SidebarEventListener(game) {
 			@Override
 			public void onClickMinimap() {
-				// TODO Alexander
-				showMiniMapDialog();
+				// TODO Push screen on the stack
+//				game.pushScreen(new MinimanScreen());
 			}
 
 			@Override
