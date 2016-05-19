@@ -25,6 +25,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureRegion;
  */
 public class TextureAtlas {
 
+	/** Configure the maxium number of indices per region name here. */
 	private static final int PAGE_SIZE = 16;
 
 	Game game;
@@ -174,7 +175,7 @@ public class TextureAtlas {
 					else
 						addRegion(regionName, x, y, w, h);
 
-					Log.d("TextureAtlas", "New Region: " + regionName + ": " + getRegion(regionName, index).toString());
+					Log.d("TextureAtlas", "New Region: " + regionName + ": " + getRegion(regionName, index) + ", index: " + index);
 				}
 			}
 

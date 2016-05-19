@@ -112,8 +112,12 @@ public class FragmentedGameActivity extends Activity {
 		super.onPause();
 
 		// Stop all music playback
-		for (AndroidMusic mu : Assets.musicPlaying)
-			mu.pause();
+		try {
+			for (AndroidMusic mu : Assets.musicPlaying)
+				mu.pause();
+		} catch (Exception e) {
+			// OK Bro
+		}
 
 		wakeLock.release();
 	}
@@ -172,7 +176,7 @@ public class FragmentedGameActivity extends Activity {
 
 	@Override
 	public void onBackPressed() {
-		//Ask the user if he/she really wants to exit game
+		//Ask the user if they really wants to exit game
 		pauseGame();
 
 		final Dialog dialog = new Dialog(this);
@@ -221,16 +225,6 @@ public class FragmentedGameActivity extends Activity {
 
 			(builder.create()).show();*/
 		/*}*/
-	}
-
-	/**
-	 * shows minimap dialogue window
-	 */
-	public void showMiniMapDialog() {
-		//game.getCurrentScreen().pauseGame(); // pause game
-
-		MiniMapFragment miniMapFrag = new MiniMapFragment();
-		miniMapFrag.show(getFragmentManager(), "MiniMap");
 	}
 
 	public void showInventoryDialog(int selectedSlot, boolean turretIsSelected, boolean switchIsEnabled) {

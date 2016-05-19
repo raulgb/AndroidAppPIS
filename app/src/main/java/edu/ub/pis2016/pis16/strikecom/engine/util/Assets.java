@@ -46,6 +46,7 @@ public class Assets {
 		return ready;
 	}
 
+	/** Class to be passed to a Thread to load all game assets asynchronously. */
 	private static class AssetLoaderRunnable implements Runnable {
 		Game game;
 

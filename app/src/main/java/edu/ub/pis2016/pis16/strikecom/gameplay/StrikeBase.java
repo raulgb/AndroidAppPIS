@@ -6,18 +6,19 @@ import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
+import edu.ub.pis2016.pis16.strikecom.engine.opengl.AnimatedSprite;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Sprite;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureRegion;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.KinematicBody;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Rectangle;
-import edu.ub.pis2016.pis16.strikecom.engine.util.Animation;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.TurretBehavior;
-import edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.TurretItem;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.UpgradeItem;
+
+import static edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig.*;
 
 public class StrikeBase extends Vehicle {
 
@@ -27,11 +28,10 @@ public class StrikeBase extends Vehicle {
 	private Sprite plateArmor;
 	private Sprite compositeArmor;
 
-	private Sprite leftThreads;
-	private Sprite rightThreads;
+	private AnimatedSprite threadsLeft;
+	private AnimatedSprite threadsRight;
 
 	private TextureRegion[] sbmk1_hull;
-	private TextureRegion[][] sbmk1_threads;
 
 	private PhysicsComponent physics;
 	private Vector2 tmp = new Vector2();
@@ -49,16 +49,11 @@ public class StrikeBase extends Vehicle {
 	private float rightThreadVel;
 
 	// Anchors
-	private Vector2 turret_0 = new Vector2();
-	private Vector2 turret_1 = new Vector2();
-	private Vector2 turret_2 = new Vector2();
-	private Vector2 turret_3 = new Vector2();
+	private Vector2[] turret_anchors;
 
 	private Vector2 pivot = new Vector2();
-	private Vector2 leftThread = new Vector2();
-	private Vector2 rightThread = new Vector2();
-
-	private Animation[] threadAnim;
+	private Vector2 leftThreadPos = new Vector2();
+	private Vector2 rightThreadPos = new Vector2();
 
 	/** Config instance to modify this StrikeBase's properties */
 	private StrikeBaseConfig cfg;
@@ -80,83 +75,65 @@ public class StrikeBase extends Vehicle {
 		this.cfg = cfg;
 		String model = cfg.modelName;
 
-		sbmk1_hull = new TextureRegion[cfg.animHullFrames];
-		for (int i = 0; i < cfg.animHullFrames; i++)
+		sbmk1_hull = new TextureRegion[cfg.anim_hull_frames];
+		for (int i = 0; i < cfg.anim_hull_frames; i++)
 			sbmk1_hull[i] = Assets.SPRITE_ATLAS.getRegion(model + "_hull", i);
-
-		sbmk1_threads = new TextureRegion[2][cfg.animThreadFrames];
-		for (int i = 0; i < cfg.animThreadFrames; i++) {
-			sbmk1_threads[LEFT][i] = Assets.SPRITE_ATLAS.getRegion(model + "_threads_left", i);
-			sbmk1_threads[RIGHT][i] = Assets.SPRITE_ATLAS.getRegion(model + "_threads_right", i);
-		}
 
 		// Create sprites
 		hull = new Sprite(sbmk1_hull[0]);
-		hull.setSize(GameConfig.TILE_SIZE * 2);
+		hull.setSize(TILE_SIZE * 2);
 
 		compositeArmor = new Sprite(Assets.SPRITE_ATLAS.getRegion("composite_" + model));
-		compositeArmor.setSize(GameConfig.TILE_SIZE * 2);
+		compositeArmor.setSize(TILE_SIZE * 2);
 		plateArmor = new Sprite(Assets.SPRITE_ATLAS.getRegion("plate_" + model));
-		plateArmor.setSize(GameConfig.TILE_SIZE * 2);
+		plateArmor.setSize(TILE_SIZE * 2);
 
+		// Thread setup
+		threadsLeft = new AnimatedSprite(Assets.SPRITE_ATLAS.getRegions(model + "_threads"), 0.0f);
+		threadsLeft.setFrameSpeed(0f);
+		threadsLeft.setScale(hull.getScale());
 
-		leftThreads = new Sprite(sbmk1_threads[LEFT][0]);
-		leftThreads.setSize(GameConfig.TILE_SIZE * 2);
-		rightThreads = new Sprite(sbmk1_threads[RIGHT][0]);
-		rightThreads.setSize(GameConfig.TILE_SIZE * 2);
-
-		// Animations
-		threadAnim = new Animation[2];
-		threadAnim[0] = new Animation(cfg.animThreadFrames);
-		threadAnim[0].setFrameSpeed(0);
-		threadAnim[1] = new Animation(cfg.animThreadFrames);
-		threadAnim[1].setFrameSpeed(0);
+		threadsRight = new AnimatedSprite(Assets.SPRITE_ATLAS.getRegions(model + "_threads"), 0.0f);
+		threadsRight.setFrameSpeed(0f);
+		threadsRight.setScale(hull.getScale());
 
 		// Create and put anchors
-		this.putAnchor("turret_0", turret_0);
-		this.putAnchor("turret_1", turret_1);
-		this.putAnchor("turret_2", turret_2);
-		this.putAnchor("turret_3", turret_3);
+		turret_anchors = new Vector2[cfg.turret_num];
+		for (int i = 0; i < cfg.turret_num; i++) {
+			turret_anchors[i] = new Vector2();
+			this.putAnchor("turret_" + i, turret_anchors[i]);
+		}
 
 		this.putAnchor("pivot", pivot);
-		this.putAnchor("left_thread", leftThread);
-		this.putAnchor("right_thread", rightThread);
-	}
-
-	public StrikeBaseConfig getCfg() {
-		return this.cfg;
+		this.putAnchor("left_thread", leftThreadPos);
+		this.putAnchor("right_thread", rightThreadPos);
 	}
 
 	@Override
 	public void update(float delta) {
-		// Animations
-		threadAnim[0].setFrameSpeed(leftThreadVel / 2f);
-		threadAnim[1].setFrameSpeed(rightThreadVel / 2f);
-		for (Animation a : threadAnim)
-			a.update(delta);
-
+		// Update vehicle physics
 		updatePhysics(delta);
 
+		// Update turret anchors
 		float rotation = physics.getRotation();
 		Vector2 pos = physics.getPosition();
 
-		// TODO Make this more universal, range 0-1 and depending on actual size (game units)
-		switch (cfg.modelName) {
-			case "sbmk1":
-				turret_0.set(-16, 16).scl(hull.getScale()).rotate(rotation).add(pos);
-				turret_1.set(16, 16).scl(hull.getScale()).rotate(rotation).add(pos);
-				turret_2.set(-16, -16).scl(hull.getScale()).rotate(rotation).add(pos);
-				turret_3.set(16, -16).scl(hull.getScale()).rotate(rotation).add(pos);
-				break;
-			case "sbmk2":
-				turret_0.set(-16, 16).scl(hull.getScale()).rotate(rotation).add(pos);
-				turret_1.set(-16, -16).scl(hull.getScale()).rotate(rotation).add(pos);
-				turret_2.set(16, -16).scl(hull.getScale()).rotate(rotation).add(pos);
-				turret_3.set(16, 16).scl(hull.getScale()).rotate(rotation).add(pos);
-				break;
+		int i = 0;
+		for (float[] offset : cfg.turret_offset) {
+			float distance = hull.getSize() / 2f;
+			float dx = offset[0] * distance;
+			float dy = offset[1] * distance;
+			turret_anchors[i].set(dx, dy).rotate(rotation).add(pos);
+			i++;
 		}
 
 		super.update(delta);
+
+		// Thread Animation
+		threadsLeft.setFrameSpeed(leftThreadVel / 2f);
+		threadsRight.setFrameSpeed(leftThreadVel / 2f);
+		threadsLeft.update(delta);
+		threadsRight.update(delta);
 	}
 
 	@Override
@@ -169,20 +146,20 @@ public class StrikeBase extends Vehicle {
 		rightThreadVel *= 1 - rightThreadDampening * delta;
 		leftThreadVel *= 1 - leftThreadDampening * delta;
 
-		final float width = 1.8f * hull.getSize();
+		final float width = 0.90f * hull.getSize();
 		float rotSpeed = (-leftThreadVel + rightThreadVel) / width;
 
 		Vector2 pos = physics.getPosition();
 		float rotation = physics.getRotation();
 
-		leftThread.set(0, width / 2f).rotate(rotation).add(pos);
-		rightThread.set(0, -width / 2f).rotate(rotation).add(pos);
+		leftThreadPos.set(cfg.thread_offset * width, width / 2f).rotate(rotation).add(pos);
+		rightThreadPos.set(cfg.thread_offset * width, -width / 2f).rotate(rotation).add(pos);
 
 		// Pivot around either threads or center
 		if (rightThreadVel > leftThreadVel)
-			pivot.set(leftThread);
+			pivot.set(leftThreadPos);
 		else if (leftThreadVel > rightThreadVel)
-			pivot.set(rightThread);
+			pivot.set(rightThreadPos);
 		else
 			pivot.set(pos);
 
@@ -210,16 +187,17 @@ public class StrikeBase extends Vehicle {
 		Vector2 pos = physics.getPosition();
 		float rotation = physics.getRotation();
 
-		leftThreads.setRegion(sbmk1_threads[LEFT][threadAnim[0].frame()]);
-		rightThreads.setRegion(sbmk1_threads[RIGHT][threadAnim[1].frame()]);
-		hull.setRegion(sbmk1_hull[0]);
+		int dmgFrame = (int) MathUtils.lerp(cfg.anim_hull_frames - 0.01f, 0, (float) hitpoints / maxHitpoints);
+		hull.setRegion(sbmk1_hull[dmgFrame]);
 
-		leftThreads.setRotation(rotation);
-		rightThreads.setRotation(rotation);
+		threadsLeft.setRotation(rotation);
+		threadsLeft.setPosition(leftThreadPos);
+		threadsRight.setRotation(rotation);
+		threadsRight.setPosition(rightThreadPos);
 		hull.setRotation(rotation);
 
-		leftThreads.draw(batch, pos.x, pos.y);
-		rightThreads.draw(batch, pos.x, pos.y);
+		threadsLeft.draw(batch);
+		threadsRight.draw(batch);
 		hull.draw(batch, pos.x, pos.y);
 
 		if (hasPlateArmor) {
@@ -233,6 +211,9 @@ public class StrikeBase extends Vehicle {
 		}
 	}
 
+	public StrikeBaseConfig getCfg() {
+		return this.cfg;
+	}
 
 	@Override
 	public void turnLeft() {
