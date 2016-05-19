@@ -1,15 +1,14 @@
 package edu.ub.pis2016.pis16.strikecom.engine.game;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
-import edu.ub.pis2016.pis16.strikecom.engine.framework.Graphics;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.GraphicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Sprite;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
+import edu.ub.pis2016.pis16.strikecom.engine.util.performance.Array;
 
 /**
  * Basic game object class, all game objects derive from this class.
@@ -21,7 +20,11 @@ public class GameObject {
 	protected Screen screen;
 	/** A Map of components, using their class as a Key */
 	private HashMap<Class, Component> components = new HashMap<>();
-	private ArrayList<Component> newComponents = new ArrayList<>();
+
+	private Array<Component> newComponents = new Array<>();
+
+	/** Component Array for iteration performance purposes */
+	private Array<Component> componentArray = new Array<>();
 
 	/** A parent GameObject in a hierarchy */
 	private GameObject parent = null;
@@ -54,20 +57,20 @@ public class GameObject {
 
 	/** Steps the game simulation. Delta is the time passed since the last frame, in seconds. */
 	public void update(float delta) {
-		if (newComponents.size() > 0) {
+		if (newComponents.size > 0) {
 			for (Component c : newComponents)
 				c.init();
 			newComponents.clear();
 		}
 
-		for (Component c : components.values())
+		for (Component c : componentArray)
 			if (c instanceof UpdateableComponent)
 				((UpdateableComponent) c).update(delta);
 	}
 
 	/** Draws the GameObject to the {@link SpriteBatch} provided. */
 	public void draw(SpriteBatch batch) {
-		for (Component c : components.values())
+		for (Component c : componentArray)
 			if (c instanceof DrawableComponent)
 				((DrawableComponent) c).draw(batch);
 	}
@@ -82,6 +85,7 @@ public class GameObject {
 		component.gameObject = this;
 		newComponents.add(component);
 		components.put(component.getClass(), component);
+		componentArray.add(component);
 	}
 
 	/** Remove a Component from the GameObject. */
@@ -90,7 +94,8 @@ public class GameObject {
 		if (comp == null)
 			return;
 		comp.destroy();
-		components.remove(type);
+		Component c = components.remove(type);
+		componentArray.removeValue(c, true);
 	}
 
 	public boolean hasComponent(Class type) {
@@ -134,6 +139,7 @@ public class GameObject {
 		screen = null;
 		parent = null;
 		components.clear();
+		componentArray.clear();
 		newComponents.clear();
 	}
 
@@ -160,7 +166,7 @@ public class GameObject {
 		throw new IllegalStateException("Can't get the position of a GameObject without PhysicsComponent: " + this.toString());
 	}
 
-	public Sprite getSprite(){
+	public Sprite getSprite() {
 		GraphicsComponent graph;
 		if ((graph = getComponent(GraphicsComponent.class)) != null)
 			return graph.getSprite();

@@ -30,16 +30,18 @@ public class StrikeBaseConfig {
 	 */
 	// Velocity Config
 	/** Tiles/second */
-	public float max_speed = 1.5f * GameConfig.TILE_SIZE;
+	public float max_speed = 30f;
 	/** Accel in tiles/s^2 */
-	public float accel = 2.5f * GameConfig.TILE_SIZE;
+	public float accel = 25f;
 	public float max_reverse_speed = -max_speed / 2f;
 
+	// SPRITE config
+	/** Size in tiles */
+	public float size_tiles = 2f;
+	/** Percentage of the sprite to take into account for vehicle width, [0-1] */
+	public float width_factor = 1f;
 	/** Ammount to move the thread origin forwards (positive) or backwards (negative) relative to the width. Range [-1,1] */
 	public float thread_offset = 0;
-
-	/** Percentage of the sprite to take into account for vehicle width */
-	public float width_factor = 0.9f;
 
 	// FUEL Consumption
 	/** Fuel used per second moving */
@@ -70,6 +72,10 @@ public class StrikeBaseConfig {
 
 				turret_dmg_mult = new float[]{1, 1, 1, 1};
 
+				size_tiles = 2.5f;
+				width_factor = 0.825f;
+				thread_offset = 0f;
+
 				turret_offset = new float[turret_num][2];
 				turret_offset[0] = new float[]{-.1093f, .68f};    // left
 				turret_offset[1] = new float[]{-.1093f, -.68f};    // right
@@ -90,6 +96,7 @@ public class StrikeBaseConfig {
 
 				turret_dmg_mult = new float[]{1.15f, 1.15f, 1.7f};
 
+				width_factor = 0.9f;
 				thread_offset = -0.1f;
 
 				turret_offset = new float[turret_num][2];

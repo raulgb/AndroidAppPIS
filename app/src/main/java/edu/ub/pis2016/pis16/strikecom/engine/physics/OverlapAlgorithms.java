@@ -1,6 +1,7 @@
 package edu.ub.pis2016.pis16.strikecom.engine.physics;
 
 import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
+import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 
 /**
  * all collision algorithms will be stored here
@@ -30,7 +31,7 @@ public class OverlapAlgorithms {
 	public static boolean overlapRectangles(Rectangle r1, Rectangle r2) {
 
 		//if (MathUtils.isEqual(r1.rotation, 0, 0.1f) && MathUtils.isEqual(r2.rotation, 0, 0.1f))
-			return (r1.x < r2.x + r2.width) && (r1.x + r1.width > r2.x) && (r1.y < r2.y + r2.height) && (r1.y + r1.height > r2.y);
+		return (r1.x < r2.x + r2.width) && (r1.x + r1.width > r2.x) && (r1.y < r2.y + r2.height) && (r1.y + r1.height > r2.y);
 
 		// TODO Alexander: Implement collision detection for rotated rectangles
 		// Use coarse Axis-Aligned Bounding Box detecting first and then if that succeeds try more precise detection
@@ -47,21 +48,34 @@ public class OverlapAlgorithms {
 	 * @return true if they are collided
 	 */
 	public static boolean overlapCircleRectangle(Circle c, Rectangle r) {
-		float closestX = c.x;
-		float closestY = c.y;
+		float cx = c.x, cy = c.y;
 
-		if (c.x < r.x)
+		// If rectangle is rotated, rotate circle to compensate
+		if (!MathUtils.isZero(r.getRotation(), 1f)) {
+			float rectCX = r.x + r.width/2f;
+			float rectCY = r.y + r.height/2f;
+			float sin = MathUtils.sinDeg(r.rotation);
+			float cos = MathUtils.cosDeg(r.rotation);
+			cx = cos * (c.x - rectCX) - sin * (c.y - rectCY) + rectCX;
+			cy  = sin * (c.x - rectCX) + cos * (c.y - rectCY) + rectCY;
+		}
+
+		// Usual circle VS rect algorithm
+		float closestX = cx;
+		float closestY = cy;
+
+		if (cx < r.x)
 			closestX = r.x;
-		else if (c.x > r.x + r.width)
+		else if (cx > r.x + r.width)
 			closestX = r.x + r.width;
 
-		if (c.y < r.y)
+		if (cy < r.y)
 			closestY = r.y;
-		else if (c.y > r.y + r.height)
+		else if (cy > r.y + r.height)
 			closestY = r.y + r.height;
 
-		closestX = c.x - closestX;
-		closestY = c.y - closestY;
+		closestX = cx - closestX;
+		closestY = cy - closestY;
 		return (closestX * closestX + closestY * closestY <= c.radius * c.radius);
 	}
 

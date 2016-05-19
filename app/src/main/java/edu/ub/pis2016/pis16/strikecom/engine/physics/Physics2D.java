@@ -7,8 +7,13 @@ import java.util.Set;
 
 import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
+import edu.ub.pis2016.pis16.strikecom.engine.opengl.Sprite;
+import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
+import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Pool;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig;
+
+import static edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig.TILE_SIZE;
 
 public class Physics2D {
 
@@ -23,10 +28,11 @@ public class Physics2D {
 	private float worldHeight;
 
 	private Set<Body> collidedBodies = new HashSet<>();
-	private SpatialHashGrid spatialHashGrid; // collision detection optimisation
+	private SpatialHashGrid spatialHashGrid;
 
-	private Pool<ContactListener.CollisionEvent> cePool;
 	private ArrayList<ContactListener> listeners;
+
+	private ContactListener.CollisionEvent cEvent = new ContactListener.CollisionEvent();
 
 	/**
 	 * creates 2d physics world
@@ -41,7 +47,7 @@ public class Physics2D {
 		// HashGrid Init
 		this.worldWidth = worldWidth;
 		this.worldHeight = worldHeight;
-		float cellSize = 4; // 4x4 tiles per cell
+		float cellSize = 16; // 16*16 tiles per cell
 		spatialHashGrid = new SpatialHashGrid(worldWidth, worldHeight, cellSize);
 
 		// Listener and EventPool init
@@ -86,8 +92,6 @@ public class Physics2D {
 			this.spatialHashGrid.insertDynamicObject(body); // insert back to  hash grid
 		}
 
-		int tested = 0;
-
 		// Handle collisions
 		collidedBodies.clear();
 		for (Body bodyA : dynamicBodies) {
@@ -100,20 +104,15 @@ public class Physics2D {
 				if (bodyA == bodyB)
 					continue;
 
-				//Log.i("Physics2D", "Testing: " + bodyA.userData + " with " + bodyB.userData);
-				tested++;
 
 				// Detect Collision
-				// todo: every object still checks collision with itself, probably there is a better way to fix this than simple if
 				if (bodyA.collide(bodyB)) {
-					// Create collision event
-					ContactListener.CollisionEvent cEvent = new ContactListener.CollisionEvent();
 					cEvent.a = bodyA;
 					cEvent.b = bodyB;
 
 					// TODO Calculate point of impact
-					cEvent.contactX = 0;
-					cEvent.contactY = 0;
+//					cEvent.contactX = 0;
+//					cEvent.contactY = 0;
 
 					// Pass along to listeners
 					for (ContactListener cl : listeners)
@@ -159,6 +158,36 @@ public class Physics2D {
 		if (dynamicBodies.remove(body))
 			return true;
 		return false;
+	}
+
+	public ArrayList<Body> getStaticBodies() {
+		return staticBodies;
+	}
+
+	public ArrayList<Body> getDynamicBodies() {
+		return dynamicBodies;
+	}
+
+	private Sprite hitbox = new Sprite(Assets.SPRITE_ATLAS.getRegion("hitbox"));
+	private Sprite hitbox_round = new Sprite(Assets.SPRITE_ATLAS.getRegion("hitbox_round"));
+
+	public void debugDraw(SpriteBatch batch) {
+		for (Body b : getDynamicBodies()) {
+			Shape bounds = b.getBounds();
+
+			if (bounds instanceof Rectangle) {
+				hitbox.setPosition(tmp.set(b.position).scl(TILE_SIZE));
+				hitbox.setSize(bounds.getWidth() * TILE_SIZE, bounds.getHeight() * TILE_SIZE);
+				hitbox.setRotation(bounds.getRotation());
+				hitbox.draw(batch);
+
+			} else if (bounds instanceof Circle) {
+				hitbox_round.setPosition(tmp.set(b.position).scl(TILE_SIZE));
+				hitbox_round.setSize(bounds.getWidth() * TILE_SIZE);
+				hitbox_round.draw(batch);
+			}
+
+		}
 	}
 }
 /*

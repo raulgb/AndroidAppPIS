@@ -9,6 +9,8 @@ import java.util.Map;
 
 import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Physics2D;
+import edu.ub.pis2016.pis16.strikecom.engine.util.performance.Array;
+import edu.ub.pis2016.pis16.strikecom.engine.util.performance.Sort;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
 
 public abstract class Screen implements Disposable {
@@ -47,23 +49,25 @@ public abstract class Screen implements Disposable {
 
 	protected final Game game;
 
-	private List<InputProcessor> inputProcessors;
-	private HashMap<String, GameObject> gameObjects;
-	private List<GameObject> goOrderedList;
-	private int uniqueID = 0;
-
-	// GameObject Management
 	private boolean dirty = false;
 	protected boolean gamePaused = false;
+
+	// GameObject Management
+	private HashMap<String, GameObject> gameObjects = new HashMap<>();
+	private Array<GameObject> goOrderedList = new Array<>();
+
 	private HashMap<String, GameObject> GOsToAdd = new HashMap<>();
-	private ArrayList<GameObject> GOsToRemove = new ArrayList<>();
+	private Array<GameObject> GOsToRemove = new Array<>();
+
+	/** List of Cascading input processors */
+	private Array<InputProcessor> inputProcessors = new Array<>();
+
+	/** Unique ID incremented for each anonymous GameObject added */
+	private int uniqueID = 0;
+
 
 	public Screen(Game game) {
 		this.game = game;
-
-		gameObjects = new HashMap<>();
-		goOrderedList = new ArrayList<>();
-		inputProcessors = new ArrayList<>();
 	}
 
 	/** Must be called by any subclasses. Commits any changes to the GameObject Map and sends all input to InputProcessors. */
@@ -120,11 +124,11 @@ public abstract class Screen implements Disposable {
 	 * return true, it stops the event from propagating
 	 */
 	public void addInputProcessor(InputProcessor ip) {
-		inputProcessors.add(inputProcessors.size(), ip);
+		inputProcessors.add(ip);
 	}
 
 	public void removeInputProcessor(InputProcessor ip) {
-		inputProcessors.remove(ip);
+		inputProcessors.removeValue(ip, true);
 	}
 
 	/**********************************/
@@ -224,16 +228,16 @@ public abstract class Screen implements Disposable {
 	}
 
 	/** Returns a list of GameObjects, ordered by their layerID, in ascending order (Ideal for drawing) */
-	public List<GameObject> getGameObjects() {
+	public Array<GameObject> getGameObjects() {
 		return goOrderedList;
 	}
 
 
 	private void reorderGameObjectsByLayer() {
 		goOrderedList.clear();
-		goOrderedList.addAll(gameObjects.values());
+		goOrderedList.addAll((GameObject[]) gameObjects.values().toArray());
 		// Sort based on layer
-		Collections.sort(goOrderedList, new Comparator<GameObject>() {
+		Sort.instance().sort(goOrderedList, new Comparator<GameObject>() {
 			@Override
 			public int compare(GameObject lhs, GameObject rhs) {
 				return Integer.compare(lhs.getLayer(), rhs.getLayer());
@@ -242,6 +246,6 @@ public abstract class Screen implements Disposable {
 	}
 
 	public boolean hasGameObject(GameObject go) {
-		return (goOrderedList.contains(go));
+		return (goOrderedList.contains(go, true));
 	}
 }

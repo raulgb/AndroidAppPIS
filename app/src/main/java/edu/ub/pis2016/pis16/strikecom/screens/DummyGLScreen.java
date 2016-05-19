@@ -24,9 +24,12 @@ import edu.ub.pis2016.pis16.strikecom.engine.opengl.OrthoCamera;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Sprite;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Texture;
+import edu.ub.pis2016.pis16.strikecom.engine.physics.Body;
+import edu.ub.pis2016.pis16.strikecom.engine.physics.Circle;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.ContactListener;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Physics2D;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Rectangle;
+import edu.ub.pis2016.pis16.strikecom.engine.physics.Shape;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.StaticBody;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 import edu.ub.pis2016.pis16.strikecom.gameplay.Explosion;
@@ -182,7 +185,7 @@ public class DummyGLScreen extends Screen {
 	}
 
 	WindowedMean fpsMean = new WindowedMean(30);
-	float second = 0;
+	float secondsCounter = 0;
 
 	@Override
 	public void update(float delta) {
@@ -199,9 +202,9 @@ public class DummyGLScreen extends Screen {
 
 		// FPS Counter
 		fpsMean.addValue(delta);
-		second += delta;
-		if (second > 5) {
-			second -= 5;
+		secondsCounter += delta;
+		if (secondsCounter > 5) {
+			secondsCounter -= 5;
 			Log.i("FPS", "" + MathUtils.roundPositive(1f / fpsMean.getMean()));
 		}
 
@@ -237,6 +240,9 @@ public class DummyGLScreen extends Screen {
 
 		for (GameObject go : this.getGameObjects())
 			go.draw(batch);
+
+		//physics2D.debugDraw(batch);
+
 		batch.end();
 
 		// Draw healthbar
@@ -299,8 +305,8 @@ public class DummyGLScreen extends Screen {
 		strikeBase.setLayer(LAYER_STRIKEBASE);
 		strikeBase.setPosition(MAP_SIZE / 2f * TILE_SIZE, MAP_SIZE / 2f * TILE_SIZE);
 		strikeBase.group = GROUP_PLAYER;
-		strikeBase.hitpoints = 200;
-		strikeBase.maxHitpoints = 200;
+		strikeBase.hitpoints = 500;
+		strikeBase.maxHitpoints = 500;
 		strikeBase.killable = true;
 		addGameObject("StrikeBase", strikeBase);
 
@@ -357,8 +363,8 @@ public class DummyGLScreen extends Screen {
 				vfb.setTarget(strikeBase.getPosition());
 			}
 		});
-		enemyTank.cfg.maxSpeed = 0.35f * TILE_SIZE;
-		enemyTank.cfg.accel = 0.075f * TILE_SIZE;
+		enemyTank.cfg.maxSpeed = 8f;
+		enemyTank.cfg.accel = 4.5f;
 
 		String tankIdentifier = addGameObject(enemyTank);
 		// ------ TANK TURRET -----

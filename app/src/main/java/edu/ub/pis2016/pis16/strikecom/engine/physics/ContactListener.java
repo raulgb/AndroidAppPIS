@@ -6,7 +6,6 @@ public interface ContactListener {
 		public Body a;
 		public Body b;
 		public float contactX, contactY;
-		public float normalX, normalY;
 	}
 
 	void onCollision(CollisionEvent ce);

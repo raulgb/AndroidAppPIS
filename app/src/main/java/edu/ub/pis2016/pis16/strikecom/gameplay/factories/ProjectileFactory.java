@@ -4,6 +4,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.GraphicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
+import edu.ub.pis2016.pis16.strikecom.engine.physics.Circle;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.DynamicBody;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Rectangle;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
@@ -25,17 +26,21 @@ public class ProjectileFactory {
 		GameObject proj = new GameObject(){
 			@Override
 			public void destroy() {
-				super.destroy();
+				// Sound
+				Assets.sfx_hit.play(2);
+
 				// Bullet Explosion on death
 				Explosion explosion = new Explosion("explosion_bullet");
 				explosion.setPosition(getPosition());
 				explosion.getSprite().setScale(0.25f);
 				getScreen().addGameObject(explosion);
+
+				super.destroy();
 			}
 		};
 		proj.putComponent(new ProjectileBehavior());
-		Rectangle rect = new Rectangle(.05f * GameConfig.TILE_SIZE, .05f * GameConfig.TILE_SIZE);
-		proj.putComponent(new PhysicsComponent(new DynamicBody(rect)));
+		Circle hitbox = new Circle(0.05f);
+		proj.putComponent(new PhysicsComponent(new DynamicBody(hitbox)));
 		proj.setLayer(Screen.LAYER_PROJECTILES);
 
 		switch (projType) {

@@ -5,6 +5,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.game.component.GraphicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
+import edu.ub.pis2016.pis16.strikecom.engine.physics.Circle;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.KinematicBody;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Rectangle;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
@@ -46,7 +47,7 @@ public class ThreadVehicle extends Vehicle {
 	public ThreadVehicle() {
 		this.setLayer(Screen.LAYER_VEHICLES);
 
-		physics = new PhysicsComponent(new KinematicBody(new Rectangle(1, 1)));
+		physics = new PhysicsComponent(new KinematicBody(new Circle(0.5f)));
 		putComponent(physics);
 		GraphicsComponent graphics = new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("enemy"));
 		graphics.getSprite().setSize(1f * GameConfig.TILE_SIZE);
@@ -107,6 +108,12 @@ public class ThreadVehicle extends Vehicle {
 		physics.setVelocity(tmp.set((leftThreadVel + rightThreadVel) / 2f, 0).rotate(rotation));
 		physics.setRotation(rotation);
 		physics.setPosition(pos);
+	}
+
+	@Override
+	public void destroy(){
+		Assets.sfx_expl_light.play(5f);
+		super.destroy();
 	}
 
 	@Override

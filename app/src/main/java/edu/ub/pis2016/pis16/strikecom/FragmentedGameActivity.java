@@ -127,9 +127,13 @@ public class FragmentedGameActivity extends Activity {
 		super.onResume();
 
 		// Reload textures and resume music
-		Texture.reloadManagedTextures();
-		for (AndroidMusic mu : Assets.musicPlaying)
-			mu.play();
+		try {
+			Texture.reloadManagedTextures();
+			for (AndroidMusic mu : Assets.musicPlaying)
+				mu.play();
+		} catch (Exception e) {
+			// OK Bro
+		}
 
 		// Hide window decorations
 		hideSystemUI();

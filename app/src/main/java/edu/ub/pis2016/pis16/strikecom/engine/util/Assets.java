@@ -23,9 +23,12 @@ public class Assets {
 	// Sounds and Music
 	public static int percentMusic;
 	public static AndroidMusic music_bg;
+	public static AndroidMusic music_bg_2;
 	public static AndroidMusic music_tense;
 	public static Sound sfx_shoot;
 	public static Sound sfx_hit;
+	public static Sound sfx_expl_heavy;
+	public static Sound sfx_expl_light;
 
 	public static ArrayList<AndroidMusic> musicPlaying = new ArrayList<>();
 
@@ -65,7 +68,8 @@ public class Assets {
 				// Global sprite atlas
 				SPRITE_ATLAS = new TextureAtlas(game, "sprites/sprites.atlas");
 
-				music_bg = game.getAudio().newMusic("music/waterflame-final_battle.mp3");
+				music_bg = game.getAudio().newMusic("music/waterflame-glorious_morning_2.mp3");
+				music_bg_2 = game.getAudio().newMusic("music/waterflame-final_battle.mp3");
 				music_tense = game.getAudio().newMusic("music/waterflame-endgame.mp3");
 
 				music_bg.setLooping(true);
@@ -77,6 +81,9 @@ public class Assets {
 				musicPlaying.add(music_bg);
 
 				sfx_shoot = game.getAudio().newSound("sounds/shoot.wav");
+				sfx_hit = game.getAudio().newSound("sounds/hit.wav");
+				sfx_expl_light = game.getAudio().newSound("sounds/expl_light.wav");
+				sfx_expl_heavy = game.getAudio().newSound("sounds/expl_heavy.wav");
 
 				Thread.sleep(250);
 

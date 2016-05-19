@@ -64,36 +64,35 @@ public class StrikeBase extends Vehicle {
 	private HashMap<Integer, UpgradeItem> equippedUpgrades = new HashMap<>();
 
 	public StrikeBase(StrikeBaseConfig cfg) {
-		super();
-
 		// TODO Create FuelBehavior
-
-		//  Create Physics component
-		physics = new PhysicsComponent(new KinematicBody(new Rectangle(1.8f, 1.8f)));
-		putComponent(physics);
 
 		this.cfg = cfg;
 		String model = cfg.modelName;
 
+		//  Create Physics component
+		float hitSize = cfg.size_tiles * cfg.width_factor;
+		physics = new PhysicsComponent(new KinematicBody(new Rectangle(hitSize, hitSize)));
+		putComponent(physics);
+
+		// Create sprites
 		sbmk1_hull = new TextureRegion[cfg.anim_hull_frames];
 		for (int i = 0; i < cfg.anim_hull_frames; i++)
 			sbmk1_hull[i] = Assets.SPRITE_ATLAS.getRegion(model + "_hull", i);
 
-		// Create sprites
 		hull = new Sprite(sbmk1_hull[0]);
-		hull.setSize(TILE_SIZE * 2);
+		hull.setSize(cfg.size_tiles * TILE_SIZE);
 
 		compositeArmor = new Sprite(Assets.SPRITE_ATLAS.getRegion("composite_" + model));
-		compositeArmor.setSize(TILE_SIZE * 2);
+		compositeArmor.setSize(cfg.size_tiles * TILE_SIZE);
 		plateArmor = new Sprite(Assets.SPRITE_ATLAS.getRegion("plate_" + model));
-		plateArmor.setSize(TILE_SIZE * 2);
+		plateArmor.setSize(cfg.size_tiles * TILE_SIZE);
 
 		// Thread setup
-		threadsLeft = new AnimatedSprite(Assets.SPRITE_ATLAS.getRegions(model + "_threads"), 0.0f);
+		threadsLeft = new AnimatedSprite(Assets.SPRITE_ATLAS.getRegions(model + "_threads"), 0);
 		threadsLeft.setFrameSpeed(0f);
 		threadsLeft.setScale(hull.getScale());
 
-		threadsRight = new AnimatedSprite(Assets.SPRITE_ATLAS.getRegions(model + "_threads"), 0.0f);
+		threadsRight = new AnimatedSprite(Assets.SPRITE_ATLAS.getRegions(model + "_threads"), 0);
 		threadsRight.setFrameSpeed(0f);
 		threadsRight.setScale(hull.getScale());
 
@@ -146,7 +145,7 @@ public class StrikeBase extends Vehicle {
 		rightThreadVel *= 1 - rightThreadDampening * delta;
 		leftThreadVel *= 1 - leftThreadDampening * delta;
 
-		final float width = 0.90f * hull.getSize();
+		final float width = cfg.width_factor * hull.getSize();
 		float rotSpeed = (-leftThreadVel + rightThreadVel) / width;
 
 		Vector2 pos = physics.getPosition();
@@ -163,9 +162,13 @@ public class StrikeBase extends Vehicle {
 		else
 			pivot.set(pos);
 
-		Vector2 threadToCenter = new Vector2(pos).sub(pivot);
-		threadToCenter.rotate(rotSpeed * delta);
-		pos.set(pivot).add(threadToCenter);
+//		Vector2 threadToCenter = new Vector2(pos).sub(pivot);
+//		threadToCenter.rotate(rotSpeed * delta);
+//		pos.set(pivot).add(threadToCenter);
+
+		tmp.set(pos).sub(pivot);
+		tmp.rotate(rotSpeed * delta);
+		pos.set(pivot).add(tmp);
 
 		// Average thread velocity and rotate to get a velocity vector
 		tmp.set(leftThreadVel + rightThreadVel, 0).scl(0.5f).rotate(rotation);
@@ -211,8 +214,10 @@ public class StrikeBase extends Vehicle {
 		}
 	}
 
-	public StrikeBaseConfig getCfg() {
-		return this.cfg;
+	@Override
+	public void destroy() {
+		Assets.sfx_expl_heavy.play(5f);
+		super.destroy();
 	}
 
 	@Override
