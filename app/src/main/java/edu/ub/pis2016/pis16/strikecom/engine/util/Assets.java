@@ -5,7 +5,6 @@ import android.util.Log;
 import java.util.ArrayList;
 
 import edu.ub.pis2016.pis16.strikecom.engine.android.AndroidMusic;
-import edu.ub.pis2016.pis16.strikecom.engine.android.AndroidSound;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Game;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.audio.Sound;
 
@@ -25,7 +24,8 @@ public class Assets {
 	public static int percentMusic;
 	public static AndroidMusic music_bg;
 	public static AndroidMusic music_tense;
-	public static Sound sfxShoot;
+	public static Sound sfx_shoot;
+	public static Sound sfx_hit;
 
 	public static ArrayList<AndroidMusic> musicPlaying = new ArrayList<>();
 
@@ -76,7 +76,7 @@ public class Assets {
 				music_bg.play();
 				musicPlaying.add(music_bg);
 
-				sfxShoot = game.getAudio().newSound("sounds/shoot.wav");
+				sfx_shoot = game.getAudio().newSound("sounds/shoot.wav");
 
 				Thread.sleep(250);
 

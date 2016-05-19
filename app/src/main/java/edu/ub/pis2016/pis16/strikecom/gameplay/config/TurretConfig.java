@@ -56,10 +56,10 @@ public class TurretConfig {
 				break;
 
 			case TURRET_GATLING:
-				lerp_speed = 0.035f;
+				lerp_speed = 0.045f;
 				firerate = 0.15f;
 				fire_cone = 10f;
-				fire_spread = 7.5f;
+				fire_spread = 6.5f;
 				range = 6.5f * TILE_SIZE;
 
 				proj_type = ProjectileFactory.Type.PROJ_GATTLING_BULLET;

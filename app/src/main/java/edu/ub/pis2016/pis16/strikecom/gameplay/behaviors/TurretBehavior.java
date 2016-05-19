@@ -69,13 +69,15 @@ public class TurretBehavior extends BehaviorComponent {
 						}
 					}
 
-					// If none found, return to idle and move around
-					if (closestGO == null) {
-						state = State.IDLE;
-						randomAngle += MathUtils.random(-180, 180);
-					} else {
+					if (closestGO != null) {
+						// If a target is found, aim at it immediately
 						target = closestGO;
 						state = State.AIMING;
+					} else {
+						// If none found, return to idle and move around
+						state = State.IDLE;
+						((Turret) gameObject).stopCannonAnimation();
+						randomAngle += MathUtils.random(-180, 180);
 					}
 				}
 				break;

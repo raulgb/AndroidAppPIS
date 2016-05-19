@@ -509,6 +509,13 @@ turret_gatling
   index: 0
 turret_gatling
   rotate: false
+  xy: 144, 74
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 4
+turret_gatling
+  rotate: false
   xy: 176, 74
   size: 32, 32
   orig: 32, 32
