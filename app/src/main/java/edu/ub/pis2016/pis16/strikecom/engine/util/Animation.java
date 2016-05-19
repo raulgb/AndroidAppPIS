@@ -45,9 +45,14 @@ public class Animation {
 				if (accum >= frameTime) {
 					accum -= frameTime;
 
-					// Execute onfinish action
-					if (frame == (frames - 1) && !looping && onFinish != null)
-						onFinish.run();
+					// Stop animation and execute Run action
+					if (frame == (frames - 1) && !looping) {
+						if (onFinish != null)
+							onFinish.run();
+						animType = Type.FRAME_SPEED;
+						frameSpeed = 0;
+						break;
+					}
 
 					frame = (frame + 1) % frames;
 				}
@@ -83,7 +88,7 @@ public class Animation {
 		this.looping = looping;
 	}
 
-	public void play(){
+	public void play() {
 		frame = 0;
 		accum = 0;
 	}

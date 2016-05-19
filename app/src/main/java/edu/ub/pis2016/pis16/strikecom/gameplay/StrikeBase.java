@@ -130,8 +130,8 @@ public class StrikeBase extends Vehicle {
 		super.update(delta);
 
 		// Thread Animation
-		threadsLeft.setFrameSpeed(leftThreadVel / 2f);
-		threadsRight.setFrameSpeed(leftThreadVel / 2f);
+		threadsLeft.setFrameSpeed(leftThreadVel / 1.5f);
+		threadsRight.setFrameSpeed(leftThreadVel / 1.5f);
 		threadsLeft.update(delta);
 		threadsRight.update(delta);
 	}

@@ -15,7 +15,7 @@ public class Explosion extends GameObject {
 
 	public Explosion(String effectName) {
 		// Construct a new AnimatedSprite, no looping and destroy this gameObject on finish
-		sprite = new AnimatedSprite(Assets.SPRITE_ATLAS.getRegions(effectName), 0.1f);
+		sprite = new AnimatedSprite(Assets.SPRITE_ATLAS.getRegions(effectName), 0.15f);
 		sprite.setLooping(false);
 		sprite.setOnFinishAction(new Runnable() {
 			@Override

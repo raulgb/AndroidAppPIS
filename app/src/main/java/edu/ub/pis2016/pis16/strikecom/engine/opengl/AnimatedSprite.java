@@ -41,6 +41,19 @@ public class AnimatedSprite extends Sprite {
 		super.draw(batch);
 	}
 
+	public void play() {
+		anim.play();
+	}
+
+	public void stop() {
+		anim.setFrame(0);
+		anim.setFrameSpeed(0);
+	}
+
+	public void setLooping(boolean looping) {
+		anim.setLooping(looping);
+	}
+
 	public void setRegions(TextureRegion[] regions) {
 		this.regions = regions;
 	}
@@ -57,7 +70,6 @@ public class AnimatedSprite extends Sprite {
 		anim.setOnFinishAction(runnable);
 	}
 
-	public void setLooping(boolean looping) {
-		anim.setLooping(looping);
-	}
+
+
 }

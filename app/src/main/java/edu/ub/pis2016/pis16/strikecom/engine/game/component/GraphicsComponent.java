@@ -2,16 +2,20 @@ package edu.ub.pis2016.pis16.strikecom.engine.game.component;
 
 import edu.ub.pis2016.pis16.strikecom.engine.game.Component;
 import edu.ub.pis2016.pis16.strikecom.engine.game.DrawableComponent;
+import edu.ub.pis2016.pis16.strikecom.engine.game.UpdateableComponent;
+import edu.ub.pis2016.pis16.strikecom.engine.opengl.AnimatedSprite;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureRegion;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Sprite;
 
 /**
- * A Component in charge of drawing anything that a GameObject might need to draw.
+ * A Component in charge of drawing anything that a GameObject might need to draw. Can take in
+ * a {@link TextureRegion}, a {@link Sprite}, or an {@link AnimatedSprite}. If an AnimatedSprite is passed, it automatically calls the
+ * update() method.
  *
  * @author German
  */
-public class GraphicsComponent extends Component implements DrawableComponent {
+public class GraphicsComponent extends Component implements DrawableComponent, UpdateableComponent {
 
 	private Sprite sprite;
 
@@ -19,7 +23,7 @@ public class GraphicsComponent extends Component implements DrawableComponent {
 		this.sprite = new Sprite(region);
 	}
 
-	public GraphicsComponent(Sprite sprite){
+	public GraphicsComponent(Sprite sprite) {
 		this.sprite = sprite;
 	}
 
@@ -49,4 +53,9 @@ public class GraphicsComponent extends Component implements DrawableComponent {
 		return sprite;
 	}
 
+	@Override
+	public void update(float delta) {
+		if (sprite instanceof AnimatedSprite)
+			((AnimatedSprite) sprite).update(delta);
+	}
 }
