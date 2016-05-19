@@ -116,7 +116,7 @@ public class TurretBehavior extends BehaviorComponent {
 
 	private void shoot() {
 		// Play fire animation
-		((Turret) gameObject).playFireAnimation(false);
+		((Turret) gameObject).fireCannon(false);
 
 		// Shooting mechanics
 		TurretConfig cfg = ((Turret) gameObject).cfg;

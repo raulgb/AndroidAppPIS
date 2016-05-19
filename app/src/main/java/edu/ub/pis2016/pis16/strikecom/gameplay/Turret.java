@@ -50,13 +50,15 @@ public class Turret extends GameObject {
 		super.update(delta);
 	}
 
-	public void playFireAnimation(boolean looping) {
-		sprite.setFrameTime(0.15f);
+	public void fireCannon(boolean looping) {
+		Assets.sfxShoot.play(1f);
+
+		sprite.setFrameTime(0.05f);
 		sprite.setLooping(looping);
 		sprite.play();
 	}
 
-	public void stopFireAnimation() {
+	public void stopCannonAnimation() {
 		sprite.stop();
 	}
 
