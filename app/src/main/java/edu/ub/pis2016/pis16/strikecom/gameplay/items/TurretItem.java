@@ -32,7 +32,7 @@ public class TurretItem extends Item {
 				cfg = new TurretConfig(TurretConfig.Type.TURRET_MACHINEGUN);
 			} else if (id.contains("gatling")) {
 				cfg = new TurretConfig(TurretConfig.Type.TURRET_GATLING);
-			} else if (id.equals("battle_annon")) {
+			} else if (id.equals("battle_cannon")) {
 				cfg = new TurretConfig(TurretConfig.Type.TURRET_CANNON);
 			} else if (id.equals("howitzer")) {
 				cfg = new TurretConfig(TurretConfig.Type.TURRET_HOWITZER);

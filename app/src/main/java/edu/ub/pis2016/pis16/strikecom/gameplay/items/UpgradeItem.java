@@ -49,13 +49,14 @@ public class UpgradeItem extends Item{
 
 	@Override
 	public String getDisplay() {
-		return this.flavour;
+		return (this.flavour + "\n\nprice: " + Integer.toString(this.price));
 	}
 
 	// Returns a string containing all relevant information of the object, using ";" as separator.
 	@Override
 	public String toString(){
-		return (this.name + ";" + this.image + ";" + this.model + ";" + this.flavour + ";" + this.function + ";" + Float.toString(this.price));
+		return (this.name + ";" + this.image + ";" + this.model + ";" + this.flavour + ";" + this.function + ";" + Integer.toString(this
+				.price));
 	}
 
 	// Requires model name of the strikebase configuration

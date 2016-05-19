@@ -244,9 +244,6 @@ public class FragmentedGameActivity extends Activity {
 	public void showSlotsDialog(Item selectedItem, boolean turretIsSelected) {
 		pauseGame();
 
-		Screen screen = game.getCurrentScreen();
-		StrikeBase strikeBase = screen.getGameObject("StrikeBase", StrikeBase.class);
-
 		SlotsFragment slots = new SlotsFragment();
 		slots.setNewItem(selectedItem);
 		slots.setTurretSelection(turretIsSelected);

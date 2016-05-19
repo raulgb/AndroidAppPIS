@@ -71,10 +71,10 @@ public class StrikeBaseConfig {
 				turret_dmg_mult = new float[]{1, 1, 1, 1};
 
 				turret_offset = new float[turret_num][2];
-				turret_offset[0] = new float[]{-1, 1};
-				turret_offset[1] = new float[]{1, 1};
-				turret_offset[2] = new float[]{-1, -1};
-				turret_offset[3] = new float[]{1, -1};
+				turret_offset[0] = new float[]{-.1093f, .68f};    // left
+				turret_offset[1] = new float[]{-.1093f, -.68f};    // right
+				turret_offset[2] = new float[]{-.4685f, 0f};    // main
+				turret_offset[3] = new float[]{.625f, 0.3125f};    // hull-mounted
 
 				turret_angle_lim = new float[turret_num][2];
 				turret_angle_lim[0] = new float[]{0, 270};
