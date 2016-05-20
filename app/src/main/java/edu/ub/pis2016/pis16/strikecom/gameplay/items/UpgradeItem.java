@@ -4,7 +4,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.game.Component;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.GraphicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 
-public class UpgradeItem extends Item{
+public class UpgradeItem extends Item {
 
 	public enum AVAILABLE_FUNCTIONS {
 		FUEL,
@@ -22,25 +22,25 @@ public class UpgradeItem extends Item{
 		this.function = function;
 	}
 
-	public String getFunction(){
+	public String getFunction() {
 		return this.function;
 	}
 
-	public boolean isFuel(){
+	public boolean isFuel() {
 		return function.equals("FUEL");
 	}
 
-	public static UpgradeItem parseUpgradeItem(String seq){
+	public static UpgradeItem parseUpgradeItem(String seq) {
 		String param[] = seq.split(";"); // ; used as separator
-		if(param.length < 6){ //should at least contain name, image, model, flavour, function, price
+		if (param.length < 6) { //should at least contain name, image, model, flavour, function, price
 			return null;
 		}
 		return new UpgradeItem(param[0], param[1], param[2], param[3], param[4], Integer.valueOf(param[5]));
 	}
 
 	public static boolean functionIsSupported(String f) {
-		for( AVAILABLE_FUNCTIONS FUNCTION : AVAILABLE_FUNCTIONS.values() ){
-			if (FUNCTION.name().equals(f)){
+		for (AVAILABLE_FUNCTIONS FUNCTION : AVAILABLE_FUNCTIONS.values()) {
+			if (FUNCTION.name().equals(f)) {
 				return true;
 			}
 		}
@@ -54,7 +54,7 @@ public class UpgradeItem extends Item{
 
 	// Returns a string containing all relevant information of the object, using ";" as separator.
 	@Override
-	public String toString(){
+	public String toString() {
 		return (this.name + ";" + this.image + ";" + this.model + ";" + this.flavour + ";" + this.function + ";" + Integer.toString(this
 				.price));
 	}

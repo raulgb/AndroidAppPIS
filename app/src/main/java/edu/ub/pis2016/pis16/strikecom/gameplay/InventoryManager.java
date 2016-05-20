@@ -22,7 +22,7 @@ public class InventoryManager {
 	private Inventory master; //inventory containing every gameObject available to the player
 
 	// Builder.
-	public InventoryManager(Context context, String turretsFile, String upgradesFile) throws IOException{
+	public InventoryManager(Context context, String turretsFile, String upgradesFile) throws IOException {
 		this.master = new Inventory();
 		this.context = context;
 		loadTurrets(turretsFile);
@@ -30,13 +30,13 @@ public class InventoryManager {
 	}
 
 	// Loads turret objects from assets to master inventory.
-	private void loadTurrets(String fileName) throws IOException  {
+	private void loadTurrets(String fileName) throws IOException {
 		AssetManager am = context.getAssets();
 
 		InputStream is = am.open(fileName);
 		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
 		String line;
-		while((line = reader.readLine()) != null){
+		while ((line = reader.readLine()) != null) {
 			master.addItem(TurretItem.parseTurretItem(line));
 		}
 		reader.close();
@@ -44,13 +44,13 @@ public class InventoryManager {
 	}
 
 	// Loads upgrade objects from assets to master inventory.
-	private void loadUpgrades(String fileName) throws IOException  {
+	private void loadUpgrades(String fileName) throws IOException {
 		AssetManager am = context.getAssets();
 
 		InputStream is = am.open(fileName);
 		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
 		String line;
-		while((line = reader.readLine()) != null){
+		while ((line = reader.readLine()) != null) {
 			master.addItem(UpgradeItem.parseUpgradeItem(line));
 		}
 		reader.close();
@@ -60,8 +60,8 @@ public class InventoryManager {
 	// Adds a given amount of fuel canisters to inventory. Fuel descriptor taken from strings.xml
 	private void addFuel(Inventory inventory, int num) {
 		String fuel = context.getString(R.string.fuel_canister);
-		for(int i=0; i<num; i++) {
-			inventory.addItem( UpgradeItem.parseUpgradeItem(fuel) );
+		for (int i = 0; i < num; i++) {
+			inventory.addItem(UpgradeItem.parseUpgradeItem(fuel));
 		}
 	}
 
@@ -76,15 +76,15 @@ public class InventoryManager {
 		int i;
 		while (addedTurrets < numTurrets) {
 			i = random.nextInt(master.getTurretSize());
-			shop.addItem( master.getTurret(i) );
+			shop.addItem(master.getTurret(i));
 			addedTurrets++;
 		}
-		while (addedUpgrades < numUpgrades){
+		while (addedUpgrades < numUpgrades) {
 			i = random.nextInt(master.getUpgradeSize());
-			shop.addItem( master.getUpgrade(i) );
+			shop.addItem(master.getUpgrade(i));
 			addedUpgrades++;
 		}
-		addFuel(shop, random.nextInt(5)+1);
+		addFuel(shop, random.nextInt(5) + 1);
 
 		return shop;
 	}
@@ -92,7 +92,7 @@ public class InventoryManager {
 	// Returns and inventory intended to be used as the starting one for the player.
 	public Inventory getStartingInventory() {
 		Inventory startInventory = new Inventory();
-		startInventory.addItem( master.getTurret(0) );
+		startInventory.addItem(master.getTurret(0));
 		return startInventory;
 	}
 }

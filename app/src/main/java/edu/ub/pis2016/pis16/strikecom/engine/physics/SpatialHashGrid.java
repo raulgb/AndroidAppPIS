@@ -5,20 +5,22 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.ub.pis2016.pis16.strikecom.engine.util.performance.Array;
+
 /**
  * Created by Alexander Bevzenko
  * as for now - axis-bound rectangles only
  * TODO: include other shapes after testing this
  */
 public class SpatialHashGrid {
-	List<Body>[] dynamicCells;
-	List<Body>[] staticCells;
 	int cellsPerRow;
 	int cellsPerCol;
 	float cellSize;
 	int[] cellIds = new int[4];
 
-	List<Body> foundObjects = new ArrayList<>();
+	private Array<Body>[] dynamicCells;
+	private Array<Body>[] staticCells;
+	private Array<Body> foundObjects = new Array<>();
 
 	/**
 	 * constructor takes world Width, Height and cell size and divides world into small cells, and initialises all lists
@@ -32,12 +34,12 @@ public class SpatialHashGrid {
 		this.cellsPerRow = (int) Math.ceil(worldWidth / cellSize);
 		this.cellsPerCol = (int) Math.ceil(worldHeight / cellSize);
 		int numCells = this.cellsPerRow * this.cellsPerCol;
-		dynamicCells = new List[numCells];
-		staticCells = new List[numCells];
+		dynamicCells = new Array[numCells];
+		staticCells = new Array[numCells];
 
 		for (int i = 0; i < numCells; i++) {
-			dynamicCells[i] = new ArrayList<Body>(10);
-			staticCells[i] = new ArrayList<Body>(10);
+			dynamicCells[i] = new Array<>(10);
+			staticCells[i] = new Array<>(10);
 		}
 	}
 
@@ -64,8 +66,8 @@ public class SpatialHashGrid {
 		int i = 0;
 		int cellId = -1;
 		while (i <= 3 && (cellId = cellIds[i++]) != -1) {
-			this.staticCells[cellId].remove(obj);
-			this.dynamicCells[cellId].remove(obj);
+			this.staticCells[cellId].removeValue(obj);
+			this.dynamicCells[cellId].removeValue(obj);
 		}
 	}
 
@@ -76,7 +78,7 @@ public class SpatialHashGrid {
 		}
 	}
 
-	public List<Body> getPotentialColliders(Body body) {
+	public Array<Body> getPotentialColliders(Body body) {
 		this.foundObjects.clear();
 
 		int[] cellIds = getCellIds(body);
@@ -84,7 +86,7 @@ public class SpatialHashGrid {
 		int i = 0;
 		int cellId = -1;
 		while (i <= 3 && (cellId = cellIds[i++]) != -1) {
-			int len = this.dynamicCells[cellId].size();
+			int len = this.dynamicCells[cellId].size;
 			for (int j = 0; j < len; j++) {
 				//Log.d("SpatialHG", i + ", " + j + ", " + this.dynamicCells[cellId].size());
 				Body collider = this.dynamicCells[cellId].get(j);
@@ -92,7 +94,7 @@ public class SpatialHashGrid {
 					this.foundObjects.add(collider);
 				}
 			}
-			len = this.staticCells[cellId].size();
+			len = this.staticCells[cellId].size;
 			for (int j = 0; j < len; j++) {
 				Body collider = this.staticCells[cellId].get(j);
 				if (!this.foundObjects.contains(collider)) {

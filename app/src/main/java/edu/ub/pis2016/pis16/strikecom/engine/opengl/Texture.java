@@ -15,6 +15,7 @@ import javax.microedition.khronos.opengles.GL10;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Disposable;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.FileIO;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Game;
+import edu.ub.pis2016.pis16.strikecom.engine.util.performance.Array;
 
 /**
  * Native OpenGL texture object. Manages a Bitmap data array and uploads it to the GPU for rendering
@@ -23,7 +24,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.framework.Game;
 public class Texture implements Disposable {
 
 	/** Managed textures */
-	public static ArrayList<Texture> managedTextures = new ArrayList<Texture>();
+	public static Array<Texture> managedTextures = new Array<>();
 
 	GLGraphics glGraphics;
 	FileIO fileIO;
@@ -111,7 +112,7 @@ public class Texture implements Disposable {
 	}
 
 	public static void removeManagedTexture(Texture t) {
-		managedTextures.remove(t);
+		managedTextures.removeValue(t);
 	}
 
 	private static final Object reloadingTextures = new Object();

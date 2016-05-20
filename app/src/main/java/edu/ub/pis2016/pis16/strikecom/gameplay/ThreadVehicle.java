@@ -92,9 +92,13 @@ public class ThreadVehicle extends Vehicle {
 		else
 			pivot.set(pos);
 
-		Vector2 threadToCenter = new Vector2(pos).sub(pivot);
-		threadToCenter.rotate(rotSpeed * delta);
-		pos.set(pivot).add(threadToCenter);
+//		Vector2 threadToCenter = new Vector2(pos).sub(pivot);
+//		threadToCenter.rotate(rotSpeed * delta);
+//		pos.set(pivot).add(threadToCenter);
+
+		tmp.set(pos).sub(pivot);
+		tmp.rotate(rotSpeed * delta);
+		pos.set(pivot).add(tmp);
 
 		// Average thread velocity and rotate to get a velocity vector
 		tmp.set(leftThreadVel + rightThreadVel, 0).scl(0.5f).rotate(rotation);

@@ -10,27 +10,26 @@ import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Sprite;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
-import edu.ub.pis2016.pis16.strikecom.engine.util.Pool;
-import edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig;
+import edu.ub.pis2016.pis16.strikecom.engine.util.performance.Array;
 
 import static edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig.TILE_SIZE;
 
 public class Physics2D {
 
 	/** StaticBodies here */
-	private ArrayList<Body> staticBodies;
+	private Array<Body> staticBodies = new Array<>();
 	/** Dynamic + Kinematic */
-	private ArrayList<Body> dynamicBodies;
+	private Array<Body> dynamicBodies = new Array<>();
 
 	private Vector2 tmp = new Vector2();
 
 	private float worldWidth;
 	private float worldHeight;
 
-	private Set<Body> collidedBodies = new HashSet<>();
+	private Array<Body> collidedBodies = new Array<>();
 	private SpatialHashGrid spatialHashGrid;
 
-	private ArrayList<ContactListener> listeners;
+	private Array<ContactListener> listeners = new Array<>();
 
 	private ContactListener.CollisionEvent cEvent = new ContactListener.CollisionEvent();
 
@@ -41,20 +40,15 @@ public class Physics2D {
 	 * @param worldHeight height of world in tiles
 	 */
 	public Physics2D(float worldWidth, float worldHeight) {
-		this.staticBodies = new ArrayList<>(); //initialize list of staticBodies
-		this.dynamicBodies = new ArrayList<>(); //initialize list of dynamicBodies
-
 		// HashGrid Init
 		this.worldWidth = worldWidth;
 		this.worldHeight = worldHeight;
 		float cellSize = 16; // 16*16 tiles per cell
 		spatialHashGrid = new SpatialHashGrid(worldWidth, worldHeight, cellSize);
-
-		// Listener and EventPool init
-		listeners = new ArrayList<>();
 	}
 
 	/** World width in tiles */
+
 	public int getWorldWidth() {
 		return MathUtils.roundPositive(worldWidth);
 	}
@@ -98,7 +92,7 @@ public class Physics2D {
 			if (collidedBodies.contains(bodyA))
 				continue;
 
-			List<Body> potentials = spatialHashGrid.getPotentialColliders(bodyA);
+			Array<Body> potentials = spatialHashGrid.getPotentialColliders(bodyA);
 
 			for (Body bodyB : potentials) {
 				if (bodyA == bodyB)
@@ -137,7 +131,7 @@ public class Physics2D {
 	}
 
 	public void addContactListener(ContactListener cl) {
-		listeners.add(listeners.size(), cl);
+		listeners.add(cl);
 	}
 
 	public void addBody(Body body) {
@@ -153,18 +147,18 @@ public class Physics2D {
 		//Log.d("Physics2D", "Removed body: " + body.userData);
 
 		spatialHashGrid.removeObject(body);
-		if (staticBodies.remove(body))
+		if (staticBodies.removeValue(body, true))
 			return true;
-		if (dynamicBodies.remove(body))
+		if (dynamicBodies.removeValue(body, true))
 			return true;
 		return false;
 	}
 
-	public ArrayList<Body> getStaticBodies() {
+	public Array<Body> getStaticBodies() {
 		return staticBodies;
 	}
 
-	public ArrayList<Body> getDynamicBodies() {
+	public Array<Body> getDynamicBodies() {
 		return dynamicBodies;
 	}
 

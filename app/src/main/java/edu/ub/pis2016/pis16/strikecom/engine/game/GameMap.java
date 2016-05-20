@@ -20,6 +20,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureRegion;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Physics2D;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Perlin2D;
+import edu.ub.pis2016.pis16.strikecom.engine.util.performance.Array;
 
 /**
  * Created by Alexander Bevzenko on 10/05/16.
@@ -32,7 +33,7 @@ public class GameMap {
 	private boolean[][] discoveredTable; // to show discovered terrain on minimap
 	private Sprite[][] tTable;
 
-	private ArrayList<AnimatedSprite> animatedTiles = new ArrayList<>();
+	private Array<AnimatedSprite> animatedTiles = new Array<>();
 
 	private Physics2D physics2D;
 	private int drawDistance;

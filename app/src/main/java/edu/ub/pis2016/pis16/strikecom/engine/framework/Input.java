@@ -2,6 +2,8 @@ package edu.ub.pis2016.pis16.strikecom.engine.framework;
 
 import java.util.List;
 
+import edu.ub.pis2016.pis16.strikecom.engine.util.performance.Array;
+
 public interface Input {
 
 	public static class KeyEvent {
@@ -37,5 +39,5 @@ public interface Input {
 
 	public List<KeyEvent> getKeyEvents();
 
-	public List<TouchEvent> getTouchEvents();
+	public Array<TouchEvent> getTouchEvents();
 }

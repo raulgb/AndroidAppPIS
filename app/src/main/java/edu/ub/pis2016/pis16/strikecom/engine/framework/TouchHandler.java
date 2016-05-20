@@ -2,7 +2,7 @@ package edu.ub.pis2016.pis16.strikecom.engine.framework;
 
 import android.view.View;
 
-import java.util.List;
+import edu.ub.pis2016.pis16.strikecom.engine.util.performance.Array;
 
 public interface TouchHandler extends View.OnTouchListener {
 	public boolean isTouchDown(int pointer);
@@ -11,5 +11,5 @@ public interface TouchHandler extends View.OnTouchListener {
 
 	public int getTouchY(int pointer);
 
-	public List<Input.TouchEvent> getTouchEvents();
+	public Array<Input.TouchEvent> getTouchEvents();
 }

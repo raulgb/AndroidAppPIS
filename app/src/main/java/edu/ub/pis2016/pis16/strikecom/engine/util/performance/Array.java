@@ -22,12 +22,17 @@ import java.util.NoSuchElementException;
 
 import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 
-/** A resizable, ordered or unordered array of objects. If unordered, this class avoids a memory copy when removing elements (the
+/**
+ * A resizable, ordered or unordered array of objects. If unordered, this class avoids a memory copy when removing elements (the
  * last element is moved to the removed element's position).
- * @author Nathan Sweet */
+ *
+ * @author Nathan Sweet
+ */
 public class Array<T> implements Iterable<T> {
-	/** Provides direct access to the underlying array. If the Array's generic type is not Object, this field may only be accessed
-	 * if the {@link Array#Array(boolean, int, Class)} constructor was used. */
+	/**
+	 * Provides direct access to the underlying array. If the Array's generic type is not Object, this field may only be accessed
+	 * if the {@link Array#Array(boolean, int, Class)} constructor was used.
+	 */
 	public T[] items;
 
 	public int size;
@@ -46,18 +51,23 @@ public class Array<T> implements Iterable<T> {
 		this(true, capacity);
 	}
 
-	/** @param ordered If false, methods that remove elements may change the order of other elements in the array, which avoids a
-	 *           memory copy.
-	 * @param capacity Any elements added beyond this will cause the backing array to be grown. */
+	/**
+	 * @param ordered  If false, methods that remove elements may change the order of other elements in the array, which avoids a
+	 *                 memory copy.
+	 * @param capacity Any elements added beyond this will cause the backing array to be grown.
+	 */
 	public Array(boolean ordered, int capacity) {
 		this.ordered = ordered;
 		items = (T[]) new Object[capacity];
 	}
 
-	/** Creates a new array with {@link #items} of the specified type.
-	 * @param ordered If false, methods that remove elements may change the order of other elements in the array, which avoids a
-	 *           memory copy.
-	 * @param capacity Any elements added beyond this will cause the backing array to be grown. */
+	/**
+	 * Creates a new array with {@link #items} of the specified type.
+	 *
+	 * @param ordered  If false, methods that remove elements may change the order of other elements in the array, which avoids a
+	 *                 memory copy.
+	 * @param capacity Any elements added beyond this will cause the backing array to be grown.
+	 */
 	public Array(boolean ordered, int capacity, Class arrayType) {
 		this.ordered = ordered;
 		items = (T[]) ArrayReflection.newInstance(arrayType, capacity);
@@ -68,26 +78,33 @@ public class Array<T> implements Iterable<T> {
 		this(true, 16, arrayType);
 	}
 
-	/** Creates a new array containing the elements in the specified array. The new array will have the same type of backing array
+	/**
+	 * Creates a new array containing the elements in the specified array. The new array will have the same type of backing array
 	 * and will be ordered if the specified array is ordered. The capacity is set to the number of elements, so any subsequent
-	 * elements added will cause the backing array to be grown. */
+	 * elements added will cause the backing array to be grown.
+	 */
 	public Array(Array<? extends T> array) {
 		this(array.ordered, array.size, array.items.getClass().getComponentType());
 		size = array.size;
 		System.arraycopy(array.items, 0, items, 0, size);
 	}
 
-	/** Creates a new ordered array containing the elements in the specified array. The new array will have the same type of
+	/**
+	 * Creates a new ordered array containing the elements in the specified array. The new array will have the same type of
 	 * backing array. The capacity is set to the number of elements, so any subsequent elements added will cause the backing array
-	 * to be grown. */
+	 * to be grown.
+	 */
 	public Array(T[] array) {
 		this(true, array, 0, array.length);
 	}
 
-	/** Creates a new array containing the elements in the specified array. The new array will have the same type of backing array.
+	/**
+	 * Creates a new array containing the elements in the specified array. The new array will have the same type of backing array.
 	 * The capacity is set to the number of elements, so any subsequent elements added will cause the backing array to be grown.
+	 *
 	 * @param ordered If false, methods that remove elements may change the order of other elements in the array, which avoids a
-	 *           memory copy. */
+	 *                memory copy.
+	 */
 	public Array(boolean ordered, T[] array, int start, int count) {
 		this(ordered, count, (Class) array.getClass().getComponentType());
 		size = count;
@@ -153,10 +170,18 @@ public class Array<T> implements Iterable<T> {
 		items[second] = firstValue;
 	}
 
-	/** Returns if this array contains value.
-	 * @param value May be null.
+	/** Returns if this array contains value. */
+	public boolean contains(T value) {
+		return contains(value, true);
+	}
+
+	/**
+	 * Returns if this array contains value.
+	 *
+	 * @param value    May be null.
 	 * @param identity If true, == comparison will be used. If false, .equals() comparison will be used.
-	 * @return true if array contains value, false if it doesn't */
+	 * @return true if array contains value, false if it doesn't
+	 */
 	public boolean contains(T value, boolean identity) {
 		T[] items = this.items;
 		int i = size - 1;
@@ -170,10 +195,13 @@ public class Array<T> implements Iterable<T> {
 		return false;
 	}
 
-	/** Returns the index of first occurrence of value in the array, or -1 if no such value exists.
-	 * @param value May be null.
+	/**
+	 * Returns the index of first occurrence of value in the array, or -1 if no such value exists.
+	 *
+	 * @param value    May be null.
 	 * @param identity If true, == comparison will be used. If false, .equals() comparison will be used.
-	 * @return An index of first occurrence of value in array or -1 if no such value exists */
+	 * @return An index of first occurrence of value in array or -1 if no such value exists
+	 */
 	public int indexOf(T value, boolean identity) {
 		T[] items = this.items;
 		if (identity || value == null) {
@@ -186,11 +214,14 @@ public class Array<T> implements Iterable<T> {
 		return -1;
 	}
 
-	/** Returns an index of last occurrence of value in array or -1 if no such value exists. Search is started from the end of an
+	/**
+	 * Returns an index of last occurrence of value in array or -1 if no such value exists. Search is started from the end of an
 	 * array.
-	 * @param value May be null.
+	 *
+	 * @param value    May be null.
 	 * @param identity If true, == comparison will be used. If false, .equals() comparison will be used.
-	 * @return An index of last occurrence of value in array or -1 if no such value exists */
+	 * @return An index of last occurrence of value in array or -1 if no such value exists
+	 */
 	public int lastIndexOf(T value, boolean identity) {
 		T[] items = this.items;
 		if (identity || value == null) {
@@ -203,10 +234,18 @@ public class Array<T> implements Iterable<T> {
 		return -1;
 	}
 
-	/** Removes the first instance of the specified value in the array.
-	 * @param value May be null.
+	/** Removes the first instance of the specified value in the array. Defaults to Identity compare */
+	public boolean removeValue(T value) {
+		return removeValue(value, true);
+	}
+
+	/**
+	 * Removes the first instance of the specified value in the array.
+	 *
+	 * @param value    May be null.
 	 * @param identity If true, == comparison will be used. If false, .equals() comparison will be used.
-	 * @return true if value was found and removed, false otherwise */
+	 * @return true if value was found and removed, false otherwise
+	 */
 	public boolean removeValue(T value, boolean identity) {
 		T[] items = this.items;
 		if (identity || value == null) {
@@ -257,9 +296,12 @@ public class Array<T> implements Iterable<T> {
 		size -= count;
 	}
 
-	/** Removes from this array all of elements contained in the specified array.
+	/**
+	 * Removes from this array all of elements contained in the specified array.
+	 *
 	 * @param identity True to use ==, false to use .equals().
-	 * @return true if this array was modified. */
+	 * @return true if this array was modified.
+	 */
 	public boolean removeAll(Array<? extends T> array, boolean identity) {
 		int size = this.size;
 		int startSize = size;
@@ -318,25 +360,34 @@ public class Array<T> implements Iterable<T> {
 		size = 0;
 	}
 
-	/** Reduces the size of the backing array to the size of the actual items. This is useful to release memory when many items
+	/**
+	 * Reduces the size of the backing array to the size of the actual items. This is useful to release memory when many items
 	 * have been removed, or if it is known that more items will not be added.
-	 * @return {@link #items} */
+	 *
+	 * @return {@link #items}
+	 */
 	public T[] shrink() {
 		if (items.length != size) resize(size);
 		return items;
 	}
 
-	/** Increases the size of the backing array to accommodate the specified number of additional items. Useful before adding many
+	/**
+	 * Increases the size of the backing array to accommodate the specified number of additional items. Useful before adding many
 	 * items to avoid multiple backing array resizes.
-	 * @return {@link #items} */
+	 *
+	 * @return {@link #items}
+	 */
 	public T[] ensureCapacity(int additionalCapacity) {
 		int sizeNeeded = size + additionalCapacity;
 		if (sizeNeeded > items.length) resize(Math.max(8, sizeNeeded));
 		return items;
 	}
 
-	/** Sets the array size, leaving any values beyond the current size null.
-	 * @return {@link #items} */
+	/**
+	 * Sets the array size, leaving any values beyond the current size null.
+	 *
+	 * @return {@link #items}
+	 */
 	public T[] setSize(int newSize) {
 		truncate(newSize);
 		if (newSize > items.length) resize(Math.max(8, newSize));
@@ -353,8 +404,10 @@ public class Array<T> implements Iterable<T> {
 		return newItems;
 	}
 
-	/** Sorts this array. The array elements must implement {@link Comparable}. This method is not thread safe (uses
-	 * {@link Sort#instance()}). */
+	/**
+	 * Sorts this array. The array elements must implement {@link Comparable}. This method is not thread safe (uses
+	 * {@link Sort#instance()}).
+	 */
 	public void sort() {
 		Sort.instance().sort(items, 0, size);
 	}
@@ -364,13 +417,16 @@ public class Array<T> implements Iterable<T> {
 		Sort.instance().sort(items, comparator, 0, size);
 	}
 
-	/** Selects the nth-lowest element from the Array according to Comparator ranking. This might partially sort the Array. The
+	/**
+	 * Selects the nth-lowest element from the Array according to Comparator ranking. This might partially sort the Array. The
 	 * array must have a size greater than 0, or a {@link com.badlogic.gdx.utils.GdxRuntimeException} will be thrown.
-	 * @see Select
+	 *
 	 * @param comparator used for comparison
-	 * @param kthLowest rank of desired object according to comparison, n is based on ordinal numbers, not array indices. for min
-	 *           value use 1, for max value use size of array, using 0 results in runtime exception.
-	 * @return the value of the Nth lowest ranked object. */
+	 * @param kthLowest  rank of desired object according to comparison, n is based on ordinal numbers, not array indices. for min
+	 *                   value use 1, for max value use size of array, using 0 results in runtime exception.
+	 * @return the value of the Nth lowest ranked object.
+	 * @see Select
+	 */
 	public T selectRanked(Comparator<T> comparator, int kthLowest) {
 		if (kthLowest < 1) {
 			throw new RuntimeException("nth_lowest must be greater than 0, 1 = first, 2 = second...");
@@ -378,11 +434,13 @@ public class Array<T> implements Iterable<T> {
 		return Select.instance().select(items, comparator, kthLowest, size);
 	}
 
-	/** @see Array#selectRanked(java.util.Comparator, int)
+	/**
 	 * @param comparator used for comparison
-	 * @param kthLowest rank of desired object according to comparison, n is based on ordinal numbers, not array indices. for min
-	 *           value use 1, for max value use size of array, using 0 results in runtime exception.
-	 * @return the index of the Nth lowest ranked object. */
+	 * @param kthLowest  rank of desired object according to comparison, n is based on ordinal numbers, not array indices. for min
+	 *                   value use 1, for max value use size of array, using 0 results in runtime exception.
+	 * @return the index of the Nth lowest ranked object.
+	 * @see Array#selectRanked(java.util.Comparator, int)
+	 */
 	public int selectRankedIndex(Comparator<T> comparator, int kthLowest) {
 		if (kthLowest < 1) {
 			throw new RuntimeException("nth_lowest must be greater than 0, 1 = first, 2 = second...");
@@ -410,16 +468,20 @@ public class Array<T> implements Iterable<T> {
 		}
 	}
 
-	/** Returns an iterator for the items in the array. Remove is supported. Note that the same iterator instance is returned each
-	 * time this method is called. Use the {@link ArrayIterator} constructor for nested or multithreaded iteration. */
+	/**
+	 * Returns an iterator for the items in the array. Remove is supported. Note that the same iterator instance is returned each
+	 * time this method is called. Use the {@link ArrayIterator} constructor for nested or multithreaded iteration.
+	 */
 	public Iterator<T> iterator() {
 		if (iterable == null) iterable = new ArrayIterable(this);
 		return iterable.iterator();
 	}
 
-	/** Returns an iterable for the selected items in the array. Remove is supported, but not between hasNext() and next(). Note
+	/**
+	 * Returns an iterable for the selected items in the array. Remove is supported, but not between hasNext() and next(). Note
 	 * that the same iterable instance is returned each time this method is called. Use the {@link Predicate.PredicateIterable}
-	 * constructor for nested or multithreaded iteration. */
+	 * constructor for nested or multithreaded iteration.
+	 */
 	public Iterable<T> select(Predicate<T> predicate) {
 		if (predicateIterable == null)
 			predicateIterable = new Predicate.PredicateIterable<T>(this, predicate);
@@ -428,8 +490,10 @@ public class Array<T> implements Iterable<T> {
 		return predicateIterable;
 	}
 
-	/** Reduces the size of the array to the specified size. If the array is already smaller than the specified size, no action is
-	 * taken. */
+	/**
+	 * Reduces the size of the array to the specified size. If the array is already smaller than the specified size, no action is
+	 * taken.
+	 */
 	public void truncate(int newSize) {
 		if (size <= newSize) return;
 		for (int i = newSize; i < size; i++)
@@ -443,8 +507,10 @@ public class Array<T> implements Iterable<T> {
 		return items[MathUtils.random(0, size - 1)];
 	}
 
-	/** Returns the items as an array. Note the array is typed, so the {@link #Array(Class)} constructor must have been used.
-	 * Otherwise use {@link #toArray(Class)} to specify the array type. */
+	/**
+	 * Returns the items as an array. Note the array is typed, so the {@link #Array(Class)} constructor must have been used.
+	 * Otherwise use {@link #toArray(Class)} to specify the array type.
+	 */
 	public T[] toArray() {
 		return (T[]) toArray(items.getClass().getComponentType());
 	}

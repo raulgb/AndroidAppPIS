@@ -7,6 +7,7 @@ import java.util.List;
 
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Input;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.TouchHandler;
+import edu.ub.pis2016.pis16.strikecom.engine.util.performance.Array;
 
 public class AndroidInput implements Input {
 	AccelerometerHandler accelHandler;
@@ -43,7 +44,7 @@ public class AndroidInput implements Input {
 		return accelHandler.getAccelZ();
 	}
 
-	public List<TouchEvent> getTouchEvents() {
+	public Array<TouchEvent> getTouchEvents() {
 		return touchHandler.getTouchEvents();
 	}
 

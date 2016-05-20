@@ -8,6 +8,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.math.Angle;
 import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Sprite;
+import edu.ub.pis2016.pis16.strikecom.engine.util.performance.Array;
 import edu.ub.pis2016.pis16.strikecom.gameplay.Turret;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.TurretConfig;
 import edu.ub.pis2016.pis16.strikecom.gameplay.factories.ProjectileFactory;
@@ -58,7 +59,10 @@ public class TurretBehavior extends BehaviorComponent {
 					float closestDistance = Float.MAX_VALUE;
 					GameObject closestGO = null;
 
-					for (GameObject go : gameObject.getScreen().getGameObjects()) {
+					// It's fine to allocate a new Iterator here cause this will only be called once every second or so.
+					Array.ArrayIterator<GameObject> iter = new Array.ArrayIterator<>(gameObject.getScreen().getGameObjects());
+					while (iter.hasNext()) {
+						GameObject go = iter.next();
 						// Target enemies with the target tag, who are not too far, and are killable
 						if (go.getTag().contains(targetTag) && !isTooFar(go) && go.killable) {
 							float distance = go.getPosition().dst2(turretPhys.getPosition());

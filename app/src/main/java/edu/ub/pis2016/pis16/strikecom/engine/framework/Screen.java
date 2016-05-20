@@ -1,6 +1,7 @@
 package edu.ub.pis2016.pis16.strikecom.engine.framework;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -161,9 +162,12 @@ public abstract class Screen implements Disposable {
 	 * This method also removes any children of the destroyed object, recursively.
 	 */
 	public void removeGameObject(GameObject go) {
-		for (GameObject child : goOrderedList)
+		Array.ArrayIterator<GameObject> iter = new Array.ArrayIterator<>(goOrderedList);
+		while (iter.hasNext()) {
+			GameObject child = iter.next();
 			if (child.getParent() == go)
 				removeGameObject(child);
+		}
 		GOsToRemove.add(go);
 	}
 
@@ -235,7 +239,12 @@ public abstract class Screen implements Disposable {
 
 	private void reorderGameObjectsByLayer() {
 		goOrderedList.clear();
-		goOrderedList.addAll((GameObject[]) gameObjects.values().toArray());
+
+		// Try to at least optimize the copying. Two calls to System.arraycopy()
+		Collection<GameObject> objs = gameObjects.values();
+		GameObject[] objArr = objs.toArray(new GameObject[objs.size()]);
+		goOrderedList.addAll(objArr);
+
 		// Sort based on layer
 		Sort.instance().sort(goOrderedList, new Comparator<GameObject>() {
 			@Override

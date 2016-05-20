@@ -10,6 +10,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.framework.Input;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Input.TouchEvent;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.TouchHandler;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Pool;
+import edu.ub.pis2016.pis16.strikecom.engine.util.performance.Array;
 
 
 public class MultiTouchHandler implements TouchHandler {
@@ -18,9 +19,11 @@ public class MultiTouchHandler implements TouchHandler {
 	int[] touchX = new int[MAX_TOUCHPOINTS];
 	int[] touchY = new int[MAX_TOUCHPOINTS];
 	int[] id = new int[MAX_TOUCHPOINTS];
+
 	Pool<TouchEvent> touchEventPool;
-	List<Input.TouchEvent> touchEvents = new ArrayList<Input.TouchEvent>();
-	List<Input.TouchEvent> touchEventsBuffer = new ArrayList<Input.TouchEvent>();
+	Array<Input.TouchEvent> touchEvents = new Array<>();
+	Array<Input.TouchEvent> touchEventsBuffer = new Array<>();
+
 	float scaleX;
 	float scaleY;
 
@@ -61,8 +64,8 @@ public class MultiTouchHandler implements TouchHandler {
 						touchEvent = touchEventPool.newObject();
 						touchEvent.type = Input.TouchEvent.TOUCH_DOWN;
 						touchEvent.pointer = pointerId;
-						touchEvent.x = touchX[i] = (int)(event.getX(i) * scaleX);
-						touchEvent.y = touchY[i] = (int)(event.getY(i) * scaleY);
+						touchEvent.x = touchX[i] = (int) (event.getX(i) * scaleX);
+						touchEvent.y = touchY[i] = (int) (event.getY(i) * scaleY);
 						isTouched[i] = true;
 						id[i] = pointerId;
 						touchEventsBuffer.add(touchEvent);
@@ -73,8 +76,8 @@ public class MultiTouchHandler implements TouchHandler {
 						touchEvent = touchEventPool.newObject();
 						touchEvent.type = Input.TouchEvent.TOUCH_UP;
 						touchEvent.pointer = pointerId;
-						touchEvent.x = touchX[i] = (int)(event.getX(i) * scaleX);
-						touchEvent.y = touchY[i] = (int)(event.getY(i) * scaleY);
+						touchEvent.x = touchX[i] = (int) (event.getX(i) * scaleX);
+						touchEvent.y = touchY[i] = (int) (event.getY(i) * scaleY);
 						isTouched[i] = false;
 						id[i] = -1;
 						touchEventsBuffer.add(touchEvent);
@@ -83,8 +86,8 @@ public class MultiTouchHandler implements TouchHandler {
 						touchEvent = touchEventPool.newObject();
 						touchEvent.type = Input.TouchEvent.TOUCH_DRAGGED;
 						touchEvent.pointer = pointerId;
-						touchEvent.x = touchX[i] = (int)(event.getX(i) * scaleX);
-						touchEvent.y = touchY[i] = (int)(event.getY(i) * scaleY);
+						touchEvent.x = touchX[i] = (int) (event.getX(i) * scaleX);
+						touchEvent.y = touchY[i] = (int) (event.getY(i) * scaleY);
 						isTouched[i] = true;
 						id[i] = pointerId;
 						touchEventsBuffer.add(touchEvent);
@@ -125,9 +128,9 @@ public class MultiTouchHandler implements TouchHandler {
 		}
 	}
 
-	public List<Input.TouchEvent> getTouchEvents() {
+	public Array<TouchEvent> getTouchEvents() {
 		synchronized (this) {
-			int len = touchEvents.size();
+			int len = touchEvents.size;
 			for (int i = 0; i < len; i++)
 				touchEventPool.free(touchEvents.get(i));
 			touchEvents.clear();
