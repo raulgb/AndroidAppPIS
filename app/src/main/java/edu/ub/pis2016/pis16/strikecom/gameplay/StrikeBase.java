@@ -25,8 +25,8 @@ public class StrikeBase extends Vehicle {
 	private static final int LEFT = 0, RIGHT = 1;
 
 	private Sprite hull;
-	private Sprite plateArmor;
-	private Sprite compositeArmor;
+	//private Sprite plateArmor;
+	//private Sprite compositeArmor;
 
 	private AnimatedSprite threadsLeft;
 	private AnimatedSprite threadsRight;
@@ -82,10 +82,12 @@ public class StrikeBase extends Vehicle {
 		hull = new Sprite(sbmk1_hull[0]);
 		hull.setSize(cfg.size_tiles * TILE_SIZE);
 
+		/*
 		compositeArmor = new Sprite(Assets.SPRITE_ATLAS.getRegion("composite_" + model));
 		compositeArmor.setSize(cfg.size_tiles * TILE_SIZE);
 		plateArmor = new Sprite(Assets.SPRITE_ATLAS.getRegion("plate_" + model));
 		plateArmor.setSize(cfg.size_tiles * TILE_SIZE);
+		*/
 
 		// Thread setup
 		threadsLeft = new AnimatedSprite(Assets.SPRITE_ATLAS.getRegions(model + "_threads"), 0);
@@ -203,6 +205,7 @@ public class StrikeBase extends Vehicle {
 		threadsRight.draw(batch);
 		hull.draw(batch, pos.x, pos.y);
 
+		/*
 		if (hasPlateArmor) {
 			plateArmor.setRotation(rotation);
 			plateArmor.draw(batch, pos.x, pos.y);
@@ -212,6 +215,7 @@ public class StrikeBase extends Vehicle {
 			compositeArmor.setRotation(rotation);
 			compositeArmor.draw(batch, pos.x, pos.y);
 		}
+		*/
 	}
 
 	@Override

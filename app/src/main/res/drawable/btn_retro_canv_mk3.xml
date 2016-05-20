@@ -11,5 +11,5 @@
         android:drawable="@drawable/btn_retro_upgrade_act" />
     <item
         android:state_enabled="true"
-        android:drawable="@drawable/btn_retro_upgrade" />
+        android:drawable="@drawable/btn_retro_mk3" />
 </selector>

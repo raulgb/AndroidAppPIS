@@ -59,8 +59,4 @@ public class UpgradeItem extends Item {
 				.price));
 	}
 
-	// Requires model name of the strikebase configuration
-	public GraphicsComponent getGraphics(String modelName) {
-		return new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion(this.model + "_" + modelName));
-	}
 }

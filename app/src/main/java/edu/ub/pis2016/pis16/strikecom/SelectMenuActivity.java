@@ -77,6 +77,10 @@ public class SelectMenuActivity extends AppCompatActivity {
 						model = "sbmk2";
 						text.setText(getString(R.string.sel_menu_mk2name));
 						break;
+					case MKIII:
+						model = "sbmk3";
+						text.setText(getString(R.string.sel_menu_mk3name));
+						break;
 					default:
 						model = "sbmk2";
 						text.setText(getString(R.string.sel_menu_mk2name));
@@ -104,6 +108,10 @@ public class SelectMenuActivity extends AppCompatActivity {
 					case MKII:
 						model = "sbmk2";
 						text.setText(getString(R.string.sel_menu_mk2name));
+						break;
+					case MKIII:
+						model = "sbmk3";
+						text.setText(getString(R.string.sel_menu_mk3name));
 						break;
 					default:
 						model = "sbmk2";

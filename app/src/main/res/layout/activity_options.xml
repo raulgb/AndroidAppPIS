@@ -131,7 +131,7 @@
             android:layout_weight="0.5"
             android:layout_gravity="center_vertical"
             style="?android:attr/borderlessButtonStyle"
-            android:background="@drawable/btn_retro_canv"
+            android:background="@drawable/btn_retro_canv_mk2"
             android:layout_marginRight="10dp"
             android:textColor="@color/black"/>
 
@@ -144,7 +144,7 @@
             android:layout_weight="0.5"
             android:layout_gravity="center_vertical"
             style="?android:attr/borderlessButtonStyle"
-            android:background="@drawable/btn_retro_canv"
+            android:background="@drawable/btn_retro_canv_mk2"
             android:layout_marginLeft="10dp"
             android:textColor="@color/black"/>
     </LinearLayout>

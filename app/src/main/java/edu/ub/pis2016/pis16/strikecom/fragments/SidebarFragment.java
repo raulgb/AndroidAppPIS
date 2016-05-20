@@ -32,8 +32,6 @@ public class SidebarFragment extends Fragment {
 		this.game = game;
 	}
 
-	public void setStrikeBaseModel(StrikeBaseConfig.Model strikeBaseModel) {this.strikeBaseModel = strikeBaseModel; }
-
 	public View getTurretSlot(int key) { return turretSlotsMap.get(key); }
 
 	public View getUpgradeSlot(int key) { return upgradeSlotsMap.get(key); }
@@ -45,7 +43,20 @@ public class SidebarFragment extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_sidebar, container, false);
+		View view;
+		switch (strikeBaseModel) {
+			case MKI:
+				view = inflater.inflate(R.layout.fragment_sidebar_mk1, container, false);
+				break;
+			case MKII:
+				view = inflater.inflate(R.layout.fragment_sidebar_mk2, container, false);
+				break;
+			case MKIII:
+				view = inflater.inflate(R.layout.fragment_sidebar_mk3, container, false);
+				break;
+			default:
+				view = inflater.inflate(R.layout.fragment_sidebar_mk2, container, false);
+		}
 
 		btnInventory = (Button) view.findViewById(R.id.btnInventory);
 
@@ -138,6 +149,37 @@ public class SidebarFragment extends Fragment {
 						game.getSidebarListener().onClickTurret(2);
 					}
 				});
+				break;
+
+			case MKIII:
+				turretSlotsMap.put(0, btnT1);
+				turretSlotsMap.put(1, btnT3);
+
+				btnT1.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						game.getSidebarListener().onClickTurret(0);
+					}
+				});
+
+				btnT2.setBackgroundColor(Color.TRANSPARENT);
+				btnT2.setEnabled(false);
+
+				btnT3.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						game.getSidebarListener().onClickTurret(1);
+					}
+				});
+
+				btnT4.setBackgroundColor(Color.TRANSPARENT);
+				btnT4.setEnabled(false);
+
+				btnT5.setBackgroundColor(Color.TRANSPARENT);
+				btnT5.setEnabled(false);
+
+				btnT6.setBackgroundColor(Color.TRANSPARENT);
+				btnT6.setEnabled(false);
 				break;
 		}
 

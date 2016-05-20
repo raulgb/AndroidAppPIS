@@ -33,7 +33,20 @@ public class SlotsFragment extends DialogFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_slots, container);
+		View view;
+		switch (strikeBaseModel) {
+			case MKI:
+				view = inflater.inflate(R.layout.fragment_slots_mk1, container, false);
+				break;
+			case MKII:
+				view = inflater.inflate(R.layout.fragment_slots_mk2, container, false);
+				break;
+			case MKIII:
+				view = inflater.inflate(R.layout.fragment_slots_mk3, container, false);
+				break;
+			default:
+				view = inflater.inflate(R.layout.fragment_slots_mk2, container, false);
+		}
 
 		final TextView currentItemDesc = (TextView) view.findViewById(R.id.currentItemDesc);
 
@@ -167,6 +180,34 @@ public class SlotsFragment extends DialogFragment {
 						selectedSlot = 2;
 					}
 				});
+				break;
+
+			case MKIII:
+				btnT1.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						selectedSlot = 0;
+					}
+				});
+
+				btnT2.setBackgroundColor(Color.TRANSPARENT);
+				btnT2.setEnabled(false);
+
+				btnT3.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						selectedSlot = 1;
+					}
+				});
+
+				btnT4.setBackgroundColor(Color.TRANSPARENT);
+				btnT4.setEnabled(false);
+
+				btnT5.setBackgroundColor(Color.TRANSPARENT);
+				btnT5.setEnabled(false);
+
+				btnT6.setBackgroundColor(Color.TRANSPARENT);
+				btnT6.setEnabled(false);
 				break;
 		}
 

@@ -52,7 +52,7 @@
                 android:layout_gravity="center"
                 style="?android:attr/borderlessButtonStyle"
                 android:text="@string/cancel_button"
-                android:background="@drawable/btn_retro_canv"/>
+                android:background="@drawable/btn_retro_canv_mk2"/>
 
         </LinearLayout>
 
