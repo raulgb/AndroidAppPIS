@@ -1,13 +1,8 @@
 package edu.ub.pis2016.pis16.strikecom.gameplay;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 import android.content.Context;
-//import android.graphics.drawable.Drawable;
-import android.content.res.AssetManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +11,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import edu.ub.pis2016.pis16.strikecom.R;
-import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
+import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.Item;
 
 public class InventoryItemAdapter extends BaseAdapter {
+
+	public static StrikeBaseConfig.Model strikeBaseModel = StrikeBaseConfig.Model.MKII;
 
 	private Context context;
 	private List<Item> items;
@@ -53,7 +50,19 @@ public class InventoryItemAdapter extends BaseAdapter {
 			// Create a new view into the list.
 			LayoutInflater inflater = (LayoutInflater) context
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
 			rowView = inflater.inflate(R.layout.list_item, parent, false);
+			switch (strikeBaseModel) {
+				case MKI:
+					rowView.setBackgroundResource(R.drawable.frame_retro_mk1);
+					break;
+				case MKII:
+					rowView.setBackgroundResource(R.drawable.frame_retro_mk2);
+					break;
+				case MKIII:
+					rowView.setBackgroundResource(R.drawable.frame_retro_mk3);
+			}
+
 		}
 
 		// Set data into the view.

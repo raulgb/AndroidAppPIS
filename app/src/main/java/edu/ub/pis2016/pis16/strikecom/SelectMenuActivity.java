@@ -22,7 +22,7 @@ public class SelectMenuActivity extends AppCompatActivity {
 
 	Activity selectMenu;
 
-	int selectedConfig = 1;
+	private int selectedConfig = 1;
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,8 +35,10 @@ public class SelectMenuActivity extends AppCompatActivity {
 
 		selectMenu = this;
 
+		final Button btnNext = (Button) findViewById(R.id.btnNext);
+		final Button btnPrev = (Button) findViewById(R.id.btnPrev);
+		final Button btnStart = (Button) findViewById(R.id.btnStart);
 
-		Button btnStart = (Button) findViewById(R.id.btnStart);
 		btnStart.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -58,7 +60,8 @@ public class SelectMenuActivity extends AppCompatActivity {
 			}
 		});
 
-		findViewById(R.id.btnNext).setOnClickListener(new View.OnClickListener() {
+
+		btnNext.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				selectedConfig += 1;
@@ -72,25 +75,33 @@ public class SelectMenuActivity extends AppCompatActivity {
 					case MKI:
 						model = "sbmk1";
 						text.setText(getString(R.string.sel_menu_mk1name));
+						btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk1);
+						btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk1);
+						btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk1);
 						break;
 					case MKII:
 						model = "sbmk2";
 						text.setText(getString(R.string.sel_menu_mk2name));
+						btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk2);
+						btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk2);
+						btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk2);
 						break;
 					case MKIII:
 						model = "sbmk3";
 						text.setText(getString(R.string.sel_menu_mk3name));
+						btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk3);
+						btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk3);
+						btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk3);
 						break;
 					default:
 						model = "sbmk2";
 						text.setText(getString(R.string.sel_menu_mk2name));
 				}
-				((ImageView) findViewById(R.id.imgSelectedBase)).setImageResource(getResources().getIdentifier(model, "drawable",
-						getPackageName()));
+				((ImageView) findViewById(R.id.imgSelectedBase)).setImageResource(getResources().getIdentifier(model, "drawable", getPackageName()));
 			}
 		});
 
-		findViewById(R.id.btnPrev).setOnClickListener(new View.OnClickListener() {
+		btnPrev.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				selectedConfig -= 1;
@@ -104,14 +115,23 @@ public class SelectMenuActivity extends AppCompatActivity {
 					case MKI:
 						model = "sbmk1";
 						text.setText(getString(R.string.sel_menu_mk1name));
+						btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk1);
+						btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk1);
+						btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk1);
 						break;
 					case MKII:
 						model = "sbmk2";
 						text.setText(getString(R.string.sel_menu_mk2name));
+						btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk2);
+						btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk2);
+						btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk2);
 						break;
 					case MKIII:
 						model = "sbmk3";
 						text.setText(getString(R.string.sel_menu_mk3name));
+						btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk3);
+						btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk3);
+						btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk3);
 						break;
 					default:
 						model = "sbmk2";

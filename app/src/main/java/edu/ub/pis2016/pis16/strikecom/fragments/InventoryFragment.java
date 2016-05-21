@@ -1,8 +1,6 @@
 package edu.ub.pis2016.pis16.strikecom.fragments;
 
 import android.app.DialogFragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -10,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
@@ -19,12 +16,15 @@ import android.widget.TextView;
 import edu.ub.pis2016.pis16.strikecom.FragmentedGameActivity;
 import edu.ub.pis2016.pis16.strikecom.R;;
 import edu.ub.pis2016.pis16.strikecom.gameplay.InventoryItemAdapter;
+import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.Inventory;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.TurretItem;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.UpgradeItem;
 
 
 public class InventoryFragment extends DialogFragment {
+
+	public static StrikeBaseConfig.Model strikeBaseModel = StrikeBaseConfig.Model.MKII;
 
 	protected Inventory inventory;
 
@@ -84,7 +84,20 @@ public class InventoryFragment extends DialogFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_inventory, container);
+		View view;
+		switch(strikeBaseModel){
+			case MKI:
+				view = inflater.inflate(R.layout.fragment_inventory_mk1, container);
+				break;
+			case MKII:
+				view = inflater.inflate(R.layout.fragment_inventory_mk2, container);
+				break;
+			case MKIII:
+				view = inflater.inflate(R.layout.fragment_inventory_mk3, container);
+				break;
+			default:
+				view = inflater.inflate(R.layout.fragment_inventory_mk2, container);
+		}
 
 		itemList = (ListView) view.findViewById(R.id.itemList); // list of items
 		itemDesc = (TextView) view.findViewById(R.id.itemDesc); // description of the item selected from the list

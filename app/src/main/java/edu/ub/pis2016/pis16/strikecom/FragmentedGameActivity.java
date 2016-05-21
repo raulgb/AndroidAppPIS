@@ -31,6 +31,7 @@ import edu.ub.pis2016.pis16.strikecom.fragments.SidebarFragment;
 import edu.ub.pis2016.pis16.strikecom.controller.SidebarEventListener;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.fragments.SlotsFragment;
+import edu.ub.pis2016.pis16.strikecom.gameplay.InventoryItemAdapter;
 import edu.ub.pis2016.pis16.strikecom.gameplay.InventoryManager;
 import edu.ub.pis2016.pis16.strikecom.gameplay.StrikeBase;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
@@ -50,14 +51,18 @@ public class FragmentedGameActivity extends Activity {
 	public HashMap<String, Object> playerState = new HashMap<>();
 	public HashMap<String, Inventory> shopMap = new HashMap<>();
 
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		int selectedConfig = getIntent().getIntExtra("config", 1);
-		SidebarFragment.strikeBaseModel = StrikeBaseConfig.Model.values()[selectedConfig];
-		SlotsFragment.strikeBaseModel = StrikeBaseConfig.Model.values()[selectedConfig];
-		DummyGLScreen.strikeBaseModel = StrikeBaseConfig.Model.values()[selectedConfig];
+		StrikeBaseConfig.Model strikeBaseModel = StrikeBaseConfig.Model.values()[selectedConfig];
+		SidebarFragment.strikeBaseModel = strikeBaseModel;
+		InventoryItemAdapter.strikeBaseModel = strikeBaseModel;
+		InventoryFragment.strikeBaseModel = strikeBaseModel;
+		SlotsFragment.strikeBaseModel = strikeBaseModel;
+		DummyGLScreen.strikeBaseModel = strikeBaseModel;
 
 		// Hide window decorations
 		hideSystemUI();
