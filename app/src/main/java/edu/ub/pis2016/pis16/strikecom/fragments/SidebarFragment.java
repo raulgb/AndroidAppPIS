@@ -54,6 +54,9 @@ public class SidebarFragment extends Fragment {
 			case MKIII:
 				view = inflater.inflate(R.layout.fragment_sidebar_mk3, container, false);
 				break;
+			case MKIV:
+				view = inflater.inflate(R.layout.fragment_sidebar_mk4, container);
+				break;
 			default:
 				view = inflater.inflate(R.layout.fragment_sidebar_mk2, container, false);
 		}
@@ -181,6 +184,51 @@ public class SidebarFragment extends Fragment {
 				btnT6.setBackgroundColor(Color.TRANSPARENT);
 				btnT6.setEnabled(false);
 				break;
+
+			case MKIV:
+				turretSlotsMap.put(0, btnT1);
+				turretSlotsMap.put(1, btnT2);
+				turretSlotsMap.put(2, btnT3);
+				turretSlotsMap.put(3, btnT5);
+				turretSlotsMap.put(4, btnT6);
+
+				btnT1.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						game.getSidebarListener().onClickTurret(0);
+					}
+				});
+
+				btnT2.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						game.getSidebarListener().onClickTurret(1);
+					}
+				});
+
+				btnT3.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						game.getSidebarListener().onClickTurret(2);
+					}
+				});
+
+				btnT4.setBackgroundColor(Color.TRANSPARENT);
+				btnT4.setEnabled(false);
+
+				btnT5.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						game.getSidebarListener().onClickTurret(3);
+					}
+				});
+
+				btnT6.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						game.getSidebarListener().onClickTurret(4);
+					}
+				});
 		}
 
 		// assignations for Minimap, inventory button and upgrade slots are common to every model.

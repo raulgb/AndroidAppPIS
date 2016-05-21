@@ -61,6 +61,8 @@ public class InventoryItemAdapter extends BaseAdapter {
 					break;
 				case MKIII:
 					rowView.setBackgroundResource(R.drawable.frame_retro_mk3);
+				case MKIV:
+					rowView.setBackgroundResource(R.drawable.frame_retro_mk4);
 			}
 
 		}

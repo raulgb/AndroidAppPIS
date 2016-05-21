@@ -95,6 +95,9 @@ public class InventoryFragment extends DialogFragment {
 			case MKIII:
 				view = inflater.inflate(R.layout.fragment_inventory_mk3, container);
 				break;
+			case MKIV:
+				view = inflater.inflate(R.layout.fragment_inventory_mk4, container);
+				break;
 			default:
 				view = inflater.inflate(R.layout.fragment_inventory_mk2, container);
 		}

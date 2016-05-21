@@ -93,6 +93,13 @@ public class SelectMenuActivity extends AppCompatActivity {
 						btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk3);
 						btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk3);
 						break;
+					case MKIV:
+						model = "sbmk4";
+						text.setText(getString(R.string.sel_menu_mk4name));
+						btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk4);
+						btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk4);
+						btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk4);
+						break;
 					default:
 						model = "sbmk2";
 						text.setText(getString(R.string.sel_menu_mk2name));
@@ -132,6 +139,13 @@ public class SelectMenuActivity extends AppCompatActivity {
 						btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk3);
 						btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk3);
 						btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk3);
+						break;
+					case MKIV:
+						model = "sbmk4";
+						text.setText(getString(R.string.sel_menu_mk4name));
+						btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk4);
+						btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk4);
+						btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk4);
 						break;
 					default:
 						model = "sbmk2";

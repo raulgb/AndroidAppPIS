@@ -44,6 +44,9 @@ public class SlotsFragment extends DialogFragment {
 			case MKIII:
 				view = inflater.inflate(R.layout.fragment_slots_mk3, container, false);
 				break;
+			case MKIV:
+				view = inflater.inflate(R.layout.fragment_slots_mk4, container, false);
+				break;
 			default:
 				view = inflater.inflate(R.layout.fragment_slots_mk2, container, false);
 		}
@@ -208,6 +211,46 @@ public class SlotsFragment extends DialogFragment {
 
 				btnT6.setBackgroundColor(Color.TRANSPARENT);
 				btnT6.setEnabled(false);
+				break;
+
+			case MKIV:
+				btnT1.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						selectedSlot = 0;
+					}
+				});
+
+				btnT2.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						selectedSlot = 1;
+					}
+				});
+
+				btnT3.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						selectedSlot = 2;
+					}
+				});
+
+				btnT4.setBackgroundColor(Color.TRANSPARENT);
+				btnT4.setEnabled(false);
+
+				btnT5.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						selectedSlot = 3;
+					}
+				});
+
+				btnT6.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						selectedSlot = 4;
+					}
+				});
 				break;
 		}
 

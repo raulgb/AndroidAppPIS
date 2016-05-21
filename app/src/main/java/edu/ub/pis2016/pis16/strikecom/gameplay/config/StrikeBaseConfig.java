@@ -5,7 +5,8 @@ public class StrikeBaseConfig {
 	public enum Model {
 		MKI,
 		MKII,
-		MKIII
+		MKIII,
+		MKIV
 	}
 
 	public Model model;
@@ -127,6 +128,30 @@ public class StrikeBaseConfig {
 				turret_angle_lim = new float[turret_num][2];
 				turret_angle_lim[0] = new float[]{0, 270};
 				turret_angle_lim[1] = new float[]{90, 0};
+				break;
+
+			case MKIV:
+				// StrikeBase Mark. IV
+				modelName = "sbmk4";
+				turret_num = 5;
+
+				turret_dmg_mult = new float[]{1.4f, 0.95f, 0.95f, 1, 1};
+
+				width_factor = 0.365f;
+				thread_offset = 0.06f;
+
+				turret_offset = new float[turret_num][2];
+				turret_offset[0] = new float[]{-.5208f, 0f};    // Main
+				turret_offset[1] = new float[]{.0625f, .5208f};    // Left
+				turret_offset[2] = new float[]{.7292f, .375f};    // Front left
+				turret_offset[3] = new float[]{.0625f, -.5208f};    // Right
+				turret_offset[4] = new float[]{.7292f, -.375f};    // Front right
+				turret_angle_lim = new float[turret_num][2];
+				turret_angle_lim[0] = new float[]{0, 270};
+				turret_angle_lim[1] = new float[]{90, 0};
+				turret_angle_lim[2] = new float[]{0, 270};
+				turret_angle_lim[3] = new float[]{90, 0};
+				turret_angle_lim[4] = new float[]{0, 270};
 				break;
 
 		}
