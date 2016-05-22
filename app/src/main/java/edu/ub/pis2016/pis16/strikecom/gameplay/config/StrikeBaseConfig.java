@@ -6,7 +6,8 @@ public class StrikeBaseConfig {
 		MKI,
 		MKII,
 		MKIII,
-		MKIV
+		MKIV,
+		MKV
 	}
 
 	public Model model;
@@ -168,6 +169,36 @@ public class StrikeBaseConfig {
 				turret_angle_lim[2] = new float[]{0, 270};
 				turret_angle_lim[3] = new float[]{90, 0};
 				turret_angle_lim[4] = new float[]{0, 270};
+				break;
+
+			case MKV:
+				// StrikeBase Mark. V
+				modelName = "sbmk5";
+				turret_num = 6;
+
+				size_tiles = 4;
+				turret_dmg_mult = new float[]{1, 1, 0.8f, 1.2f, 1, 1};
+
+				thread_offsetX = 0.01563f;
+				thread_offsetY = 0.578f;
+
+				hitbox_factor[0] = 0.9f;
+				hitbox_factor[1] = 0.55f;
+
+				turret_offset = new float[turret_num][2];
+				turret_offset[0] = new float[]{-.2969f, .3125f};    // Rear Left
+				turret_offset[1] = new float[]{.2969f, .3125f};    // Front left
+				turret_offset[2] = new float[]{.8438f, .1563f};     // Hull-mounted
+				turret_offset[3] = new float[]{-.05625f, -.1406f};    // Main
+				turret_offset[4] = new float[]{-.2969f, -.3125f};    // Rear Right
+				turret_offset[5] = new float[]{.2969f, -.3125f};    // Front Right
+				turret_angle_lim = new float[turret_num][2];
+				turret_angle_lim[0] = new float[]{0, 270};
+				turret_angle_lim[1] = new float[]{90, 0};
+				turret_angle_lim[2] = new float[]{0, 270};
+				turret_angle_lim[3] = new float[]{90, 0};
+				turret_angle_lim[4] = new float[]{0, 270};
+				turret_angle_lim[5] = new float[]{0, 270};
 				break;
 
 		}

@@ -252,6 +252,50 @@ public class SlotsFragment extends DialogFragment {
 					}
 				});
 				break;
+
+			case MKV:
+				btnT1.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						selectedSlot = 0;
+					}
+				});
+
+				btnT2.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						selectedSlot = 1;
+					}
+				});
+
+				btnT3.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						selectedSlot = 2;
+					}
+				});
+
+				btnT4.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						selectedSlot = 3;
+					}
+				});
+
+				btnT5.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						selectedSlot = 4;
+					}
+				});
+
+				btnT6.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						selectedSlot = 5;
+					}
+				});
+				break;
 		}
 
 		// Assignations for the upgrade slots are the same regardless the configuration

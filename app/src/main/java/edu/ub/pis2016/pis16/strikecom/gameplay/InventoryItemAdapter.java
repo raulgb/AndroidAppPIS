@@ -2,7 +2,6 @@ package edu.ub.pis2016.pis16.strikecom.gameplay;
 
 import java.util.List;
 import android.content.Context;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,10 +60,13 @@ public class InventoryItemAdapter extends BaseAdapter {
 					break;
 				case MKIII:
 					rowView.setBackgroundResource(R.drawable.frame_retro_mk3);
+					break;
 				case MKIV:
 					rowView.setBackgroundResource(R.drawable.frame_retro_mk4);
+					break;
+				case MKV:
+					rowView.setBackgroundResource(R.drawable.frame_retro_mk5);
 			}
-
 		}
 
 		// Set data into the view.
