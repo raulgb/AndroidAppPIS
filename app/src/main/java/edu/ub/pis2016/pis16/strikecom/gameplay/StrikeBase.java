@@ -7,12 +7,14 @@ import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.AnimatedSprite;
+import edu.ub.pis2016.pis16.strikecom.engine.opengl.OrthoCamera;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Sprite;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureRegion;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.KinematicBody;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Rectangle;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
+import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.CameraBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.TurretBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.TurretItem;
@@ -70,8 +72,11 @@ public class StrikeBase extends Vehicle {
 		String model = cfg.modelName;
 
 		//  Create Physics component
-		float hitSize = cfg.size_tiles * cfg.width_factor;
-		physics = new PhysicsComponent(new KinematicBody(new Rectangle(hitSize, hitSize)));
+		// Width actually signifies the horizontal X axis, as the sprite looks to the right.
+		// Height is from thread to thread.
+		float hitWidth = cfg.size_tiles * cfg.hitbox_factor[0];
+		float hitHeight = cfg.size_tiles * cfg.hitbox_factor[1];
+		physics = new PhysicsComponent(new KinematicBody(new Rectangle(hitWidth, hitHeight)));
 		putComponent(physics);
 
 		// Create sprites
@@ -147,14 +152,16 @@ public class StrikeBase extends Vehicle {
 		rightThreadVel *= 1 - rightThreadDampening * delta;
 		leftThreadVel *= 1 - leftThreadDampening * delta;
 
-		final float width = cfg.width_factor * hull.getSize();
+		// Thread offset is interpreted as the vehicles max pivoting point along its Y axis,
+		// So in some way it's the "width" of the vehicle
+		final float width = cfg.thread_offsetY * hull.getSize();
 		float rotSpeed = (-leftThreadVel + rightThreadVel) / width;
 
 		Vector2 pos = physics.getPosition();
 		float rotation = physics.getRotation();
 
-		leftThreadPos.set(cfg.thread_offset * width, width / 2f).rotate(rotation).add(pos);
-		rightThreadPos.set(cfg.thread_offset * width, -width / 2f).rotate(rotation).add(pos);
+		leftThreadPos.set(cfg.thread_offsetX * width, width / 2f).rotate(rotation).add(pos);
+		rightThreadPos.set(cfg.thread_offsetX * width, -width / 2f).rotate(rotation).add(pos);
 
 		// Pivot around either threads or center
 		if (rightThreadVel > leftThreadVel)
@@ -271,9 +278,25 @@ public class StrikeBase extends Vehicle {
 		turret.setLayer(Screen.LAYER_STRIKEBASE_TURRETS);
 
 		turret.setTag(getTag() + "_" + tName);
-		turret.putComponent(new TurretBehavior());
+
+		// Create a modified turret behavior with camera shake
+		TurretBehavior turretBehavior = new TurretBehavior(){
+			private final Vector2 shakeDir = new Vector2();
+			@Override
+			public void shoot(){
+				float rotation = gameObject.getComponent(PhysicsComponent.class).getRotation();
+				shakeDir.set(1,0).rotate(rotation).scl(-2f);
+
+				super.shoot();
+				screen.getGameObject("OrthoCamera", OrthoCamera.class)
+						.getComponent(CameraBehavior.class)
+						.cameraShake(shakeDir);
+			}
+		};
+		turretBehavior.setTargetTag("enemy");
+
+		turret.putComponent(turretBehavior);
 		turret.cfg = item.getConfig();
-		turret.getComponent(TurretBehavior.class).setTargetTag("enemy");
 		//getComponent(GraphicsComponent.class).getSprite().setSize(GameConfig.TILE_SIZE *2);
 
 		screen.addGameObject(tName, turret);

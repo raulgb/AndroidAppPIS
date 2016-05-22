@@ -3,10 +3,12 @@ package edu.ub.pis2016.pis16.strikecom.engine.opengl;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
+import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 
 /** 2D ortho camera for OpenGL graphics */
-public class OrthoCamera {
+public class OrthoCamera extends GameObject{
 
 	private GLGraphics glGraphics;
 
@@ -31,7 +33,7 @@ public class OrthoCamera {
 		gl.glLoadIdentity();
 	}
 
-	public void update() {
+	public void updateOrtho() {
 		GL10 gl = glGraphics.getGL();
 		gl.glMatrixMode(GL10.GL_PROJECTION);
 		gl.glLoadIdentity();

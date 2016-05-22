@@ -40,10 +40,12 @@ public class StrikeBaseConfig {
 	// SPRITE config
 	/** Size in tiles */
 	public float size_tiles = 2f;
-	/** Percentage of the sprite to take into account for vehicle width, [0-1] */
-	public float width_factor = 1f;
+	/** Portion of the total sprite size to use for the hitbox. First is X axis second is Y axis */
+	public float[] hitbox_factor = {1, 1};
+	/** Where in the sprite are the threads. 1 means the outermost edge, 0 means in the center. [0-1]*/
+	public float thread_offsetY = 1f;
 	/** Ammount to move the thread origin forwards (positive) or backwards (negative) relative to the width. Range [-1,1] */
-	public float thread_offset = 0;
+	public float thread_offsetX = 0;
 
 	// FUEL Consumption
 	/** Fuel used per second moving */
@@ -75,8 +77,12 @@ public class StrikeBaseConfig {
 				turret_dmg_mult = new float[]{1, 1, 1, 1};
 
 				size_tiles = 2.5f;
-				width_factor = 0.825f;
-				thread_offset = 0f;
+
+				thread_offsetY = 0.825f;
+				thread_offsetX = 0f;
+
+				hitbox_factor[0] = 0.95f;
+				hitbox_factor[1] = 0.85f;
 
 				turret_offset = new float[turret_num][2];
 				turret_offset[0] = new float[]{-.1093f, .68f};    // left
@@ -98,8 +104,11 @@ public class StrikeBaseConfig {
 
 				turret_dmg_mult = new float[]{1.15f, 1.15f, 1.7f};
 
-				width_factor = 0.9f;
-				thread_offset = -0.1f;
+				thread_offsetY = 0.9f;
+				thread_offsetX = -0.1f;
+
+				hitbox_factor[0] = 1.05f;
+				hitbox_factor[1] = 0.75f;
 
 				turret_offset = new float[turret_num][2];
 				turret_offset[0] = new float[]{-.5625f, .5f};    // Top Left
@@ -119,8 +128,11 @@ public class StrikeBaseConfig {
 
 				turret_dmg_mult = new float[]{1.2f, 1.1f};
 
-				width_factor = 0.7f;
-				thread_offset = 0f;
+				thread_offsetX = 0f;
+				thread_offsetY = 0.7f;
+
+				hitbox_factor[0] = 0.85f;
+				hitbox_factor[1] = 0.7f;
 
 				turret_offset = new float[turret_num][2];
 				turret_offset[0] = new float[]{-.375f, .1562f};    // Top
@@ -135,10 +147,14 @@ public class StrikeBaseConfig {
 				modelName = "sbmk4";
 				turret_num = 5;
 
+				size_tiles = 3;
 				turret_dmg_mult = new float[]{1.4f, 0.95f, 0.95f, 1, 1};
 
-				width_factor = 0.365f;
-				thread_offset = 0.06f;
+				thread_offsetX = 0.06f;
+				thread_offsetY = 0.365f;
+
+				hitbox_factor[0] = 0.9f;
+				hitbox_factor[1] = 0.55f;
 
 				turret_offset = new float[turret_num][2];
 				turret_offset[0] = new float[]{-.5208f, 0f};    // Main

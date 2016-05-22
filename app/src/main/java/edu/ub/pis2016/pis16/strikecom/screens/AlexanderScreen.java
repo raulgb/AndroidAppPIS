@@ -79,8 +79,14 @@ public class AlexanderScreen extends Screen {
 		Log.i("DUMMY_SCREEN", "Created");
 
 		glGraphics = game.getGLGraphics();
-		camera = new OrthoCamera(glGraphics, glGraphics.getWidth(), glGraphics.getHeight());
+		camera = new OrthoCamera(glGraphics, glGraphics.getWidth(), glGraphics.getHeight()){
+			@Override
+			public void update(float delta) {
+				camera.position.set(strikeBase.getPosition());
+			}
+		};
 		camera.zoom = 1 / getZoomConstant();
+		addGameObject(camera);
 		//camera.zoom = 1 / 8f;
 
 		physics2D = new Physics2D(1024, 1024);
@@ -169,10 +175,6 @@ public class AlexanderScreen extends Screen {
 		for (GameObject go : this.getGameObjects())
 			go.update(delta);
 
-		// Move camera to strikebase
-		camera.position.set(strikeBase.getComponent(PhysicsComponent.class).getPosition());
-		camera.position.add(strikeBase.getComponent(PhysicsComponent.class).getVelocity().scl(0.25f));
-		camera.update();
 	}
 
 	@Override

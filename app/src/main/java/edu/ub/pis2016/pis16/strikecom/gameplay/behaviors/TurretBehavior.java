@@ -120,7 +120,8 @@ public class TurretBehavior extends BehaviorComponent {
 		return tmp.len2() > cfg.range * cfg.range;
 	}
 
-	private void shoot() {
+	/** Override for aditional firing behavior */
+	public void shoot() {
 		// Play fire animation
 		((Turret) gameObject).fireCannon(false);
 

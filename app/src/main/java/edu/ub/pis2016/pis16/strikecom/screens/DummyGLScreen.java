@@ -1,6 +1,7 @@
 package edu.ub.pis2016.pis16.strikecom.screens;
 
 import android.content.Context;
+import android.graphics.Camera;
 import android.util.Log;
 
 import javax.microedition.khronos.opengles.GL10;
@@ -36,6 +37,7 @@ import edu.ub.pis2016.pis16.strikecom.gameplay.Explosion;
 import edu.ub.pis2016.pis16.strikecom.gameplay.ThreadVehicle;
 import edu.ub.pis2016.pis16.strikecom.gameplay.StrikeBase;
 import edu.ub.pis2016.pis16.strikecom.gameplay.Turret;
+import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.CameraBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.TurretBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.VehicleFollowBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig;
@@ -96,11 +98,15 @@ public class DummyGLScreen extends Screen {
 
 		// Create camera, set zoom to fit TILES_ON_SCREEN, rounding to nearest int
 		camera = new OrthoCamera(glGraphics, glGraphics.getWidth(), glGraphics.getHeight());
+		camera.putComponent(new CameraBehavior());
+
 		float zoomFactor = glGraphics.getWidth() / (float) (TILES_ON_SCREEN * TILE_SIZE);
 		camera.zoom = 1f / (int) zoomFactor;
+		camera.setLayer(LAYER_GUI);
+		addGameObject("OrthoCamera", camera);
 
 		physics2D = new Physics2D(MAP_SIZE, MAP_SIZE);
-		batch = new SpriteBatch(game.getGLGraphics(), 512);
+		batch = new SpriteBatch(game.getGLGraphics(), 1024);
 		gameMap = new GameMap(physics2D, TILE_SIZE, 0L, 16, 2, 0.5f);
 		gameMap.setDrawDistance(GameConfig.TILES_ON_SCREEN / 2 + 1);
 
@@ -108,6 +114,8 @@ public class DummyGLScreen extends Screen {
 
 		createGameObjects();
 		commitGameObjectChanges();
+
+		camera.getComponent(CameraBehavior.class).setTracking(strikeBase);
 
 		// Projectile CONTACT LISTENER
 		physics2D.addContactListener(new ContactListener() {
@@ -147,6 +155,9 @@ public class DummyGLScreen extends Screen {
 			private void handleProjectileCollision(GameObject projectile, GameObject other) {
 				//Log.i("Physics2D", "Someone got hit: " + other.hitpoints);
 				other.hitpoints = MathUtils.max(1, other.hitpoints - projectile.hitpoints);
+
+				if (other == strikeBase)
+					camera.getComponent(CameraBehavior.class).cameraShake(1.5f);
 
 				if (other.hitpoints == 1)
 					other.destroy();
@@ -219,14 +230,6 @@ public class DummyGLScreen extends Screen {
 
 		gameMap.update(delta);
 
-		// Sketchy hack to get seamless rendering using the OpenGL camera
-		if (strikeBase.isValid()) {
-			tmp.set(strikeBase.getPosition());
-			tmp.x = (int) (tmp.x * 10) / 10f;
-			tmp.y = (int) (tmp.y * 10) / 10f;
-			camera.position.set(tmp);
-		}
-		camera.update();
 	}
 
 	@Override
@@ -241,7 +244,7 @@ public class DummyGLScreen extends Screen {
 		for (GameObject go : this.getGameObjects())
 			go.draw(batch);
 
-		//physics2D.debugDraw(batch);
+		physics2D.debugDraw(batch);
 
 		batch.end();
 
@@ -252,8 +255,8 @@ public class DummyGLScreen extends Screen {
 		healthBarSprite.setSize(HBWidth, 48);
 		healthBarSprite.draw(batch, glGraphics.getWidth() / 2f, glGraphics.getHeight() - 48);
 		batch.end();
-		camera.update();
 
+		camera.updateOrtho();
 	}
 
 	@Override
