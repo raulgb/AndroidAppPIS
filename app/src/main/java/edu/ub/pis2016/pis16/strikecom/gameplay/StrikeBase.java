@@ -155,7 +155,7 @@ public class StrikeBase extends Vehicle {
 		// Thread offset is interpreted as the vehicles max pivoting point along its Y axis,
 		// So in some way it's the "width" of the vehicle
 		final float width = cfg.thread_offsetY * hull.getSize();
-		float rotSpeed = (-leftThreadVel + rightThreadVel) / width;
+		float rotSpeed = (-leftThreadVel + rightThreadVel) / width * cfg.maneuverability;
 
 		Vector2 pos = physics.getPosition();
 		float rotation = physics.getRotation();

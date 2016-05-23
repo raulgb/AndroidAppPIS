@@ -20,8 +20,6 @@
         android:textIsSelectable="false"
         android:layout_toRightOf="@id/itemImage"
         android:layout_marginLeft="5dp"
-        android:layout_centerInParent="true"
-        android:gravity="center_vertical"
-        android:textAlignment="gravity"/>
+        android:layout_marginTop="16dp"/>
 
 </RelativeLayout>

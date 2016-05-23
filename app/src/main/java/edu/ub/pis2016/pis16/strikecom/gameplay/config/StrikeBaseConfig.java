@@ -38,6 +38,8 @@ public class StrikeBaseConfig {
 	public float accel = 25f;
 	public float max_reverse_speed = -max_speed / 2f;
 
+	public float maneuverability = 0.6f;
+
 	// SPRITE config
 	/** Size in tiles */
 	public float size_tiles = 2f;
@@ -75,6 +77,8 @@ public class StrikeBaseConfig {
 				modelName = "sbmk1";
 				turret_num = 4;
 
+				maneuverability = 0.5f;
+
 				turret_dmg_mult = new float[]{1, 1, 1, 1};
 
 				size_tiles = 2.5f;
@@ -103,13 +107,15 @@ public class StrikeBaseConfig {
 				modelName = "sbmk2";
 				turret_num = 3;
 
+				maneuverability = 0.6f;
+
 				turret_dmg_mult = new float[]{1.15f, 1.15f, 1.7f};
 
 				thread_offsetY = 0.9f;
 				thread_offsetX = -0.1f;
 
 				hitbox_factor[0] = 1.05f;
-				hitbox_factor[1] = 0.75f;
+				hitbox_factor[1] = 0.8f;
 
 				turret_offset = new float[turret_num][2];
 				turret_offset[0] = new float[]{-.5625f, .5f};    // Top Left
@@ -126,6 +132,8 @@ public class StrikeBaseConfig {
 				// StrikeBase Mark. III
 				modelName = "sbmk3";
 				turret_num = 2;
+
+				maneuverability = 0.75f;
 
 				turret_dmg_mult = new float[]{1.2f, 1.1f};
 
@@ -148,6 +156,8 @@ public class StrikeBaseConfig {
 				modelName = "sbmk4";
 				turret_num = 5;
 
+				maneuverability = 0.4f;
+
 				size_tiles = 3;
 				turret_dmg_mult = new float[]{1.4f, 0.95f, 0.95f, 1, 1};
 
@@ -155,7 +165,7 @@ public class StrikeBaseConfig {
 				thread_offsetY = 0.365f;
 
 				hitbox_factor[0] = 0.9f;
-				hitbox_factor[1] = 0.55f;
+				hitbox_factor[1] = 0.6f;
 
 				turret_offset = new float[turret_num][2];
 				turret_offset[0] = new float[]{-.5208f, 0f};    // Main
@@ -176,6 +186,8 @@ public class StrikeBaseConfig {
 				modelName = "sbmk5";
 				turret_num = 6;
 
+				maneuverability = 0.25f;
+
 				size_tiles = 4;
 				turret_dmg_mult = new float[]{1, 1, 0.8f, 1.2f, 1, 1};
 
@@ -183,15 +195,15 @@ public class StrikeBaseConfig {
 				thread_offsetY = 0.578f;
 
 				hitbox_factor[0] = 0.9f;
-				hitbox_factor[1] = 0.55f;
+				hitbox_factor[1] = 0.6f;
 
 				turret_offset = new float[turret_num][2];
-				turret_offset[0] = new float[]{-.2969f, .3125f};    // Rear Left
-				turret_offset[1] = new float[]{.2969f, .3125f};    // Front left
+				turret_offset[0] = new float[]{-.2969f, .5469f};    // Rear Left
+				turret_offset[1] = new float[]{.2969f, .5469f};    // Front left
 				turret_offset[2] = new float[]{.8438f, .1563f};     // Hull-mounted
-				turret_offset[3] = new float[]{-.05625f, -.1406f};    // Main
-				turret_offset[4] = new float[]{-.2969f, -.3125f};    // Rear Right
-				turret_offset[5] = new float[]{.2969f, -.3125f};    // Front Right
+				turret_offset[3] = new float[]{-.5625f, -.1406f};    // Main
+				turret_offset[4] = new float[]{-.2969f, -.5469f};    // Rear Right
+				turret_offset[5] = new float[]{.2969f, -.5469f};    // Front Right
 				turret_angle_lim = new float[turret_num][2];
 				turret_angle_lim[0] = new float[]{0, 270};
 				turret_angle_lim[1] = new float[]{90, 0};

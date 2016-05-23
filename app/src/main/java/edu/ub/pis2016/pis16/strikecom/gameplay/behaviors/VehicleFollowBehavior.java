@@ -58,7 +58,12 @@ public class VehicleFollowBehavior extends BehaviorComponent {
 
 	/** Set the position to go to. if {@code null} is passed, will stop immediately. */
 	public void setTarget(GameObject go) {
-		// TODO Implement
+		if (go == null) {
+			this.target.set(gameObject.getPosition());
+		} else {
+			this.target.set(go.getPosition());
+		}
+		moveOrder = true;
 	}
 
 	/** Set the max tracking distance */

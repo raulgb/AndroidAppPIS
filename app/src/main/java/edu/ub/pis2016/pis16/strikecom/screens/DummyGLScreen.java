@@ -363,7 +363,8 @@ public class DummyGLScreen extends Screen {
 				if (!strikeBase.isValid())
 					return;
 				VehicleFollowBehavior vfb = gameObject.getComponent(VehicleFollowBehavior.class);
-				vfb.setTarget(strikeBase.getPosition());
+				//vfb.setTarget(strikeBase.getPosition());
+				vfb.setTarget(strikeBase);
 			}
 		});
 		enemyTank.cfg.maxSpeed = 8f;
