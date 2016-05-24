@@ -210,8 +210,6 @@ public class DummyGLScreen extends Screen {
 					strikeBase.getComponent(VehicleFollowBehavior.class).setTarget(targetPos);
 			}
 		});
-
-		Texture.reloadManagedTextures();
 	}
 
 	WindowedMean fpsMean = new WindowedMean(30);
@@ -282,6 +280,7 @@ public class DummyGLScreen extends Screen {
 	public void resume() {
 		Log.i("DUMMY_SCREEN", "Resumed");
 
+		Texture.reloadManagedTextures();
 		GL10 gl = game.getGLGraphics().getGL();
 		gl.glClearColor(.25f, .75f, .25f, 1f);
 	}

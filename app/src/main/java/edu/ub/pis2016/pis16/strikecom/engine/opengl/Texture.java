@@ -107,21 +107,28 @@ public class Texture implements Disposable {
 
 	// OpenGL context loss prevention methods
 
+	private static final Object reloadingTextures = new Object();
+
 	public static void addManagedTexture(Texture t) {
-		managedTextures.add(t);
+		synchronized (reloadingTextures) {
+			managedTextures.add(t);
+//			reloadingTextures.notifyAll();
+		}
 	}
 
 	public static void removeManagedTexture(Texture t) {
-		managedTextures.removeValue(t);
+		synchronized (reloadingTextures) {
+			managedTextures.removeValue(t);
+//			reloadingTextures.notifyAll();
+		}
 	}
-
-	private static final Object reloadingTextures = new Object();
 
 	public static void reloadManagedTextures() {
 		Log.i("Texture", "Reloaded all managed textures");
 		synchronized (reloadingTextures) {
 			for (Texture t : managedTextures)
 				t.reload();
+//				reloadingTextures.notifyAll();
 		}
 	}
 

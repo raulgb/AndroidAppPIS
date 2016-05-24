@@ -9,7 +9,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 23
         versionCode 1
-        versionName "1.0"
+        versionName "0.8a"
     }
     buildTypes {
         release {
@@ -21,6 +21,6 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'junit:junit:4.12'
+    //compile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.3.0'
 }
