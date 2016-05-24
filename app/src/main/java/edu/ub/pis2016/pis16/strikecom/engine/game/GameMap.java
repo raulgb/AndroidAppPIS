@@ -1,22 +1,24 @@
 package edu.ub.pis2016.pis16.strikecom.engine.game;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
+import android.os.Environment;
+import android.util.Log;
 
+import edu.ub.pis2016.pis16.strikecom.engine.framework.FileIO;
+import edu.ub.pis2016.pis16.strikecom.engine.framework.Game;
 import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.AnimatedSprite;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Sprite;
-import edu.ub.pis2016.pis16.strikecom.engine.opengl.Texture;
-import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureRegion;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Physics2D;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Perlin2D;
@@ -286,7 +288,12 @@ public class GameMap {
 		}
 	}
 
-	public void createMiniMap(Vector2 center){
+	/**
+	 * creates a .png image of current map of the game, to be used in UI/map
+	 * @param center current position of StrikeBase,
+	 */
+	public void createMiniMap(Vector2 center,Game game){
+
 		Color color=new Color();
 		Bitmap.Config conf = Bitmap.Config.ARGB_8888; // see other conf types
 		Bitmap bmp = Bitmap.createBitmap(width, height, conf); // this creates a MUTABLE bitmap
@@ -298,21 +305,25 @@ public class GameMap {
 						bmp.setPixel(x, y, color.BLACK);
 					}
 				}else {
-					bmp.setPixel(x,y,color.WHITE);
+					bmp.setPixel(x, y, color.WHITE);// undiscovered area
 				}
 			}
 
 		}
 
-/*
-		FileOutputStream out = null;
+
+
+		FileIO fio=game.getFileIO();
+		OutputStream out = null;
+
 		try {
-			out = new FileOutputStream();
-			bmp.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+			//out = new FileOutputStream(getOutputMediaFile());
+			//game.getFileIO().writeFile();
+			bmp.compress(Bitmap.CompressFormat.PNG, 100, fio.writeFile("sprites/gameMap.png")); // bmp is your Bitmap instance
 			// PNG is a lossless format, the compression factor (100) is ignored
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
+		} /*finally {
 			try {
 				if (out != null) {
 					out.close();
@@ -335,5 +346,6 @@ public class GameMap {
 			return -16776961; //BLUE - water
 
 	}
+
 
 }//android drawables
