@@ -1,32 +1,57 @@
 package edu.ub.pis2016.pis16.strikecom.screens;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Camera;
 import android.util.Log;
+
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import edu.ub.pis2016.pis16.strikecom.FragmentedGameActivity;
 import edu.ub.pis2016.pis16.strikecom.StrikeComGLGame;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Game;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.InputProcessor;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.engine.game.GameMap;
 import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
+import edu.ub.pis2016.pis16.strikecom.engine.game.component.BehaviorComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.GraphicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
+import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
+import edu.ub.pis2016.pis16.strikecom.engine.math.WindowedMean;
+import edu.ub.pis2016.pis16.strikecom.engine.opengl.GLGameFragment;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.GLGraphics;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.OrthoCamera;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Sprite;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Texture;
+import edu.ub.pis2016.pis16.strikecom.engine.physics.Body;
+import edu.ub.pis2016.pis16.strikecom.engine.physics.Circle;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.ContactListener;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Physics2D;
+import edu.ub.pis2016.pis16.strikecom.engine.physics.Rectangle;
+import edu.ub.pis2016.pis16.strikecom.engine.physics.Shape;
+import edu.ub.pis2016.pis16.strikecom.engine.physics.StaticBody;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
-import edu.ub.pis2016.pis16.strikecom.engine.util.Pool;
+import edu.ub.pis2016.pis16.strikecom.gameplay.Explosion;
+import edu.ub.pis2016.pis16.strikecom.gameplay.ThreadVehicle;
 import edu.ub.pis2016.pis16.strikecom.gameplay.StrikeBase;
-import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.ProjectileBehavior;
+import edu.ub.pis2016.pis16.strikecom.gameplay.Turret;
+import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.CameraBehavior;
+import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.TurretBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.VehicleFollowBehavior;
+import edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
+import edu.ub.pis2016.pis16.strikecom.gameplay.config.TurretConfig;
+
+import static edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig.*;
 
 /**
  * Dummy OpenGL screen.
@@ -46,126 +71,184 @@ import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
  */
 public class AlexanderScreen extends Screen {
 
+	/** Total Seconds the Game has lasted */
 	float secondsElapsed;
+	private int drawMapCounter;
 
-	GLGraphics glGraphics;
+	private GLGraphics glGraphics;
+	private SpriteBatch batch;
+
 	OrthoCamera camera;
-	SpriteBatch batch;
 
 	Physics2D physics2D;
-
-	GameObject moveIcon;
-	StrikeBase strikeBase;
-
-	Sprite grass;
-	Sprite g0;
-	Sprite g1;
-	Sprite g2;
-	Sprite g3;
-	Sprite g4;
-	Sprite g5;
-	Sprite g6;
-	Sprite g7;
 	GameMap gameMap;
 
+	GameObject moveIcon;
 
-	public Pool<GameObject> projectilePool;
+	Sprite healthBarSprite;
+	StrikeBase strikeBase;
+
+	FragmentedGameActivity activity;
+
 
 	private Vector2 targetPos = new Vector2();
 	private Vector2 tmp = new Vector2();
+	boolean currentShopContact = false;
+	boolean pastShopContact = false;
 
-	public AlexanderScreen(Game game) {
+	public AlexanderScreen(final Game game) {
 		super(game);
 		Log.i("DUMMY_SCREEN", "Created");
+		drawMapCounter=0;
 
 		glGraphics = game.getGLGraphics();
-		camera = new OrthoCamera(glGraphics, glGraphics.getWidth(), glGraphics.getHeight()){
-			@Override
-			public void update(float delta) {
-				camera.position.set(strikeBase.getPosition());
-			}
-		};
-		camera.zoom = 1 / getZoomConstant();
-		addGameObject(camera);
-		//camera.zoom = 1 / 8f;
 
-		physics2D = new Physics2D(1024, 1024);
-		batch = new SpriteBatch(game.getGLGraphics(), 8192*2);
+		activity = (FragmentedGameActivity) ((GLGameFragment) game).getActivity();
 
-		projectilePool = new Pool<>(new Pool.PoolObjectFactory<GameObject>() {
-			@Override
-			public GameObject createObject() {
-				// Create a Bullet gameObject
-				GameObject projectile = new GameObject();
-				projectile.setLayer(Screen.LAYER_PROJECTILES);
-				projectile.putComponent(new PhysicsComponent());
-				projectile.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("bullet")));
-				projectile.getComponent(GraphicsComponent.class).getSprite().setScale(0.3f);
-				projectile.putComponent(new ProjectileBehavior());
-				return projectile;
-			}
-		}, 64);
+		// Create camera, set zoom to fit TILES_ON_SCREEN, rounding to nearest int
+		camera = new OrthoCamera(glGraphics, glGraphics.getWidth(), glGraphics.getHeight());
+		camera.putComponent(new CameraBehavior());
 
-		strikeBase = new StrikeBase(new StrikeBaseConfig(StrikeBaseConfig.Model.MKII));
-		strikeBase.putComponent(new VehicleFollowBehavior());
-		strikeBase.setTag("player");
-		strikeBase.setLayer(LAYER_VEHICLES);
-		strikeBase.getComponent(PhysicsComponent.class).body.position.set(512, 512);
-		addGameObject("StrikeBase", strikeBase);
+		float zoomFactor = glGraphics.getWidth() / (float) (TILES_ON_SCREEN * TILE_SIZE);
+		camera.zoom = 1f / (int) zoomFactor;
+		camera.setLayer(LAYER_GUI);
+		addGameObject("OrthoCamera", camera);
 
-		moveIcon = new GameObject();
-		moveIcon.setLayer(LAYER_GUI);
-		moveIcon.putComponent(new PhysicsComponent());
-		moveIcon.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("cursor_move")));
-		moveIcon.getComponent(GraphicsComponent.class).getSprite().setScale(0.3f);
-		addGameObject("MoveIcon", moveIcon);
+		physics2D = new Physics2D(MAP_SIZE, MAP_SIZE);
+		batch = new SpriteBatch(game.getGLGraphics(), 1024);
+		gameMap = new GameMap(physics2D, TILE_SIZE, 0L, 16, 2, 0.5f);
+		gameMap.setDrawDistance(GameConfig.TILES_ON_SCREEN / 2 + 1);
 
-		grass = new Sprite(Assets.SPRITE_ATLAS.getRegion("grass"));
-		g0 = new Sprite(Assets.SPRITE_ATLAS.getRegion("gray",0));
-		g1 = new Sprite(Assets.SPRITE_ATLAS.getRegion("gray",1));
-		g2 = new Sprite(Assets.SPRITE_ATLAS.getRegion("gray",2));
-		g3 = new Sprite(Assets.SPRITE_ATLAS.getRegion("gray",3));
-		g4 = new Sprite(Assets.SPRITE_ATLAS.getRegion("gray",4));
-		g5 = new Sprite(Assets.SPRITE_ATLAS.getRegion("gray",5));
-		g6 = new Sprite(Assets.SPRITE_ATLAS.getRegion("gray",6));
-		g7 = new Sprite(Assets.SPRITE_ATLAS.getRegion("gray",7));
+		healthBarSprite = new Sprite(Assets.SPRITE_ATLAS.getRegion("healthbar", 0));
 
-		// TODO Changed Constructur
-		gameMap = new GameMap(physics2D,16,1337,16,2,0.5f);
+		createGameObjects();
+		commitGameObjectChanges();
 
+		camera.getComponent(CameraBehavior.class).setTracking(strikeBase);
+
+		// Projectile CONTACT LISTENER
 		physics2D.addContactListener(new ContactListener() {
 			@Override
 			public void onCollision(CollisionEvent ce) {
-				Log.d("Collision", ce.a.userData.toString() + " with " + ce.b.userData.toString());
+				GameObject goA = (GameObject) ce.a.userData;
+				GameObject goB = (GameObject) ce.b.userData;
+
+				// Skip gameobjects in the same group / same faction
+				if ((goA.group & goB.group) != 0)
+					return;
+
+				if (goA.getTag().contains("proj") && !goB.getTag().contains("proj"))
+					if (!goA.getTag().contains(goB.getTag())) {
+						handleProjectileCollision(goA, goB);
+					}
+				if (goB.getTag().contains("proj") && !goA.getTag().contains("proj"))
+					if (!goB.getTag().contains(goA.getTag())) {
+						handleProjectileCollision(goB, goA);
+					}
+
+				if (goA.getTag().contains("shop") && goB.getTag().equals("player_strikebase")) {
+					if (!pastShopContact) {
+						activity.showShopDialog(goA.getTag());
+					}
+					currentShopContact = true;
+				}
+				if (goB.getTag().contains("shop") && goA.getTag().equals("player_strikebase")) {
+					if (!pastShopContact) {
+						activity.showShopDialog(goB.getTag());
+					}
+					currentShopContact = true;
+				}
+
+			}
+
+			private void handleProjectileCollision(GameObject projectile, GameObject other) {
+				//Log.i("Physics2D", "Someone got hit: " + other.hitpoints);
+				other.hitpoints = MathUtils.max(1, other.hitpoints - projectile.hitpoints);
+
+				if (other == strikeBase)
+					camera.getComponent(CameraBehavior.class).cameraShake(1.5f);
+
+				if (other.hitpoints == 1)
+					other.destroy();
+
+				projectile.destroy();
+
 			}
 		});
 
+		// Move order Input
 		addInputProcessor(new InputProcessor() {
 			@Override
-			public boolean touchUp(float x, float y, int pointer) {
-				return false;
-			}
-
-			@Override
 			public boolean touchDown(float x, float y, int pointer) {
+				moveOrder(x, y);
 				return false;
 			}
 
 			@Override
 			public boolean touchDragged(float x, float y, int pointer) {
+				moveOrder(x, y);
+				return false;
+			}
+
+			private void moveOrder(float x, float y) {
 				targetPos.set(x, y);
 				camera.unproject(targetPos);
-				strikeBase.getComponent(VehicleFollowBehavior.class).setTarget(targetPos);
-				Log.i("TOUCH", targetPos.toString());
-				moveIcon.getComponent(PhysicsComponent.class).setPosition(targetPos);
-				return true;
+				moveIcon.setPosition(targetPos);
+
+				GameObject strikeBase = getGameObject("StrikeBase");
+				if (strikeBase != null)
+					strikeBase.getComponent(VehicleFollowBehavior.class).setTarget(targetPos);
 			}
 		});
+
+		Texture.reloadManagedTextures();
+
+		try {
+
+			Activity act = ((GLGameFragment)game).getActivity();
+			//File fileDir = gameAct.getFilesDir();
+			//File file = new File(fileDir, "text.txt");
+
+			OutputStream fout = act.openFileOutput("testname.txt", Context.MODE_PRIVATE);
+			String string = "Test string";
+			fout.write(string.getBytes());
+			fout.close();
+
+
+			//			OutputStream fileOut = game.getFileIO().writeFile("test.txt");
+//			OutputStreamWriter file = new OutputStreamWriter(fileOut);
+//			file.write("test", 0,4);
+//			file.close();
+
+		}catch (Exception e){
+			e.printStackTrace();
+		}
 	}
+
+	WindowedMean fpsMean = new WindowedMean(30);
+	float secondsCounter = 0;
 
 	@Override
 	public void update(float delta) {
+		if (gamePaused)
+			return;
+
+		// Slow-motion
+//		delta *= 1 / 2f;
+
 		super.update(delta);
+
+		pastShopContact = currentShopContact;
+		currentShopContact = false;
+
+		// FPS Counter
+		fpsMean.addValue(delta);
+		secondsCounter += delta;
+		if (secondsCounter > 5) {
+			secondsCounter -= 5;
+			Log.i("FPS", "" + MathUtils.roundPositive(1f / fpsMean.getMean()));
+		}
+
 		secondsElapsed += delta;
 
 		// Step physics simulation
@@ -175,65 +258,44 @@ public class AlexanderScreen extends Screen {
 		for (GameObject go : this.getGameObjects())
 			go.update(delta);
 
+		gameMap.update(delta);
+
 	}
 
 	@Override
 	public void present(float delta) {
 		GL10 gl = game.getGLGraphics().getGL();
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		int tmpX;
-		int tmpY;
+
 		batch.begin(Assets.SPRITE_ATLAS.getTexture());
 
-		// Draw terrain
-		/*
-		int[] pos= gameMap.getRelativePosition();
-		//Log.d("SB pos in sprites", String.valueOf(pos[0])+" "+String.valueOf(pos[1]));
-		for (int y = 0; y < 32; y++) {
-			tmpY=pos[1]-16+y;
-			for (int x = 0; x < 40; x++) {
-				tmpX = pos[0] - 20 + x;
-				if (tmpX < 0 || tmpX>1023 || tmpY<0 || tmpY>1023) {
-					g0.draw(batch, 16 + tmpX * 7.99f, 16 + tmpY * 7.99f);
-				} else {
-					if (gameMap.getPTable()[tmpX][tmpY] < -0.25f) {
-						g0.draw(batch, 16 + tmpX * 7.99f, 16 + tmpY * 7.99f);
-					} else if (gameMap.getPTable()[tmpX][tmpY] < -0.5f) {
-						g1.draw(batch, 16 + tmpX * 7.99f, 16 + tmpY * 7.99f);
-					} else if (gameMap.getPTable()[tmpX][tmpY] < -0.25f) {
-						g2.draw(batch, 16 + tmpX * 7.99f, 16 + tmpY *
-								7.99f);
-					} else if (gameMap.getPTable()[tmpX][tmpY] < 0.0f) {
-						g3.draw(batch, 16 + tmpX * 7.99f, 16 + tmpY * 7.99f);
-					} else if (gameMap.getPTable()[tmpX][tmpY] < 0.25f) {
-						g4.draw(batch, 16 + tmpX * 7.99f, 16 + tmpY * 7.99f);
-					} else if (gameMap.getPTable()[tmpX][tmpY] < 0.5f) {
-						g5.draw(batch, 16 + tmpX * 7.99f, 16 + tmpY * 7.99f);
-					} else if (gameMap.getPTable()[tmpX][tmpY] < 0.75f) {
-						g6.draw(batch, 16 + tmpX * 7.99f, 16 + tmpY * 7.99f);
-					} else {
-						g7.draw(batch, 16 + tmpX * 7.99f, 16 + tmpY * 7.99f);
-					}
-				}
-			}
-		}
-		*/
-		gameMap.draw(batch, strikeBase.getPosition());
-
+		gameMap.draw(batch, camera.position);
 
 		for (GameObject go : this.getGameObjects())
 			go.draw(batch);
-		//todo control minimap drawing by a button from  sidebar
-		gameMap.drawMiniMap(batch, strikeBase.getPosition());
+
+		physics2D.debugDraw(batch);
 
 		batch.end();
-	}
 
+		// Draw healthbar
+		camera.GUIProjection();
+		batch.begin(Assets.SPRITE_ATLAS.getTexture());
+		float HBWidth = glGraphics.getWidth() * 0.8f * ((float) strikeBase.hitpoints / strikeBase.maxHitpoints);
+		healthBarSprite.setSize(HBWidth, 48);
+		healthBarSprite.draw(batch, glGraphics.getWidth() / 2f, glGraphics.getHeight() - 48);
+		batch.end();
+
+		camera.updateOrtho();
+		drawMapCounter++;
+		if ((drawMapCounter%120)==0){
+			gameMap.createMiniMap(camera.position,game);
+		}
+	}
 
 	@Override
 	public void resume() {
 		Log.i("DUMMY_SCREEN", "Resumed");
-		Texture.reloadManagedTextures();
 
 		GL10 gl = game.getGLGraphics().getGL();
 		gl.glClearColor(.25f, .75f, .25f, 1f);
@@ -261,6 +323,163 @@ public class AlexanderScreen extends Screen {
 		return physics2D;
 	}
 
+	private void createGameObjects() {
+		// ------ SHOP -----------------
+		GameObject shop = new GameObject();
+		shop.putComponent(new PhysicsComponent(new StaticBody(new Rectangle(1.5f, 1.5f))));
+		shop.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("shop")));
+		shop.setTag("shop_1");
+		shop.hitpoints = 9999;
+		shop.setLayer(LAYER_BACKGROUND);
+		shop.setPosition((MAP_SIZE / 2f - 4) * TILE_SIZE, MAP_SIZE / 2f * TILE_SIZE);
+		addGameObject("shop_1", shop);
+
+		// ------ STRIKEBASE CONFIG ------------
+		strikeBase = new StrikeBase(new StrikeBaseConfig(strikeBaseModel));
+		strikeBase.putComponent(new VehicleFollowBehavior());
+		strikeBase.getComponent(VehicleFollowBehavior.class).setMinRange(1.5f * TILE_SIZE);
+		strikeBase.setTag("player_strikebase");
+		strikeBase.setLayer(LAYER_STRIKEBASE);
+		strikeBase.setPosition(MAP_SIZE / 2f * TILE_SIZE, MAP_SIZE / 2f * TILE_SIZE);
+		strikeBase.group = GROUP_PLAYER;
+		strikeBase.hitpoints = 500;
+		strikeBase.maxHitpoints = 500;
+		strikeBase.killable = true;
+		addGameObject("StrikeBase", strikeBase);
+
+		// ------ MOVE ICON CONFIG ------------
+		moveIcon = new GameObject();
+		moveIcon.setLayer(LAYER_BUILDING_BOTTOM);
+		moveIcon.putComponent(new PhysicsComponent());
+		moveIcon.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("cursor_move")));
+		moveIcon.getComponent(GraphicsComponent.class).getSprite().setScale(0.3f);
+		addGameObject("MoveIcon", moveIcon);
+
+		createEnemy();
+		createEnemy();
+	}
+
+	/** Create a new tank enemy which spawns somewhere random on the map */
+	private void createEnemy() {
+		// Create 2 new enemies on death
+		final ThreadVehicle enemyTank = new ThreadVehicle() {
+			@Override
+			public void destroy() {
+				super.destroy();
+
+				Explosion explosion = new Explosion("explosion_tank");
+				explosion.setPosition(this.getPosition());
+				addGameObject(explosion);
+
+				// Add Scrap to Player
+				FragmentedGameActivity gameActivity = (FragmentedGameActivity) ((GLGameFragment) game).getActivity();
+
+				int scrap = (int) gameActivity.playerState.get("SCRAP");
+				gameActivity.playerState.put("SCRAP", scrap + this.maxHitpoints);
+
+				// Spawn one more enemy, and maybe another one
+				createEnemy();
+				if (Math.random() > 0.5f)
+					createEnemy();
+			}
+		};
+		enemyTank.group = GROUP_RAIDERS;
+		enemyTank.hitpoints = 20;
+		enemyTank.maxHitpoints = 20;
+		enemyTank.killable = true;
+		enemyTank.setTag("enemy_tank");
+		enemyTank.putComponent(new VehicleFollowBehavior());
+		enemyTank.getComponent(VehicleFollowBehavior.class).setMaxRange(16 * TILE_SIZE);
+		enemyTank.getComponent(VehicleFollowBehavior.class).setMinRange(3 * TILE_SIZE);
+		enemyTank.putComponent(new BehaviorComponent() {
+			@Override
+			public void update(float delta) {
+				if (!strikeBase.isValid())
+					return;
+				VehicleFollowBehavior vfb = gameObject.getComponent(VehicleFollowBehavior.class);
+				//vfb.setTarget(strikeBase.getPosition());
+				vfb.setTarget(strikeBase);
+			}
+		});
+		enemyTank.cfg.maxSpeed = 8f;
+		enemyTank.cfg.accel = 4.5f;
+
+		String tankIdentifier = addGameObject(enemyTank);
+		// ------ TANK TURRET -----
+		Turret turret = new Turret("enemy_turret", enemyTank, "turret");
+
+		// Configure enemy damage and stuff here
+		turret.cfg = new TurretConfig(TurretConfig.Type.TURRET_CANNON);
+		turret.putComponent(new TurretBehavior());
+
+		// Bigger cannon
+		turret.getComponent(GraphicsComponent.class).getSprite().setSize(1.4f * GameConfig.TILE_SIZE);
+		turret.getComponent(TurretBehavior.class).setTargetTag("player");
+		turret.setLayer(Screen.LAYER_VEHICLE_TURRET);
+		addGameObject(turret);
+
+		// Spawn it somewhere random, but not in view of the player, but not too far off the player
+		tmp.set(strikeBase.getPosition());
+		while (tmp.dst(strikeBase.getPosition()) < GameConfig.TILES_ON_SCREEN / 2f * TILE_SIZE
+				|| tmp.dst(strikeBase.getPosition()) > GameConfig.TILES_ON_SCREEN * TILE_SIZE) {
+			float randX = MathUtils.random(physics2D.getWorldWidth() * 0.2f, physics2D.getWorldWidth() * 0.8f) * TILE_SIZE;
+			float randY = MathUtils.random(physics2D.getWorldHeight() * 0.2f, physics2D.getWorldHeight() * 0.8f) * TILE_SIZE;
+			tmp.set(randX, randY);
+		}
+
+		enemyTank.getComponent(PhysicsComponent.class).setPosition(tmp);
+		// Add a healthbar for the new tank
+		addHealthBar(tankIdentifier);
+	}
+
+	private void addHealthBar(final String gameObjIdentifier) {
+		final GameObject healthBar = new GameObject();
+		healthBar.putComponent(new PhysicsComponent());
+		healthBar.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("healthbar", 0)));
+		healthBar.setLayer(LAYER_GUI);
+		healthBar.putComponent(new BehaviorComponent() {
+			public void init() {
+				// Put parent adquisition here for delayed start, otherwise it would crash if we'd add
+				// one object after the other
+				GameObject owner = getGameObject(gameObjIdentifier);
+				gameObject.setParent(owner);
+			}
+
+			@Override
+			public void update(float delta) {
+				GameObject owner = gameObject.getParent();
+				if (!owner.hasComponent(GraphicsComponent.class))
+					return;
+
+				Sprite selfSprite = gameObject.getComponent(GraphicsComponent.class).getSprite();
+				Sprite ownerSprite = owner.getComponent(GraphicsComponent.class).getSprite();
+				gameObject.setPosition(owner.getPosition().add(0, ownerSprite.getSize() * 0.6f));
+
+				float healthPerc = 100 * (float) owner.hitpoints / owner.maxHitpoints;
+
+				if (healthPerc > 75)
+					Assets.SPRITE_ATLAS.getRegion("healthbar", 0);
+				else if (healthPerc > 50)
+					Assets.SPRITE_ATLAS.getRegion("healthbar", 1);
+				else if (healthPerc > 25)
+					Assets.SPRITE_ATLAS.getRegion("healthbar", 2);
+				else
+					Assets.SPRITE_ATLAS.getRegion("healthbar", 3);
+
+				healthPerc /= 100;
+
+				// Set the healthbar width to the parent's width * perc health
+				selfSprite.setSize(healthPerc * ownerSprite.getSize(), 0.15f * TILE_SIZE);
+			}
+		});
+		// Add to Screen
+		addGameObject(healthBar);
+	}
+
+	private void removeEnemy(GameObject enemy) {
+
+	}
+
 	@Deprecated
 	private float getZoomConstant() {
 		Context ctx = ((StrikeComGLGame) game).getActivity().getApplicationContext();
@@ -281,3 +500,6 @@ public class AlexanderScreen extends Screen {
 	}
 
 }
+//https://developer.android.com/training/basics/data-storage/files.html
+//https://developer.android.com/training/basics/data-storage/files.html
+//http://stackoverflow.com/questions/6301493/get-path-of-android-resource
