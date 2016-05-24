@@ -128,6 +128,7 @@ public class DummyGLScreen extends Screen {
 				if ((goA.group & goB.group) != 0)
 					return;
 
+				// projectile vs non-projectile
 				if (goA.getTag().contains("proj") && !goB.getTag().contains("proj"))
 					if (!goA.getTag().contains(goB.getTag())) {
 						handleProjectileCollision(goA, goB);
@@ -137,6 +138,7 @@ public class DummyGLScreen extends Screen {
 						handleProjectileCollision(goB, goA);
 					}
 
+				// strikebase vs shop
 				if (goA.getTag().contains("shop") && goB.getTag().equals("player_strikebase")) {
 					if (!pastShopContact) {
 						activity.showShopDialog(goA.getTag());
@@ -150,6 +152,23 @@ public class DummyGLScreen extends Screen {
 					currentShopContact = true;
 				}
 
+				// strikebase vs enemy
+				if (goA.getTag().equals("player_strikebase") && goB.getTag().contains("enemy"))
+					handleStrikebaseCollision(goA, goB);
+
+				if (goB.getTag().equals("player_strikebase") && goA.getTag().contains("enemy"))
+					handleStrikebaseCollision(goB, goA);
+
+			}
+
+			private void handleStrikebaseCollision(GameObject strikebase, GameObject other){
+				if(other.getTag().contains("proj"))
+					return;
+
+				camera.getComponent(CameraBehavior.class).cameraShake(1.5f);
+
+				strikebase.hitpoints -= other.hitpoints/2;
+				other.destroy();
 			}
 
 			private void handleProjectileCollision(GameObject projectile, GameObject other) {
@@ -244,7 +263,7 @@ public class DummyGLScreen extends Screen {
 		for (GameObject go : this.getGameObjects())
 			go.draw(batch);
 
-		physics2D.debugDraw(batch);
+		//physics2D.debugDraw(batch);
 
 		batch.end();
 

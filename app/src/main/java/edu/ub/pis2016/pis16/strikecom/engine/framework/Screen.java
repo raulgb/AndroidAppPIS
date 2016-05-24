@@ -257,4 +257,8 @@ public abstract class Screen implements Disposable {
 	public boolean hasGameObject(GameObject go) {
 		return (goOrderedList.contains(go, true));
 	}
+
+	public Game getGame() {
+		return game;
+	}
 }

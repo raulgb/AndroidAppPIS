@@ -280,20 +280,9 @@ public class StrikeBase extends Vehicle {
 		turret.setTag(getTag() + "_" + tName);
 
 		// Create a modified turret behavior with camera shake
-		TurretBehavior turretBehavior = new TurretBehavior(){
-			private final Vector2 shakeDir = new Vector2();
-			@Override
-			public void shoot(){
-				float rotation = gameObject.getComponent(PhysicsComponent.class).getRotation();
-				shakeDir.set(1,0).rotate(rotation).scl(-2f);
-
-				super.shoot();
-				screen.getGameObject("OrthoCamera", OrthoCamera.class)
-						.getComponent(CameraBehavior.class)
-						.cameraShake(shakeDir);
-			}
-		};
+		TurretBehavior turretBehavior = new TurretBehavior();
 		turretBehavior.setTargetTag("enemy");
+		turretBehavior.setAngleLimit(cfg.turret_angle_lim[slot][0], cfg.turret_angle_lim[slot][1]);
 
 		turret.putComponent(turretBehavior);
 		turret.cfg = item.getConfig();
@@ -378,5 +367,9 @@ public class StrikeBase extends Vehicle {
 	public UpgradeItem getUpgrade(int slot) {
 		return equippedUpgrades.get(slot);
 	}
+
+	public HashMap getEquippedTurrets() { return this.equippedTurrets; }
+
+	public HashMap getEquippedUpgrades() { return this.equippedUpgrades; }
 
 }

@@ -26,11 +26,17 @@ public class TurretBehavior extends BehaviorComponent {
 	private float counter = 0;
 
 	private float randomAngle = 0f;
+	private float angle_limit[] = {0, 360}; // min angle, max angle
 
 	private enum State {
 		IDLE,
 		SEARCHING,
 		AIMING,
+	}
+
+	public void setAngleLimit(float min_angle, float max_angle) {
+		this.angle_limit[0] = min_angle;
+		this.angle_limit[1] = max_angle;
 	}
 
 	@Override
@@ -90,6 +96,7 @@ public class TurretBehavior extends BehaviorComponent {
 					target = null;
 					state = State.SEARCHING;
 				} else {
+
 					// Move the turret towards the target position and check if it's within a 3 degree cone, shoot
 					// a projectile towards it
 					turretPhys.lookAt(target.getPosition(), cfg.lerp_speed);
@@ -104,7 +111,6 @@ public class TurretBehavior extends BehaviorComponent {
 		}
 
 	}
-
 
 	public void setTargetTag(String tag) {
 		this.targetTag = tag;

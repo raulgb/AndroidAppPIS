@@ -3,11 +3,11 @@ package edu.ub.pis2016.pis16.strikecom.gameplay.config;
 public class StrikeBaseConfig {
 
 	public enum Model {
-		MKI,
-		MKII,
-		MKIII,
-		MKIV,
-		MKV
+		MKIII,	// 2-turrets model
+		MKII,	// 3-turrets model
+		MKI,	// 4-turrets model
+		MKIV,   // 5-turrets model
+		MKV		// 6-turrets model
 	}
 
 	public Model model;
@@ -79,7 +79,7 @@ public class StrikeBaseConfig {
 
 				maneuverability = 0.5f;
 
-				turret_dmg_mult = new float[]{1, 1, 1, 1};
+				turret_dmg_mult = new float[]{1, 1, 1.1f, .9f};
 
 				size_tiles = 2.5f;
 
@@ -96,10 +96,10 @@ public class StrikeBaseConfig {
 				turret_offset[3] = new float[]{.625f, 0.3125f};    // hull-mounted
 
 				turret_angle_lim = new float[turret_num][2];
-				turret_angle_lim[0] = new float[]{0, 270};
-				turret_angle_lim[1] = new float[]{270, 180};
-				turret_angle_lim[2] = new float[]{90, 270};
-				turret_angle_lim[3] = new float[]{180, 90};
+				turret_angle_lim[0] = new float[]{10, 170};		// left
+				turret_angle_lim[1] = new float[]{190, 350};	// right
+				turret_angle_lim[2] = new float[]{0, 360};		//main
+				turret_angle_lim[3] = new float[]{0, 90};		// hull-mounted
 				break;
 
 			case MKII:
@@ -123,9 +123,9 @@ public class StrikeBaseConfig {
 				turret_offset[2] = new float[]{.5625f, -.5f};    // Bottom right
 
 				turret_angle_lim = new float[turret_num][2];
-				turret_angle_lim[0] = new float[]{0, 270};
-				turret_angle_lim[1] = new float[]{90, 0};
-				turret_angle_lim[2] = new float[]{0, 360};
+				turret_angle_lim[0] = new float[]{310, 230};
+				turret_angle_lim[1] = new float[]{130, 50};
+				turret_angle_lim[2] = new float[]{230, 360};
 				break;
 
 			case MKIII:
@@ -147,8 +147,8 @@ public class StrikeBaseConfig {
 				turret_offset[0] = new float[]{-.375f, .1562f};    // Top
 				turret_offset[1] = new float[]{.5278f, -.2812f};    // Front
 				turret_angle_lim = new float[turret_num][2];
-				turret_angle_lim[0] = new float[]{0, 270};
-				turret_angle_lim[1] = new float[]{90, 0};
+				turret_angle_lim[0] = new float[]{0, 360};
+				turret_angle_lim[1] = new float[]{270, 50};
 				break;
 
 			case MKIV:
@@ -173,12 +173,13 @@ public class StrikeBaseConfig {
 				turret_offset[2] = new float[]{.7292f, .375f};    // Front left
 				turret_offset[3] = new float[]{.0625f, -.5208f};    // Right
 				turret_offset[4] = new float[]{.7292f, -.375f};    // Front right
+
 				turret_angle_lim = new float[turret_num][2];
-				turret_angle_lim[0] = new float[]{0, 270};
-				turret_angle_lim[1] = new float[]{90, 0};
-				turret_angle_lim[2] = new float[]{0, 270};
-				turret_angle_lim[3] = new float[]{90, 0};
-				turret_angle_lim[4] = new float[]{0, 270};
+				turret_angle_lim[0] = new float[]{0, 360};		// Main
+				turret_angle_lim[1] = new float[]{10, 170};		// Left
+				turret_angle_lim[2] = new float[]{320, 90};		// Front left
+				turret_angle_lim[3] = new float[]{190, 350};	// Right
+				turret_angle_lim[4] = new float[]{270, 40};		// Front right
 				break;
 
 			case MKV:
@@ -202,17 +203,17 @@ public class StrikeBaseConfig {
 				turret_offset[1] = new float[]{.2969f, .5469f};    // Front left
 				turret_offset[2] = new float[]{.8438f, .1563f};     // Hull-mounted
 				turret_offset[3] = new float[]{-.5625f, -.1406f};    // Main
-				turret_offset[4] = new float[]{-.2969f, -.5469f};    // Rear Right
-				turret_offset[5] = new float[]{.2969f, -.5469f};    // Front Right
-				turret_angle_lim = new float[turret_num][2];
-				turret_angle_lim[0] = new float[]{0, 270};
-				turret_angle_lim[1] = new float[]{90, 0};
-				turret_angle_lim[2] = new float[]{0, 270};
-				turret_angle_lim[3] = new float[]{90, 0};
-				turret_angle_lim[4] = new float[]{0, 270};
-				turret_angle_lim[5] = new float[]{0, 270};
-				break;
+				turret_offset[4] = new float[]{-.2969f, -.5469f};    // Rear right
+				turret_offset[5] = new float[]{.2969f, -.5469f};    // Front right
 
+				turret_angle_lim = new float[turret_num][2];
+				turret_angle_lim[0] = new float[]{40, 180};		// Rear left
+				turret_angle_lim[1] = new float[]{0, 140};		// Front left
+				turret_angle_lim[2] = new float[]{320, 70};		// Hull-mounted
+				turret_angle_lim[3] = new float[]{0, 360};		// Main
+				turret_angle_lim[4] = new float[]{180, 320};		// Rear right
+				turret_angle_lim[5] = new float[]{220, 360};		// Front right
+				break;
 		}
 	}
 }
