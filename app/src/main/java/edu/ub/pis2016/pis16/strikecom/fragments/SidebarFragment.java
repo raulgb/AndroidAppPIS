@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.HashMap;
@@ -26,15 +27,21 @@ public class SidebarFragment extends Fragment {
 
 	private TextView scrapText;
 	private TextView fuelText;
+
 	private Button btnInventory;
+	private Button btnMinimap;
 
 	public void setGame(StrikeComGLGame game) {
 		this.game = game;
 	}
 
-	public View getTurretSlot(int key) { return turretSlotsMap.get(key); }
+	public View getTurretSlot(int key) {
+		return turretSlotsMap.get(key);
+	}
 
-	public View getUpgradeSlot(int key) { return upgradeSlotsMap.get(key); }
+	public View getUpgradeSlot(int key) {
+		return upgradeSlotsMap.get(key);
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -44,31 +51,36 @@ public class SidebarFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
 		View view;
-		switch (strikeBaseModel) {
-			case MK1:
-				view = inflater.inflate(R.layout.fragment_sidebar_mk1, container, false);
-				break;
-			case MK2:
-				view = inflater.inflate(R.layout.fragment_sidebar_mk2, container, false);
-				break;
-			case MK3:
-				view = inflater.inflate(R.layout.fragment_sidebar_mk3, container, false);
-				break;
-			case MK4:
-				view = inflater.inflate(R.layout.fragment_sidebar_mk4, container, false);
-				break;
-			case MK5:
-				view = inflater.inflate(R.layout.fragment_sidebar_mk5, container, false);
-				break;
-			default:
-				view = inflater.inflate(R.layout.fragment_sidebar_mk2, container, false);
-		}
+
+		view = inflater.inflate(R.layout.fragment_sidebar, container, false);
+
+//		switch (strikeBaseModel) {
+//			case MK1:
+//				view = inflater.inflate(R.layout.fragment_sidebar_mk1, container, false);
+//				break;
+//			case MK2:
+//				view = inflater.inflate(R.layout.fragment_sidebar_mk2, container, false);
+//				break;
+//			case MK3:
+//				view = inflater.inflate(R.layout.fragment_sidebar_mk3, container, false);
+//				break;
+//			case MK4:
+//				view = inflater.inflate(R.layout.fragment_sidebar_mk4, container, false);
+//				break;
+//			case MK5:
+//				view = inflater.inflate(R.layout.fragment_sidebar_mk5, container, false);
+//				break;
+//			default:
+//				view = inflater.inflate(R.layout.fragment_sidebar_mk1, container, false);
+//		}
 
 		btnInventory = (Button) view.findViewById(R.id.btnInventory);
 
 		// Resources display
 		scrapText = (TextView) view.findViewById(R.id.textScrap);
 		fuelText = (TextView) view.findViewById(R.id.textFuel);
+
+		LinearLayout outerFrame = (LinearLayout) view.findViewById(R.id.outerFrame);
 
 		// Turret slots
 		View btnT1 = view.findViewById(R.id.btnT1);
@@ -78,8 +90,41 @@ public class SidebarFragment extends Fragment {
 		View btnT5 = view.findViewById(R.id.btnT5);
 		View btnT6 = view.findViewById(R.id.btnT6);
 
+		View btnU1 = view.findViewById(R.id.btnU1);
+		View btnU2 = view.findViewById(R.id.btnU2);
+		View btnU3 = view.findViewById(R.id.btnU3);
+
+		btnMinimap = (Button) view.findViewById(R.id.btnMinimap);
+
+		// Get strikebase model name and find relevant resources
+		String modeSuffix = strikeBaseModel.toString().toLowerCase();
+
+		int frameResID = getResources().getIdentifier("frame_retro_" + modeSuffix, "drawable", getActivity().getPackageName());
+		int buttonResId = getResources().getIdentifier("btn_retro_" + modeSuffix, "drawable", getActivity().getPackageName());
+		int buttonFillResId = getResources().getIdentifier("btn_retro_fill_" + modeSuffix, "drawable", getActivity().getPackageName());
+		int buttonUpgradeResId = getResources().getIdentifier("btn_retro_canv_" + modeSuffix, "drawable", getActivity()
+				.getPackageName());
+
+		outerFrame.setBackgroundResource(frameResID);
+
+		btnT1.setBackgroundResource(buttonFillResId);
+		btnT2.setBackgroundResource(buttonFillResId);
+		btnT3.setBackgroundResource(buttonFillResId);
+		btnT4.setBackgroundResource(buttonFillResId);
+		btnT5.setBackgroundResource(buttonFillResId);
+		btnT6.setBackgroundResource(buttonFillResId);
+
+		btnU1.setBackgroundResource(buttonUpgradeResId);
+		btnU2.setBackgroundResource(buttonUpgradeResId);
+		btnU3.setBackgroundResource(buttonUpgradeResId);
+
+		btnInventory.setBackgroundResource(buttonResId);
+		btnMinimap.setBackgroundResource(buttonResId);
+		// FINISHED Image Setup
+
+
 		// Each strike base model has its own turret slots assignation.
-		switch(strikeBaseModel) {
+		switch (strikeBaseModel) {
 			case MK1:
 				turretSlotsMap.put(0, btnT1);
 				turretSlotsMap.put(1, btnT3);
@@ -297,9 +342,6 @@ public class SidebarFragment extends Fragment {
 				game.getSidebarListener().onClickInventory();
 			}
 		});
-		View btnU1 = view.findViewById(R.id.btnU1);
-		View btnU2 = view.findViewById(R.id.btnU2);
-		View btnU3 = view.findViewById(R.id.btnU3);
 
 		btnU1.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -327,15 +369,15 @@ public class SidebarFragment extends Fragment {
 		return view;
 	}
 
-	public void updateScrap(int scrap){
+	public void updateScrap(int scrap) {
 		scrapText.setText(Integer.toString(scrap));
 	}
 
-	public void updateFuel(float fuel){
+	public void updateFuel(float fuel) {
 		fuelText.setText(Integer.toString(Math.round(fuel)));
 	}
 
-	public void setInventoyText(String text){
+	public void setInventoyText(String text) {
 		btnInventory.setText(text);
 	}
 }

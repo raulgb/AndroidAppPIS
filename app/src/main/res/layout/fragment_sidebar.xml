@@ -4,7 +4,8 @@
               android:layout_width="180dp"
               android:layout_height="fill_parent"
               android:backgroundTintMode="src_atop"
-              android:background="@drawable/frame_retro_mk1">
+              android:background="@drawable/frame_retro_mk1"
+              android:id="@+id/outerFrame">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -100,7 +101,9 @@
             android:layout_column="0"
             android:layout_rowWeight="0.3"
             android:background="@drawable/btn_retro_mk1"
-            android:layout_margin="2dp" />
+            android:layout_margin="2dp"
+            android:paddingLeft="4dp"
+            android:paddingTop="12dp"/>
 
         <Button
             style="?android:attr/borderlessButtonStyle"
@@ -112,7 +115,9 @@
             android:layout_column="1"
             android:layout_rowWeight="0.3"
             android:background="@drawable/btn_retro_canv_mk1"
-            android:layout_margin="2dp" />
+            android:layout_margin="2dp"
+            android:paddingLeft="4dp"
+            android:paddingTop="12dp"/>
 
         <Button
             style="?android:attr/borderlessButtonStyle"
@@ -124,7 +129,9 @@
             android:layout_column="2"
             android:layout_rowWeight="0.3"
             android:background="@drawable/btn_retro_canv_mk1"
-            android:layout_margin="2dp" />
+            android:layout_margin="2dp"
+            android:paddingLeft="4dp"
+            android:paddingTop="12dp"/>
 
         <Button
             style="?android:attr/borderlessButtonStyle"
@@ -136,7 +143,9 @@
             android:layout_column="0"
             android:background="@drawable/btn_retro_canv_mk1"
             android:layout_margin="2dp"
-            android:layout_marginTop="3dp" />
+            android:layout_marginTop="3dp"
+            android:paddingLeft="4dp"
+            android:paddingTop="12dp"/>
 
         <Button
             style="?android:attr/borderlessButtonStyle"
@@ -148,7 +157,9 @@
             android:layout_column="1"
             android:background="@drawable/btn_retro_canv_mk1"
             android:layout_margin="2dp"
-            android:layout_marginTop="3dp" />
+            android:layout_marginTop="3dp"
+            android:paddingTop="12dp"
+            android:paddingLeft="4dp"/>
 
         <Button
             style="?android:attr/borderlessButtonStyle"
@@ -160,7 +171,9 @@
             android:layout_column="2"
             android:background="@drawable/btn_retro_canv_mk1"
             android:layout_margin="2dp"
-            android:layout_marginTop="3dp" />
+            android:layout_marginTop="3dp"
+            android:paddingLeft="4dp"
+            android:paddingTop="12dp"/>
     </GridLayout>
 
     <GridLayout
@@ -181,7 +194,9 @@
             android:layout_column="0"
             android:layout_rowWeight="0.3"
             android:background="@drawable/btn_retro_upgrade_canv_mk1"
-            android:layout_margin="2dp" />
+            android:layout_margin="2dp"
+            android:paddingLeft="4dp"
+            android:paddingTop="12dp"/>
 
         <Button
             style="?android:attr/borderlessButtonStyle"
@@ -193,7 +208,9 @@
             android:layout_column="1"
             android:layout_rowWeight="0.3"
             android:background="@drawable/btn_retro_upgrade_canv_mk1"
-            android:layout_margin="2dp" />
+            android:layout_margin="2dp"
+            android:paddingLeft="4dp"
+            android:paddingTop="12dp"/>
 
         <Button
             style="?android:attr/borderlessButtonStyle"
@@ -205,7 +222,9 @@
             android:layout_column="2"
             android:layout_rowWeight="0.3"
             android:background="@drawable/btn_retro_upgrade_canv_mk1"
-            android:layout_margin="2dp" />
+            android:layout_margin="2dp"
+            android:paddingLeft="4dp"
+            android:paddingTop="12dp"/>
 
     </GridLayout>
 

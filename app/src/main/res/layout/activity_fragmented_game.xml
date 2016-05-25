@@ -18,7 +18,7 @@
         android:layout_width="180dp"
         android:id="@+id/sidebarFragment"
         android:layout_height="fill_parent"
-        tools:layout="@layout/fragment_sidebar_mk2">
+        tools:layout="@layout/fragment_sidebar">
     </fragment>
 
 
