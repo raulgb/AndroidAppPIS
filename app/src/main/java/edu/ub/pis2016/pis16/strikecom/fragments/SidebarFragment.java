@@ -50,39 +50,17 @@ public class SidebarFragment extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
-		View view;
+		View view = inflater.inflate(R.layout.fragment_sidebar, container, false);
 
-		view = inflater.inflate(R.layout.fragment_sidebar, container, false);
-
-//		switch (strikeBaseModel) {
-//			case MK1:
-//				view = inflater.inflate(R.layout.fragment_sidebar_mk1, container, false);
-//				break;
-//			case MK2:
-//				view = inflater.inflate(R.layout.fragment_sidebar_mk2, container, false);
-//				break;
-//			case MK3:
-//				view = inflater.inflate(R.layout.fragment_sidebar_mk3, container, false);
-//				break;
-//			case MK4:
-//				view = inflater.inflate(R.layout.fragment_sidebar_mk4, container, false);
-//				break;
-//			case MK5:
-//				view = inflater.inflate(R.layout.fragment_sidebar_mk5, container, false);
-//				break;
-//			default:
-//				view = inflater.inflate(R.layout.fragment_sidebar_mk1, container, false);
-//		}
-
+		/** Extract all UI elements */
 		btnInventory = (Button) view.findViewById(R.id.btnInventory);
+		btnMinimap = (Button) view.findViewById(R.id.btnMinimap);
 
-		// Resources display
 		scrapText = (TextView) view.findViewById(R.id.textScrap);
 		fuelText = (TextView) view.findViewById(R.id.textFuel);
 
 		LinearLayout outerFrame = (LinearLayout) view.findViewById(R.id.outerFrame);
 
-		// Turret slots
 		View btnT1 = view.findViewById(R.id.btnT1);
 		View btnT2 = view.findViewById(R.id.btnT2);
 		View btnT3 = view.findViewById(R.id.btnT3);
@@ -94,7 +72,6 @@ public class SidebarFragment extends Fragment {
 		View btnU2 = view.findViewById(R.id.btnU2);
 		View btnU3 = view.findViewById(R.id.btnU3);
 
-		btnMinimap = (Button) view.findViewById(R.id.btnMinimap);
 
 		// Get strikebase model name and find relevant resources
 		String modeSuffix = strikeBaseModel.toString().toLowerCase();

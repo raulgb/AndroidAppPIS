@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal"
+    >
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        >
+
+        <ImageView
+            android:layout_width="190dp"
+            android:layout_height="190dp"
+            android:id="@+id/imageView"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:background="@drawable/sbmk5"
+            android:alpha="0.65"/>
+
+        <Button
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:id="@+id/slotT1"
+            android:paddingLeft="-8dp"
+            android:paddingTop="-8dp"
+            android:background="@drawable/btn_retro_fill_mk5"
+            android:layout_alignTop="@+id/imageView"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="26dp"/>
+
+        <Button
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:id="@+id/slotT2"
+            android:paddingLeft="-8dp"
+            android:paddingTop="-8dp"
+            android:background="@drawable/btn_retro_fill_mk5"
+            android:layout_alignTop="@+id/imageView"
+            android:layout_marginTop="26dp"
+            android:layout_marginLeft="111dp"/>
+
+        <Button
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:id="@+id/slotT3"
+            android:paddingLeft="-8dp"
+            android:paddingTop="-8dp"
+            android:background="@drawable/btn_retro_fill_mk5"
+            android:layout_alignTop="@+id/imageView"
+            android:layout_marginTop="63dp"
+            android:layout_marginLeft="159dp"/>
+
+        <Button
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:id="@+id/slotT4"
+            android:paddingLeft="-8dp"
+            android:paddingTop="-8dp"
+            android:background="@drawable/btn_retro_fill_mk5"
+            android:layout_alignTop="@+id/imageView"
+            android:layout_marginLeft="26dp"
+            android:layout_marginTop="91dp"/>
+
+        <Button
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:id="@+id/slotT5"
+            android:paddingLeft="-8dp"
+            android:paddingTop="-8dp"
+            android:background="@drawable/btn_retro_fill_mk5"
+            android:layout_alignParentStart="false"
+            android:layout_alignTop="@+id/imageView"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="130dp"/>
+        
+        <Button
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:id="@+id/slotT6"
+            android:paddingLeft="-8dp"
+            android:paddingTop="-8dp"
+            android:background="@drawable/btn_retro_fill_mk5"
+            android:layout_alignParentStart="false"
+            android:layout_alignTop="@+id/imageView"
+            android:layout_marginLeft="111dp"
+            android:layout_marginTop="130dp"/>
+
+    </RelativeLayout>
+</LinearLayout>

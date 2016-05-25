@@ -31,20 +31,35 @@ public class SlotsFragment extends DialogFragment {
 	private int selectedSlot = -1;
 	private boolean turretIsSelected = true;
 
+	TextView currentItemDesc;
+	TextView newItemDesc;
+
 	HashMap<Integer, TurretItem> equippedTurrets = new HashMap<>();
 	HashMap<Integer, UpgradeItem> equippedUpgrades = new HashMap<>();
 
-	public void setNewItem(Item selectedItem) { this.newItem = selectedItem; }
+	HashMap<Integer, Button> turretAssign = new HashMap<>();
+	HashMap<Integer, Button> upgradeAssign = new HashMap<>();
 
-	public void setTurretSelection(boolean turretIsSelected) { this.turretIsSelected = turretIsSelected; }
+	public void setNewItem(Item selectedItem) {
+		this.newItem = selectedItem;
+	}
 
-	public void setEquippedTurrets(HashMap equippedTurrets) { this.equippedTurrets = equippedTurrets; }
+	public void setTurretSelection(boolean turretIsSelected) {
+		this.turretIsSelected = turretIsSelected;
+	}
 
-	public void setEquippedUpgrades(HashMap equippedUpgrades) { this.equippedUpgrades = equippedUpgrades; }
+	public void setEquippedTurrets(HashMap equippedTurrets) {
+		this.equippedTurrets = equippedTurrets;
+	}
+
+	public void setEquippedUpgrades(HashMap equippedUpgrades) {
+		this.equippedUpgrades = equippedUpgrades;
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view;
+
 		switch (strikeBaseModel) {
 			case MK1:
 				view = inflater.inflate(R.layout.fragment_slots_mk1, container, false);
@@ -58,15 +73,19 @@ public class SlotsFragment extends DialogFragment {
 			case MK4:
 				view = inflater.inflate(R.layout.fragment_slots_mk4, container, false);
 				break;
+			case MK5:
+				view = inflater.inflate(R.layout.fragment_slots_mk5, container, false);
+				break;
 			default:
 				view = inflater.inflate(R.layout.fragment_slots_mk2, container, false);
 		}
 
-		final TextView currentItemDesc = (TextView) view.findViewById(R.id.currentItemDesc);
+		currentItemDesc = (TextView) view.findViewById(R.id.currentItemDesc);
 
 		// NEW ITEM ATTRIBUTES
-		TextView newItemDesc = (TextView) view.findViewById(R.id.newItemDesc);
-		newItemDesc.setText(newItem.getDisplayText());
+		newItemDesc = (TextView) view.findViewById(R.id.newItemDesc);
+		if (newItem != null)
+			newItemDesc.setText(newItem.getDisplayText());
 
 		// BUTTONS
 		Button equipToSlotBtn = (Button) view.findViewById(R.id.slotsBtn_1);
@@ -76,7 +95,7 @@ public class SlotsFragment extends DialogFragment {
 				if (selectedSlot >= 0) {
 					dismiss();
 					FragmentedGameActivity callingActivity = (FragmentedGameActivity) getActivity();
-					if(turretIsSelected) {
+					if (turretIsSelected) {
 						callingActivity.equipTurret((TurretItem) newItem, selectedSlot);
 					} else {
 						callingActivity.equipUpgrade((UpgradeItem) newItem, selectedSlot);
@@ -101,11 +120,12 @@ public class SlotsFragment extends DialogFragment {
 		Button btnT4 = (Button) view.findViewById(R.id.slotT4);
 		Button btnT5 = (Button) view.findViewById(R.id.slotT5);
 		Button btnT6 = (Button) view.findViewById(R.id.slotT6);
+
 		Button btnU1 = (Button) view.findViewById(R.id.slotU1);
 		Button btnU2 = (Button) view.findViewById(R.id.slotU2);
 		Button btnU3 = (Button) view.findViewById(R.id.slotU3);
 
-		if(turretIsSelected) {
+		if (turretIsSelected) {
 			btnU1.setEnabled(false);
 			btnU1.setBackgroundResource(R.drawable.btn_retro_act);
 			btnU2.setEnabled(false);
@@ -113,326 +133,55 @@ public class SlotsFragment extends DialogFragment {
 			btnU3.setEnabled(false);
 			btnU3.setBackgroundResource(R.drawable.btn_retro_act);
 		} else {
-			btnT1.setEnabled(false);
-			btnT1.setBackgroundResource(R.drawable.btn_retro_act);
-			btnT2.setEnabled(false);
-			btnT2.setBackgroundResource(R.drawable.btn_retro_act);
-			btnT3.setEnabled(false);
-			btnT3.setBackgroundResource(R.drawable.btn_retro_act);
-			btnT4.setEnabled(false);
-			btnT4.setBackgroundResource(R.drawable.btn_retro_act);
-			btnT5.setEnabled(false);
-			btnT5.setBackgroundResource(R.drawable.btn_retro_act);
-			btnT6.setEnabled(false);
-			btnT6.setBackgroundResource(R.drawable.btn_retro_act);
+//			btnT1.setEnabled(false);
+//			btnT1.setBackgroundResource(R.drawable.btn_retro_act);
+//			btnT2.setEnabled(false);
+//			btnT2.setBackgroundResource(R.drawable.btn_retro_act);
+//			btnT3.setEnabled(false);
+//			btnT3.setBackgroundResource(R.drawable.btn_retro_act);
+//			btnT4.setEnabled(false);
+//			btnT4.setBackgroundResource(R.drawable.btn_retro_act);
+//			btnT5.setEnabled(false);
+//			btnT5.setBackgroundResource(R.drawable.btn_retro_act);
+//			btnT6.setEnabled(false);
+//			btnT6.setBackgroundResource(R.drawable.btn_retro_act);
 		}
 
-		HashMap<Integer, Button> turretAssign = new HashMap<>();
-		HashMap<Integer, Button> upgradeAssign = new HashMap<>();
-
-
 		// Turret slots assignations change between strike base models
-		switch(strikeBaseModel) {
+		switch (strikeBaseModel) {
 			case MK1:
-				btnT1.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						selectedSlot = 0;
-						if (equippedTurrets.containsKey(0)) {
-							currentItemDesc.setText(equippedTurrets.get(0).getDisplayText());
-						} else {
-							currentItemDesc.setText("");
-						}
-					}
-				});
-				turretAssign.put(0, btnT1);
-
-				btnT2.setBackgroundColor(Color.TRANSPARENT);
-				btnT2.setEnabled(false);
-
-				btnT3.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						selectedSlot = 1;
-						if (equippedTurrets.containsKey(1)) {
-							currentItemDesc.setText(equippedTurrets.get(1).getDisplayText());
-						} else {
-							currentItemDesc.setText("");
-						}
-					}
-				});
-				turretAssign.put(1, btnT3);
-
-
-				btnT4.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						selectedSlot = 2;
-						if (equippedTurrets.containsKey(2)) {
-							currentItemDesc.setText(equippedTurrets.get(2).getDisplayText());
-						} else {
-							currentItemDesc.setText("");
-						}
-					}
-				});
-				turretAssign.put(2, btnT4);
-
-
-				btnT5.setBackgroundColor(Color.TRANSPARENT);
-				btnT5.setEnabled(false);
-
-				btnT6.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						selectedSlot = 3;
-						if (equippedTurrets.containsKey(3)) {
-							currentItemDesc.setText(equippedTurrets.get(3).getDisplayText());
-						} else {
-							currentItemDesc.setText("");
-						}
-					}
-				});
-				turretAssign.put(3, btnT6);
+				setButtonAsign(btnT1, 0);
+				setButtonAsign(btnT2, 1);
+				setButtonAsign(btnT3, 2);
+				setButtonAsign(btnT4, 3);
 				break;
 
 			case MK2:
-				btnT1.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						selectedSlot = 0;
-						if (equippedTurrets.containsKey(0)) {
-							currentItemDesc.setText(equippedTurrets.get(0).getDisplayText());
-						} else {
-							currentItemDesc.setText("");
-						}
-					}
-				});
-				turretAssign.put(0, btnT1);
-
-				btnT2.setBackgroundColor(Color.TRANSPARENT);
-				btnT2.setEnabled(false);
-
-				btnT3.setBackgroundColor(Color.TRANSPARENT);
-				btnT3.setEnabled(false);
-
-				btnT4.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						selectedSlot = 1;
-						if (equippedTurrets.containsKey(1)) {
-							currentItemDesc.setText(equippedTurrets.get(1).getDisplayText());
-						} else {
-							currentItemDesc.setText("");
-						}
-					}
-				});
-				turretAssign.put(1, btnT4);
-
-				btnT5.setBackgroundColor(Color.TRANSPARENT);
-				btnT5.setEnabled(false);
-
-				btnT6.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						selectedSlot = 2;
-						if (equippedTurrets.containsKey(2)) {
-							currentItemDesc.setText(equippedTurrets.get(2).getDisplayText());
-						} else {
-							currentItemDesc.setText("");
-						}
-					}
-				});
-				turretAssign.put(2, btnT6);
+				setButtonAsign(btnT1, 0);
+				setButtonAsign(btnT2, 1);
+				setButtonAsign(btnT3, 2);
 				break;
 
 			case MK3:
-				btnT1.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						selectedSlot = 0;
-						if (equippedTurrets.containsKey(0)) {
-							currentItemDesc.setText(equippedTurrets.get(0).getDisplayText());
-						} else {
-							currentItemDesc.setText("");
-						}
-					}
-				});
-				turretAssign.put(0, btnT1);
-
-				btnT2.setBackgroundColor(Color.TRANSPARENT);
-				btnT2.setEnabled(false);
-
-				btnT3.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						selectedSlot = 1;
-						if (equippedTurrets.containsKey(1)) {
-							currentItemDesc.setText(equippedTurrets.get(1).getDisplayText());
-						} else {
-							currentItemDesc.setText("");
-						}
-					}
-				});
-				turretAssign.put(1, btnT3);
-
-				btnT4.setBackgroundColor(Color.TRANSPARENT);
-				btnT4.setEnabled(false);
-
-				btnT5.setBackgroundColor(Color.TRANSPARENT);
-				btnT5.setEnabled(false);
-
-				btnT6.setBackgroundColor(Color.TRANSPARENT);
-				btnT6.setEnabled(false);
+				setButtonAsign(btnT1, 0);
+				setButtonAsign(btnT2, 1);
 				break;
 
 			case MK4:
-				btnT1.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						selectedSlot = 0;
-						if (equippedTurrets.containsKey(0)) {
-							currentItemDesc.setText(equippedTurrets.get(0).getDisplayText());
-						} else {
-							currentItemDesc.setText("");
-						}
-					}
-				});
-				turretAssign.put(0, btnT1);
-
-				btnT2.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						selectedSlot = 1;
-						if (equippedTurrets.containsKey(1)) {
-							currentItemDesc.setText(equippedTurrets.get(1).getDisplayText());
-						} else {
-							currentItemDesc.setText("");
-						}
-					}
-				});
-				turretAssign.put(1, btnT2);
-
-				btnT3.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						selectedSlot = 2;
-						if (equippedTurrets.containsKey(2)) {
-							currentItemDesc.setText(equippedTurrets.get(2).getDisplayText());
-						} else {
-							currentItemDesc.setText("");
-						}
-					}
-				});
-				turretAssign.put(2, btnT3);
-
-				btnT4.setBackgroundColor(Color.TRANSPARENT);
-				btnT4.setEnabled(false);
-
-				btnT5.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						selectedSlot = 3;
-						if (equippedTurrets.containsKey(3)) {
-							currentItemDesc.setText(equippedTurrets.get(3).getDisplayText());
-						} else {
-							currentItemDesc.setText("");
-						}
-					}
-				});
-				turretAssign.put(3, btnT5);
-
-				btnT6.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						selectedSlot = 4;
-						if (equippedTurrets.containsKey(4)) {
-							currentItemDesc.setText(equippedTurrets.get(4).getDisplayText());
-						} else {
-							currentItemDesc.setText("");
-						}
-					}
-				});
-				turretAssign.put(4, btnT6);
+				setButtonAsign(btnT1, 0);
+				setButtonAsign(btnT2, 1);
+				setButtonAsign(btnT3, 2);
+				setButtonAsign(btnT4, 3);
+				setButtonAsign(btnT5, 4);
 				break;
 
 			case MK5:
-				btnT1.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						selectedSlot = 0;
-						if (equippedTurrets.containsKey(0)) {
-							currentItemDesc.setText(equippedTurrets.get(0).getDisplayText());
-						} else {
-							currentItemDesc.setText("");
-						}
-					}
-				});
-				turretAssign.put(0, btnT1);
-
-				btnT2.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						selectedSlot = 1;
-						if (equippedTurrets.containsKey(1)) {
-							currentItemDesc.setText(equippedTurrets.get(1).getDisplayText());
-						} else {
-							currentItemDesc.setText("");
-						}
-					}
-				});
-				turretAssign.put(1, btnT2);
-
-				btnT3.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						selectedSlot = 2;
-						if (equippedTurrets.containsKey(2)) {
-							currentItemDesc.setText(equippedTurrets.get(2).getDisplayText());
-						} else {
-							currentItemDesc.setText("");
-						}
-					}
-				});
-				turretAssign.put(2, btnT3);
-
-				btnT4.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						selectedSlot = 3;
-						if (equippedTurrets.containsKey(3)) {
-							currentItemDesc.setText(equippedTurrets.get(3).getDisplayText());
-						} else {
-							currentItemDesc.setText("");
-						}
-					}
-				});
-				turretAssign.put(3, btnT4);
-
-				btnT5.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						selectedSlot = 4;
-						if (equippedTurrets.containsKey(4)) {
-							currentItemDesc.setText(equippedTurrets.get(4).getDisplayText());
-						} else {
-							currentItemDesc.setText("");
-						}
-					}
-				});
-				turretAssign.put(4, btnT5);
-
-				btnT6.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						selectedSlot = 5;
-						if (equippedTurrets.containsKey(6)) {
-							currentItemDesc.setText(equippedTurrets.get(6).getDisplayText());
-						} else {
-							currentItemDesc.setText("");
-						}
-					}
-				});
-				turretAssign.put(5, btnT6);
+				setButtonAsign(btnT1, 0);
+				setButtonAsign(btnT2, 1);
+				setButtonAsign(btnT3, 2);
+				setButtonAsign(btnT4, 3);
+				setButtonAsign(btnT5, 4);
+				setButtonAsign(btnT6, 5);
 				break;
 		}
 
@@ -469,13 +218,28 @@ public class SlotsFragment extends DialogFragment {
 		return view;
 	}
 
+	private void setButtonAsign(Button button, final int slot){
+		button.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				selectedSlot = slot;
+				if (equippedTurrets.containsKey(slot)) {
+					currentItemDesc.setText(equippedTurrets.get(slot).getDisplayText());
+				} else {
+					currentItemDesc.setText("");
+				}
+			}
+		});
+		turretAssign.put(slot, button);
+	}
+
 	private void drawEquippedTurrets(HashMap<Integer, Button> turretAssign) {
 		int imageID;
 
 		// Draw equipped turrets
 		for (Integer key : turretAssign.keySet()) {
 			Button slotBtn = turretAssign.get(key);
-			if(equippedTurrets.containsKey(key)){
+			if (equippedTurrets.containsKey(key)) {
 
 				imageID = getResources().getIdentifier(equippedTurrets.get(key).getImage(), "drawable", getActivity().getPackageName());
 				Bitmap original = BitmapFactory.decodeResource(getResources(), imageID);
@@ -492,7 +256,7 @@ public class SlotsFragment extends DialogFragment {
 		// Draw equipped upgrades
 		for (Integer key : upgradeAssign.keySet()) {
 			Button slotBtn = upgradeAssign.get(key);
-			if(equippedUpgrades.containsKey(key)){
+			if (equippedUpgrades.containsKey(key)) {
 				imageID = getResources().getIdentifier(equippedUpgrades.get(key).getImage(), "drawable", getActivity().getPackageName());
 				Bitmap original = BitmapFactory.decodeResource(getResources(), imageID);
 				Bitmap b = Bitmap.createScaledBitmap(original, 64, 64, false);

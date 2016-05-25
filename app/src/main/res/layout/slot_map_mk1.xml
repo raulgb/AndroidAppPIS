@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    >
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        >
+
+        <ImageView
+            android:layout_width="190dp"
+            android:layout_height="190dp"
+            android:id="@+id/imageView"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:background="@drawable/sbmk1"
+            android:alpha="0.65"/>
+
+        <Button
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/slotT1"
+            android:paddingLeft="-8dp"
+            android:paddingTop="-8dp"
+            android:background="@drawable/btn_retro_fill_mk1"
+            android:layout_alignTop="@+id/imageView"
+            android:layout_marginLeft="66dp"
+            android:layout_marginTop="10dp"/>
+
+        <Button
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/slotT2"
+            android:paddingLeft="-8dp"
+            android:paddingTop="-8dp"
+            android:background="@drawable/btn_retro_fill_mk1"
+            android:layout_alignTop="@+id/imageView"
+            android:layout_marginLeft="66dp"
+            android:layout_marginTop="140dp"/>
+
+        <Button
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/slotT3"
+            android:paddingLeft="-8dp"
+            android:paddingTop="-8dp"
+            android:background="@drawable/btn_retro_fill_mk1"
+            android:layout_alignTop="@+id/imageView"
+            android:layout_marginTop="75dp"
+            android:layout_marginLeft="33dp"/>
+
+        <Button
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/slotT4"
+            android:paddingLeft="-8dp"
+            android:paddingTop="-8dp"
+            android:background="@drawable/btn_retro_fill_mk1"
+            android:layout_alignTop="@+id/imageView"
+            android:layout_marginTop="43dp"
+            android:layout_marginLeft="137dp"/>
+
+    </RelativeLayout>
+</LinearLayout>
