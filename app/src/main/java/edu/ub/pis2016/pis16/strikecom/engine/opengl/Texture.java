@@ -7,8 +7,6 @@ import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Objects;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -107,28 +105,28 @@ public class Texture implements Disposable {
 
 	// OpenGL context loss prevention methods
 
-	private static final Object reloadingTextures = new Object();
+	private static final Object managedTextureLock = new Object();
 
 	public static void addManagedTexture(Texture t) {
-		synchronized (reloadingTextures) {
+		synchronized (managedTextureLock) {
 			managedTextures.add(t);
-//			reloadingTextures.notifyAll();
+//			managedTextureLock.notifyAll();
 		}
 	}
 
 	public static void removeManagedTexture(Texture t) {
-		synchronized (reloadingTextures) {
+		synchronized (managedTextureLock) {
 			managedTextures.removeValue(t);
-//			reloadingTextures.notifyAll();
+//			managedTextureLock.notifyAll();
 		}
 	}
 
 	public static void reloadManagedTextures() {
 		Log.i("Texture", "Reloaded all managed textures");
-		synchronized (reloadingTextures) {
+		synchronized (managedTextureLock) {
 			for (Texture t : managedTextures)
 				t.reload();
-//				reloadingTextures.notifyAll();
+//				managedTextureLock.notifyAll();
 		}
 	}
 

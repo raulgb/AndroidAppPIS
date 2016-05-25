@@ -18,7 +18,7 @@ import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
 
 public class SidebarFragment extends Fragment {
 
-	public static StrikeBaseConfig.Model strikeBaseModel = StrikeBaseConfig.Model.MKII;
+	public static StrikeBaseConfig.Model strikeBaseModel = StrikeBaseConfig.Model.MK2;
 	private StrikeComGLGame game;
 
 	private HashMap<Integer, View> turretSlotsMap = new HashMap<>();
@@ -45,19 +45,19 @@ public class SidebarFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
 		View view;
 		switch (strikeBaseModel) {
-			case MKI:
+			case MK1:
 				view = inflater.inflate(R.layout.fragment_sidebar_mk1, container, false);
 				break;
-			case MKII:
+			case MK2:
 				view = inflater.inflate(R.layout.fragment_sidebar_mk2, container, false);
 				break;
-			case MKIII:
+			case MK3:
 				view = inflater.inflate(R.layout.fragment_sidebar_mk3, container, false);
 				break;
-			case MKIV:
+			case MK4:
 				view = inflater.inflate(R.layout.fragment_sidebar_mk4, container, false);
 				break;
-			case MKV:
+			case MK5:
 				view = inflater.inflate(R.layout.fragment_sidebar_mk5, container, false);
 				break;
 			default:
@@ -80,7 +80,7 @@ public class SidebarFragment extends Fragment {
 
 		// Each strike base model has its own turret slots assignation.
 		switch(strikeBaseModel) {
-			case MKI:
+			case MK1:
 				turretSlotsMap.put(0, btnT1);
 				turretSlotsMap.put(1, btnT3);
 				turretSlotsMap.put(2, btnT4);
@@ -121,7 +121,7 @@ public class SidebarFragment extends Fragment {
 				});
 				break;
 
-			case MKII:
+			case MK2:
 				turretSlotsMap.put(0, btnT1);
 				turretSlotsMap.put(1, btnT4);
 				turretSlotsMap.put(2, btnT6);
@@ -157,7 +157,7 @@ public class SidebarFragment extends Fragment {
 				});
 				break;
 
-			case MKIII:
+			case MK3:
 				turretSlotsMap.put(0, btnT1);
 				turretSlotsMap.put(1, btnT3);
 
@@ -188,7 +188,7 @@ public class SidebarFragment extends Fragment {
 				btnT6.setEnabled(false);
 				break;
 
-			case MKIV:
+			case MK4:
 				turretSlotsMap.put(0, btnT1);
 				turretSlotsMap.put(1, btnT2);
 				turretSlotsMap.put(2, btnT3);
@@ -233,7 +233,7 @@ public class SidebarFragment extends Fragment {
 					}
 				});
 
-			case MKV:
+			case MK5:
 				turretSlotsMap.put(0, btnT1);
 				turretSlotsMap.put(1, btnT2);
 				turretSlotsMap.put(2, btnT3);

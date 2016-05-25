@@ -1,11 +1,8 @@
 package edu.ub.pis2016.pis16.strikecom.engine.framework;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
@@ -46,7 +43,7 @@ public abstract class Screen implements Disposable {
 	public static final int LAYER_GUI = 99;
 
 	/** Strikebase model **/
-	public static StrikeBaseConfig.Model strikeBaseModel = StrikeBaseConfig.Model.MKII;
+	public static StrikeBaseConfig.Model strikeBaseModel = StrikeBaseConfig.Model.MK2;
 
 	protected final Game game;
 

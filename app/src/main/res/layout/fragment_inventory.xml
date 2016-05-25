@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:background="@drawable/frame_retro_mk1"
+              android:orientation="vertical"
+              android:padding="12dp"
+              android:id="@+id/outerFrame">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/turretSelectionBtn"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="4dp"
+            android:background="@drawable/btn_retro_canv_mk1"
+            android:text="@string/turrets_selection"
+            android:textColor="#EEE"
+            />
+
+        <Button
+            android:id="@+id/upgradeSelectionBtn"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/turretSelectionBtn"
+            android:background="@drawable/btn_retro_canv_mk1"
+            android:text="@string/upgrades_selection"
+            android:textColor="#EEE"
+
+            />
+
+        <ImageView
+            android:id="@+id/scrap_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="17dp"
+            android:layout_toLeftOf="@+id/playerScrap"
+            android:src="@drawable/scrap_64"/>
+
+        <TextView
+            android:id="@+id/playerScrap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"
+            android:layout_toLeftOf="@+id/fuel_icon"
+            android:text="@string/res1_defVal"
+            android:textColor="#EEE"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+
+        <ImageView
+            android:id="@+id/fuel_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="17dp"
+            android:layout_toLeftOf="@+id/playerFuel"
+            android:src="@drawable/fuel_64"/>
+
+        <TextView
+            android:id="@+id/playerFuel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="32dp"
+            android:text="@string/res1_defVal"
+            android:textColor="#EEE"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:paddingTop="4dp">
+
+        <ListView
+            android:id="@+id/itemList"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="4dp"
+            android:layout_weight="0.6"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.4"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="@drawable/frame_retro_mk1"
+                android:orientation="vertical"
+                android:paddingLeft="12dp"
+                android:paddingTop="10dp"
+                android:id="@+id/itemDescFrame">
+
+                <ScrollView
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent">
+
+                        <ImageView
+                            android:id="@+id/itemDescImage"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:contentDescription="Detailed Image"/>
+
+                        <TextView
+                            android:id="@+id/itemDesc"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Select an item to display info"
+                            android:textColor="#EEE"
+                            android:textIsSelectable="false"
+                            android:textSize="14sp"
+                            />
+                    </LinearLayout>
+
+                </ScrollView>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_weight="0"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/inventoryBtn_1"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@drawable/btn_retro_canv_mk1"
+                    android:clickable="false"
+                    android:text="@string/equip_button"
+                    android:textColor="#EEE"/>
+
+                <Button
+                    android:id="@+id/inventoryBtn_2"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@drawable/btn_retro_canv_mk1"
+                    android:text="@string/exit_button"
+                    android:textColor="#EEE"/>
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

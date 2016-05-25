@@ -3,11 +3,11 @@ package edu.ub.pis2016.pis16.strikecom.gameplay.config;
 public class StrikeBaseConfig {
 
 	public enum Model {
-		MKIII,	// 2-turrets model
-		MKII,	// 3-turrets model
-		MKI,	// 4-turrets model
-		MKIV,   // 5-turrets model
-		MKV		// 6-turrets model
+		MK1,	// 4-turrets model
+		MK2,	// 3-turrets model
+		MK3,	// 2-turrets model
+		MK4,    // 5-turrets model
+		MK5     // 6-turrets model
 	}
 
 	public Model model;
@@ -25,7 +25,7 @@ public class StrikeBaseConfig {
 	 *
 	 * 	DEPENDING ON TURRET ANCHOR POSITION ON THE SPRITE
 	 * 	IF ANY TURRET IS MISSING, DON'T SKIP INDICES
-	 * 	I.E. MODEL MKII IS:
+	 * 	I.E. MODEL MK2 IS:
 	 *
 	 * 		1
 	 *
@@ -72,7 +72,7 @@ public class StrikeBaseConfig {
 		this.model = model;
 
 		switch (model) {
-			case MKI:
+			case MK1:
 				// StrikeBase Mark. I
 				modelName = "sbmk1";
 				turret_num = 4;
@@ -102,7 +102,7 @@ public class StrikeBaseConfig {
 				turret_angle_lim[3] = new float[]{0, 90};		// hull-mounted
 				break;
 
-			case MKII:
+			case MK2:
 				// StrikeBase Mark. II
 				modelName = "sbmk2";
 				turret_num = 3;
@@ -128,7 +128,7 @@ public class StrikeBaseConfig {
 				turret_angle_lim[2] = new float[]{230, 360};
 				break;
 
-			case MKIII:
+			case MK3:
 				// StrikeBase Mark. III
 				modelName = "sbmk3";
 				turret_num = 2;
@@ -151,7 +151,7 @@ public class StrikeBaseConfig {
 				turret_angle_lim[1] = new float[]{270, 50};
 				break;
 
-			case MKIV:
+			case MK4:
 				// StrikeBase Mark. IV
 				modelName = "sbmk4";
 				turret_num = 5;
@@ -182,7 +182,7 @@ public class StrikeBaseConfig {
 				turret_angle_lim[4] = new float[]{270, 40};		// Front right
 				break;
 
-			case MKV:
+			case MK5:
 				// StrikeBase Mark. V
 				modelName = "sbmk5";
 				turret_num = 6;

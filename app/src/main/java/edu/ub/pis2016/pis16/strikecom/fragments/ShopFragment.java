@@ -83,9 +83,9 @@ public class ShopFragment extends InventoryFragment {
 					selectedItem = i;
 
 					if(turretIsSelected) {
-						itemDesc.setText( inventory.getTurret(selectedItem).getDisplay() );
+						itemDesc.setText( inventory.getTurret(selectedItem).getDisplayText() );
 					} else {
-						itemDesc.setText( inventory.getUpgrade(selectedItem).getDisplay() );
+						itemDesc.setText( inventory.getUpgrade(selectedItem).getDisplayText() );
 					}
 				}
 			}

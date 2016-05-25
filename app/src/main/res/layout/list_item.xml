@@ -8,7 +8,7 @@
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp">
     <ImageView
-        android:id="@+id/itemImage"
+        android:id="@+id/itemDescImage"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_alignParentLeft="true"
@@ -29,6 +29,6 @@
         android:layout_alignParentLeft="false"
         android:layout_centerVertical="true"
         android:textSize="18dp"
-        android:layout_toRightOf="@+id/itemImage"/>
+        android:layout_toRightOf="@+id/itemDescImage"/>
 
 </RelativeLayout>

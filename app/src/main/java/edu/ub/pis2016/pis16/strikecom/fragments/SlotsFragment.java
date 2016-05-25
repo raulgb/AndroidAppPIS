@@ -25,7 +25,7 @@ import edu.ub.pis2016.pis16.strikecom.gameplay.items.UpgradeItem;
 
 public class SlotsFragment extends DialogFragment {
 
-	public static StrikeBaseConfig.Model strikeBaseModel = StrikeBaseConfig.Model.MKII;
+	public static StrikeBaseConfig.Model strikeBaseModel = StrikeBaseConfig.Model.MK2;
 
 	private Item newItem;
 	private int selectedSlot = -1;
@@ -46,16 +46,16 @@ public class SlotsFragment extends DialogFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view;
 		switch (strikeBaseModel) {
-			case MKI:
+			case MK1:
 				view = inflater.inflate(R.layout.fragment_slots_mk1, container, false);
 				break;
-			case MKII:
+			case MK2:
 				view = inflater.inflate(R.layout.fragment_slots_mk2, container, false);
 				break;
-			case MKIII:
+			case MK3:
 				view = inflater.inflate(R.layout.fragment_slots_mk3, container, false);
 				break;
-			case MKIV:
+			case MK4:
 				view = inflater.inflate(R.layout.fragment_slots_mk4, container, false);
 				break;
 			default:
@@ -66,7 +66,7 @@ public class SlotsFragment extends DialogFragment {
 
 		// NEW ITEM ATTRIBUTES
 		TextView newItemDesc = (TextView) view.findViewById(R.id.newItemDesc);
-		newItemDesc.setText(newItem.getDisplay());
+		newItemDesc.setText(newItem.getDisplayText());
 
 		// BUTTONS
 		Button equipToSlotBtn = (Button) view.findViewById(R.id.slotsBtn_1);
@@ -133,13 +133,13 @@ public class SlotsFragment extends DialogFragment {
 
 		// Turret slots assignations change between strike base models
 		switch(strikeBaseModel) {
-			case MKI:
+			case MK1:
 				btnT1.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View view) {
 						selectedSlot = 0;
 						if (equippedTurrets.containsKey(0)) {
-							currentItemDesc.setText(equippedTurrets.get(0).getDisplay());
+							currentItemDesc.setText(equippedTurrets.get(0).getDisplayText());
 						} else {
 							currentItemDesc.setText("");
 						}
@@ -155,7 +155,7 @@ public class SlotsFragment extends DialogFragment {
 					public void onClick(View view) {
 						selectedSlot = 1;
 						if (equippedTurrets.containsKey(1)) {
-							currentItemDesc.setText(equippedTurrets.get(1).getDisplay());
+							currentItemDesc.setText(equippedTurrets.get(1).getDisplayText());
 						} else {
 							currentItemDesc.setText("");
 						}
@@ -169,7 +169,7 @@ public class SlotsFragment extends DialogFragment {
 					public void onClick(View view) {
 						selectedSlot = 2;
 						if (equippedTurrets.containsKey(2)) {
-							currentItemDesc.setText(equippedTurrets.get(2).getDisplay());
+							currentItemDesc.setText(equippedTurrets.get(2).getDisplayText());
 						} else {
 							currentItemDesc.setText("");
 						}
@@ -186,7 +186,7 @@ public class SlotsFragment extends DialogFragment {
 					public void onClick(View view) {
 						selectedSlot = 3;
 						if (equippedTurrets.containsKey(3)) {
-							currentItemDesc.setText(equippedTurrets.get(3).getDisplay());
+							currentItemDesc.setText(equippedTurrets.get(3).getDisplayText());
 						} else {
 							currentItemDesc.setText("");
 						}
@@ -195,13 +195,13 @@ public class SlotsFragment extends DialogFragment {
 				turretAssign.put(3, btnT6);
 				break;
 
-			case MKII:
+			case MK2:
 				btnT1.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View view) {
 						selectedSlot = 0;
 						if (equippedTurrets.containsKey(0)) {
-							currentItemDesc.setText(equippedTurrets.get(0).getDisplay());
+							currentItemDesc.setText(equippedTurrets.get(0).getDisplayText());
 						} else {
 							currentItemDesc.setText("");
 						}
@@ -220,7 +220,7 @@ public class SlotsFragment extends DialogFragment {
 					public void onClick(View view) {
 						selectedSlot = 1;
 						if (equippedTurrets.containsKey(1)) {
-							currentItemDesc.setText(equippedTurrets.get(1).getDisplay());
+							currentItemDesc.setText(equippedTurrets.get(1).getDisplayText());
 						} else {
 							currentItemDesc.setText("");
 						}
@@ -236,7 +236,7 @@ public class SlotsFragment extends DialogFragment {
 					public void onClick(View view) {
 						selectedSlot = 2;
 						if (equippedTurrets.containsKey(2)) {
-							currentItemDesc.setText(equippedTurrets.get(2).getDisplay());
+							currentItemDesc.setText(equippedTurrets.get(2).getDisplayText());
 						} else {
 							currentItemDesc.setText("");
 						}
@@ -245,13 +245,13 @@ public class SlotsFragment extends DialogFragment {
 				turretAssign.put(2, btnT6);
 				break;
 
-			case MKIII:
+			case MK3:
 				btnT1.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View view) {
 						selectedSlot = 0;
 						if (equippedTurrets.containsKey(0)) {
-							currentItemDesc.setText(equippedTurrets.get(0).getDisplay());
+							currentItemDesc.setText(equippedTurrets.get(0).getDisplayText());
 						} else {
 							currentItemDesc.setText("");
 						}
@@ -267,7 +267,7 @@ public class SlotsFragment extends DialogFragment {
 					public void onClick(View view) {
 						selectedSlot = 1;
 						if (equippedTurrets.containsKey(1)) {
-							currentItemDesc.setText(equippedTurrets.get(1).getDisplay());
+							currentItemDesc.setText(equippedTurrets.get(1).getDisplayText());
 						} else {
 							currentItemDesc.setText("");
 						}
@@ -285,13 +285,13 @@ public class SlotsFragment extends DialogFragment {
 				btnT6.setEnabled(false);
 				break;
 
-			case MKIV:
+			case MK4:
 				btnT1.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View view) {
 						selectedSlot = 0;
 						if (equippedTurrets.containsKey(0)) {
-							currentItemDesc.setText(equippedTurrets.get(0).getDisplay());
+							currentItemDesc.setText(equippedTurrets.get(0).getDisplayText());
 						} else {
 							currentItemDesc.setText("");
 						}
@@ -304,7 +304,7 @@ public class SlotsFragment extends DialogFragment {
 					public void onClick(View view) {
 						selectedSlot = 1;
 						if (equippedTurrets.containsKey(1)) {
-							currentItemDesc.setText(equippedTurrets.get(1).getDisplay());
+							currentItemDesc.setText(equippedTurrets.get(1).getDisplayText());
 						} else {
 							currentItemDesc.setText("");
 						}
@@ -317,7 +317,7 @@ public class SlotsFragment extends DialogFragment {
 					public void onClick(View view) {
 						selectedSlot = 2;
 						if (equippedTurrets.containsKey(2)) {
-							currentItemDesc.setText(equippedTurrets.get(2).getDisplay());
+							currentItemDesc.setText(equippedTurrets.get(2).getDisplayText());
 						} else {
 							currentItemDesc.setText("");
 						}
@@ -333,7 +333,7 @@ public class SlotsFragment extends DialogFragment {
 					public void onClick(View view) {
 						selectedSlot = 3;
 						if (equippedTurrets.containsKey(3)) {
-							currentItemDesc.setText(equippedTurrets.get(3).getDisplay());
+							currentItemDesc.setText(equippedTurrets.get(3).getDisplayText());
 						} else {
 							currentItemDesc.setText("");
 						}
@@ -346,7 +346,7 @@ public class SlotsFragment extends DialogFragment {
 					public void onClick(View view) {
 						selectedSlot = 4;
 						if (equippedTurrets.containsKey(4)) {
-							currentItemDesc.setText(equippedTurrets.get(4).getDisplay());
+							currentItemDesc.setText(equippedTurrets.get(4).getDisplayText());
 						} else {
 							currentItemDesc.setText("");
 						}
@@ -355,13 +355,13 @@ public class SlotsFragment extends DialogFragment {
 				turretAssign.put(4, btnT6);
 				break;
 
-			case MKV:
+			case MK5:
 				btnT1.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View view) {
 						selectedSlot = 0;
 						if (equippedTurrets.containsKey(0)) {
-							currentItemDesc.setText(equippedTurrets.get(0).getDisplay());
+							currentItemDesc.setText(equippedTurrets.get(0).getDisplayText());
 						} else {
 							currentItemDesc.setText("");
 						}
@@ -374,7 +374,7 @@ public class SlotsFragment extends DialogFragment {
 					public void onClick(View view) {
 						selectedSlot = 1;
 						if (equippedTurrets.containsKey(1)) {
-							currentItemDesc.setText(equippedTurrets.get(1).getDisplay());
+							currentItemDesc.setText(equippedTurrets.get(1).getDisplayText());
 						} else {
 							currentItemDesc.setText("");
 						}
@@ -387,7 +387,7 @@ public class SlotsFragment extends DialogFragment {
 					public void onClick(View view) {
 						selectedSlot = 2;
 						if (equippedTurrets.containsKey(2)) {
-							currentItemDesc.setText(equippedTurrets.get(2).getDisplay());
+							currentItemDesc.setText(equippedTurrets.get(2).getDisplayText());
 						} else {
 							currentItemDesc.setText("");
 						}
@@ -400,7 +400,7 @@ public class SlotsFragment extends DialogFragment {
 					public void onClick(View view) {
 						selectedSlot = 3;
 						if (equippedTurrets.containsKey(3)) {
-							currentItemDesc.setText(equippedTurrets.get(3).getDisplay());
+							currentItemDesc.setText(equippedTurrets.get(3).getDisplayText());
 						} else {
 							currentItemDesc.setText("");
 						}
@@ -413,7 +413,7 @@ public class SlotsFragment extends DialogFragment {
 					public void onClick(View view) {
 						selectedSlot = 4;
 						if (equippedTurrets.containsKey(4)) {
-							currentItemDesc.setText(equippedTurrets.get(4).getDisplay());
+							currentItemDesc.setText(equippedTurrets.get(4).getDisplayText());
 						} else {
 							currentItemDesc.setText("");
 						}
@@ -426,7 +426,7 @@ public class SlotsFragment extends DialogFragment {
 					public void onClick(View view) {
 						selectedSlot = 5;
 						if (equippedTurrets.containsKey(6)) {
-							currentItemDesc.setText(equippedTurrets.get(6).getDisplay());
+							currentItemDesc.setText(equippedTurrets.get(6).getDisplayText());
 						} else {
 							currentItemDesc.setText("");
 						}

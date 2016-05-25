@@ -55,7 +55,7 @@ public class TurretItem extends Item {
 	}
 
 	@Override
-	public String getDisplay() {
+	public String getDisplayText() {
 		int attack, firerate, range;
 
 		// TODO adjust these formulas for better reflecting the turret stats

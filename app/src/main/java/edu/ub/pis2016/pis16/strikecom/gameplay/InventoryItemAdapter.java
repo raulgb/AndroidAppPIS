@@ -15,7 +15,7 @@ import edu.ub.pis2016.pis16.strikecom.gameplay.items.Item;
 
 public class InventoryItemAdapter extends BaseAdapter {
 
-	public static StrikeBaseConfig.Model strikeBaseModel = StrikeBaseConfig.Model.MKII;
+	public static StrikeBaseConfig.Model strikeBaseModel = StrikeBaseConfig.Model.MK2;
 
 	private Context context;
 	private List<Item> items;
@@ -52,25 +52,25 @@ public class InventoryItemAdapter extends BaseAdapter {
 
 			rowView = inflater.inflate(R.layout.list_item, parent, false);
 			switch (strikeBaseModel) {
-				case MKI:
+				case MK1:
 					rowView.setBackgroundResource(R.drawable.frame_retro_mk1);
 					break;
-				case MKII:
+				case MK2:
 					rowView.setBackgroundResource(R.drawable.frame_retro_mk2);
 					break;
-				case MKIII:
+				case MK3:
 					rowView.setBackgroundResource(R.drawable.frame_retro_mk3);
 					break;
-				case MKIV:
+				case MK4:
 					rowView.setBackgroundResource(R.drawable.frame_retro_mk4);
 					break;
-				case MKV:
+				case MK5:
 					rowView.setBackgroundResource(R.drawable.frame_retro_mk5);
 			}
 		}
 
 		// Set data into the view.
-		ImageView itemImage = (ImageView) rowView.findViewById(R.id.itemImage);
+		ImageView itemImage = (ImageView) rowView.findViewById(R.id.itemDescImage);
 		TextView itemName = (TextView) rowView.findViewById(R.id.itemName);
 
 		Item item = this.items.get(position);

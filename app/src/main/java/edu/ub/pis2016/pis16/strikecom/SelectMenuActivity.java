@@ -72,35 +72,35 @@ public class SelectMenuActivity extends AppCompatActivity {
 				TextView text = (TextView)findViewById(R.id.textView2);
 				String model;
 				switch (StrikeBaseConfig.Model.values()[selectedConfig]){
-					case MKI:
+					case MK1:
 						model = "sbmk1";
 						text.setText(getString(R.string.sel_menu_mk1name));
 						btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk1);
 						btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk1);
 						btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk1);
 						break;
-					case MKII:
+					case MK2:
 						model = "sbmk2";
 						text.setText(getString(R.string.sel_menu_mk2name));
 						btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk2);
 						btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk2);
 						btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk2);
 						break;
-					case MKIII:
+					case MK3:
 						model = "sbmk3";
 						text.setText(getString(R.string.sel_menu_mk3name));
 						btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk3);
 						btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk3);
 						btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk3);
 						break;
-					case MKIV:
+					case MK4:
 						model = "sbmk4";
 						text.setText(getString(R.string.sel_menu_mk4name));
 						btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk4);
 						btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk4);
 						btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk4);
 						break;
-					case MKV:
+					case MK5:
 						model = "sbmk5";
 						text.setText(getString(R.string.sel_menu_mk5name));
 						btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk5);
@@ -126,35 +126,35 @@ public class SelectMenuActivity extends AppCompatActivity {
 				TextView text = (TextView)findViewById(R.id.textView2);
 				String model;
 				switch (StrikeBaseConfig.Model.values()[selectedConfig]){
-					case MKI:
+					case MK1:
 						model = "sbmk1";
 						text.setText(getString(R.string.sel_menu_mk1name));
 						btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk1);
 						btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk1);
 						btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk1);
 						break;
-					case MKII:
+					case MK2:
 						model = "sbmk2";
 						text.setText(getString(R.string.sel_menu_mk2name));
 						btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk2);
 						btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk2);
 						btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk2);
 						break;
-					case MKIII:
+					case MK3:
 						model = "sbmk3";
 						text.setText(getString(R.string.sel_menu_mk3name));
 						btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk3);
 						btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk3);
 						btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk3);
 						break;
-					case MKIV:
+					case MK4:
 						model = "sbmk4";
 						text.setText(getString(R.string.sel_menu_mk4name));
 						btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk4);
 						btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk4);
 						btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk4);
 						break;
-					case MKV:
+					case MK5:
 						model = "sbmk5";
 						text.setText(getString(R.string.sel_menu_mk5name));
 						btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk5);

@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -24,13 +26,15 @@ import edu.ub.pis2016.pis16.strikecom.gameplay.items.UpgradeItem;
 
 public class InventoryFragment extends DialogFragment {
 
-	public static StrikeBaseConfig.Model strikeBaseModel = StrikeBaseConfig.Model.MKII;
+	public static StrikeBaseConfig.Model strikeBaseModel = StrikeBaseConfig.Model.MK2;
 
 	protected Inventory inventory;
 
 	protected Button equipBtn;
 	protected Button cancelBtn;
 	protected ListView itemList;
+
+	protected ImageView itemImage;
 	protected TextView itemDesc;
 	protected TextView scrapText;
 	protected TextView fuelText;
@@ -85,47 +89,55 @@ public class InventoryFragment extends DialogFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view;
-		switch(strikeBaseModel){
-			case MKI:
-				view = inflater.inflate(R.layout.fragment_inventory_mk1, container);
-				break;
-			case MKII:
-				view = inflater.inflate(R.layout.fragment_inventory_mk2, container);
-				break;
-			case MKIII:
-				view = inflater.inflate(R.layout.fragment_inventory_mk3, container);
-				break;
-			case MKIV:
-				view = inflater.inflate(R.layout.fragment_inventory_mk4, container);
-				break;
-			case MKV:
-				view = inflater.inflate(R.layout.fragment_inventory_mk5, container);
-				break;
-			default:
-				view = inflater.inflate(R.layout.fragment_inventory_mk2, container);
-		}
+
+		view = inflater.inflate(R.layout.fragment_inventory, container);
+
+		/** Look up all UI Elements */
+		LinearLayout outerFrame = (LinearLayout) view.findViewById(R.id.outerFrame);
+		LinearLayout itemDescFrame = (LinearLayout) view.findViewById(R.id.itemDescFrame);
+
+		equipBtn = (Button) view.findViewById(R.id.inventoryBtn_1);
+		cancelBtn = (Button) view.findViewById(R.id.inventoryBtn_2);
+
+		Button turretSelectionBtn = (Button) view.findViewById(R.id.turretSelectionBtn);
+		Button upgradeSelectionBtn = (Button) view.findViewById(R.id.upgradeSelectionBtn);
 
 		itemList = (ListView) view.findViewById(R.id.itemList); // list of items
+		// Right side detailed display
+		itemImage = (ImageView) view.findViewById(R.id.itemDescImage); // Image of the item selected from the list
 		itemDesc = (TextView) view.findViewById(R.id.itemDesc); // description of the item selected from the list
+
 		scrapText = (TextView) view.findViewById(R.id.playerScrap);
 		fuelText = (TextView) view.findViewById(R.id.playerFuel);
 		scrapText.setText("" + playerScrap);
 		fuelText.setText("" + Math.round(playerFuel));
+		/** FINISHED LOOKUP */
 
-		// Equip/unequip button
-		equipBtn = (Button) view.findViewById(R.id.inventoryBtn_1);
-		// Cancel button
-		cancelBtn = (Button) view.findViewById(R.id.inventoryBtn_2);
+		// Get strikebase model name and find relevant resources
+		String modeSuffix = strikeBaseModel.toString().toLowerCase();
+
+		int frameResID = getResources().getIdentifier("frame_retro_" + modeSuffix, "drawable", getActivity().getPackageName());
+		int buttonResId = getResources().getIdentifier("btn_retro_" + modeSuffix, "drawable", getActivity().getPackageName());
+		int buttonUpgradeResId = getResources().getIdentifier("btn_retro_upgrade_" + modeSuffix, "drawable", getActivity().getPackageName());
+
+		outerFrame.setBackgroundResource(frameResID);
+		itemDescFrame.setBackgroundResource(frameResID);
+
+		equipBtn.setBackgroundResource(buttonResId);
+		cancelBtn.setBackgroundResource(buttonResId);
+		turretSelectionBtn.setBackgroundResource(buttonResId);
+		upgradeSelectionBtn.setBackgroundResource(buttonResId);
+
 		configButtons();
 
 		// Switch to turret selection
-		final Button turretSelectionBtn = (Button) view.findViewById(R.id.turretSelectionBtn);
 		turretSelectionBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				if (!turretIsSelected) {
 					turretIsSelected = true;
 					itemDesc.setText("");
+					itemImage.setBackgroundResource(0);
 					selectedItem = -1;
 					fillItemList();
 				}
@@ -134,13 +146,13 @@ public class InventoryFragment extends DialogFragment {
 
 
 		// Switch to upgrades selection
-		final Button upgradeSelectionBtn = (Button) view.findViewById(R.id.upgradeSelectionBtn);
 		upgradeSelectionBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				if (turretIsSelected) {
 					turretIsSelected = false;
 					itemDesc.setText("");
+					itemImage.setBackgroundResource(0);
 					selectedItem = -1;
 					fillItemList();
 				}
@@ -150,9 +162,11 @@ public class InventoryFragment extends DialogFragment {
 		if (!switchListEnabled) {
 			turretSelectionBtn.setEnabled(false);
 			turretSelectionBtn.setText("");
+			itemImage.setBackgroundResource(0);
 			turretSelectionBtn.setBackgroundColor(Color.TRANSPARENT);
 			upgradeSelectionBtn.setEnabled(false);
 			upgradeSelectionBtn.setText("");
+			itemImage.setBackgroundResource(0);
 			upgradeSelectionBtn.setBackgroundColor(Color.TRANSPARENT);
 		}
 
@@ -230,9 +244,16 @@ public class InventoryFragment extends DialogFragment {
 					selectedItem = i;
 
 					if (turretIsSelected) {
-						itemDesc.setText(inventory.getTurret(selectedItem).getDisplay());
+						TurretItem turretItem = inventory.getTurret(selectedItem);
+						itemDesc.setText(turretItem.getDisplayText());
+
+						// Get resource ID for custom image and set it to the ImageView
+						String imageName = turretItem.getImage() + "_big";
+						int resId = getActivity().getResources().getIdentifier(imageName, "drawable", getActivity().getPackageName());
+						itemImage.setBackgroundResource(resId);
+
 					} else {
-						itemDesc.setText(inventory.getUpgrade(selectedItem).getDisplay());
+						itemDesc.setText(inventory.getUpgrade(selectedItem).getDisplayText());
 						if (inventory.getUpgrade(selectedItem).isFuel()) {
 							equipBtn.setText(getString(R.string.use_item));
 						}

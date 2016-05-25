@@ -48,7 +48,7 @@ public class UpgradeItem extends Item {
 	}
 
 	@Override
-	public String getDisplay() {
+	public String getDisplayText() {
 		return (this.flavour + "\n\nprice: " + Integer.toString(this.price));
 	}
 
