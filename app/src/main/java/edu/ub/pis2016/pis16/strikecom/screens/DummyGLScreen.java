@@ -341,6 +341,9 @@ public class DummyGLScreen extends Screen {
 
 	/** Create a new tank enemy which spawns somewhere random on the map */
 	private void createEnemy() {
+		if (!strikeBase.isValid())
+			return;
+
 		final Vehicle enemyTank = EnemyFactory.createEnemyTank();
 		GameObject tankTurret = EnemyFactory.createEnemyTankTurret(enemyTank);
 

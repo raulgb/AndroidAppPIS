@@ -91,9 +91,12 @@ public class Physics2D {
 		contacts.clear();
 
 		for (Body bodyA : coarseCollisionArray.dynamicBodies) {
-			Array<Body> potentials = coarseCollisionArray.getPotentialColliders(bodyA);
+			//Array<Body> potentials = coarseCollisionArray.getPotentialColliders(bodyA);
 
-			for (Body bodyB : potentials) {
+			for (Body bodyB : coarseCollisionArray.allBodies) {
+				if(!Filter.test(bodyA.filter, bodyB.filter))
+					continue;
+
 				ContactListener.Contact newContact = contactPool.newObject();
 				// Check if this collision has already been done
 				newContact.a = bodyA;
