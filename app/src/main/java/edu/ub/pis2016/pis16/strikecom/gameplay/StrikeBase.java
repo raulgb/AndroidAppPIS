@@ -113,6 +113,13 @@ public class StrikeBase extends Vehicle {
 		this.putAnchor("pivot", pivot);
 		this.putAnchor("left_thread", leftThreadPos);
 		this.putAnchor("right_thread", rightThreadPos);
+
+		addOnDestroyAction(new Runnable() {
+			@Override
+			public void run() {
+				Assets.sfx_expl_heavy.play(5f);
+			}
+		});
 	}
 
 	@Override
@@ -223,12 +230,6 @@ public class StrikeBase extends Vehicle {
 			compositeArmor.draw(batch, pos.x, pos.y);
 		}
 		*/
-	}
-
-	@Override
-	public void destroy() {
-		Assets.sfx_expl_heavy.play(5f);
-		super.destroy();
 	}
 
 	@Override

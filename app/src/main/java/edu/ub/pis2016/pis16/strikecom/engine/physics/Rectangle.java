@@ -3,7 +3,7 @@ package edu.ub.pis2016.pis16.strikecom.engine.physics;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 
 public class Rectangle implements Shape {
-	private Vector2 tmp = new Vector2();
+	static Vector2 tmp = new Vector2();
 
 	/** Lower Left corner of the Rectangle */
 	public float x, y;
@@ -72,5 +72,17 @@ public class Rectangle implements Shape {
 			return OverlapAlgorithms.overlapCircleRectangle((Circle) p, this);
 		}
 		return false;
+	}
+
+	public void set(float x, float y, float w, float h) {
+		this.x = x;
+		this.y = y;
+		this.width = w;
+		this.height = h;
+	}
+
+	public boolean contains(Vector2 p){
+		// both x and y have to be inside the rectangle limits
+		return p.x >= x && p.x <= x + width && p.y >= y && p.y <= y + height;
 	}
 }

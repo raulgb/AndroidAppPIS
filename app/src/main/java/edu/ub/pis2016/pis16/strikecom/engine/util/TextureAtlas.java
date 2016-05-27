@@ -64,10 +64,10 @@ public class TextureAtlas {
 	 */
 	public TextureRegion getRegion(String name, int index) {
 		if (index < 0) index = 0;
-		TextureRegion region;
-		if ((region = regions.get(name)[index]) == null)
-			throw new IllegalArgumentException("No region with name: " + name + " and index: " + index);
-		return region;
+		TextureRegion[] rArray;
+		if ((rArray = regions.get(name)) == null)
+			throw new IllegalArgumentException("No region with name: " + name);
+		return rArray[index];
 	}
 
 	public TextureRegion getRegion(String name) {

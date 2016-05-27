@@ -1,5 +1,6 @@
 package edu.ub.pis2016.pis16.strikecom.engine.physics;
 
+import edu.ub.pis2016.pis16.strikecom.engine.math.Angle;
 import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 
@@ -52,12 +53,15 @@ public class OverlapAlgorithms {
 
 		// If rectangle is rotated, rotate circle to compensate
 		if (!MathUtils.isZero(r.getRotation(), 1f)) {
-			float rectCX = r.x + r.width/2f;
-			float rectCY = r.y + r.height/2f;
-			float sin = MathUtils.sinDeg(r.rotation);
-			float cos = MathUtils.cosDeg(r.rotation);
+			float rectCX = r.x + r.width / 2f;
+			float rectCY = r.y + r.height / 2f;
+
+			float correctionAngle = Angle.angleDelta(r.rotation, 0);
+			float sin = MathUtils.sinDeg(correctionAngle);
+			float cos = MathUtils.cosDeg(correctionAngle);
+
 			cx = cos * (c.x - rectCX) - sin * (c.y - rectCY) + rectCX;
-			cy  = sin * (c.x - rectCX) + cos * (c.y - rectCY) + rectCY;
+			cy = sin * (c.x - rectCX) + cos * (c.y - rectCY) + rectCY;
 		}
 
 		// Usual circle VS rect algorithm
@@ -76,7 +80,12 @@ public class OverlapAlgorithms {
 
 		closestX = cx - closestX;
 		closestY = cy - closestY;
-		return (closestX * closestX + closestY * closestY <= c.radius * c.radius);
+
+		if (closestX * closestX + closestY * closestY <= c.radius * c.radius) {
+			float i = 1;
+			return true;
+		} else
+			return false;
 	}
 
 	float min(float a, float b) {

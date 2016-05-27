@@ -6,24 +6,25 @@ import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 public abstract class Body {
 
 	public Vector2 position = new Vector2();
-	public Object userData;
 
 	/** The shape of the body, centered around it */
-	protected Shape bounds;
+	public Shape bounds;
+	public Object userData;
+	public Physics2D.Filter filter = Physics2D.Filter.ALL;
+	public boolean colliding = false;
 
 	public Body(Shape bounds) {
 		this.bounds = bounds;
-		bounds.setPosition(this.position);
 	}
 
 	public Shape getBounds() {
 		return bounds;
 	}
 
-	public boolean collide(Body body){
+	public boolean collide(Body other) {
 		bounds.setPosition(this.position);
-		body.bounds.setPosition(body.position);
+		other.bounds.setPosition(other.position);
 
-		return bounds.overlaps(body.bounds);
+		return bounds.overlaps(other.bounds);
 	}
 }

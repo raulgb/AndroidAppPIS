@@ -55,6 +55,12 @@ public class ThreadVehicle extends Vehicle {
 
 		// Config turret
 		putAnchor("turret", turretAnchor);
+		addOnDestroyAction(new Runnable() {
+			@Override
+			public void run() {
+				Assets.sfx_expl_light.play(5f);
+			}
+		});
 	}
 
 	public void update(float delta) {
@@ -112,12 +118,6 @@ public class ThreadVehicle extends Vehicle {
 		physics.setVelocity(tmp.set((leftThreadVel + rightThreadVel) / 2f, 0).rotate(rotation));
 		physics.setRotation(rotation);
 		physics.setPosition(pos);
-	}
-
-	@Override
-	public void destroy(){
-		Assets.sfx_expl_light.play(5f);
-		super.destroy();
 	}
 
 	@Override

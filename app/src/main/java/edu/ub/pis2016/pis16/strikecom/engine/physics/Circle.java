@@ -7,7 +7,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
  */
 public class Circle implements Shape {
 
-	Vector2 tmp = new Vector2();
+	static Vector2 tmp = new Vector2();
 
 	/** Center coordinates of the Circle */
 	public float x, y;
@@ -64,5 +64,14 @@ public class Circle implements Shape {
 		}
 
 		return false;
+	}
+
+	public boolean overlaps(Circle c) {
+		return OverlapAlgorithms.overlapCircles(this, c);
+	}
+
+	@Override
+	public boolean contains(Vector2 point) {
+		return point.dst2(x, y) < radius * radius;
 	}
 }

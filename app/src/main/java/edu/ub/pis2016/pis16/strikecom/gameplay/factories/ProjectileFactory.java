@@ -23,21 +23,20 @@ public class ProjectileFactory {
 
 	public static GameObject newProjectile(Type projType) {
 		// Common
-		GameObject proj = new GameObject(){
+		final GameObject proj = new GameObject();
+		proj.addOnDestroyAction(new Runnable() {
 			@Override
-			public void destroy() {
+			public void run() {
 				// Sound
 				Assets.sfx_hit.play(2);
 
 				// Bullet Explosion on death
 				Explosion explosion = new Explosion("explosion_bullet");
-				explosion.setPosition(getPosition());
+				explosion.setPosition(proj.getPosition());
 				explosion.getSprite().setScale(0.25f);
-				getScreen().addGameObject(explosion);
-
-				super.destroy();
+				proj.getScreen().addGameObject(explosion);
 			}
-		};
+		});
 		proj.putComponent(new ProjectileBehavior());
 		Circle hitbox = new Circle(0.05f);
 		proj.putComponent(new PhysicsComponent(new DynamicBody(hitbox)));

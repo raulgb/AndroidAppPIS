@@ -8,6 +8,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.math.Angle;
 import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Sprite;
+import edu.ub.pis2016.pis16.strikecom.engine.physics.Physics2D;
 import edu.ub.pis2016.pis16.strikecom.engine.util.performance.Array;
 import edu.ub.pis2016.pis16.strikecom.gameplay.Turret;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.TurretConfig;
@@ -151,9 +152,13 @@ public class TurretBehavior extends BehaviorComponent {
 		));
 		projPhys.setRotation(turretPhys.getRotation());
 
-		// set the tag to "player_proj" or "enemy_proj" and same group as parent
+		// set the tag to "player_proj" or "enemy_proj"
 		projectile.setTag(gameObject.getParent().getTag() + "_proj");
-		projectile.group = gameObject.group;
+
+		if (gameObject.getTag().contains("player"))
+			projPhys.body.filter = Physics2D.Filter.PLAYER_PROJ;
+		else if (gameObject.getTag().contains("enemy"))
+			projPhys.body.filter = Physics2D.Filter.ENEMY_PROJ;
 
 		// set hitpoints as damage made on impact
 		projectile.hitpoints = cfg.proj_damage;

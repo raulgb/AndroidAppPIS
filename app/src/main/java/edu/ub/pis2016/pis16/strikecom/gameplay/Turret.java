@@ -21,7 +21,6 @@ public class Turret extends GameObject {
 	public Turret(String model, Vehicle owner, String anchor) {
 		this.model = model;
 
-		this.group = owner.group;
 		this.anchor = owner.getAnchor(anchor);
 
 		this.setParent(owner);
@@ -34,6 +33,10 @@ public class Turret extends GameObject {
 
 		putComponent(new GraphicsComponent(sprite));
 		putComponent(new PhysicsComponent());
+
+		// Set same filter as parent for collisions
+		PhysicsComponent ownerPhys = owner.getPhysics();
+		//getPhysics().body.filter = ownerPhys.body.filter;
 	}
 
 	public void setId(String id) {

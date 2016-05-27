@@ -1,8 +1,5 @@
 package edu.ub.pis2016.pis16.strikecom.engine.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import edu.ub.pis2016.pis16.strikecom.engine.util.performance.Array;
 
 public class Pool<T> {
@@ -10,6 +7,7 @@ public class Pool<T> {
 	public interface PoolObjectFactory<T> {
 		T createObject();
 	}
+
 
 	private final Array<T> freeObjects;
 	private final PoolObjectFactory<T> factory;

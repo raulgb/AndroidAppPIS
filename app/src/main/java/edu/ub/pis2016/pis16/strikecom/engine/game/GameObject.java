@@ -1,6 +1,7 @@
 package edu.ub.pis2016.pis16.strikecom.engine.game;
 
 import java.util.HashMap;
+import java.util.concurrent.RunnableFuture;
 
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.GraphicsComponent;
@@ -26,14 +27,14 @@ public class GameObject {
 	/** Component Array for iteration performance purposes */
 	private Array<Component> componentArray = new Array<>();
 
+	private Array<Runnable> destroyRunnables = new Array<>(false, 2);
+
 	/** A parent GameObject in a hierarchy */
 	private GameObject parent = null;
 	/** The layer ID refers to how this component will be ordered in the draw call stack. Lower layers will be drawn first */
 	private int layerID = 0;
 	/** Tags are used internally for BehaviorComponents to identify certain GameObject as part of the scenery, allied, enemy, etc. */
 	private String tag = "";
-	/** Groups for factions or whatever. Testing is done A.group & B.group */
-	public int group = 0;
 
 
 	/** Health Related */
@@ -126,21 +127,40 @@ public class GameObject {
 		this.parent = parent;
 	}
 
-	/** Call this method to schedule this object to be removed from the Screen. */
-	public void destroy() {
+	public void addOnDestroyAction(Runnable r) {
+		destroyRunnables.add(r);
+	}
+
+	/**
+	 * Call this method to schedule this object to be removed from the Screen. This will also run any actions
+	 * defined to be run on object destroy.
+	 */
+	final public void destroy() {
+		for (Runnable r : destroyRunnables)
+			r.run();
 		screen.removeGameObject(this);
 	}
 
-	/** Override this method to change what happens when the object is actually destroyed */
 	public void destroyInternal() {
-		for (Component c : components.values())
-			c.destroy();
+		try {
+			for (Component c : componentArray)
+				c.destroy();
 
-		screen = null;
-		parent = null;
-		components.clear();
-		componentArray.clear();
-		newComponents.clear();
+			destroyRunnables.clear();
+			components.clear();
+			componentArray.clear();
+			newComponents.clear();
+
+			screen = null;
+			parent = null;
+			destroyRunnables = null;
+			components = null;
+			componentArray = null;
+			newComponents = null;
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+
 	}
 
 	// --- ACCELERATOR METHODS --- //
@@ -170,7 +190,16 @@ public class GameObject {
 		GraphicsComponent graph;
 		if ((graph = getComponent(GraphicsComponent.class)) != null)
 			return graph.getSprite();
-		throw new IllegalStateException("Can't get the Srpite of a GameObject without GraphicsComponent: " + this.toString());
+		throw new IllegalStateException("Can't get the Sprite of a GameObject without GraphicsComponent: " + this.toString());
+
+	}
+
+
+	public PhysicsComponent getPhysics() {
+		PhysicsComponent phys;
+		if ((phys = getComponent(PhysicsComponent.class)) != null)
+			return phys;
+		throw new IllegalStateException("GameObject has no PhysicsComponent: " + this.toString());
 
 	}
 
@@ -181,4 +210,5 @@ public class GameObject {
 	public boolean isValid() {
 		return screen != null;
 	}
+
 }

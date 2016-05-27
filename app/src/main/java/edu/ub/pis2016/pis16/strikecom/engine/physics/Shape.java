@@ -24,4 +24,5 @@ public interface Shape {//interface with basic collision methods
 	/** Returns true if this shape overlaps another shape */
 	boolean overlaps(Shape p);
 
+	boolean contains(Vector2 point);
 }

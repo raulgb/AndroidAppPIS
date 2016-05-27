@@ -1,37 +1,31 @@
 package edu.ub.pis2016.pis16.strikecom.engine.physics;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Sprite;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
+import edu.ub.pis2016.pis16.strikecom.engine.util.Pool;
 import edu.ub.pis2016.pis16.strikecom.engine.util.performance.Array;
+import edu.ub.pis2016.pis16.strikecom.engine.util.performance.ObjectSet;
 
 import static edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig.TILE_SIZE;
 
 public class Physics2D {
 
-	/** StaticBodies here */
-	private Array<Body> staticBodies = new Array<>();
-	/** Dynamic + Kinematic */
-	private Array<Body> dynamicBodies = new Array<>();
-
-	private Vector2 tmp = new Vector2();
-
 	private float worldWidth;
 	private float worldHeight;
 
-	private Array<Body> collidedBodies = new Array<>();
-	private SpatialHashGrid spatialHashGrid;
+	private CoarseCollisionArray coarseCollisionArray;
+
+	/** Special map for Bodies currenly under contact */
+	private ObjectSet<ContactListener.Contact> previousContacts = new ObjectSet<>();
+	private ObjectSet<ContactListener.Contact> contacts = new ObjectSet<>();
 
 	private Array<ContactListener> listeners = new Array<>();
 
-	private ContactListener.CollisionEvent cEvent = new ContactListener.CollisionEvent();
+	Pool<ContactListener.Contact> contactPool;
+	private Vector2 tmp = new Vector2();
 
 	/**
 	 * creates 2d physics world
@@ -44,7 +38,16 @@ public class Physics2D {
 		this.worldWidth = worldWidth;
 		this.worldHeight = worldHeight;
 		float cellSize = 16; // 16*16 tiles per cell
-		spatialHashGrid = new SpatialHashGrid(worldWidth, worldHeight, cellSize);
+		//coarseCollisionArray = new SpatialHashGrid(worldWidth, worldHeight, cellSize);
+		coarseCollisionArray = new CoarseCollisionArray();
+
+
+		contactPool = new Pool<>(new Pool.PoolObjectFactory<ContactListener.Contact>() {
+			@Override
+			public ContactListener.Contact createObject() {
+				return new ContactListener.Contact();
+			}
+		}, 32);
 	}
 
 	/** World width in tiles */
@@ -59,10 +62,8 @@ public class Physics2D {
 	}
 
 	public void update(float delta) {//update all Bodies of the game
-		spatialHashGrid.clearDynamicCells(); //clear previous cells numbers assigned to dynamic objects
-
 		//update velocity and positions of all dynamic bodies
-		for (Body body : dynamicBodies) {
+		for (Body body : coarseCollisionArray.dynamicBodies) {
 
 			// Only update Dynamic Bodies
 			if (body instanceof DynamicBody) {
@@ -82,52 +83,66 @@ public class Physics2D {
 				dynBody.position.y = MathUtils.max(0.1f, dynBody.position.y);
 				dynBody.position.y = MathUtils.min(worldHeight - 0.1f, dynBody.position.y);
 			}
-
-			this.spatialHashGrid.insertDynamicObject(body); // insert back to  hash grid
 		}
 
-		// Handle collisions
-		collidedBodies.clear();
-		for (Body bodyA : dynamicBodies) {
-			if (collidedBodies.contains(bodyA))
-				continue;
+		// Store past contacts
+		previousContacts.clear();
+		previousContacts.addAll(contacts);
+		contacts.clear();
 
-			Array<Body> potentials = spatialHashGrid.getPotentialColliders(bodyA);
+		for (Body bodyA : coarseCollisionArray.dynamicBodies) {
+			Array<Body> potentials = coarseCollisionArray.getPotentialColliders(bodyA);
 
 			for (Body bodyB : potentials) {
-				if (bodyA == bodyB)
+				ContactListener.Contact newContact = contactPool.newObject();
+				// Check if this collision has already been done
+				newContact.a = bodyA;
+				newContact.b = bodyB;
+				if (contacts.contains(newContact)) {
+					contactPool.free(newContact);
 					continue;
-
+				}
 
 				// Detect Collision
 				if (bodyA.collide(bodyB)) {
-					cEvent.a = bodyA;
-					cEvent.b = bodyB;
+					newContact.a = bodyA;
+					newContact.b = bodyB;
+					tmp.set(bodyA.position).lerp(bodyB.position, .5f);
+					newContact.contactX = tmp.x;
+					newContact.contactY = tmp.y;
 
-					// TODO Calculate point of impact
-//					cEvent.contactX = 0;
-//					cEvent.contactY = 0;
+					// Store new contact
+					contacts.add(newContact);
 
-					// Pass along to listeners
-					for (ContactListener cl : listeners)
-						cl.onCollision(cEvent);
-
-					collidedBodies.add(bodyB);
+					// Pass along to listeners the first time
+					if (!previousContacts.contains(newContact))
+						for (ContactListener cl : listeners)
+							cl.beginContact(newContact);
 				}
 			}
 		}
-		//Log.i("Physics2D", "Total tested: " + tested);
+
+		// End all obsolete contacts
+		for (ContactListener.Contact oldContact : previousContacts) {
+			if (!contacts.contains(oldContact)) {
+				// End contact
+				for (ContactListener cl : listeners)
+					cl.endContact(oldContact);
+
+				contacts.remove(oldContact);
+				contactPool.free(oldContact);
+			}
+		}
 	}
 
 	/** Static bodies */
 	protected void addStaticBody(Body b) {
-		this.staticBodies.add(b);
-		this.spatialHashGrid.insertStaticObject(b); //warning
+		this.coarseCollisionArray.insertStaticObject(b); //warning
 	}
 
 	/** Dynamic and Kinematic bodies */
 	protected void addDynamicBody(Body b) {//add dynamic body to physics engine
-		this.dynamicBodies.add(b);
+		this.coarseCollisionArray.insertDynamicObject(b);
 	}
 
 	public void addContactListener(ContactListener cl) {
@@ -143,30 +158,23 @@ public class Physics2D {
 			addDynamicBody(body);
 	}
 
-	public boolean removeBody(Body body) {
-		//Log.d("Physics2D", "Removed body: " + body.userData);
-
-		spatialHashGrid.removeObject(body);
-		if (staticBodies.removeValue(body, true))
-			return true;
-		if (dynamicBodies.removeValue(body, true))
-			return true;
-		return false;
+	public void removeBody(Body body) {
+		coarseCollisionArray.removeObject(body);
 	}
 
 	public Array<Body> getStaticBodies() {
-		return staticBodies;
+		return coarseCollisionArray.getStaticBodies();
 	}
 
 	public Array<Body> getDynamicBodies() {
-		return dynamicBodies;
+		return coarseCollisionArray.getDynamicBodies();
 	}
 
 	private Sprite hitbox = new Sprite(Assets.SPRITE_ATLAS.getRegion("hitbox"));
 	private Sprite hitbox_round = new Sprite(Assets.SPRITE_ATLAS.getRegion("hitbox_round"));
 
 	public void debugDraw(SpriteBatch batch) {
-		for (Body b : getDynamicBodies()) {
+		for (Body b : coarseCollisionArray.allBodies) {
 			Shape bounds = b.getBounds();
 
 			if (bounds instanceof Rectangle) {
@@ -183,6 +191,44 @@ public class Physics2D {
 
 		}
 	}
+
+	static final int PLAYER_BIT = 1;
+	static final int ENEMY_BIT = 1 << 1;
+	static final int PLAYER_PROJ_BIT = 1 << 2;
+	static final int ENEMY_PROJ_BIT = 1 << 3;
+	static final int TERRAIN_BIT = 1 << 4;
+	static final int SHOP_BIT = 1 << 5;
+
+	/**
+	 * Filters are used to determine whether two bodies collide. To collide two filters,
+	 * the Category bits of A must be set on the mask bits of B, and likewise for B.
+	 */
+	public enum Filter {
+		ALL(0x7FFFFFFF, 0x7FFFFFFF),
+		PLAYER(PLAYER_BIT, ENEMY_BIT | ENEMY_PROJ_BIT | SHOP_BIT),
+		ENEMY(ENEMY_BIT, PLAYER_BIT | PLAYER_PROJ_BIT),
+		PLAYER_PROJ(PLAYER_PROJ_BIT, ENEMY_BIT),
+		ENEMY_PROJ(ENEMY_PROJ_BIT, PLAYER_BIT),
+		SHOP(SHOP_BIT, PLAYER_BIT);
+
+		public final int categoryBits;
+		public final int maskBits;
+
+		Filter(int categoryBits, int maskBits) {
+			this.categoryBits = categoryBits;
+			this.maskBits = maskBits;
+		}
+
+		public static boolean isProjectile(Filter f) {
+			return f == PLAYER_PROJ || f == ENEMY_PROJ;
+		}
+
+		/** Returns true if two Filters indicate a collision */
+		public static boolean test(Filter a, Filter b) {
+			return (a.maskBits & b.categoryBits) != 0 && (a.categoryBits & b.maskBits) != 0;
+		}
+	}
+
 }
 /*
 * http://box2d.org/manual.pdf
