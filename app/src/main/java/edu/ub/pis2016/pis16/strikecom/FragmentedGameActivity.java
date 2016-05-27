@@ -24,6 +24,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Texture;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.ContactListener;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
+import edu.ub.pis2016.pis16.strikecom.fragments.GameOverFragment;
 import edu.ub.pis2016.pis16.strikecom.fragments.InventoryFragment;
 import edu.ub.pis2016.pis16.strikecom.fragments.MiniMapFragment;
 import edu.ub.pis2016.pis16.strikecom.fragments.ShopFragment;
@@ -33,6 +34,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.fragments.SlotsFragment;
 import edu.ub.pis2016.pis16.strikecom.gameplay.InventoryItemAdapter;
 import edu.ub.pis2016.pis16.strikecom.gameplay.InventoryManager;
+import edu.ub.pis2016.pis16.strikecom.gameplay.PlayerState;
 import edu.ub.pis2016.pis16.strikecom.gameplay.StrikeBase;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.Inventory;
@@ -45,10 +47,10 @@ public class FragmentedGameActivity extends Activity {
 
 	PowerManager.WakeLock wakeLock;
 
+	public PlayerState playerState;
 	public StrikeComGLGame game;
 	public SidebarFragment sidebar;
 
-	public HashMap<String, Object> playerState = new HashMap<>();
 	public HashMap<String, Inventory> shopMap = new HashMap<>();
 
 
@@ -57,12 +59,15 @@ public class FragmentedGameActivity extends Activity {
 		super.onCreate(savedInstanceState);
 
 		int selectedConfig = getIntent().getIntExtra("config", 1);
+		String playerName = getIntent().getStringExtra("player_name");
+
 		StrikeBaseConfig.Model strikeBaseModel = StrikeBaseConfig.Model.values()[selectedConfig];
 		SidebarFragment.strikeBaseModel = strikeBaseModel;
 		InventoryItemAdapter.strikeBaseModel = strikeBaseModel;
 		InventoryFragment.strikeBaseModel = strikeBaseModel;
 		SlotsFragment.strikeBaseModel = strikeBaseModel;
 		DummyGLScreen.strikeBaseModel = strikeBaseModel;
+		GameOverFragment.strikeBaseModel = strikeBaseModel;
 
 		// Hide window decorations
 		hideSystemUI();
@@ -81,10 +86,9 @@ public class FragmentedGameActivity extends Activity {
 		// Give the sidebar fragment a reference to the game fragment.
 		sidebar.setGame(game);
 
-		playerState.put("SCRAP", 1000);
-		playerState.put("FUEL", 100f);
-		playerState.put("POINTS", 0);
-		playerState.put("INVENTORY", new Inventory());
+		playerState = new PlayerState(playerName);
+		playerState.addScrap(1000);
+		playerState.addFuel(100f);
 
 		// Thread updating sidebar once per second
 		new Thread(new Runnable() {
@@ -99,8 +103,8 @@ public class FragmentedGameActivity extends Activity {
 					runOnUiThread(new Runnable() {
 						@Override
 						public void run() {
-							sidebar.updateScrap((Integer) playerState.get("SCRAP"));
-							sidebar.updateFuel((Float) playerState.get("FUEL"));
+							sidebar.updateScrap((Integer) playerState.getScrap());
+							sidebar.updateFuel((Float) playerState.getFuel());
 						}
 					});
 				}
@@ -197,10 +201,7 @@ public class FragmentedGameActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// return to main menu
-
-				Intent intent = new Intent(getApplicationContext(), MainMenuActivity.class);
-				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				startActivity(intent);
+				backToMainMenu();
 
 			}
 		});
@@ -236,16 +237,22 @@ public class FragmentedGameActivity extends Activity {
 		/*}*/
 	}
 
+	public void backToMainMenu() {
+		Intent intent = new Intent(getApplicationContext(), MainMenuActivity.class);
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		startActivity(intent);
+	}
+
 	public void showInventoryDialog(int selectedSlot, boolean turretIsSelected, boolean switchIsEnabled) {
 		pauseGame();
 
 		InventoryFragment inventoryFrag = new InventoryFragment();
-		inventoryFrag.setInventory((Inventory) playerState.get("INVENTORY"));
+		inventoryFrag.setInventory(playerState.inventory);
 		inventoryFrag.setSelectedSlot(selectedSlot);
 		inventoryFrag.setSwitchListEnabled(switchIsEnabled);
 		inventoryFrag.setTurretSelection(turretIsSelected);
-		inventoryFrag.setPlayerScrap((Integer) playerState.get("SCRAP"));
-		inventoryFrag.setPlayerFuel((Float) playerState.get("FUEL"));
+		inventoryFrag.setPlayerScrap(playerState.getScrap());
+		inventoryFrag.setPlayerFuel(playerState.getFuel());
 		inventoryFrag.show(getFragmentManager(), "Inventory_Fragment");
 
 	}
@@ -261,7 +268,6 @@ public class FragmentedGameActivity extends Activity {
 		slots.setEquippedTurrets(strikeBase.getEquippedTurrets());
 		slots.setEquippedUpgrades(strikeBase.getEquippedUpgrades());
 		slots.show(getFragmentManager(), "slots");
-
 	}
 
 	public void showShopDialog(String shopID) {
@@ -270,10 +276,18 @@ public class FragmentedGameActivity extends Activity {
 		ShopFragment shopFragment = new ShopFragment();
 		shopFragment.setId(shopID);
 		shopFragment.setInventory(shopMap.get(shopID));
-		shopFragment.setPlayerScrap((Integer) playerState.get("SCRAP"));
-		shopFragment.setPlayerFuel((Float) playerState.get("FUEL"));
+		shopFragment.setPlayerScrap(playerState.getScrap());
+		shopFragment.setPlayerFuel(playerState.getFuel());
 		shopFragment.show(getFragmentManager(), "shop");
 
+	}
+
+	public void showGameOverDialog() {
+		pauseGame();
+
+		GameOverFragment gameOverFragment = new GameOverFragment();
+		gameOverFragment.setScore(playerState.getScore());
+		gameOverFragment.show(getFragmentManager(), "gameover");
 	}
 
 	public void equipTurret(TurretItem item, int slot) {
@@ -282,9 +296,7 @@ public class FragmentedGameActivity extends Activity {
 		retrieveTurret(slot);
 		strikeBase.addTurret(item, slot);
 
-		Inventory inv = (Inventory) playerState.get("INVENTORY");
-		inv.removeItem(item);
-		playerState.put("INVENTORY", inv);
+		playerState.inventory.removeItem(item);
 
 		Button slotBtn = (Button) sidebar.getTurretSlot(slot);
 		int imageID = getResources().getIdentifier(item.getImage(), "drawable", getPackageName());
@@ -302,9 +314,7 @@ public class FragmentedGameActivity extends Activity {
 		retrieveUpgrade(slot);
 		strikeBase.addUpgrade(item, slot);
 
-		Inventory inv = (Inventory) playerState.get("INVENTORY");
-		inv.removeItem(item);
-		playerState.put("INVENTORY", inv);
+		playerState.inventory.removeItem(item);
 
 		Button slotBtn = (Button) sidebar.getUpgradeSlot(slot);
 		int imageID = getResources().getIdentifier(item.getImage(), "drawable", getPackageName());
@@ -317,43 +327,32 @@ public class FragmentedGameActivity extends Activity {
 	}
 
 	public void useFuel(UpgradeItem fuel) {
-		Inventory inv = (Inventory) playerState.get("INVENTORY");
-		inv.removeItem(fuel);
-		playerState.put("INVENTORY", inv);
-		playerState.put("FUEL", (Float) playerState.get("FUEL") + 250f);
+		playerState.inventory.removeItem(fuel);
+		playerState.addFuel(250f);
 
 		updateFuelCounter();
 		resumeGame();
 	}
 
 	public void buyItem(String shopID, TurretItem item) {
-		Inventory playerInventory = (Inventory) playerState.get("INVENTORY");
 		Inventory shopInventory = shopMap.get(shopID);
-		int scrap = (Integer) playerState.get("SCRAP");
 
 		shopInventory.removeItem(item);
-		scrap -= item.getPrice();
-		playerInventory.addItem(item);
-
-		playerState.put("INVENTORY", playerInventory);
-		playerState.put("SCRAP", scrap);
+		playerState.inventory.addItem(item);
+		playerState.addScrap( -item.getPrice());
 	}
 
 	public void buyItem(String shopID, UpgradeItem item) {
-		Inventory playerInventory = (Inventory) playerState.get("INVENTORY");
 		Inventory shopInventory = shopMap.get(shopID);
-		int scrap = (Integer) playerState.get("SCRAP");
 
 		shopInventory.removeItem(item);
-		scrap -= item.getPrice();
 
 		if (item.isFuel()) {
-			playerState.put("FUEL", (Float) playerState.get("FUEL") + 250f);
+			playerState.addFuel(250f);
 		} else {
-			playerInventory.addItem(item);
-			playerState.put("INVENTORY", playerInventory);
+			playerState.inventory.addItem(item);
 		}
-		playerState.put("SCRAP", scrap);
+		playerState.addScrap( -item.getPrice());
 	}
 
 	private void retrieveTurret(int slot) {
@@ -362,9 +361,7 @@ public class FragmentedGameActivity extends Activity {
 
 		if (turret != null) {
 			strikeBase.removeTurret(slot);
-			Inventory inv = (Inventory) playerState.get("INVENTORY");
-			inv.addItem(turret);
-			playerState.put("INVENTORY", inv);
+			playerState.inventory.addItem(turret);
 		}
 	}
 
@@ -374,9 +371,7 @@ public class FragmentedGameActivity extends Activity {
 
 		if (upgrade != null) {
 			strikeBase.removeUpgrade(slot);
-			Inventory inv = (Inventory) playerState.get("INVENTORY");
-			inv.addItem(upgrade);
-			playerState.put("INVENTORY", inv);
+			playerState.inventory.addItem(upgrade);;
 		}
 	}
 
@@ -385,7 +380,7 @@ public class FragmentedGameActivity extends Activity {
 		String upgradesFile = getString(R.string.upgradesFile);
 		try {
 			InventoryManager im = new InventoryManager(this, turretsFile, upgradesFile);
-			playerState.put("INVENTORY", im.getStartingInventory());
+			playerState.inventory =  im.getStartingInventory();
 
 			for (String key : shopMap.keySet()) {
 				shopMap.put(key, im.getShopInventory(20, 2));
@@ -404,11 +399,11 @@ public class FragmentedGameActivity extends Activity {
 	}
 
 	public void updateScrapCounter() {
-		sidebar.updateScrap((Integer) playerState.get("SCRAP"));
+		sidebar.updateScrap(playerState.getScrap());
 	}
 
 	public void updateFuelCounter() {
-		sidebar.updateFuel((Float) playerState.get("FUEL"));
+		sidebar.updateFuel(playerState.getFuel());
 	}
 
 }

@@ -36,8 +36,7 @@ public class EnemyFactory {
 				FragmentedGameActivity gameActivity =
 						(FragmentedGameActivity) ((GLGameFragment) thisScreen.getGame()).getActivity();
 
-				int scrap = (int) gameActivity.playerState.get("SCRAP");
-				gameActivity.playerState.put("SCRAP", scrap + enemyTank.maxHitpoints);
+				gameActivity.playerState.addScrap(enemyTank.maxHitpoints);
 			}
 		});
 

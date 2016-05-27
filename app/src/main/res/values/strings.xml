@@ -80,4 +80,9 @@
     <string name="alertYes">Yes</string>
     <string name="alertNo">No</string>
 
+    <!--Game Over-->
+    <string name="gameover_title">Game Over</string>
+    <string name="score_label">Your score:</string>
+    <string name="submit_button">Submit</string>
+
 </resources>

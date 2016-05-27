@@ -316,6 +316,13 @@ public class DummyGLScreen extends Screen {
 
 		// ------ STRIKEBASE CONFIG ------------
 		strikeBase = new StrikeBase(new StrikeBaseConfig(strikeBaseModel));
+		strikeBase.addOnDestroyAction(new Runnable() {
+			@Override
+			public void run() {
+				activity.showGameOverDialog();
+			}
+		});
+
 		strikeBase.putComponent(new VehicleFollowBehavior());
 		strikeBase.getComponent(VehicleFollowBehavior.class).setMinRange(1.5f * TILE_SIZE);
 		strikeBase.setTag("player_strikebase");

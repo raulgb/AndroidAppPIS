@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import edu.ub.pis2016.pis16.strikecom.gameplay.PlayerState;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
 
 /**
@@ -55,6 +56,7 @@ public class SelectMenuActivity extends AppCompatActivity {
 				} else {
 					Intent changeToGame = new Intent(selectMenu, FragmentedGameActivity.class);
 					changeToGame.putExtra("config", selectedConfig);
+					changeToGame.putExtra("player_name", textName.getText().toString());
 					startActivity(changeToGame);
 				}
 			}

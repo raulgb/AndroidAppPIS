@@ -3,7 +3,9 @@ package edu.ub.pis2016.pis16.strikecom.gameplay;
 import java.util.HashMap;
 
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
+import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
+import edu.ub.pis2016.pis16.strikecom.engine.math.Angle;
 import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.AnimatedSprite;
@@ -280,12 +282,15 @@ public class StrikeBase extends Vehicle {
 
 		turret.setTag(getTag() + "_" + tName);
 
-		// Create a modified turret behavior with camera shake
+		// Create a modified physics component that takes parent rotation into account
+		PhysicsComponent turretPhysics = new PhysicsComponent();
+
 		TurretBehavior turretBehavior = new TurretBehavior();
 		turretBehavior.setTargetTag("enemy");
-		turretBehavior.setAngleLimit(cfg.turret_angle_lim[slot][0], cfg.turret_angle_lim[slot][1]);
+		turretBehavior.setAngleLimit(cfg.turret_angle_lim[slot]);
 
 		turret.putComponent(turretBehavior);
+		turret.putComponent(turretPhysics);
 		turret.cfg = item.getConfig();
 		//getComponent(GraphicsComponent.class).getSprite().setSize(GameConfig.TILE_SIZE *2);
 
