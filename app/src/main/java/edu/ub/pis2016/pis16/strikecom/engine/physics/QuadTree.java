@@ -139,7 +139,7 @@ public class QuadTree {
 		objects.add(body);
 
 		if (objects.size > MAX_OBJECTS && level < MAX_LEVELS) {
-			if (nodes[0] == null) {
+			if (!isSplit) {
 				split();
 			}
 

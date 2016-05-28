@@ -1,7 +1,6 @@
 package edu.ub.pis2016.pis16.strikecom.gameplay.factories;
 
 import edu.ub.pis2016.pis16.strikecom.FragmentedGameActivity;
-import edu.ub.pis2016.pis16.strikecom.engine.framework.Graphics;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.GraphicsComponent;
@@ -40,8 +39,6 @@ public class EnemyFactory {
 		tank.cfg.accel = .75f * TILE_SIZE;
 
 		tank.getPhysics().body.filter = Physics2D.Filter.ENEMY;
-		tmp.set(8 * TILE_SIZE, 0).rotate(MathUtils.random(360));
-		tank.getPhysics().setPosition(strikeBase.getPosition().add(tmp));
 
 		tank.setTag("enemy_tank");
 		tank.setLayer(LAYER_VEHICLES);
@@ -94,9 +91,11 @@ public class EnemyFactory {
 		turret.setLayer(LAYER_VEHICLE_TURRET);
 		turret.getSprite().setSize(1f * TILE_SIZE);
 		TurretBehavior tb = new TurretBehavior();
-		tb.setTargetTag("player");
 		turret.putComponent(tb);
 		screen.addGameObject(turret);
+
+		tank.faction = GameObject.Faction.RAIDERS;
+		turret.faction = GameObject.Faction.RAIDERS;
 
 		return tank;
 	}

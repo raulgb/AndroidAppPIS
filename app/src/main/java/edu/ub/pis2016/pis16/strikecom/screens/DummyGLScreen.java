@@ -86,13 +86,14 @@ public class DummyGLScreen extends Screen {
 
 		activity = (FragmentedGameActivity) ((StrikeComGLGame) game).getActivity();
 
-		// Create camera, set zoom to fit TILES_ON_SCREEN, rounding to nearest int
+		// Camera
 		camera = new OrthoCamera(glGraphics, glGraphics.getWidth(), glGraphics.getHeight());
 		camera.putComponent(new CameraBehavior());
-
+		// Set zoom to fit TILES_ON_SCREEN, rounding to nearest int
 		float zoomFactor = glGraphics.getWidth() / (float) (TILES_ON_SCREEN * TILE_SIZE);
 		camera.zoom = 1f / (int) zoomFactor;
 		camera.setLayer(LAYER_GUI);
+		camera.setTag("ortho_camera");
 		addGameObject("OrthoCamera", camera);
 
 		physics2D = new Physics2D(MAP_SIZE, MAP_SIZE);
@@ -134,7 +135,7 @@ public class DummyGLScreen extends Screen {
 		if (secondsCounter > 5) {
 			secondsCounter -= 5;
 			Log.i("FPS", "" + MathUtils.roundPositive(1f / fpsMean.getMean()));
-//			System.gc();
+			System.gc();
 //			for (GameObject go : getGameObjects())
 //				System.out.println(go);
 		}
@@ -163,7 +164,7 @@ public class DummyGLScreen extends Screen {
 
 		gameMap.draw(batch, camera.position);
 
-		// Calculate a triangle which defines an area where object are drawn.
+		// Calculate a recangle which defines an area where object are drawn.
 		// Any object outside this rectangle is not drawn
 		float clipBreath = TILES_ON_SCREEN * TILE_SIZE * 1.2f;
 		clipBounds.set(
@@ -232,6 +233,7 @@ public class DummyGLScreen extends Screen {
 		shop.setTag("shop_1");
 		shop.setLayer(LAYER_BACKGROUND);
 		shop.setPosition((MAP_SIZE / 2f - 4) * TILE_SIZE, MAP_SIZE / 2f * TILE_SIZE);
+		shop.faction = GameObject.Faction.SHOP;
 		addGameObject("shop_1", shop);
 
 		// ------ STRIKEBASE CONFIG ------------
@@ -243,22 +245,23 @@ public class DummyGLScreen extends Screen {
 			}
 		});
 
-		strikeBase.putComponent(new VehicleFollowBehavior());
-		strikeBase.getComponent(VehicleFollowBehavior.class).setMinRange(1.5f * TILE_SIZE);
 		strikeBase.setTag("player_strikebase");
 		strikeBase.setLayer(LAYER_STRIKEBASE);
 		strikeBase.setPosition(MAP_SIZE / 2f * TILE_SIZE, MAP_SIZE / 2f * TILE_SIZE);
 		strikeBase.getPhysics().body.filter = Physics2D.Filter.PLAYER;
-		strikeBase.hitpoints = 500;
-		strikeBase.maxHitpoints = 500;
-		strikeBase.killable = true;
-		camera.setPosition(strikeBase.getPosition());
-		addGameObject("StrikeBase", strikeBase);
+		// Vehicle Follow Behavior
+		strikeBase.putComponent(new VehicleFollowBehavior());
+		strikeBase.getComponent(VehicleFollowBehavior.class).setMinRange(1.5f * TILE_SIZE);
+		strikeBase.getComponent(VehicleFollowBehavior.class).setTarget(strikeBase.getPosition());
 
+		strikeBase.faction = GameObject.Faction.PLAYER;
+		addGameObject("StrikeBase", strikeBase);
 		commitGameObjectChanges();
 
-		createEnemy();
-		createEnemy();
+		camera.setPosition(strikeBase.getPosition());
+
+		for (int i = 0; i < 50; i++)
+			createEnemy();
 
 	}
 
@@ -268,15 +271,25 @@ public class DummyGLScreen extends Screen {
 			return;
 
 		GameObject enemy = EnemyFactory.createRandomEnemyTank(this);
-		if (enemy != null)
-			enemy.addOnDestroyAction(new Runnable() {
-				@Override
-				public void run() {
-					createEnemy();
-					if (Math.random() > 0.5f)
-						createEnemy();
-				}
-			});
+//		if (enemy != null)
+//			enemy.addOnDestroyAction(new Runnable() {
+//				@Override
+//				public void run() {
+//					createEnemy();
+//					if (Math.random() > 0.5f)
+//						createEnemy();
+//				}
+//			});
+
+//		tmp.set(8 * TILE_SIZE, 0).rotate(MathUtils.random(360));
+//		enemy.getPhysics().setPosition(strikeBase.getPosition().add(tmp));
+
+		// Random pos
+		enemy.getPhysics().setPosition(
+				MathUtils.random(physics2D.getWorldWidth() * TILE_SIZE),
+				MathUtils.random(physics2D.getWorldHeight() * TILE_SIZE)
+		);
+		enemy.getPhysics().setRotation(MathUtils.random(360));
 
 		addHealthBar(enemy);
 	}

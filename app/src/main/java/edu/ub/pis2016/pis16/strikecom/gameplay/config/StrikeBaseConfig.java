@@ -2,6 +2,7 @@ package edu.ub.pis2016.pis16.strikecom.gameplay.config;
 
 public class StrikeBaseConfig {
 
+
 	public enum Model {
 		MK3,	// 2-turrets model
 		MK2,	// 3-turrets model
@@ -31,6 +32,10 @@ public class StrikeBaseConfig {
 	 *
 	 * 		2	3
 	 */
+
+	// Properties
+	public int hitpoints = 500;
+
 	// Velocity Config
 	/** Tiles/second */
 	public float max_speed = 30f;

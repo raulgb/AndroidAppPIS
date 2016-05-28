@@ -38,7 +38,7 @@ public class VehicleFollowBehavior extends BehaviorComponent {
 			float angleDelta = Angle.angleDelta(rotation, tmp.angle());
 			float absAngleDelta = Math.abs(angleDelta);
 
-			if (absAngleDelta > 5) {
+			if (absAngleDelta > 15) {
 //				if (Math.abs(angleDelta) > 120) {
 //					vehicle.reverse(1f);
 //				} else {

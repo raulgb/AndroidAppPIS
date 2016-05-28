@@ -1,9 +1,5 @@
 package edu.ub.pis2016.pis16.strikecom.engine.game;
 
-import java.util.HashMap;
-import java.util.concurrent.RunnableFuture;
-
-import edu.ub.pis2016.pis16.strikecom.engine.framework.Graphics;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.GraphicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
@@ -18,8 +14,6 @@ import edu.ub.pis2016.pis16.strikecom.engine.util.performance.ObjectMap;
  * Contains a HashMap with references to each of its components.
  */
 public class GameObject {
-
-	//public static final int PLAYER_BIT;
 
 	/** The Screen owning this GameObject */
 	protected Screen screen;
@@ -40,10 +34,44 @@ public class GameObject {
 	/** Tags are used internally for BehaviorComponents to identify certain GameObject as part of the scenery, allied, enemy, etc. */
 	private String tag = "";
 
-
 	/** Health Related */
 	public int hitpoints = 0, maxHitpoints = 0;
 	public boolean killable = false;
+
+	/** Factions */
+	public Faction faction = Faction.NEUTRAL;
+
+	private static final int NEUTRAL_BIT = 0x01;
+	private static final int PLAYER_BIT = 0x01 << 1;
+	private static final int RAIDERS_BIT = 0x01 << 2;
+	private static final int SHOP_BIT = 0x01 << 3;
+
+	public enum Faction {
+		HOSTILE(0, 0),
+		NEUTRAL(NEUTRAL_BIT, 0),
+		PLAYER(PLAYER_BIT, SHOP_BIT),
+		RAIDERS(RAIDERS_BIT, 0),
+		SHOP(SHOP_BIT, PLAYER_BIT);
+
+		protected int self;
+		protected int allies;
+
+		Faction(int self, int allies) {
+			this.self = self;
+			this.allies = allies | self | NEUTRAL_BIT;
+		}
+
+		/** Returns true if both factions agreed to be allies */
+		public boolean isAlly(Faction other) {
+			return (this.self & other.allies) > 0 && (this.allies & other.self) > 0;
+		}
+
+		/** Returns true if either faction is not an ally of the other. */
+		public boolean isEnemy(Faction other) {
+			return (this.self & other.allies) == 0 || (this.allies & other.self) == 0;
+		}
+	}
+
 
 	/**
 	 * Sets the layer ordering, lowest values get rendered first.

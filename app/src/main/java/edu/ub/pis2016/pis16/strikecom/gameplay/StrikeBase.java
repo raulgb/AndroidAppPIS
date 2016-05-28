@@ -70,6 +70,10 @@ public class StrikeBase extends Vehicle {
 		this.cfg = cfg;
 		String model = cfg.modelName;
 
+		this.killable = true;
+		this.hitpoints = cfg.hitpoints;
+		this.maxHitpoints = cfg.hitpoints;
+
 		//  Create Physics component
 		// Width actually signifies the horizontal X axis, as the sprite looks to the right.
 		// Height is from thread to thread.
@@ -283,6 +287,8 @@ public class StrikeBase extends Vehicle {
 	public void addTurret(TurretItem item, int slot) {
 		String tName = "turret_" + Integer.toString(slot);
 		Turret turret = new Turret(item.getModel(), this, tName);
+
+		turret.faction = this.faction;
 		turret.setParent(this);
 		turret.setLayer(Screen.LAYER_STRIKEBASE_TURRETS);
 
@@ -290,7 +296,6 @@ public class StrikeBase extends Vehicle {
 
 		PhysicsComponent turretPhysics = new PhysicsComponent();
 		TurretBehavior turretBehavior = new TurretBehavior();
-		turretBehavior.setTargetTag("enemy");
 		turretBehavior.setAngleLimit(cfg.turret_angle_lim[slot]);
 
 		turret.putComponent(turretBehavior);
@@ -299,7 +304,6 @@ public class StrikeBase extends Vehicle {
 		//getComponent(GraphicsComponent.class).getSprite().setSize(GameConfig.TILE_SIZE *2);
 
 		screen.addGameObject(tName, turret);
-
 		equippedTurrets.put(slot, item);
 	}
 

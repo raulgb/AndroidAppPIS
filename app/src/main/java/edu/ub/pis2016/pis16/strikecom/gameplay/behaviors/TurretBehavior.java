@@ -19,7 +19,6 @@ import edu.ub.pis2016.pis16.strikecom.gameplay.factories.ProjectileFactory;
  */
 public class TurretBehavior extends BehaviorComponent {
 
-	private String targetTag = null;
 	private GameObject target = null;
 	private Vector2 tmp = new Vector2();
 
@@ -46,6 +45,7 @@ public class TurretBehavior extends BehaviorComponent {
 		this.maxAngle = angleLimit[1];
 	}
 
+
 	@Override
 	public void update(float delta) {
 		counter += delta;
@@ -68,37 +68,36 @@ public class TurretBehavior extends BehaviorComponent {
 				}
 				break;
 			case SEARCHING:
-				if (targetTag == null) {
-					state = State.IDLE;
-				} else {
-					// Look for the closest gameobject in view
-					float closestDistance = Float.MAX_VALUE;
-					GameObject closestGO = null;
+				// Look for the closest gameobject in view
+				GameObject.Faction faction = gameObject.faction;
+				float closestDistance = Float.MAX_VALUE;
+				GameObject closestGO = null;
 
-					// It's fine to allocate a new Iterator here cause this will only be called once every second or so.
-					Array.ArrayIterator<GameObject> iter = new Array.ArrayIterator<>(gameObject.getScreen().getGameObjects());
-					while (iter.hasNext()) {
-						GameObject go = iter.next();
-						// Target enemies with the target tag, who are not too far, and are killable
-						if (go.getTag().contains(targetTag) && !isTooFar(go) && go.killable) {
-							float distance = go.getPosition().dst2(turretPhys.getPosition());
-							if (distance < closestDistance) {
-								closestGO = go;
-								closestDistance = distance;
-							}
+				// It's fine to allocate a new Iterator here cause this will only be called once every second or so.
+				Array.ArrayIterator<GameObject> iter = new Array.ArrayIterator<>(gameObject.getScreen().getGameObjects());
+				while (iter.hasNext()) {
+					GameObject go = iter.next();
+					// Target enemies with the target tag, who are not too far, and are killable
+					if (faction.isEnemy(go.faction) && go.killable && !isTooFar(go)) {
+						float distance = go.getPosition().dst2(turretPhys.getPosition());
+						if (distance < closestDistance) {
+							closestGO = go;
+							closestDistance = distance;
+							// TODO Separate this into two classes, one for Enemy Turrets with DUMB AI, and one for StrikeBase Turrets
+							break;
 						}
 					}
+				}
 
-					if (closestGO != null) {
-						// If a target is found, aim at it immediately
-						target = closestGO;
-						state = State.AIMING;
-					} else {
-						// If none found, return to idle and move around
-						state = State.IDLE;
-						((Turret) gameObject).stopCannonAnimation();
-						randomAngle = MathUtils.random(minAngle, maxAngle);
-					}
+				if (closestGO != null) {
+					// If a target is found, aim at it immediately
+					target = closestGO;
+					state = State.AIMING;
+				} else {
+					// If none found, return to idle and move around
+					state = State.IDLE;
+					((Turret) gameObject).stopCannonAnimation();
+					randomAngle = MathUtils.random(minAngle, maxAngle);
 				}
 				break;
 			case AIMING:
@@ -119,12 +118,12 @@ public class TurretBehavior extends BehaviorComponent {
 					if (targetAngle < min) {
 						// Move the turret to its minimum angle
 						tmp.set(8, 0).rotate(min).add(turretPhys.getPosition());
-						turretPhys.lookAt(tmp, cfg.lerp_speed * .1f);
+						turretPhys.lookAt(tmp, cfg.lerp_speed * 10);
 
 					} else if (targetAngle > max) {
 						// Move the turret to its maximum angle
 						tmp.set(8, 0).rotate(max).add(turretPhys.getPosition());
-						turretPhys.lookAt(tmp, cfg.lerp_speed * .1f);
+						turretPhys.lookAt(tmp, cfg.lerp_speed * 10);
 
 					} else {
 						// Move the turret towards the target position and check if it's within a 3 degree cone, shoot
@@ -138,10 +137,6 @@ public class TurretBehavior extends BehaviorComponent {
 				}
 				break;
 		}
-	}
-
-	public void setTargetTag(String tag) {
-		this.targetTag = tag;
 	}
 
 	private boolean isTooFar(GameObject other) {
@@ -182,10 +177,18 @@ public class TurretBehavior extends BehaviorComponent {
 		// set the tag to "player_proj" or "enemy_proj"
 		projectile.setTag(gameObject.getParent().getTag() + "_proj");
 
-		if (gameObject.getTag().contains("player"))
-			projPhys.body.filter = Physics2D.Filter.PLAYER_PROJ;
-		else if (gameObject.getTag().contains("enemy"))
-			projPhys.body.filter = Physics2D.Filter.ENEMY_PROJ;
+		switch (gameObject.faction) {
+			case PLAYER:
+				projPhys.body.filter = Physics2D.Filter.PLAYER_PROJ;
+				break;
+			case RAIDERS:
+				projPhys.body.filter = Physics2D.Filter.ENEMY_PROJ;
+				break;
+			default:
+				projPhys.body.filter = Physics2D.Filter.ALL;
+				break;
+		}
+
 
 		// set hitpoints as damage made on impact
 		projectile.hitpoints = cfg.proj_damage;
