@@ -7,6 +7,7 @@ public class PlayerState {
 	private int scrap;
 	private float fuel;
 	private int score;
+	private int enemyCounter =  0; // number of defeated enemies
 
 	public Inventory inventory;
 
@@ -26,6 +27,10 @@ public class PlayerState {
 		this.fuel += fuel;
 	}
 
+	public void increaseCounter(){
+		enemyCounter += 1;
+	}
+
 	public int getScrap() {
 		return this.scrap;
 	}
@@ -39,7 +44,7 @@ public class PlayerState {
 	}
 
 	private int computeScore() {
-		score = scrap;
+		score = scrap + enemyCounter * enemyCounter;
 		return score;
 	}
 

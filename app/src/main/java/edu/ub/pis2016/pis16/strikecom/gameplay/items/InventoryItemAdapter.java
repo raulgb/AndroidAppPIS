@@ -1,4 +1,4 @@
-package edu.ub.pis2016.pis16.strikecom.gameplay;
+package edu.ub.pis2016.pis16.strikecom.gameplay.items;
 
 import java.util.List;
 import android.content.Context;

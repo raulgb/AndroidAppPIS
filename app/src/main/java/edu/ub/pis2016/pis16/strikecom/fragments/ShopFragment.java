@@ -5,7 +5,7 @@ import android.widget.AdapterView;
 
 import edu.ub.pis2016.pis16.strikecom.FragmentedGameActivity;
 import edu.ub.pis2016.pis16.strikecom.R;
-import edu.ub.pis2016.pis16.strikecom.gameplay.InventoryItemAdapter;
+import edu.ub.pis2016.pis16.strikecom.gameplay.items.InventoryItemAdapter;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.TurretItem;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.UpgradeItem;
 

@@ -1,4 +1,4 @@
-package edu.ub.pis2016.pis16.strikecom.gameplay;
+package edu.ub.pis2016.pis16.strikecom.gameplay.items;
 
 import android.content.res.AssetManager;
 import android.content.Context;

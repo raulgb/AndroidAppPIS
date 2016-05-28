@@ -1,10 +1,8 @@
 package edu.ub.pis2016.pis16.strikecom;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,20 +21,17 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import edu.ub.pis2016.pis16.strikecom.engine.android.AndroidMusic;
-import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Texture;
-import edu.ub.pis2016.pis16.strikecom.engine.physics.ContactListener;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 import edu.ub.pis2016.pis16.strikecom.fragments.GameOverFragment;
 import edu.ub.pis2016.pis16.strikecom.fragments.InventoryFragment;
-import edu.ub.pis2016.pis16.strikecom.fragments.MiniMapFragment;
 import edu.ub.pis2016.pis16.strikecom.fragments.ShopFragment;
 import edu.ub.pis2016.pis16.strikecom.fragments.SidebarFragment;
 import edu.ub.pis2016.pis16.strikecom.controller.SidebarEventListener;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.fragments.SlotsFragment;
-import edu.ub.pis2016.pis16.strikecom.gameplay.InventoryItemAdapter;
-import edu.ub.pis2016.pis16.strikecom.gameplay.InventoryManager;
+import edu.ub.pis2016.pis16.strikecom.gameplay.items.InventoryItemAdapter;
+import edu.ub.pis2016.pis16.strikecom.gameplay.items.InventoryManager;
 import edu.ub.pis2016.pis16.strikecom.gameplay.PlayerState;
 import edu.ub.pis2016.pis16.strikecom.gameplay.StrikeBase;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
