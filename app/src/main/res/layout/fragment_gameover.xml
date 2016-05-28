@@ -3,7 +3,8 @@
               android:orientation="vertical"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:background="@drawable/frame_retro_mk2">
+              android:background="@drawable/frame_retro_mk2"
+              android:padding="12dp">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -14,58 +15,62 @@
         android:layout_marginLeft="10px"
         android:layout_marginRight="10px"
         android:id="@+id/title"
-        />
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="40px"/>
+        android:textColor="#EEE"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_gravity="center">
+        android:layout_gravity="center"
+        android:layout_marginTop="24dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="40px"
             android:text="@string/score_label"
-            android:id="@+id/textLabel"/>
+            android:id="@+id/textLabel"
+            android:textSize="24dp"
+            android:textColor="#EEE"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10px"
             android:id="@+id/textScore"
-            android:text=""/>
+            android:text=""
+            android:textSize="24dp"
+            android:textStyle="bold"
+            android:textColor="#EEE"/>
     </LinearLayout>
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="40px"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_gravity="center">
+        android:layout_gravity="center"
+        android:layout_marginTop="32dp">
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/btn_retro_mk2"
-            android:layout_marginLeft="40px"
             android:text="@string/exit_button"
-            android:id="@+id/btnExit"/>
+            android:id="@+id/btnExit"
+            android:layout_weight="0.5"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:textColor="#EEE"/>
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/btn_retro_mk2"
-            android:layout_marginLeft="10px"
             android:text="@string/submit_button"
-            android:id="@+id/btnSubmit"/>
+            android:id="@+id/btnSubmit"
+            android:layout_weight="0.5"
+            android:layout_marginRight="40dp"
+            android:textColor="#EEE"/>
     </LinearLayout>
 
 </LinearLayout>
