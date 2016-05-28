@@ -15,26 +15,24 @@ public class VehicleFollowBehavior extends BehaviorComponent {
 
 	float minRange = 0;
 	float maxRange = Float.MAX_VALUE;
-	boolean moveOrder;
 	GameObject targetGO = null;
 
 	@Override
 	public void update(float delta) {
-		if(targetGO != null && targetGO.isValid()){
-			moveOrder = true;
+		if (targetGO != null) {
 			target.set(targetGO.getPosition());
 		}
 
-		if (!moveOrder)
-			return;
-
-		Vector2 pos = gameObject.getComponent(PhysicsComponent.class).getPosition();
-		float rotation = gameObject.getComponent(PhysicsComponent.class).getRotation();
+		// get only what we need to know wether to move
 		Vehicle vehicle = (Vehicle) gameObject;
-
-		// Move AI, strikebase follows the move pointer
+		PhysicsComponent phys = gameObject.getPhysics();
+		Vector2 pos = phys.getPosition();
 		float distance = tmp.set(target).dst2(pos);
+
+		// Range check
 		if (minRange * minRange < distance && distance < maxRange * maxRange) {
+
+			float rotation = phys.getRotation();
 
 			tmp.set(target).sub(pos);
 			float angleDelta = Angle.angleDelta(rotation, tmp.angle());
@@ -46,30 +44,31 @@ public class VehicleFollowBehavior extends BehaviorComponent {
 //				} else {
 				// Reduce power when we're close to target
 				float power = MathUtils.min(1, absAngleDelta / 30f);
-				if (angleDelta > 0)
-					vehicle.turnLeft(power);
-				else
-					vehicle.turnRight(power);
-//				if (absAngleDelta > 90)
-//					vehicle.brake();
+				if (absAngleDelta > 90)
+					vehicle.reverse(1);
+				else {
+					if (angleDelta > 0)
+						vehicle.turnLeft(power);
+					else if (angleDelta < 0)
+						vehicle.turnRight(power);
+				}
+
 
 			} else {
 				vehicle.accelerate(1);
 			}
 		} else {
 			vehicle.brake(0.3f);
-			if (gameObject.getComponent(PhysicsComponent.class).getVelocity().isZero()) {
-				moveOrder = false;
-			}
 		}
+
 	}
+
 
 	/** Set the position to go to. if {@code null} is passed, will stop immediately. */
 	public void setTarget(Vector2 target) {
 		if (target == null)
 			this.target.set(gameObject.getPosition());
 		this.target.set(target);
-		moveOrder = true;
 	}
 
 	/** Set the position to go to. if {@code null} is passed, will stop immediately. */

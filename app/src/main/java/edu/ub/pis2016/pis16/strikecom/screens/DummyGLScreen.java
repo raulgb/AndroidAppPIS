@@ -134,7 +134,7 @@ public class DummyGLScreen extends Screen {
 		if (secondsCounter > 5) {
 			secondsCounter -= 5;
 			Log.i("FPS", "" + MathUtils.roundPositive(1f / fpsMean.getMean()));
-
+//			System.gc();
 //			for (GameObject go : getGameObjects())
 //				System.out.println(go);
 		}

@@ -1,7 +1,6 @@
 package edu.ub.pis2016.pis16.strikecom.engine.physics;
 
-import android.util.Log;
-
+import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
 import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Sprite;
@@ -24,7 +23,8 @@ public class Physics2D {
 
 	private Array<Body> potentials = new Array<>(false, 16);
 
-	private QuadTree quadTree;
+	private QuadTree dynamicQuadTree;
+	private QuadTree staticQuadTree;
 
 	/** Special map for Bodies currenly under contact */
 	private ObjectSet<ContactListener.Contact> previousContacts = new ObjectSet<>();
@@ -47,7 +47,8 @@ public class Physics2D {
 		this.worldWidth = worldWidth;
 		this.worldHeight = worldHeight;
 
-		quadTree = new QuadTree(0, new Rectangle(worldWidth, worldHeight));
+		dynamicQuadTree = new QuadTree(new Rectangle(worldWidth, worldHeight));
+		staticQuadTree = new QuadTree(new Rectangle(worldWidth, worldHeight));
 
 		contactPool = new Pool<>(new Pool.PoolObjectFactory<ContactListener.Contact>() {
 			@Override
@@ -69,7 +70,7 @@ public class Physics2D {
 	}
 
 	public void update(float delta) {//update all Bodies of the game
-		quadTree.clear();
+		dynamicQuadTree.clear();
 
 		//update velocity and positions of all dynamic bodies
 		for (Body body : dynamicBodies) {
@@ -83,20 +84,26 @@ public class Physics2D {
 				dynBody.position.add(tmp.set(dynBody.velocity).scl(delta));
 
 				// Friction
-				dynBody.friction = MathUtils.clamp(dynBody.friction, 0, 1);
+				//dynBody.friction = MathUtils.clamp(dynBody.friction, 0, 1);
 				dynBody.velocity.scl(1f - dynBody.friction * delta);
 
-				// keep in world bounds
-				dynBody.position.x = MathUtils.max(0.1f, dynBody.position.x);
-				dynBody.position.x = MathUtils.min(worldWidth - 0.1f, dynBody.position.x);
-				dynBody.position.y = MathUtils.max(0.1f, dynBody.position.y);
-				dynBody.position.y = MathUtils.min(worldHeight - 0.1f, dynBody.position.y);
+				// Destroy all bodies out of bounds
+				if(dynBody.position.x < 0 ||dynBody.position.x > worldWidth
+						|| dynBody.position.y < 0 || dynBody.position.y > worldHeight){
+					removeBody(dynBody);
+					GameObject go = (GameObject)dynBody.userData;
+					go.destroy();
+				}
+//				dynBody.position.x = MathUtils.max(0.1f, dynBody.position.x);
+//				dynBody.position.x = MathUtils.min(worldWidth - 0.1f, dynBody.position.x);
+//				dynBody.position.y = MathUtils.max(0.1f, dynBody.position.y);
+//				dynBody.position.y = MathUtils.min(worldHeight - 0.1f, dynBody.position.y);
 			}
 		}
 
-		for (Body body : allBodies) {
+		for (Body body : dynamicBodies) {
 			body.updateBounds();
-			quadTree.insert(body);
+			dynamicQuadTree.insert(body);
 		}
 
 		// Store past contacts
@@ -104,14 +111,15 @@ public class Physics2D {
 		previousContacts.addAll(contacts);
 		contacts.clear();
 
-
 		// Contact that will be sent to the first collision
 		ContactListener.Contact newContact = contactPool.newObject();
 		int tested = 0;
 
 		for (Body bodyA : dynamicBodies) {
-			// Get potential matches
-			quadTree.retrieve(potentials, bodyA);
+			// Get potential matches from both dynamic and static contexts
+			potentials.clear();
+			dynamicQuadTree.retrieve(potentials, bodyA);
+			staticQuadTree.retrieve(potentials, bodyA);
 
 			for (Body bodyB : potentials) {
 				if (!Filter.test(bodyA.filter, bodyB.filter))
@@ -168,14 +176,18 @@ public class Physics2D {
 
 	/** Static bodies */
 	protected void addStaticBody(Body b) {
-		staticBodies.add(b);
 		allBodies.add(b);
+
+		// Update bounds and Add to static lists
+		b.updateBounds();
+		staticBodies.add(b);
+		staticQuadTree.insert(b);
 	}
 
 	/** Dynamic and Kinematic bodies */
 	protected void addDynamicBody(Body b) {
-		dynamicBodies.add(b);
 		allBodies.add(b);
+		dynamicBodies.add(b);
 	}
 
 	public void addContactListener(ContactListener cl) {
@@ -191,7 +203,14 @@ public class Physics2D {
 
 	public void removeBody(Body body) {
 		allBodies.removeValue(body);
-		staticBodies.removeValue(body);
+		// If we remove a static body, refresh Static Tree
+		if (body instanceof StaticBody) {
+			staticBodies.removeValue(body);
+			staticQuadTree.clear();
+			for (Body b : staticBodies)
+				staticQuadTree.insert(b);
+			return;
+		}
 		dynamicBodies.removeValue(body);
 	}
 
