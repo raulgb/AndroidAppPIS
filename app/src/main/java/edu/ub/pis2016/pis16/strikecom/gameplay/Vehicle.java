@@ -8,15 +8,16 @@ public abstract class Vehicle extends GameObject {
 
 	protected abstract void updatePhysics(float delta);
 
-	public abstract void turnLeft();
+	public abstract void turnLeft(float power);
 
-	public abstract void turnRight();
+	public abstract void turnRight(float power);
 
-	public abstract void accelerate();
+	public abstract void accelerate(float power);
 
-	public abstract void brake();
+	/** @param power Ammount of power to use for braking, 0 is none, 1 is full power */
+	public abstract void brake(float power);
 
-	public abstract void reverse();
+	public abstract void reverse(float power);
 
 	public Vector2 getAnchor(String name) {
 		return getComponent(PhysicsComponent.class).getAnchor(name);

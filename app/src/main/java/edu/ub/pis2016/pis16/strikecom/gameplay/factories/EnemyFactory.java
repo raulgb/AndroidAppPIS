@@ -49,6 +49,7 @@ public class EnemyFactory {
 		enemyTank.putComponent(new VehicleFollowBehavior());
 		enemyTank.getComponent(VehicleFollowBehavior.class).setMaxRange(16 * TILE_SIZE);
 		enemyTank.getComponent(VehicleFollowBehavior.class).setMinRange(3 * TILE_SIZE);
+
 		enemyTank.putComponent(new BehaviorComponent() {
 
 			private GameObject strikeBase;

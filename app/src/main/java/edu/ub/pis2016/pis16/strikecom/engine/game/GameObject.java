@@ -17,6 +17,8 @@ import edu.ub.pis2016.pis16.strikecom.engine.util.performance.Array;
  */
 public class GameObject {
 
+	//public static final int PLAYER_BIT;
+
 	/** The Screen owning this GameObject */
 	protected Screen screen;
 	/** A Map of components, using their class as a Key */
@@ -136,30 +138,29 @@ public class GameObject {
 	 * defined to be run on object destroy.
 	 */
 	final public void destroy() {
+		if (!isValid())
+			throw new IllegalStateException("Can't destroy an Invalid GameObject: " + toString());
+
 		for (Runnable r : destroyRunnables)
 			r.run();
 		screen.removeGameObject(this);
 	}
 
 	public void destroyInternal() {
-		try {
-			for (Component c : componentArray)
-				c.destroy();
+		for (Component c : componentArray)
+			c.destroy();
 
-			destroyRunnables.clear();
-			components.clear();
-			componentArray.clear();
-			newComponents.clear();
+		destroyRunnables.clear();
+		components.clear();
+		componentArray.clear();
+		newComponents.clear();
 
-			screen = null;
-			parent = null;
-			destroyRunnables = null;
-			components = null;
-			componentArray = null;
-			newComponents = null;
-		}catch (Exception e){
-			e.printStackTrace();
-		}
+		screen = null;
+		parent = null;
+		destroyRunnables = null;
+		components = null;
+		componentArray = null;
+		newComponents = null;
 
 	}
 

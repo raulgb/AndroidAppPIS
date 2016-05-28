@@ -4,6 +4,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.BehaviorComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Angle;
+import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.gameplay.Vehicle;
 
@@ -26,22 +27,31 @@ public class VehicleFollowBehavior extends BehaviorComponent {
 		Vehicle vehicle = (Vehicle) gameObject;
 
 		// Move AI, strikebase follows the move pointer
-		// TODO Not working, vehicles never stop??
 		float distance = tmp.set(target).dst2(pos);
 		if (minRange * minRange < distance && distance < maxRange * maxRange) {
 
 			tmp.set(target).sub(pos);
 			float angleDelta = Angle.angleDelta(rotation, tmp.angle());
-			if (Math.abs(angleDelta) > 5) {
+			float absAngleDelta = Math.abs(angleDelta);
+
+			if (absAngleDelta > 5) {
+//				if (Math.abs(angleDelta) > 120) {
+//					vehicle.reverse(1f);
+//				} else {
+				// Reduce power when we're close to target
+				float power = MathUtils.min(1, absAngleDelta / 30f);
 				if (angleDelta > 0)
-					vehicle.turnLeft();
+					vehicle.turnLeft(power);
 				else
-					vehicle.turnRight();
+					vehicle.turnRight(power);
+//				if (absAngleDelta > 90)
+//					vehicle.brake();
+
 			} else {
-				vehicle.accelerate();
+				vehicle.accelerate(1);
 			}
 		} else {
-			vehicle.brake();
+			vehicle.brake(0.3f);
 			if (gameObject.getComponent(PhysicsComponent.class).getVelocity().isZero()) {
 				moveOrder = false;
 			}

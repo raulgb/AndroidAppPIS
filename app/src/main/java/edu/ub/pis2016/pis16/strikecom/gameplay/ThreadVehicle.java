@@ -7,7 +7,6 @@ import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Circle;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.KinematicBody;
-import edu.ub.pis2016.pis16.strikecom.engine.physics.Rectangle;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.VehicleConfig;
@@ -121,34 +120,34 @@ public class ThreadVehicle extends Vehicle {
 	}
 
 	@Override
-	public void turnLeft() {
-		this.rightThreadAccel = cfg.accel * 0.75f;
-		this.leftThreadAccel = -cfg.accel * 0.25f;
+	public void turnLeft(float power) {
+		this.rightThreadAccel = cfg.accel * 0.75f * power;
+		this.leftThreadAccel = -cfg.accel * 0.25f * power;
 
 		this.leftThreadDampening = 0f;
 		this.rightThreadDampening = 0f;
 	}
 
 	@Override
-	public void turnRight() {
-		this.leftThreadAccel = cfg.accel * 0.75f;
-		this.rightThreadAccel = -cfg.accel * 0.25f;
+	public void turnRight(float power) {
+		this.leftThreadAccel = cfg.accel * 0.75f * power;
+		this.rightThreadAccel = -cfg.accel * 0.25f * power;
 
 		this.leftThreadDampening = 0f;
 		this.rightThreadDampening = 0f;
 	}
 
 	@Override
-	public void accelerate() {
-		this.leftThreadAccel = cfg.accel;
-		this.rightThreadAccel = cfg.accel;
+	public void accelerate(float power) {
+		this.leftThreadAccel = cfg.accel * power;
+		this.rightThreadAccel = cfg.accel * power;
 
 		this.leftThreadDampening = 0f;
 		this.rightThreadDampening = 0f;
 	}
 
 	@Override
-	public void brake() {
+	public void brake(float v) {
 		this.leftThreadAccel = 0;
 		this.rightThreadAccel = 0;
 
@@ -156,7 +155,7 @@ public class ThreadVehicle extends Vehicle {
 		this.rightThreadDampening = 0.95f;
 	}
 
-	public void reverse() {
-
+	public void reverse(float power) {
+		accelerate(-power * 0.75f);
 	}
 }

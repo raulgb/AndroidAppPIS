@@ -7,6 +7,8 @@ import javax.microedition.khronos.opengles.GL10;
 
 import edu.ub.pis2016.pis16.strikecom.FragmentedGameActivity;
 import edu.ub.pis2016.pis16.strikecom.StrikeComGLGame;
+import edu.ub.pis2016.pis16.strikecom.controller.GameContactListener;
+import edu.ub.pis2016.pis16.strikecom.controller.VehicleTouchController;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Game;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.InputProcessor;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
@@ -28,6 +30,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.physics.Physics2D;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Rectangle;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.StaticBody;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
+import edu.ub.pis2016.pis16.strikecom.engine.util.performance.ObjectMap;
 import edu.ub.pis2016.pis16.strikecom.gameplay.StrikeBase;
 import edu.ub.pis2016.pis16.strikecom.gameplay.Vehicle;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.CameraBehavior;
@@ -36,7 +39,9 @@ import edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
 import edu.ub.pis2016.pis16.strikecom.gameplay.factories.EnemyFactory;
 
-import static edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig.*;
+import static edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig.MAP_SIZE;
+import static edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig.TILES_ON_SCREEN;
+import static edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig.TILE_SIZE;
 
 /**
  * Dummy OpenGL screen.
@@ -67,7 +72,6 @@ public class DummyGLScreen extends Screen {
 	Physics2D physics2D;
 	GameMap gameMap;
 
-	GameObject moveIcon;
 
 	Sprite healthBarSprite;
 	StrikeBase strikeBase;
@@ -110,90 +114,11 @@ public class DummyGLScreen extends Screen {
 		camera.getComponent(CameraBehavior.class).setTracking(strikeBase);
 
 		// Projectile CONTACT LISTENER
-		physics2D.addContactListener(new ContactListener() {
-			@Override
-			public void beginContact(Contact contact) {
-//				Log.i("BEGIN CONTACT", contact.a + " : " + contact.b);
-
-				GameObject goA = (GameObject) contact.a.userData;
-				GameObject goB = (GameObject) contact.b.userData;
-				Physics2D.Filter filterA = goA.getPhysics().body.filter;
-				Physics2D.Filter filterB = goB.getPhysics().body.filter;
-
-				if (Physics2D.Filter.isProjectile(filterA))
-					handleProjectileContact(goA, goB);
-				else if (Physics2D.Filter.isProjectile(filterB))
-					handleProjectileContact(goB, goA);
-
-				else if (filterA == Physics2D.Filter.PLAYER && filterB == Physics2D.Filter.ENEMY)
-					handlePlayerContact(goA, goB);
-				else if (filterA == Physics2D.Filter.ENEMY && filterB == Physics2D.Filter.PLAYER)
-					handlePlayerContact(goB, goA);
-
-				else if (filterA == Physics2D.Filter.SHOP)
-					handleShopContact(goA, goB);
-				else if (filterB == Physics2D.Filter.SHOP)
-					handleShopContact(goB, goA);
-			}
-
-			@Override
-			public void endContact(Contact contact) {
-//				Log.i("END CONTACT", contact.a + " : " + contact.b);
-			}
-
-			private void handlePlayerContact(GameObject player, GameObject other) {
-				if (other.killable) {
-					player.hitpoints -= other.hitpoints / 2f;
-					camera.getComponent(CameraBehavior.class).cameraShake(2);
-					other.destroy();
-				}
-			}
-
-			private void handleShopContact(GameObject shop, GameObject other) {
-				if (!(other.getPhysics().body.filter == Physics2D.Filter.PLAYER))
-					return;
-				activity.showShopDialog(shop.getTag());
-			}
-
-			private void handleProjectileContact(GameObject projectile, GameObject other) {
-				if (!other.killable)
-					return;
-
-				other.hitpoints = MathUtils.max(1, other.hitpoints - projectile.hitpoints);
-				if (other == strikeBase)
-					camera.getComponent(CameraBehavior.class).cameraShake(1.5f);
-				if (other.hitpoints == 1)
-					other.destroy();
-				projectile.destroy();
-			}
-		});
+		physics2D.addContactListener(new GameContactListener(this));
 
 		// Move order Input
-		addInputProcessor(new InputProcessor() {
-			@Override
-			public boolean touchDown(float x, float y, int pointer) {
-				moveOrder(x, y);
-				return false;
-			}
+		addInputProcessor(new VehicleTouchController(this, strikeBase));
 
-			@Override
-			public boolean touchDragged(float x, float y, int pointer) {
-				moveOrder(x, y);
-				return false;
-			}
-
-			private void moveOrder(float x, float y) {
-				targetPos.set(x, y);
-				camera.unproject(targetPos);
-				moveIcon.setPosition(targetPos);
-
-				GameObject strikeBase = getGameObject("StrikeBase");
-				if (strikeBase != null)
-					strikeBase.getComponent(VehicleFollowBehavior.class).setTarget(targetPos);
-			}
-		});
-
-		Texture.reloadManagedTextures();
 	}
 
 	WindowedMean fpsMean = new WindowedMean(30);
@@ -218,6 +143,9 @@ public class DummyGLScreen extends Screen {
 		if (secondsCounter > 5) {
 			secondsCounter -= 5;
 			Log.i("FPS", "" + MathUtils.roundPositive(1f / fpsMean.getMean()));
+
+			for (GameObject go : getGameObjects())
+				System.out.println(go);
 		}
 
 		secondsElapsed += delta;
@@ -269,6 +197,7 @@ public class DummyGLScreen extends Screen {
 		healthBarSprite.draw(batch, glGraphics.getWidth() / 2f, glGraphics.getHeight() - 48);
 		batch.end();
 
+//		camera.rotation = strikeBase.getPhysics().getRotation() - 90;
 		camera.updateOrtho();
 	}
 
@@ -276,6 +205,7 @@ public class DummyGLScreen extends Screen {
 	public void resume() {
 		Log.i("DUMMY_SCREEN", "Resumed");
 
+		Texture.reloadManagedTextures();
 		GL10 gl = game.getGLGraphics().getGL();
 		gl.glClearColor(.25f, .75f, .25f, 1f);
 	}
@@ -309,7 +239,6 @@ public class DummyGLScreen extends Screen {
 		shop.getPhysics().body.filter = Physics2D.Filter.SHOP;
 		shop.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("shop")));
 		shop.setTag("shop_1");
-		shop.hitpoints = 9999;
 		shop.setLayer(LAYER_BACKGROUND);
 		shop.setPosition((MAP_SIZE / 2f - 4) * TILE_SIZE, MAP_SIZE / 2f * TILE_SIZE);
 		addGameObject("shop_1", shop);
@@ -334,14 +263,6 @@ public class DummyGLScreen extends Screen {
 		strikeBase.killable = true;
 		addGameObject("StrikeBase", strikeBase);
 
-		// ------ MOVE ICON CONFIG ------------
-		moveIcon = new GameObject();
-		moveIcon.setLayer(LAYER_BUILDING_BOTTOM);
-		moveIcon.putComponent(new PhysicsComponent());
-		moveIcon.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("cursor_move")));
-		moveIcon.getComponent(GraphicsComponent.class).getSprite().setScale(0.3f);
-		addGameObject("MoveIcon", moveIcon);
-
 		createEnemy();
 		createEnemy();
 	}
@@ -365,7 +286,6 @@ public class DummyGLScreen extends Screen {
 					createEnemy();
 			}
 		});
-
 
 		// Spawn it somewhere random, but not in view of the player, but not too far off the player
 		tmp.set(strikeBase.getPosition());

@@ -9,14 +9,12 @@ import edu.ub.pis2016.pis16.strikecom.engine.math.Angle;
 import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.AnimatedSprite;
-import edu.ub.pis2016.pis16.strikecom.engine.opengl.OrthoCamera;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Sprite;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureRegion;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.KinematicBody;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Rectangle;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
-import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.CameraBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.TurretBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.TurretItem;
@@ -51,6 +49,7 @@ public class StrikeBase extends Vehicle {
 	// Current Speed
 	private float leftThreadVel;
 	private float rightThreadVel;
+	private float rotSpeed;
 
 	// Anchors
 	private Vector2[] turret_anchors;
@@ -145,8 +144,8 @@ public class StrikeBase extends Vehicle {
 		super.update(delta);
 
 		// Thread Animation
-		threadsLeft.setFrameSpeed(leftThreadVel / 1.5f);
-		threadsRight.setFrameSpeed(leftThreadVel / 1.5f);
+		threadsLeft.setFrameSpeed(leftThreadVel * 1.5f);
+		threadsRight.setFrameSpeed(leftThreadVel * 1.5f);
 		threadsLeft.update(delta);
 		threadsRight.update(delta);
 	}
@@ -164,7 +163,7 @@ public class StrikeBase extends Vehicle {
 		// Thread offset is interpreted as the vehicles max pivoting point along its Y axis,
 		// So in some way it's the "width" of the vehicle
 		final float width = cfg.thread_offsetY * hull.getSize();
-		float rotSpeed = (-leftThreadVel + rightThreadVel) / width * cfg.maneuverability;
+		rotSpeed = (-leftThreadVel + rightThreadVel) / width * cfg.maneuverability;
 
 		Vector2 pos = physics.getPosition();
 		float rotation = physics.getRotation();
@@ -235,43 +234,52 @@ public class StrikeBase extends Vehicle {
 	}
 
 	@Override
-	public void turnLeft() {
-		this.rightThreadAccel = cfg.accel * 0.75f;
-		this.leftThreadAccel = -cfg.accel * 0.25f;
+	public void turnLeft(float power) {
+		this.rightThreadAccel = cfg.accel * 0.75f * power;
+		this.leftThreadAccel = -cfg.accel * 0.25f * power;
+
+		if (rotSpeed < 0)
+			this.leftThreadDampening = 0.99f;
+		else
+			this.leftThreadDampening = 0f;
+
+		this.rightThreadDampening = 0f;
+	}
+
+	@Override
+	public void turnRight(float power) {
+		this.leftThreadAccel = cfg.accel * 0.75f * power;
+		this.rightThreadAccel = -cfg.accel * 0.25f * power;
+
+		if (rotSpeed > 0)
+			this.rightThreadDampening = 0.99f;
+		else
+			this.rightThreadDampening = 0f;
+
+		this.leftThreadDampening = 0f;
+	}
+
+	@Override
+	public void accelerate(float power) {
+		this.leftThreadAccel = cfg.accel * power;
+		this.rightThreadAccel = cfg.accel * power;
 
 		this.leftThreadDampening = 0f;
 		this.rightThreadDampening = 0f;
 	}
 
 	@Override
-	public void turnRight() {
-		this.leftThreadAccel = cfg.accel * 0.75f;
-		this.rightThreadAccel = -cfg.accel * 0.25f;
-
-		this.leftThreadDampening = 0f;
-		this.rightThreadDampening = 0f;
-	}
-
-	@Override
-	public void accelerate() {
-		this.leftThreadAccel = cfg.accel;
-		this.rightThreadAccel = cfg.accel;
-
-		this.leftThreadDampening = 0f;
-		this.rightThreadDampening = 0f;
-	}
-
-	@Override
-	public void brake() {
+	public void brake(float power) {
+		power = MathUtils.clamp(power, 0, 1);
 		this.leftThreadAccel = 0;
 		this.rightThreadAccel = 0;
 
-		this.leftThreadDampening = 0.95f;
-		this.rightThreadDampening = 0.95f;
+		this.leftThreadDampening = 0.90f * (1 - power);
+		this.rightThreadDampening = 0.90f * (1 - power);
 	}
 
-	public void reverse() {
-
+	public void reverse(float power) {
+		accelerate(-power * 0.75f);
 	}
 
 	public void addTurret(TurretItem item, int slot) {
@@ -374,8 +382,12 @@ public class StrikeBase extends Vehicle {
 		return equippedUpgrades.get(slot);
 	}
 
-	public HashMap getEquippedTurrets() { return this.equippedTurrets; }
+	public HashMap getEquippedTurrets() {
+		return this.equippedTurrets;
+	}
 
-	public HashMap getEquippedUpgrades() { return this.equippedUpgrades; }
+	public HashMap getEquippedUpgrades() {
+		return this.equippedUpgrades;
+	}
 
 }

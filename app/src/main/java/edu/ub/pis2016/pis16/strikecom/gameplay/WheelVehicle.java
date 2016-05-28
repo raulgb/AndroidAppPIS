@@ -1,38 +1,34 @@
 package edu.ub.pis2016.pis16.strikecom.gameplay;
 
-import edu.ub.pis2016.pis16.strikecom.gameplay.Vehicle;
+public class WheelVehicle extends Vehicle {
 
-/**
- * Created by Arbitro on 14/05/2016.
- */
-public class WheelVehicle extends Vehicle{
 	@Override
 	protected void updatePhysics(float delta) {
 
 	}
 
 	@Override
-	public void turnLeft() {
+	public void turnLeft(float power) {
 
 	}
 
 	@Override
-	public void turnRight() {
+	public void turnRight(float power) {
 
 	}
 
 	@Override
-	public void accelerate() {
+	public void accelerate(float power) {
 
 	}
 
 	@Override
-	public void brake() {
+	public void brake(float v) {
 
 	}
 
 	@Override
-	public void reverse() {
+	public void reverse(float power) {
 
 	}
 }

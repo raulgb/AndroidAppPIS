@@ -5,9 +5,19 @@ package edu.ub.pis2016.pis16.strikecom.engine.framework;
  * All points are top-left corner origin.
  */
 public abstract class InputProcessor {
-	public boolean touchUp(float x, float y, int pointer){return false;}
+	public boolean touchUp(float x, float y, int pointer) {
+		return false;
+	}
 
-	public boolean touchDown(float x, float y, int pointer){return false;}
+	public boolean touchDown(float x, float y, int pointer) {
+		return false;
+	}
 
-	public boolean touchDragged(float x, float y, int pointer){return false;}
+	public boolean touchDragged(float x, float y, int pointer) {
+		return false;
+	}
+
+	/** Called each frame after all inputs are dispatched */
+	public void update(float delta) {
+	}
 }

@@ -93,6 +93,8 @@ public abstract class Screen implements Disposable {
 					break;
 			}
 		}
+		for (InputProcessor ip : inputProcessors)
+			ip.update(deltaTime);
 	}
 
 	public abstract void present(float deltaTime);
