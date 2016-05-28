@@ -1,17 +1,21 @@
 package edu.ub.pis2016.pis16.strikecom.gameplay.factories;
 
 import edu.ub.pis2016.pis16.strikecom.FragmentedGameActivity;
+import edu.ub.pis2016.pis16.strikecom.engine.framework.Graphics;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
+import edu.ub.pis2016.pis16.strikecom.engine.game.component.GraphicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.GLGameFragment;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Physics2D;
+import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 import edu.ub.pis2016.pis16.strikecom.gameplay.Explosion;
 import edu.ub.pis2016.pis16.strikecom.gameplay.ThreadVehicle;
 import edu.ub.pis2016.pis16.strikecom.gameplay.Turret;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.TurretBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.VehicleFollowBehavior;
+import edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.TurretConfig;
 
 import static edu.ub.pis2016.pis16.strikecom.engine.framework.Screen.LAYER_VEHICLES;
@@ -65,6 +69,13 @@ public class EnemyFactory {
 			}
 		});
 
+		// ---- RANDOM HULL
+		// TODO Add more variety
+		GraphicsComponent graphics = new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("enemy_hull", MathUtils.random(2)));
+		graphics.getSprite().setSize(1.1f * GameConfig.TILE_SIZE);
+		tank.removeComponent(GraphicsComponent.class);
+		tank.putComponent(graphics);
+
 		// ---- RANDOM TURRET
 		Turret turret;
 		TurretConfig turretConfig;
@@ -81,7 +92,7 @@ public class EnemyFactory {
 		turret = new Turret(turretConfig, tank);
 
 		turret.setLayer(LAYER_VEHICLE_TURRET);
-		turret.getSprite().setSize(1.1f * TILE_SIZE);
+		turret.getSprite().setSize(1f * TILE_SIZE);
 		TurretBehavior tb = new TurretBehavior();
 		tb.setTargetTag("player");
 		turret.putComponent(tb);
