@@ -6,7 +6,7 @@
               android:background="@drawable/frame_retro_mk2"
               android:padding="12dp">
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:gravity="center_vertical|center_horizontal"
         android:textSize="100px"
@@ -58,7 +58,7 @@
             android:text="@string/exit_button"
             android:id="@+id/btnExit"
             android:layout_weight="0.5"
-            android:layout_marginLeft="40dp"
+            android:layout_marginLeft="20dp"
             android:layout_marginRight="40dp"
             android:textColor="#EEE"/>
 
@@ -69,7 +69,7 @@
             android:text="@string/submit_button"
             android:id="@+id/btnSubmit"
             android:layout_weight="0.5"
-            android:layout_marginRight="40dp"
+            android:layout_marginRight="20dp"
             android:textColor="#EEE"/>
     </LinearLayout>
 

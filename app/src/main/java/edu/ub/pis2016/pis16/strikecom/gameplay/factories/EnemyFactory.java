@@ -28,10 +28,12 @@ public class EnemyFactory {
 			return null;
 
 		// ---- TANK
-		final Vehicle tank = new ThreadVehicle();
+		final ThreadVehicle tank = new ThreadVehicle();
 		tank.killable = true;
 		tank.hitpoints = 25;
 		tank.maxHitpoints = 25;
+
+		tank.cfg.accel = .75f * TILE_SIZE;
 
 		tank.getPhysics().body.filter = Physics2D.Filter.ENEMY;
 		tmp.set(8 * TILE_SIZE, 0).rotate(MathUtils.random(360));
@@ -43,7 +45,7 @@ public class EnemyFactory {
 
 		VehicleFollowBehavior vfb = new VehicleFollowBehavior();
 		vfb.setTarget(strikeBase);
-		vfb.setMinRange(4 * TILE_SIZE);
+		vfb.setMinRange(5 * TILE_SIZE);
 		vfb.setMaxRange(16 * TILE_SIZE);
 		tank.putComponent(vfb);
 		screen.addGameObject(tank);
