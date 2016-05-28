@@ -15,7 +15,7 @@
         <Button
             android:layout_width="@dimen/minimap_size"
             android:layout_height="@dimen/minimap_size"
-            android:text="@string/minimap"
+            android:text=""
             android:id="@+id/btnMinimap"
             style="?android:attr/borderlessButtonStyle"
             android:background="@drawable/btn_retro_mk1"

@@ -3,6 +3,7 @@ package edu.ub.pis2016.pis16.strikecom.fragments;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -88,9 +89,8 @@ public class InventoryFragment extends DialogFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view;
-
-		view = inflater.inflate(R.layout.fragment_inventory, container);
+		View view = inflater.inflate(R.layout.fragment_inventory, container);
+		final Typeface myCustomFont= Typeface.createFromAsset(getActivity().getAssets(), getString(R.string.game_font));
 
 		/** Look up all UI Elements */
 		LinearLayout outerFrame = (LinearLayout) view.findViewById(R.id.outerFrame);
@@ -112,6 +112,15 @@ public class InventoryFragment extends DialogFragment {
 		scrapText.setText("" + playerScrap);
 		fuelText.setText("" + Math.round(playerFuel));
 		/** FINISHED LOOKUP */
+
+		// Apply the same custom font to all UI elements
+		equipBtn.setTypeface(myCustomFont);
+		cancelBtn.setTypeface(myCustomFont);
+		turretSelectionBtn.setTypeface(myCustomFont);
+		upgradeSelectionBtn.setTypeface(myCustomFont);
+		itemDesc.setTypeface(myCustomFont);
+		scrapText.setTypeface(myCustomFont);
+		fuelText.setTypeface(myCustomFont);
 
 		// Get strikebase model name and find relevant resources
 		String modeSuffix = strikeBaseModel.toString().toLowerCase();

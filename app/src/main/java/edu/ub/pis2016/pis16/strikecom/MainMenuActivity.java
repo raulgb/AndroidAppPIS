@@ -28,7 +28,7 @@ public class MainMenuActivity extends AppCompatActivity{
 		Button btnPlay = (Button) findViewById(R.id.btnPlay);
 		Button btnExit = (Button) findViewById(R.id.btnExit);
 		Button btnOptions = (Button) findViewById(R.id.bntOptions);
-		Typeface myCustomFont= Typeface.createFromAsset(getAssets(), "fonts/Minecraft.ttf");
+		Typeface myCustomFont= Typeface.createFromAsset(getAssets(), getString(R.string.game_font));
 		btnPlay.setTypeface(myCustomFont);
 		btnExit.setTypeface(myCustomFont);
 		btnOptions.setTypeface(myCustomFont);

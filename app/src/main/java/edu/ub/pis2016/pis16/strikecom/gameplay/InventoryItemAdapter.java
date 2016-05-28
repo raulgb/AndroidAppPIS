@@ -2,6 +2,7 @@ package edu.ub.pis2016.pis16.strikecom.gameplay;
 
 import java.util.List;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +46,8 @@ public class InventoryItemAdapter extends BaseAdapter {
 
 		View rowView = convertView;
 
+		final Typeface myCustomFont= Typeface.createFromAsset(context.getAssets(), context.getString(R.string.game_font));
+
 		if (convertView == null) {
 			// Create a new view into the list.
 			LayoutInflater inflater = (LayoutInflater) context
@@ -72,6 +75,9 @@ public class InventoryItemAdapter extends BaseAdapter {
 		// Set data into the view.
 		ImageView itemImage = (ImageView) rowView.findViewById(R.id.itemDescImage);
 		TextView itemName = (TextView) rowView.findViewById(R.id.itemName);
+
+		// Apply custom font
+		itemName.setTypeface(myCustomFont);
 
 		Item item = this.items.get(position);
 		itemName.setText(item.getName());

@@ -113,10 +113,11 @@
         android:layout_weight="1">
 
         <TextView
+            android:id="@+id/currentItemLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Current Item"
+            android:text="@string/currentItem_label"
             android:textColor="#EEE"
             />
 
@@ -130,15 +131,16 @@
                 android:id="@+id/currentItemDesc"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Select an item to show information"
+                android:text="@string/slots_info"
                 android:textColor="#EEE"/>
         </LinearLayout>
 
         <TextView
+            android:id="@+id/newItemLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="New Item"
+            android:text="@string/newItem_label"
             android:textColor="#EEE"/>
 
         <LinearLayout

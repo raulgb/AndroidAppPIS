@@ -2,6 +2,7 @@ package edu.ub.pis2016.pis16.strikecom.fragments;
 
 import android.app.Fragment;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,12 +53,19 @@ public class SidebarFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_sidebar, container, false);
 
+		final Typeface myCustomFont= Typeface.createFromAsset(getActivity().getAssets(), getString(R.string.game_font));
+
 		/** Extract all UI elements */
 		btnInventory = (Button) view.findViewById(R.id.btnInventory);
 		btnMinimap = (Button) view.findViewById(R.id.btnMinimap);
 
 		scrapText = (TextView) view.findViewById(R.id.textScrap);
 		fuelText = (TextView) view.findViewById(R.id.textFuel);
+
+		// Apply custom font
+		btnInventory.setTypeface(myCustomFont);
+		scrapText.setTypeface(myCustomFont);
+		fuelText.setTypeface(myCustomFont);
 
 		LinearLayout outerFrame = (LinearLayout) view.findViewById(R.id.outerFrame);
 

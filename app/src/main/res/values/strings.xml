@@ -59,6 +59,9 @@
     <!-- Slots Dialog -->
     <string name="equipToSlot_button">Equip</string>
     <string name="backToInventory_button">Back</string>
+    <string name="currentItem_label">Current item</string>
+    <string name="newItem_label">New item</string>
+    <string name="slots_info">Select an item to show information</string>
 
     <!-- Shop Dialog -->
     <string name="buy_button">Buy</string>
@@ -84,5 +87,9 @@
     <string name="gameover_title">Game Over</string>
     <string name="score_label">Your score:</string>
     <string name="submit_button">Submit</string>
+
+
+    <!-- Game Font-->
+    <string name="game_font">fonts/Minecraft.ttf</string>
 
 </resources>

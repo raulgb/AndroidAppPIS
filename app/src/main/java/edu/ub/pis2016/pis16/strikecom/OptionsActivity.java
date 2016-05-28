@@ -5,6 +5,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -12,6 +13,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.GLGameFragment;
@@ -38,6 +41,14 @@ public class OptionsActivity extends Activity {
         setContentView(R.layout.activity_options);
         Options= this;
 
+        final Typeface myCustomFont= Typeface.createFromAsset(getAssets(), getString(R.string.game_font));
+
+		TextView title = (TextView) findViewById(R.id.Options);
+		TextView musicLabel = (TextView) findViewById(R.id.Music);
+		TextView soundLabel = (TextView) findViewById(R.id.Sound);
+		title.setTypeface(myCustomFont);
+		musicLabel.setTypeface(myCustomFont);
+		soundLabel.setTypeface(myCustomFont);
 
         seekBarMusic = (SeekBar) findViewById(R.id.seekBarMusic);
         seekBarSound = (SeekBar) findViewById(R.id.seekBarSound);
@@ -47,6 +58,9 @@ public class OptionsActivity extends Activity {
         seekBarSound.setProgress(percentSound);
         textViewMusic.setText(percentMusic + "%");
         textViewSound.setText(percentSound + "%");
+
+		textViewMusic.setTypeface(myCustomFont);
+		textViewSound.setTypeface(myCustomFont);
 
         seekBarMusic.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int seekBarPercent = 0;
@@ -81,6 +95,7 @@ public class OptionsActivity extends Activity {
         });
 
         Button btnSave = (Button) findViewById(R.id.btnSave);
+		btnSave.setTypeface(myCustomFont);
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,6 +123,8 @@ public class OptionsActivity extends Activity {
         });
 
         Button btnExit = (Button) findViewById(R.id.btnExit2);
+		btnExit.setTypeface(myCustomFont);
+
         btnExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

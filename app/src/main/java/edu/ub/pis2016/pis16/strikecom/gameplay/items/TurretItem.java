@@ -64,7 +64,7 @@ public class TurretItem extends Item {
 		range = Math.round(cfg.range);
 
 		return (name + "\n\n\tattack: " + Integer.toString(attack) + "\n\tfirerate: " + Integer.toString(firerate) + "\n\trange: " + Integer
-				.toString(range) + "\n\n\tprice: " + Integer.toString(price));
+				.toString(range) + "\n\tprice: " + Integer.toString(price));
 	}
 
 	public TurretConfig getConfig() {

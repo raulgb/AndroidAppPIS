@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -15,6 +16,7 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -196,7 +198,12 @@ public class FragmentedGameActivity extends Activity {
 		dialog.setContentView(R.layout.alert_dialog);
 		dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
+		Typeface myCustomFont= Typeface.createFromAsset(getAssets(), getString(R.string.game_font));
+
+		((TextView) dialog.findViewById(R.id.alert_message)).setTypeface(myCustomFont);
+
 		Button dialogYes = (Button) dialog.findViewById(R.id.btnYes);
+		dialogYes.setTypeface(myCustomFont);
 		dialogYes.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -207,6 +214,7 @@ public class FragmentedGameActivity extends Activity {
 		});
 
 		Button dialogNo = (Button) dialog.findViewById(R.id.btnNo);
+		dialogNo.setTypeface(myCustomFont);
 		dialogNo.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {

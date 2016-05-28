@@ -4,6 +4,7 @@ import android.app.DialogFragment;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -80,15 +81,23 @@ public class SlotsFragment extends DialogFragment {
 				view = inflater.inflate(R.layout.fragment_slots_mk2, container, false);
 		}
 
+		final Typeface myCustomFont= Typeface.createFromAsset(getActivity().getAssets(), getString(R.string.game_font));
+
+		((TextView) view.findViewById(R.id.currentItemLabel)).setTypeface(myCustomFont);
+		((TextView) view.findViewById(R.id.newItemLabel)).setTypeface(myCustomFont);
+
 		currentItemDesc = (TextView) view.findViewById(R.id.currentItemDesc);
+		currentItemDesc.setTypeface(myCustomFont);
 
 		// NEW ITEM ATTRIBUTES
 		newItemDesc = (TextView) view.findViewById(R.id.newItemDesc);
 		if (newItem != null)
 			newItemDesc.setText(newItem.getDisplayText());
+		newItemDesc.setTypeface(myCustomFont);
 
 		// BUTTONS
 		Button equipToSlotBtn = (Button) view.findViewById(R.id.slotsBtn_1);
+		equipToSlotBtn.setTypeface(myCustomFont);
 		equipToSlotBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -104,6 +113,7 @@ public class SlotsFragment extends DialogFragment {
 			}
 		});
 		Button backToInventoryBtn = (Button) view.findViewById(R.id.slotsBtn_2);
+		backToInventoryBtn.setTypeface(myCustomFont);
 		backToInventoryBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
