@@ -16,9 +16,15 @@ public class VehicleFollowBehavior extends BehaviorComponent {
 	float minRange = 0;
 	float maxRange = Float.MAX_VALUE;
 	boolean moveOrder;
+	GameObject targetGO = null;
 
 	@Override
 	public void update(float delta) {
+		if(targetGO != null && targetGO.isValid()){
+			moveOrder = true;
+			target.set(targetGO.getPosition());
+		}
+
 		if (!moveOrder)
 			return;
 

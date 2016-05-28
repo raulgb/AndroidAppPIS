@@ -18,9 +18,13 @@ public class Turret extends GameObject {
 	AnimatedSprite sprite;
 	Vector2 anchor;
 
+	public Turret(TurretConfig cfg, Vehicle owner){
+		this(cfg.sprite, owner, cfg.anchor);
+		this.cfg = cfg;
+	}
+
 	public Turret(String model, Vehicle owner, String anchor) {
 		this.model = model;
-
 		this.anchor = owner.getAnchor(anchor);
 
 		this.setParent(owner);

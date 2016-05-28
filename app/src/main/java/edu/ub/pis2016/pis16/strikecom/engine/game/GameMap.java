@@ -191,10 +191,8 @@ public class GameMap {
 			return grass;
 		else if (value > 0.5f)
 			return dry;
-		else if (value > 0.4f)
-			return sand[MathUtils.random(0, 1)];
 		else
-			return water;
+			return sand[MathUtils.random(0, 1)];
 	}
 
 	public float[][] getPTable() {
@@ -263,9 +261,9 @@ public class GameMap {
 		Sprite tmp;
 
 		for (int y = 0; y < height; y++) {
-			tmpY =  tileSize / 2f+(center.y - height*2 + y *4);
+			tmpY = tileSize / 2f + (center.y - height * 2 + y * 4);
 			for (int x = 0; x < width; x++) {
-				tmpX = tileSize / 2f+(center.x - width*2 + x *4);
+				tmpX = tileSize / 2f + (center.x - width * 2 + x * 4);
 				if (discoveredTable[y][x]) {    //discovered terrain
 					tmp = getGray(pTable[y][x]);
 					tmp.setScale(0.5f); //warning: resize works for other instances of this sprites
@@ -290,21 +288,22 @@ public class GameMap {
 
 	/**
 	 * creates a .png image of current map of the game, to be used in UI/map
+	 *
 	 * @param center current position of StrikeBase,
 	 */
-	public void createMiniMap(Vector2 center,Game game){
+	public void createMiniMap(Vector2 center, Game game) {
 
-		Color color=new Color();
+		Color color = new Color();
 		Bitmap.Config conf = Bitmap.Config.ARGB_8888; // see other conf types
 		Bitmap bmp = Bitmap.createBitmap(width, height, conf); // this creates a MUTABLE bitmap
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
 				if (discoveredTable[y][x]) {
-					bmp.setPixel(x,y,calcColor(pTable[y][x]));
+					bmp.setPixel(x, y, calcColor(pTable[y][x]));
 					if (x == (int) (center.x) / tileSize && y == (int) (center.y) / tileSize) {//player position marker
 						bmp.setPixel(x, y, color.BLACK);
 					}
-				}else {
+				} else {
 					bmp.setPixel(x, y, color.WHITE);// undiscovered area
 				}
 			}
@@ -312,8 +311,7 @@ public class GameMap {
 		}
 
 
-
-		FileIO fio=game.getFileIO();
+		FileIO fio = game.getFileIO();
 		OutputStream out = null;
 
 		try {
@@ -335,13 +333,14 @@ public class GameMap {
 
 
 	}
-	private int calcColor(float inValue){
+
+	private int calcColor(float inValue) {
 		if (inValue > 0.6f)
-			return  -16711936; //GREEN -grass
+			return -16711936; //GREEN -grass
 		else if (inValue > 0.5f)
-			return -3355444 ;//LTGRAY-  dry
+			return -3355444;//LTGRAY-  dry
 		else if (inValue > 0.4f)
-			return  -256; //YELLOW - sand
+			return -256; //YELLOW - sand
 		else
 			return -16776961; //BLUE - water
 

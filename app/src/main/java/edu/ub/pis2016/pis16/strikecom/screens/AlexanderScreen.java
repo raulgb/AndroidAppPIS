@@ -343,34 +343,21 @@ public class AlexanderScreen extends Screen {
 
 	/** Create a new tank enemy which spawns somewhere random on the map */
 	private void createEnemy() {
-		final Vehicle enemyTank = EnemyFactory.createEnemyTank();
-		GameObject tankTurret = EnemyFactory.createEnemyTankTurret(enemyTank);
+		if (!strikeBase.isValid())
+			return;
 
-		addGameObject(enemyTank);
-		addGameObject(tankTurret);
-
-		enemyTank.addOnDestroyAction(new Runnable() {
-			@Override
-			public void run() {
-				createEnemy();
-				if (Math.random() > 0.5f)
+		GameObject enemy = EnemyFactory.createRandomEnemyTank(this);
+		if (enemy != null)
+			enemy.addOnDestroyAction(new Runnable() {
+				@Override
+				public void run() {
 					createEnemy();
-			}
-		});
+					if (Math.random() > 0.5f)
+						createEnemy();
+				}
+			});
 
-
-		// Spawn it somewhere random, but not in view of the player, but not too far off the player
-		tmp.set(strikeBase.getPosition());
-		while (tmp.dst(strikeBase.getPosition()) < GameConfig.TILES_ON_SCREEN / 2f * TILE_SIZE
-				|| tmp.dst(strikeBase.getPosition()) > GameConfig.TILES_ON_SCREEN * TILE_SIZE) {
-			float randX = MathUtils.random(physics2D.getWorldWidth() * 0.2f, physics2D.getWorldWidth() * 0.8f) * TILE_SIZE;
-			float randY = MathUtils.random(physics2D.getWorldHeight() * 0.2f, physics2D.getWorldHeight() * 0.8f) * TILE_SIZE;
-			tmp.set(randX, randY);
-		}
-
-		enemyTank.getPhysics().setPosition(tmp);
-		// Add a healthbar for the new tank
-		addHealthBar(enemyTank);
+		addHealthBar(enemy);
 	}
 
 	private void addHealthBar(final GameObject owner) {

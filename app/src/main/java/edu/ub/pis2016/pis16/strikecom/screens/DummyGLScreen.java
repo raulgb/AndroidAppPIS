@@ -32,11 +32,15 @@ import edu.ub.pis2016.pis16.strikecom.engine.physics.StaticBody;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 import edu.ub.pis2016.pis16.strikecom.engine.util.performance.ObjectMap;
 import edu.ub.pis2016.pis16.strikecom.gameplay.StrikeBase;
+import edu.ub.pis2016.pis16.strikecom.gameplay.ThreadVehicle;
+import edu.ub.pis2016.pis16.strikecom.gameplay.Turret;
 import edu.ub.pis2016.pis16.strikecom.gameplay.Vehicle;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.CameraBehavior;
+import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.TurretBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.VehicleFollowBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
+import edu.ub.pis2016.pis16.strikecom.gameplay.config.TurretConfig;
 import edu.ub.pis2016.pis16.strikecom.gameplay.factories.EnemyFactory;
 
 import static edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig.MAP_SIZE;
@@ -71,8 +75,6 @@ public class DummyGLScreen extends Screen {
 
 	Physics2D physics2D;
 	GameMap gameMap;
-
-
 	Sprite healthBarSprite;
 	StrikeBase strikeBase;
 
@@ -118,7 +120,6 @@ public class DummyGLScreen extends Screen {
 
 		// Move order Input
 		addInputProcessor(new VehicleTouchController(this, strikeBase));
-
 	}
 
 	WindowedMean fpsMean = new WindowedMean(30);
@@ -261,10 +262,14 @@ public class DummyGLScreen extends Screen {
 		strikeBase.hitpoints = 500;
 		strikeBase.maxHitpoints = 500;
 		strikeBase.killable = true;
+		camera.setPosition(strikeBase.getPosition());
 		addGameObject("StrikeBase", strikeBase);
+
+		commitGameObjectChanges();
 
 		createEnemy();
 		createEnemy();
+
 	}
 
 	/** Create a new tank enemy which spawns somewhere random on the map */
@@ -272,33 +277,18 @@ public class DummyGLScreen extends Screen {
 		if (!strikeBase.isValid())
 			return;
 
-		final Vehicle enemyTank = EnemyFactory.createEnemyTank();
-		GameObject tankTurret = EnemyFactory.createEnemyTankTurret(enemyTank);
-
-		addGameObject(enemyTank);
-		addGameObject(tankTurret);
-
-		enemyTank.addOnDestroyAction(new Runnable() {
-			@Override
-			public void run() {
-				createEnemy();
-				if (Math.random() > 0.5f)
+		GameObject enemy = EnemyFactory.createRandomEnemyTank(this);
+		if (enemy != null)
+			enemy.addOnDestroyAction(new Runnable() {
+				@Override
+				public void run() {
 					createEnemy();
-			}
-		});
+					if (Math.random() > 0.5f)
+						createEnemy();
+				}
+			});
 
-		// Spawn it somewhere random, but not in view of the player, but not too far off the player
-		tmp.set(strikeBase.getPosition());
-		while (tmp.dst(strikeBase.getPosition()) < GameConfig.TILES_ON_SCREEN / 2f * TILE_SIZE
-				|| tmp.dst(strikeBase.getPosition()) > GameConfig.TILES_ON_SCREEN * TILE_SIZE) {
-			float randX = MathUtils.random(physics2D.getWorldWidth() * 0.2f, physics2D.getWorldWidth() * 0.8f) * TILE_SIZE;
-			float randY = MathUtils.random(physics2D.getWorldHeight() * 0.2f, physics2D.getWorldHeight() * 0.8f) * TILE_SIZE;
-			tmp.set(randX, randY);
-		}
-
-		enemyTank.getPhysics().setPosition(tmp);
-		// Add a healthbar for the new tank
-		addHealthBar(enemyTank);
+		addHealthBar(enemy);
 	}
 
 	private void addHealthBar(final GameObject owner) {

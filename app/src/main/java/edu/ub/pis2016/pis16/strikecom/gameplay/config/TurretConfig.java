@@ -16,6 +16,14 @@ public class TurretConfig {
 		TURRET_HOWITZER
 	}
 
+	/** Sprite region name */
+	public String sprite = "turret_machinegun";
+	/** Size of sprite IN TILES */
+	public float sprite_size = 1f;
+
+	/** Anchor to use for attaching */
+	public String anchor = "turret";
+
 	/** Idle seconds after target not found */
 	public float idle_seconds = 1f;
 	/** Seconds between each shot */
@@ -43,6 +51,8 @@ public class TurretConfig {
 		// TODO Check balance
 		switch (turretType) {
 			case TURRET_MACHINEGUN:
+				sprite = "turret_machinegun";
+
 				lerp_speed = 0.050f;
 				firerate = 0.4f;
 				fire_cone = 5f;
@@ -56,6 +66,8 @@ public class TurretConfig {
 				break;
 
 			case TURRET_GATLING:
+				sprite = "turret_gatling";
+
 				lerp_speed = 0.045f;
 				firerate = 0.15f;
 				fire_cone = 10f;
@@ -68,6 +80,9 @@ public class TurretConfig {
 				break;
 
 			case TURRET_CANNON:
+				sprite = "turret_cannon";
+				sprite_size = 0.85f;
+
 				lerp_speed = 0.020f;
 				firerate = 2f;
 				fire_cone = 10f;
@@ -80,6 +95,9 @@ public class TurretConfig {
 				break;
 
 			case TURRET_HOWITZER:
+				sprite = "turret_howitzer";
+				sprite_size = 0.85f;
+
 				lerp_speed = 0.005f;
 				firerate = 5f;
 				fire_cone = 5f;
