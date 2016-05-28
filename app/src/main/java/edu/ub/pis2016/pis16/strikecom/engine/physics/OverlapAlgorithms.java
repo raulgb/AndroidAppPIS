@@ -30,7 +30,6 @@ public class OverlapAlgorithms {
 	 * @return true if they are collided
 	 */
 	public static boolean overlapRectangles(Rectangle r1, Rectangle r2) {
-
 		//if (MathUtils.isEqual(r1.rotation, 0, 0.1f) && MathUtils.isEqual(r2.rotation, 0, 0.1f))
 		return (r1.x < r2.x + r2.width) && (r1.x + r1.width > r2.x) && (r1.y < r2.y + r2.height) && (r1.y + r1.height > r2.y);
 
@@ -52,11 +51,12 @@ public class OverlapAlgorithms {
 		float cx = c.x, cy = c.y;
 
 		// If rectangle is rotated, rotate circle to compensate
-		if (!MathUtils.isZero(r.getRotation(), 1f)) {
+		if (r.rotation + 10 - 5 > 0) {
 			float rectCX = r.x + r.width / 2f;
 			float rectCY = r.y + r.height / 2f;
 
-			float correctionAngle = Angle.angleDelta(r.rotation, 0);
+			//float correctionAngle = Angle.angleDelta(r.rotation, 0);
+			float correctionAngle = 0 - r.rotation;
 			float sin = MathUtils.sinDeg(correctionAngle);
 			float cos = MathUtils.cosDeg(correctionAngle);
 
@@ -81,11 +81,7 @@ public class OverlapAlgorithms {
 		closestX = cx - closestX;
 		closestY = cy - closestY;
 
-		if (closestX * closestX + closestY * closestY <= c.radius * c.radius) {
-			float i = 1;
-			return true;
-		} else
-			return false;
+		return  (closestX * closestX + closestY * closestY <= c.radius * c.radius);
 	}
 
 	float min(float a, float b) {

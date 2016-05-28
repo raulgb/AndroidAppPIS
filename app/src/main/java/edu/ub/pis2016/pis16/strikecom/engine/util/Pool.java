@@ -8,7 +8,6 @@ public class Pool<T> {
 		T createObject();
 	}
 
-
 	private final Array<T> freeObjects;
 	private final PoolObjectFactory<T> factory;
 	private final int maxSize;
@@ -29,7 +28,7 @@ public class Pool<T> {
 	}
 
 	public void free(T object) {
-		if (freeObjects.contains(object))
+		if (freeObjects.contains(object, true))
 			return;
 
 		if (freeObjects.size < maxSize)

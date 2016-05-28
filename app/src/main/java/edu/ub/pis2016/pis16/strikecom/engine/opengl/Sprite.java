@@ -12,11 +12,10 @@ public class Sprite {
 	private TextureRegion region;
 
 	/** In degrees */
-	private float rotation,
-			scaleX,
-			scaleY,
-			width,
-			height;
+	private float rotation = 0;
+	private float
+			scaleX, scaleY,
+			width, height;
 	private Vector2 position = new Vector2();
 
 	public Sprite(TextureRegion region) {
@@ -35,13 +34,14 @@ public class Sprite {
 	}
 
 	public void draw(SpriteBatch batch, float x, float y) {
-		this.position.set(x, y);
+		this.position.x = x;
+		this.position.y = y;
 		draw(batch);
 	}
 
 	public void draw(SpriteBatch batch) {
 		// If not rotated, use default 0 deg method to save performance, otherwise use specialized drawing
-		if (MathUtils.isEqual(rotation, 0, 0.01f))
+		if (rotation == 0)
 			batch.drawSprite(position.x, position.y, width * scaleX, height * scaleY, region);
 		else
 			batch.drawSprite(position.x, position.y, width * scaleX, height * scaleY, rotation, region);

@@ -1,5 +1,7 @@
 package edu.ub.pis2016.pis16.strikecom.engine.physics;
 
+import android.util.Log;
+
 import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Sprite;
@@ -16,7 +18,13 @@ public class Physics2D {
 	private float worldWidth;
 	private float worldHeight;
 
-	private CoarseCollisionArray coarseCollisionArray;
+	private Array<Body> dynamicBodies = new Array<>(false, 64);
+	private Array<Body> staticBodies = new Array<>(false, 64);
+	private Array<Body> allBodies = new Array<>(false, 128);
+
+	private Array<Body> potentials = new Array<>(false, 16);
+
+	private QuadTree quadTree;
 
 	/** Special map for Bodies currenly under contact */
 	private ObjectSet<ContactListener.Contact> previousContacts = new ObjectSet<>();
@@ -26,6 +34,7 @@ public class Physics2D {
 
 	Pool<ContactListener.Contact> contactPool;
 	private Vector2 tmp = new Vector2();
+
 
 	/**
 	 * creates 2d physics world
@@ -37,17 +46,15 @@ public class Physics2D {
 		// HashGrid Init
 		this.worldWidth = worldWidth;
 		this.worldHeight = worldHeight;
-		float cellSize = 16; // 16*16 tiles per cell
-		//coarseCollisionArray = new SpatialHashGrid(worldWidth, worldHeight, cellSize);
-		coarseCollisionArray = new CoarseCollisionArray();
 
+		quadTree = new QuadTree(0, new Rectangle(worldWidth, worldHeight));
 
 		contactPool = new Pool<>(new Pool.PoolObjectFactory<ContactListener.Contact>() {
 			@Override
 			public ContactListener.Contact createObject() {
 				return new ContactListener.Contact();
 			}
-		}, 32);
+		}, 128);
 	}
 
 	/** World width in tiles */
@@ -62,8 +69,10 @@ public class Physics2D {
 	}
 
 	public void update(float delta) {//update all Bodies of the game
+		quadTree.clear();
+
 		//update velocity and positions of all dynamic bodies
-		for (Body body : coarseCollisionArray.dynamicBodies) {
+		for (Body body : dynamicBodies) {
 
 			// Only update Dynamic Bodies
 			if (body instanceof DynamicBody) {
@@ -85,29 +94,40 @@ public class Physics2D {
 			}
 		}
 
+		for (Body body : allBodies) {
+			body.updateBounds();
+			quadTree.insert(body);
+		}
+
 		// Store past contacts
 		previousContacts.clear();
 		previousContacts.addAll(contacts);
 		contacts.clear();
 
-		for (Body bodyA : coarseCollisionArray.dynamicBodies) {
-			//Array<Body> potentials = coarseCollisionArray.getPotentialColliders(bodyA);
 
-			for (Body bodyB : coarseCollisionArray.allBodies) {
-				if(!Filter.test(bodyA.filter, bodyB.filter))
+		// Contact that will be sent to the first collision
+		ContactListener.Contact newContact = contactPool.newObject();
+		int tested = 0;
+
+		for (Body bodyA : dynamicBodies) {
+			// Get potential matches
+			quadTree.retrieve(potentials, bodyA);
+
+			for (Body bodyB : potentials) {
+				if (!Filter.test(bodyA.filter, bodyB.filter))
 					continue;
 
-				ContactListener.Contact newContact = contactPool.newObject();
-				// Check if this collision has already been done
+				tested++;
+
+				// Check if this collision did already occur this frame
 				newContact.a = bodyA;
 				newContact.b = bodyB;
 				if (contacts.contains(newContact)) {
-					contactPool.free(newContact);
 					continue;
 				}
 
 				// Detect Collision
-				if (bodyA.collide(bodyB)) {
+				if (bodyA.bounds.overlaps(bodyB.bounds)) {
 					newContact.a = bodyA;
 					newContact.b = bodyB;
 					tmp.set(bodyA.position).lerp(bodyB.position, .5f);
@@ -121,9 +141,17 @@ public class Physics2D {
 					if (!previousContacts.contains(newContact))
 						for (ContactListener cl : listeners)
 							cl.beginContact(newContact);
+
+					// Create a new contact for the next one
+					newContact = contactPool.newObject();
 				}
 			}
 		}
+
+		Log.i("Physics2D", String.format("nº: %4d | t: %8d", allBodies.size, tested));
+
+		// Free the last unused contact
+		contactPool.free(newContact);
 
 		// End all obsolete contacts
 		for (ContactListener.Contact oldContact : previousContacts) {
@@ -140,12 +168,14 @@ public class Physics2D {
 
 	/** Static bodies */
 	protected void addStaticBody(Body b) {
-		this.coarseCollisionArray.insertStaticObject(b); //warning
+		staticBodies.add(b);
+		allBodies.add(b);
 	}
 
 	/** Dynamic and Kinematic bodies */
-	protected void addDynamicBody(Body b) {//add dynamic body to physics engine
-		this.coarseCollisionArray.insertDynamicObject(b);
+	protected void addDynamicBody(Body b) {
+		dynamicBodies.add(b);
+		allBodies.add(b);
 	}
 
 	public void addContactListener(ContactListener cl) {
@@ -153,8 +183,6 @@ public class Physics2D {
 	}
 
 	public void addBody(Body body) {
-		//Log.d("Physics2D", "Added new body: " + body.userData);
-
 		if (body instanceof StaticBody)
 			addStaticBody(body);
 		else
@@ -162,36 +190,39 @@ public class Physics2D {
 	}
 
 	public void removeBody(Body body) {
-		coarseCollisionArray.removeObject(body);
+		allBodies.removeValue(body);
+		staticBodies.removeValue(body);
+		dynamicBodies.removeValue(body);
 	}
 
-	public Array<Body> getStaticBodies() {
-		return coarseCollisionArray.getStaticBodies();
+	public Array<Body> getBodies() {
+		return allBodies;
 	}
 
 	public Array<Body> getDynamicBodies() {
-		return coarseCollisionArray.getDynamicBodies();
+		return dynamicBodies;
 	}
 
 	private Sprite hitbox = new Sprite(Assets.SPRITE_ATLAS.getRegion("hitbox"));
 	private Sprite hitbox_round = new Sprite(Assets.SPRITE_ATLAS.getRegion("hitbox_round"));
 
 	public void debugDraw(SpriteBatch batch) {
-		for (Body b : coarseCollisionArray.allBodies) {
-			Shape bounds = b.getBounds();
+		for (Body b : allBodies) {
+			Shape bounds = b.bounds;
 
-			if (bounds instanceof Rectangle) {
-				hitbox.setPosition(tmp.set(b.position).scl(TILE_SIZE));
-				hitbox.setSize(bounds.getWidth() * TILE_SIZE, bounds.getHeight() * TILE_SIZE);
-				hitbox.setRotation(bounds.getRotation());
-				hitbox.draw(batch);
-
-			} else if (bounds instanceof Circle) {
-				hitbox_round.setPosition(tmp.set(b.position).scl(TILE_SIZE));
-				hitbox_round.setSize(bounds.getWidth() * TILE_SIZE);
-				hitbox_round.draw(batch);
+			switch (bounds.type) {
+				case RECTANGLE:
+					hitbox.setPosition(tmp.set(b.position).scl(TILE_SIZE));
+					hitbox.setSize(bounds.width * TILE_SIZE, bounds.height * TILE_SIZE);
+					hitbox.setRotation(bounds.rotation);
+					hitbox.draw(batch);
+					break;
+				case CIRCLE:
+					hitbox_round.setPosition(tmp.set(b.position).scl(TILE_SIZE));
+					hitbox_round.setSize(bounds.radius * 2 * TILE_SIZE);
+					hitbox_round.draw(batch);
+					break;
 			}
-
 		}
 	}
 
@@ -233,8 +264,3 @@ public class Physics2D {
 	}
 
 }
-/*
-* http://box2d.org/manual.pdf
-* https://github.com/erincatto/Box2D
-*
-* */

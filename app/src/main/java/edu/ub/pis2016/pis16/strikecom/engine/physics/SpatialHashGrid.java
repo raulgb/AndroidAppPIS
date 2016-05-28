@@ -109,8 +109,8 @@ public class SpatialHashGrid {
 	public int[] getCellIds(Body body) {
 		int x1 = (int) Math.floor(body.position.x / this.cellSize);
 		int y1 = (int) Math.floor(body.position.y / this.cellSize);
-		int x2 = (int) Math.floor((body.position.x + body.bounds.getWidth()) / this.cellSize);
-		int y2 = (int) Math.floor((body.position.y + body.bounds.getHeight()) / this.cellSize);
+		int x2 = (int) Math.floor((body.position.x + body.bounds.width) / this.cellSize);
+		int y2 = (int) Math.floor((body.position.y + body.bounds.height) / this.cellSize);
 
 		if (x1 == x2 && y1 == y2) {
 			if (x1 >= 0 && x1 < this.cellsPerRow && y1 >= 0 && y1 < this.cellsPerCol) {

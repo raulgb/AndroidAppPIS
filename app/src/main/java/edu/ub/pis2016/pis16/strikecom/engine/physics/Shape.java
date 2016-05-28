@@ -2,27 +2,26 @@ package edu.ub.pis2016.pis16.strikecom.engine.physics;
 
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 
-public interface Shape {//interface with basic collision methods
+public abstract class Shape {//interface with basic collision methods
 
-	/** Natural position of the plauer, LL corner for rects, center for circles  */
-	Vector2 getPosition();
+	public enum Type {
+		RECTANGLE,
+		CIRCLE
+	}
 
-	/** Set the center position of the shape */
-	void setPosition(Vector2 pos);
+	public Type type;
+	public float x, y, width, height;
+	public float radius = 0;
+	public float rotation = 0;
 
-	/** Set the center position of the shape */
-	void setPosition(float x, float y);
-
-	float getRotation();
-
-	void setRotation(float r);
-
-	float getWidth();
-
-	float getHeight();
+	/** Axis Aligned Bounding Box. DO NOT ACCESS THIS, USE aabb() */
+	protected float[] aabb = new float[4];
 
 	/** Returns true if this shape overlaps another shape */
-	boolean overlaps(Shape p);
+	abstract boolean overlaps(Shape p);
 
-	boolean contains(Vector2 point);
+	/** Calculate an AABB for this shape */
+	abstract float[] aabb();
+
+	abstract boolean contains(Vector2 point);
 }

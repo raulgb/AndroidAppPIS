@@ -3,75 +3,52 @@ package edu.ub.pis2016.pis16.strikecom.engine.physics;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 
 /**
- * A circle defined by its position and radius;
+ * A circle defined by its center position and radius;
  */
-public class Circle implements Shape {
-
-	static Vector2 tmp = new Vector2();
-
-	/** Center coordinates of the Circle */
-	public float x, y;
-	public float radius, rotation;
+public class Circle extends Shape {
 
 	public Circle(float radius) {
-		this.radius = radius;
-	}
-
-	public Vector2 getPosition() {
-		return tmp.set(x, y);
-	}
-
-	@Override
-	public float getWidth() {
-		return radius * 2;
-	}
-
-	@Override
-	public float getHeight() {
-		return radius * 2;
-	}
-
-	public void setPosition(Vector2 p) {
-		x = p.x;
-		y = p.y;
-	}
-
-	@Override
-	public void setPosition(float x, float y) {
-		this.x = x;
-		this.y = y;
-	}
-
-	@Override
-	public float getRotation() {
-		return rotation;
-	}
-
-	@Override
-	public void setRotation(float r) {
-		rotation = r % 360;
+		this.type = Type.CIRCLE;
+		set(0, 0, radius);
 	}
 
 	@Override
 	public boolean overlaps(Shape p) {
-		//if p is circle
-		if (p instanceof Circle) {
-			return OverlapAlgorithms.overlapCircles(this, (Circle) p);
+		switch (p.type) {
+			case RECTANGLE:
+				return OverlapAlgorithms.overlapCircleRectangle(this, (Rectangle) p);
+			case CIRCLE:
+				return OverlapAlgorithms.overlapCircles(this, (Circle) p);
 		}
-		//if p is rectangle
-		else if (p instanceof Rectangle) {
-			return OverlapAlgorithms.overlapCircleRectangle(this, (Rectangle) p);
-		}
-
 		return false;
 	}
 
-	public boolean overlaps(Circle c) {
-		return OverlapAlgorithms.overlapCircles(this, c);
+	@Override
+	public float[] aabb() {
+		aabb[0] = x - radius;
+		aabb[1] = y - radius;
+		aabb[2] = x + radius;
+		aabb[3] = y + radius;
+		return aabb;
+	}
+
+	public void set(float x, float y, float rad) {
+		this.x = x;
+		this.y = y;
+		this.radius = rad;
+		this.width = rad * 2f;
 	}
 
 	@Override
-	public boolean contains(Vector2 point) {
-		return point.dst2(x, y) < radius * radius;
+	public boolean contains(Vector2 p) {
+		float dx = p.x - x;
+		float dy = p.y - y;
+		return (dx * dx + dy * dy) < radius * radius;
 	}
+
+	@Override
+	public String toString() {
+		return "C:[" + x + "," + y + "," + radius + "]";
+	}
+
 }

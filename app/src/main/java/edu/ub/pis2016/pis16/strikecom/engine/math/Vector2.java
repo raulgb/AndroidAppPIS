@@ -108,19 +108,27 @@ public class Vector2 {
 	}
 
 	public float dst(Vector2 v) {
-		return tmp.set(v).sub(this).len();
+		float dx = v.x - x;
+		float dy = v.y - y;
+		return (float) Math.sqrt(dx * dx + dy * dy);
 	}
 
 	public float dst(float x, float y) {
-		return tmp.set(x, y).sub(this).len();
+		float dx = x - this.x;
+		float dy = y - this.y;
+		return (float) Math.sqrt(dx * dx + dy * dy);
 	}
 
 	public float dst2(Vector2 v) {
-		return tmp.set(v).sub(this).len2();
+		float dx = v.x - x;
+		float dy = v.y - y;
+		return dx * dx + dy * dy;
 	}
 
 	public float dst2(float x, float y) {
-		return tmp.set(x, y).sub(this).len2();
+		float dx = x - this.x;
+		float dy = y - this.y;
+		return dx * dx + dy * dy;
 	}
 
 	public float len() {

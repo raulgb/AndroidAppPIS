@@ -8,6 +8,7 @@ import java.util.Map;
 import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Physics2D;
 import edu.ub.pis2016.pis16.strikecom.engine.util.performance.Array;
+import edu.ub.pis2016.pis16.strikecom.engine.util.performance.ObjectMap;
 import edu.ub.pis2016.pis16.strikecom.engine.util.performance.Sort;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
 
@@ -51,11 +52,11 @@ public abstract class Screen implements Disposable {
 	protected boolean gamePaused = false;
 
 	// GameObject Management
-	private HashMap<String, GameObject> gameObjects = new HashMap<>();
+	private ObjectMap<String, GameObject> gameObjects = new ObjectMap<>();
 	private Array<GameObject> goOrderedList = new Array<>();
 
-	private HashMap<String, GameObject> GOsToAdd = new HashMap<>();
-	private Array<GameObject> GOsToRemove = new Array<>();
+	private ObjectMap<String, GameObject> GOsToAdd = new ObjectMap<>();
+	private Array<GameObject> GOsToRemove = new Array<>(false, 16);
 
 	/** List of Cascading input processors */
 	private Array<InputProcessor> inputProcessors = new Array<>();
@@ -175,10 +176,10 @@ public abstract class Screen implements Disposable {
 		// TODO Raul: Usar PriorityQueue para no reordenar cada vez TODO el array
 
 		// Add all pending GOs, link to this screen
-		for (Map.Entry<String, GameObject> entry : GOsToAdd.entrySet()) {
+		for (ObjectMap.Entry<String, GameObject> entry : GOsToAdd.entries()) {
 			dirty = true;
-			entry.getValue().setScreen(this);
-			gameObjects.put(entry.getKey(), entry.getValue());
+			entry.value.setScreen(this);
+			gameObjects.put(entry.key, entry.value);
 		}
 		GOsToAdd.clear();
 
@@ -188,9 +189,9 @@ public abstract class Screen implements Disposable {
 			go.destroyInternal();
 
 			String keyToRemove = null;
-			for (Map.Entry<String, GameObject> e : gameObjects.entrySet())
-				if (e.getValue() == go) {
-					keyToRemove = e.getKey();
+			for (ObjectMap.Entry<String, GameObject> e : gameObjects.entries())
+				if (e.value == go) {
+					keyToRemove = e.key;
 					break;
 				}
 
@@ -236,13 +237,11 @@ public abstract class Screen implements Disposable {
 	}
 
 
+	/** Reorder the working array of GameObjects by layer for correct update and drawing */
 	private void reorderGameObjectsByLayer() {
 		goOrderedList.clear();
-
-		// Try to at least optimize the copying. Two calls to System.arraycopy()
-		Collection<GameObject> objs = gameObjects.values();
-		GameObject[] objArr = objs.toArray(new GameObject[objs.size()]);
-		goOrderedList.addAll(objArr);
+		// Super optimized no-alloc method, copy all values to a given array
+		gameObjects.values().toArray(goOrderedList);
 
 		// Sort based on layer
 		Sort.instance().sort(goOrderedList, new Comparator<GameObject>() {
@@ -253,8 +252,12 @@ public abstract class Screen implements Disposable {
 		});
 	}
 
-	public boolean hasGameObject(GameObject go) {
-		return (goOrderedList.contains(go, true));
+	public boolean existsGameObject(GameObject go) {
+		return goOrderedList.contains(go, true);
+	}
+
+	public boolean existsGameObject(String name) {
+		return gameObjects.containsKey(name);
 	}
 
 	public Game getGame() {

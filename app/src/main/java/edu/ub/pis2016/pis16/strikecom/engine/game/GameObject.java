@@ -3,6 +3,7 @@ package edu.ub.pis2016.pis16.strikecom.engine.game;
 import java.util.HashMap;
 import java.util.concurrent.RunnableFuture;
 
+import edu.ub.pis2016.pis16.strikecom.engine.framework.Graphics;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.GraphicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
@@ -10,6 +11,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Sprite;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
 import edu.ub.pis2016.pis16.strikecom.engine.util.performance.Array;
+import edu.ub.pis2016.pis16.strikecom.engine.util.performance.ObjectMap;
 
 /**
  * Basic game object class, all game objects derive from this class.
@@ -22,7 +24,7 @@ public class GameObject {
 	/** The Screen owning this GameObject */
 	protected Screen screen;
 	/** A Map of components, using their class as a Key */
-	private HashMap<Class, Component> components = new HashMap<>();
+	private ObjectMap<Class, Component> components = new ObjectMap<>(6, 0.8f);
 
 	private Array<Component> newComponents = new Array<>();
 
@@ -147,6 +149,9 @@ public class GameObject {
 	}
 
 	public void destroyInternal() {
+		if (!isValid())
+			return;
+
 		for (Component c : componentArray)
 			c.destroy();
 
@@ -181,25 +186,22 @@ public class GameObject {
 	}
 
 	public Vector2 getPosition() {
-		PhysicsComponent phys;
-		if ((phys = getComponent(PhysicsComponent.class)) != null)
-			return phys.getPosition();
+		if (hasComponent(PhysicsComponent.class))
+			return getComponent(PhysicsComponent.class).getPosition();
 		throw new IllegalStateException("Can't get the position of a GameObject without PhysicsComponent: " + this.toString());
 	}
 
 	public Sprite getSprite() {
-		GraphicsComponent graph;
-		if ((graph = getComponent(GraphicsComponent.class)) != null)
-			return graph.getSprite();
+		if (hasComponent(GraphicsComponent.class))
+			return getComponent(GraphicsComponent.class).getSprite();
 		throw new IllegalStateException("Can't get the Sprite of a GameObject without GraphicsComponent: " + this.toString());
 
 	}
 
 
 	public PhysicsComponent getPhysics() {
-		PhysicsComponent phys;
-		if ((phys = getComponent(PhysicsComponent.class)) != null)
-			return phys;
+		if (hasComponent(PhysicsComponent.class))
+			return getComponent(PhysicsComponent.class);
 		throw new IllegalStateException("GameObject has no PhysicsComponent: " + this.toString());
 
 	}

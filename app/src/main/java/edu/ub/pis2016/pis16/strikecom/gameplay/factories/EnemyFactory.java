@@ -10,13 +10,13 @@ import edu.ub.pis2016.pis16.strikecom.engine.physics.Physics2D;
 import edu.ub.pis2016.pis16.strikecom.gameplay.Explosion;
 import edu.ub.pis2016.pis16.strikecom.gameplay.ThreadVehicle;
 import edu.ub.pis2016.pis16.strikecom.gameplay.Turret;
-import edu.ub.pis2016.pis16.strikecom.gameplay.Vehicle;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.TurretBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.VehicleFollowBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.TurretConfig;
 
+import static edu.ub.pis2016.pis16.strikecom.engine.framework.Screen.LAYER_VEHICLES;
+import static edu.ub.pis2016.pis16.strikecom.engine.framework.Screen.LAYER_VEHICLE_TURRET;
 import static edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig.TILE_SIZE;
-import static edu.ub.pis2016.pis16.strikecom.engine.framework.Screen.*;
 
 public class EnemyFactory {
 

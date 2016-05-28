@@ -24,16 +24,17 @@ public class PhysicsComponent extends Component {
 	public Body body = null;
 
 	private static Vector2 tmp = new Vector2();
+
 	private Vector2 position = new Vector2();
 	private Vector2 velocity = new Vector2();
 	private Vector2 acceleration = new Vector2();
+
 	private float rotation = 0;
 
 	private HashMap<String, Vector2> anchors = new HashMap<>();
 
 	/** Basic Physics, no collisions, no updating every frame. Use for GUI etc. */
 	public PhysicsComponent() {
-		position.set(0, 0);
 	}
 
 	/** Full Physics behavior, collisions, updated automatically etc */
@@ -50,7 +51,7 @@ public class PhysicsComponent extends Component {
 
 	protected void destroy() {
 		if (body != null) {
-			body.userData = null;
+			//body.userData = null;
 			gameObject.getScreen().getPhysics2D().removeBody(this.body);
 		}
 	}
@@ -117,13 +118,13 @@ public class PhysicsComponent extends Component {
 
 	public void setRotation(float r) {
 		if (body != null)
-			body.getBounds().setRotation(r);
+			body.rotation = r;
 		else rotation = r;
 	}
 
 	public float getRotation() {
 		if (body != null)
-			return body.getBounds().getRotation();
+			return body.rotation;
 		else return rotation;
 	}
 

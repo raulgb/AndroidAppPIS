@@ -10,7 +10,6 @@ import edu.ub.pis2016.pis16.strikecom.StrikeComGLGame;
 import edu.ub.pis2016.pis16.strikecom.controller.GameContactListener;
 import edu.ub.pis2016.pis16.strikecom.controller.VehicleTouchController;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Game;
-import edu.ub.pis2016.pis16.strikecom.engine.framework.InputProcessor;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.engine.game.GameMap;
 import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
@@ -25,22 +24,15 @@ import edu.ub.pis2016.pis16.strikecom.engine.opengl.OrthoCamera;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Sprite;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Texture;
-import edu.ub.pis2016.pis16.strikecom.engine.physics.ContactListener;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Physics2D;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Rectangle;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.StaticBody;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
-import edu.ub.pis2016.pis16.strikecom.engine.util.performance.ObjectMap;
 import edu.ub.pis2016.pis16.strikecom.gameplay.StrikeBase;
-import edu.ub.pis2016.pis16.strikecom.gameplay.ThreadVehicle;
-import edu.ub.pis2016.pis16.strikecom.gameplay.Turret;
-import edu.ub.pis2016.pis16.strikecom.gameplay.Vehicle;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.CameraBehavior;
-import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.TurretBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.VehicleFollowBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
-import edu.ub.pis2016.pis16.strikecom.gameplay.config.TurretConfig;
 import edu.ub.pis2016.pis16.strikecom.gameplay.factories.EnemyFactory;
 
 import static edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig.MAP_SIZE;
@@ -130,11 +122,9 @@ public class DummyGLScreen extends Screen {
 		if (gamePaused)
 			return;
 
-		// delta = 0.016f; // for debugging
+//		delta = 0.016f; // for debugging
+		delta = MathUtils.min(1, delta);
 		FRAME += 1;
-
-		// Slow-motion
-//		delta *= 1 / 2f;
 
 		super.update(delta);
 
@@ -145,8 +135,8 @@ public class DummyGLScreen extends Screen {
 			secondsCounter -= 5;
 			Log.i("FPS", "" + MathUtils.roundPositive(1f / fpsMean.getMean()));
 
-			for (GameObject go : getGameObjects())
-				System.out.println(go);
+//			for (GameObject go : getGameObjects())
+//				System.out.println(go);
 		}
 
 		secondsElapsed += delta;
