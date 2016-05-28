@@ -148,7 +148,7 @@ public class Physics2D {
 			}
 		}
 
-		Log.i("Physics2D", String.format("nº: %4d | t: %8d", allBodies.size, tested));
+//		Log.i("Physics2D", String.format("nº: %4d | t: %8d", allBodies.size, tested));
 
 		// Free the last unused contact
 		contactPool.free(newContact);
