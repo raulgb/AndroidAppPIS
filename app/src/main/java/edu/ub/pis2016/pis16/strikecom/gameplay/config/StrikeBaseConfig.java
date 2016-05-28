@@ -3,9 +3,9 @@ package edu.ub.pis2016.pis16.strikecom.gameplay.config;
 public class StrikeBaseConfig {
 
 	public enum Model {
-		MK1,	// 4-turrets model
-		MK2,	// 3-turrets model
 		MK3,	// 2-turrets model
+		MK2,	// 3-turrets model
+		MK1,	// 4-turrets model
 		MK4,    // 5-turrets model
 		MK5     // 6-turrets model
 	}

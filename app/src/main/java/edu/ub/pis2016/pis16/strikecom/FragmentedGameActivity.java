@@ -17,6 +17,7 @@ import android.os.PowerManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -208,7 +209,7 @@ public class FragmentedGameActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// return to main menu
-				backToMainMenu();
+				backToMainMenu(false);
 
 			}
 		});
@@ -245,7 +246,12 @@ public class FragmentedGameActivity extends Activity {
 		/*}*/
 	}
 
-	public void backToMainMenu() {
+	public void backToMainMenu(boolean modelUnlocked) {
+		if(modelUnlocked) {
+			Toast.makeText(getApplicationContext(), getString(R.string.gameover_news),
+					Toast.LENGTH_SHORT).show();
+		}
+
 		Intent intent = new Intent(getApplicationContext(), MainMenuActivity.class);
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(intent);

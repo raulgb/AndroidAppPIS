@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import edu.ub.pis2016.pis16.strikecom.fragments.GameOverFragment;
+
 public class MainMenuActivity extends AppCompatActivity{
 
 	Activity mainMenu;
@@ -58,6 +60,8 @@ public class MainMenuActivity extends AppCompatActivity{
 			}
 		});
 
+		//GameOverFragment.lock(this);
+		//GameOverFragment.unlockAll(this);
 		hideSystemUI();
 	}
 

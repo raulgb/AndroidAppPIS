@@ -18,6 +18,7 @@
     <string name="sel_menu_mk3name">StrikeBase Mark. III</string>
     <string name="sel_menu_mk4name">StrikeBase Mark. IV</string>
     <string name="sel_menu_mk5name">StrikeBase Mark. V</string>
+    <string name="sel_menu_locked">LOCKED</string>
     <string name="enter_name_toast">Please enter a name!</string>
 
     <!-- Optins -->
@@ -87,7 +88,7 @@
     <string name="gameover_title">Game Over</string>
     <string name="score_label">Your score:</string>
     <string name="submit_button">Submit</string>
-
+    <string name="gameover_news">New Strikebase model unlocked!</string>
 
     <!-- Game Font-->
     <string name="game_font">fonts/Minecraft.ttf</string>

@@ -2,9 +2,11 @@ package edu.ub.pis2016.pis16.strikecom;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -24,7 +26,7 @@ public class SelectMenuActivity extends AppCompatActivity {
 
 	Activity selectMenu;
 
-	private int selectedConfig = 1;
+	private int selectedConfig = 0;
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,6 +40,7 @@ public class SelectMenuActivity extends AppCompatActivity {
 		selectMenu = this;
 
 		final Typeface myCustomFont= Typeface.createFromAsset(getAssets(), getString(R.string.game_font));
+		final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(selectMenu);
 
 		TextView title = (TextView) findViewById(R.id.textView);
 		TextView label = (TextView) findViewById(R.id.textView3);
@@ -86,46 +89,88 @@ public class SelectMenuActivity extends AppCompatActivity {
 					selectedConfig = 0;
 				}
 
-				String model;
+				// TODO Draw a cooler image for locked models
+				String model = "locked";
 				switch (StrikeBaseConfig.Model.values()[selectedConfig]){
 					case MK1:
 						model = "sbmk1";
-						modelName.setText(getString(R.string.sel_menu_mk1name));
-						btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk1);
-						btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk1);
-						btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk1);
+						if (sharedPreferences.getBoolean(model, false)) {
+							btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk1);
+							btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk1);
+							modelName.setText(getString(R.string.sel_menu_mk1name));
+							btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk1);
+							btnStart.setEnabled(true);
+							break;
+						}
+						modelName.setText(getString(R.string.sel_menu_locked));
+						btnStart.setBackgroundResource(R.drawable.btn_retro_act);
+						btnStart.setEnabled(false);
+						model = "locked";
 						break;
+
 					case MK2:
 						model = "sbmk2";
-						modelName.setText(getString(R.string.sel_menu_mk2name));
-						btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk2);
-						btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk2);
-						btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk2);
+						if (sharedPreferences.getBoolean(model, false)) {
+							btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk2);
+							btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk2);
+							modelName.setText(getString(R.string.sel_menu_mk2name));
+							btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk2);
+							btnStart.setEnabled(true);
+							break;
+						}
+						modelName.setText(getString(R.string.sel_menu_locked));
+						btnStart.setBackgroundResource(R.drawable.btn_retro_act);
+						btnStart.setEnabled(false);
+						model = "locked";
 						break;
+
 					case MK3:
 						model = "sbmk3";
-						modelName.setText(getString(R.string.sel_menu_mk3name));
-						btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk3);
-						btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk3);
-						btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk3);
+						if (sharedPreferences.getBoolean(model, true)) {
+							btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk3);
+							btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk3);
+							modelName.setText(getString(R.string.sel_menu_mk3name));
+							btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk3);
+							btnStart.setEnabled(true);
+							break;
+						}
+						modelName.setText(getString(R.string.sel_menu_locked));
+						btnStart.setBackgroundResource(R.drawable.btn_retro_act);
+						btnStart.setEnabled(false);
+						model = "locked";
 						break;
+
 					case MK4:
 						model = "sbmk4";
-						modelName.setText(getString(R.string.sel_menu_mk4name));
-						btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk4);
-						btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk4);
-						btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk4);
+						if (sharedPreferences.getBoolean(model, false)) {
+							btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk4);
+							btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk4);
+							modelName.setText(getString(R.string.sel_menu_mk4name));
+							btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk4);
+							btnStart.setEnabled(true);
+							break;
+						}
+						modelName.setText(getString(R.string.sel_menu_locked));
+						btnStart.setBackgroundResource(R.drawable.btn_retro_act);
+						btnStart.setEnabled(false);
+						model = "locked";
 						break;
+
 					case MK5:
 						model = "sbmk5";
-						modelName.setText(getString(R.string.sel_menu_mk5name));
-						btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk5);
-						btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk5);
-						btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk5);
+						if (sharedPreferences.getBoolean(model, false)) {
+							btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk5);
+							btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk5);
+							modelName.setText(getString(R.string.sel_menu_mk5name));
+							btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk5);
+							btnStart.setEnabled(true);
+							break;
+						}
+						modelName.setText(getString(R.string.sel_menu_locked));
+						btnStart.setBackgroundResource(R.drawable.btn_retro_act);
+						btnStart.setEnabled(false);
+						model = "locked";
 						break;
-					default:
-						model = "sbmk2";
-						modelName.setText(getString(R.string.sel_menu_mk2name));
 				}
 				((ImageView) findViewById(R.id.imgSelectedBase)).setImageResource(getResources().getIdentifier(model, "drawable", getPackageName()));
 			}
@@ -139,46 +184,87 @@ public class SelectMenuActivity extends AppCompatActivity {
 					selectedConfig = StrikeBaseConfig.Model.values().length -1;
 				}
 
-				String model;
+				String model = "locked";
 				switch (StrikeBaseConfig.Model.values()[selectedConfig]){
 					case MK1:
 						model = "sbmk1";
-						modelName.setText(getString(R.string.sel_menu_mk1name));
-						btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk1);
-						btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk1);
-						btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk1);
+						if (sharedPreferences.getBoolean(model, false)) {
+							btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk1);
+							btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk1);
+							modelName.setText(getString(R.string.sel_menu_mk1name));
+							btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk1);
+							btnStart.setEnabled(true);
+							break;
+						}
+						modelName.setText(getString(R.string.sel_menu_locked));
+						btnStart.setBackgroundResource(R.drawable.btn_retro_act);
+						btnStart.setEnabled(false);
+						model = "locked";
 						break;
+
 					case MK2:
 						model = "sbmk2";
-						modelName.setText(getString(R.string.sel_menu_mk2name));
-						btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk2);
-						btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk2);
-						btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk2);
+						if (sharedPreferences.getBoolean(model, true)) {
+							btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk2);
+							btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk2);
+							modelName.setText(getString(R.string.sel_menu_mk2name));
+							btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk2);
+							btnStart.setEnabled(true);
+							break;
+						}
+						modelName.setText(getString(R.string.sel_menu_locked));
+						btnStart.setBackgroundResource(R.drawable.btn_retro_act);
+						btnStart.setEnabled(false);
+						model = "locked";
 						break;
+
 					case MK3:
 						model = "sbmk3";
-						modelName.setText(getString(R.string.sel_menu_mk3name));
-						btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk3);
-						btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk3);
-						btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk3);
+						if (sharedPreferences.getBoolean(model, true)) {
+							btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk3);
+							btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk3);
+							modelName.setText(getString(R.string.sel_menu_mk3name));
+							btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk3);
+							btnStart.setEnabled(true);
+							break;
+						}
+						modelName.setText(getString(R.string.sel_menu_locked));
+						btnStart.setBackgroundResource(R.drawable.btn_retro_act);
+						btnStart.setEnabled(false);
+						model = "locked";
 						break;
+
 					case MK4:
 						model = "sbmk4";
-						modelName.setText(getString(R.string.sel_menu_mk4name));
-						btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk4);
-						btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk4);
-						btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk4);
+						if (sharedPreferences.getBoolean(model, false)) {
+							btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk4);
+							btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk4);
+							modelName.setText(getString(R.string.sel_menu_mk4name));
+							btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk4);
+							btnStart.setEnabled(true);
+							break;
+						}
+						modelName.setText(getString(R.string.sel_menu_locked));
+						btnStart.setBackgroundResource(R.drawable.btn_retro_act);
+						btnStart.setEnabled(false);
+						model = "locked";
 						break;
+
 					case MK5:
 						model = "sbmk5";
-						modelName.setText(getString(R.string.sel_menu_mk5name));
-						btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk5);
-						btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk5);
-						btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk5);
+						if (sharedPreferences.getBoolean(model, false)) {
+							btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk5);
+							btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk5);
+							modelName.setText(getString(R.string.sel_menu_mk5name));
+							btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk5);
+							btnStart.setEnabled(true);
+							break;
+						}
+						modelName.setText(getString(R.string.sel_menu_locked));
+						btnStart.setBackgroundResource(R.drawable.btn_retro_act);
+						btnStart.setEnabled(false);
+						model = "locked";
 						break;
-					default:
-						model = "sbmk2";
-						modelName.setText(getString(R.string.sel_menu_mk2name));
 				}
 				((ImageView) findViewById(R.id.imgSelectedBase)).setImageResource(getResources().getIdentifier(model, "drawable", getPackageName()));
 			}
@@ -189,7 +275,6 @@ public class SelectMenuActivity extends AppCompatActivity {
 		p.setDither(false);
 		p.setAntiAlias(false);
 		findViewById(R.id.imgSelectedBase).setLayerPaint(p);
-
 	}
 
 	@Override
