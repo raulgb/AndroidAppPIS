@@ -2,3 +2,4 @@ TURRET_MACHINEGUN;Machinegun;High caliber machinegun.
 TURRET_GATLING;Gatling gun;Multi-barreled machinegun with superior fire rate.
 TURRET_CANNON;Battle cannon;This cannon can punch a hole through most enemies.
 TURRET_HOWITZER;Howitzer;Slow but extremely powerful siege cannon.
+TURRET_PLASMA;Plasma cannon;It leaves nothing but molten slag with each shot.

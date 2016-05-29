@@ -62,7 +62,7 @@ public class EnemyConfig {
 				region = "enemy_medium";
 				maxHitpoints = 50;
 				index = 1;
-				turretType = new TurretConfig(TurretConfig.Type.TURRET_CANNON);
+				turretType = new TurretConfig(TurretConfig.Type.TURRET_HOWITZER);
 				size *= 1.4f;
 				break;
 			
@@ -71,7 +71,7 @@ public class EnemyConfig {
 				region = "enemy_large";
 				index = -1;
 				maxHitpoints = 75;
-				turretType = new TurretConfig(TurretConfig.Type.TURRET_HOWITZER);
+				turretType = new TurretConfig(TurretConfig.Type.TURRET_PLASMA);
 				size *= 1.6f;
 		}
 	}

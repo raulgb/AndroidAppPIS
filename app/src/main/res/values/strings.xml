@@ -18,7 +18,7 @@
     <string name="sel_menu_mk3name">StrikeBase Mark. III</string>
     <string name="sel_menu_mk4name">StrikeBase Mark. IV</string>
     <string name="sel_menu_mk5name">StrikeBase Mark. V</string>
-    <string name="sel_menu_locked">LOCKED</string>
+    <string name="sel_menu_locked">\?\?\?\?\?\?</string>
     <string name="enter_name_toast">Please enter a name!</string>
 
     <!-- Optins -->

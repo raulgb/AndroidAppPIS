@@ -13,7 +13,8 @@ public class TurretConfig {
 		TURRET_MACHINEGUN,
 		TURRET_GATLING,
 		TURRET_CANNON,
-		TURRET_HOWITZER
+		TURRET_HOWITZER,
+		TURRET_PLASMA
 	}
 
 	/** Sprite region name */
@@ -123,6 +124,24 @@ public class TurretConfig {
 				proj_type = ProjectileFactory.Type.PROJ_HE_ROUND;
 				proj_damage = 25;
 				proj_speed = 0.10f * TILE_SIZE;
+				break;
+
+			case TURRET_PLASMA:
+				sprite = "turret_plasma";
+				sprite_size = 0.9f;
+
+				image = "plasma_64";
+				price = 2000;
+
+				lerp_speed = 0.010f;
+				firerate = 2f;
+				fire_cone = 5f;
+				fire_spread = 2f;
+				range = 7f * TILE_SIZE;
+
+				proj_type = ProjectileFactory.Type.PROJ_PLASMA;
+				proj_damage = 50;
+				proj_speed = 0.4f * TILE_SIZE;
 				break;
 		}
 	}

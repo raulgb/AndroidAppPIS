@@ -85,7 +85,7 @@ public class FragmentedGameActivity extends Activity {
 		sidebar.setGame(game);
 
 		playerState = new PlayerState(playerName);
-		playerState.addScrap(1000);
+		playerState.addScrap(2500);
 		playerState.addFuel(100f);
 
 		// Thread updating sidebar once per second
