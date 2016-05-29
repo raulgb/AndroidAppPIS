@@ -8,6 +8,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Circle;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.KinematicBody;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
+import edu.ub.pis2016.pis16.strikecom.gameplay.config.EnemyConfig;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.VehicleConfig;
 
@@ -37,19 +38,24 @@ public class ThreadVehicle extends Vehicle {
 	private Vector2 leftThread = new Vector2();
 	private Vector2 rightThread = new Vector2();
 
-	public VehicleConfig cfg = new VehicleConfig();
+	//public VehicleConfig cfg = new VehicleConfig();
+	public EnemyConfig cfg;
 	private Vector2 tmp = new Vector2();
 
 	// Anchors
-	private Vector2 turretAnchor = new Vector2();
+	protected Vector2 turretAnchor = new Vector2();
 
-	public ThreadVehicle() {
+	public ThreadVehicle(EnemyConfig cfg) {
 		this.setLayer(Screen.LAYER_VEHICLES);
+		this.cfg = cfg;
+
+		this.hitpoints = cfg.maxHitpoints;
+		this.maxHitpoints = cfg.maxHitpoints;
 
 		physics = new PhysicsComponent(new KinematicBody(new Circle(0.5f)));
 		putComponent(physics);
-		GraphicsComponent graphics = new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("enemy"));
-		graphics.getSprite().setSize(1f * GameConfig.TILE_SIZE);
+		GraphicsComponent graphics = new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion(cfg.region, cfg.index));
+		graphics.getSprite().setSize(cfg.size);
 		putComponent(graphics);
 
 		// Config turret

@@ -8,13 +8,12 @@ import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.GLGameFragment;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Physics2D;
-import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 import edu.ub.pis2016.pis16.strikecom.gameplay.Explosion;
 import edu.ub.pis2016.pis16.strikecom.gameplay.ThreadVehicle;
 import edu.ub.pis2016.pis16.strikecom.gameplay.Turret;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.TurretBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.VehicleFollowBehavior;
-import edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig;
+import edu.ub.pis2016.pis16.strikecom.gameplay.config.EnemyConfig;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.TurretConfig;
 
 import static edu.ub.pis2016.pis16.strikecom.engine.framework.Screen.LAYER_VEHICLES;
@@ -30,19 +29,28 @@ public class EnemyFactory {
 		if (strikeBase == null || !strikeBase.isValid())
 			return null;
 
-		// ---- TANK
-		final ThreadVehicle tank = new ThreadVehicle();
-		tank.killable = true;
-		tank.hitpoints = 25;
-		tank.maxHitpoints = 25;
+		// RANDOM enemy config
+		EnemyConfig enemyConfig;
+		float rand = MathUtils.random();
+		if (rand > .9f)
+			enemyConfig = new EnemyConfig(EnemyConfig.Model.large);
+		else if (rand > .7f)
+			enemyConfig = new EnemyConfig(EnemyConfig.Model.medium_2);
+		else if (rand > .5f)
+			enemyConfig = new EnemyConfig(EnemyConfig.Model.medium_1);
+		else if (rand > .25f)
+			enemyConfig = new EnemyConfig(EnemyConfig.Model.small_2);
+		else
+			enemyConfig = new EnemyConfig(EnemyConfig.Model.small_1);
 
+		// ---- TANK
+		final ThreadVehicle tank = new ThreadVehicle(enemyConfig);
+		tank.killable = true;
 		tank.cfg.accel = .75f * TILE_SIZE;
 
 		tank.getPhysics().body.filter = Physics2D.Filter.ENEMY;
-
 		tank.setTag("enemy_tank");
 		tank.setLayer(LAYER_VEHICLES);
-		tank.getSprite().setSize(1.2f * TILE_SIZE);
 
 		VehicleFollowBehavior vfb = new VehicleFollowBehavior();
 		vfb.setTarget(strikeBase);
@@ -63,30 +71,12 @@ public class EnemyFactory {
 						(FragmentedGameActivity) ((GLGameFragment) screen.getGame()).getActivity();
 
 				gameActivity.playerState.addScrap(tank.maxHitpoints);
+				gameActivity.playerState.increaseCounter();
 			}
 		});
 
-		// ---- RANDOM HULL
-		// TODO Add more variety
-		GraphicsComponent graphics = new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("enemy_hull", MathUtils.random(2)));
-		graphics.getSprite().setSize(1.1f * GameConfig.TILE_SIZE);
-		tank.removeComponent(GraphicsComponent.class);
-		tank.putComponent(graphics);
-
-		// ---- RANDOM TURRET
-		Turret turret;
-		TurretConfig turretConfig;
-		float rand = MathUtils.random();
-		if (rand > .75f)
-			turretConfig = new TurretConfig(TurretConfig.Type.TURRET_GATLING);
-		else if (rand > .50f)
-			turretConfig = new TurretConfig(TurretConfig.Type.TURRET_MACHINEGUN);
-		else if (rand > .15f)
-			turretConfig = new TurretConfig(TurretConfig.Type.TURRET_CANNON);
-		else
-			turretConfig = new TurretConfig(TurretConfig.Type.TURRET_HOWITZER);
-
-		turret = new Turret(turretConfig, tank);
+		// ---- TURRET
+		Turret turret = new Turret(tank.cfg.turretType, tank);
 
 		turret.setLayer(LAYER_VEHICLE_TURRET);
 		turret.getSprite().setSize(1f * TILE_SIZE);
@@ -170,3 +160,6 @@ public class EnemyFactory {
 	*/
 
 }
+
+
+
