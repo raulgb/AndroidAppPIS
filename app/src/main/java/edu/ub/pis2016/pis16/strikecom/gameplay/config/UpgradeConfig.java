@@ -54,7 +54,7 @@ public class UpgradeConfig {
 			case AI:
 				functionName = "ai";
 				image = "ai_64";
-				value = 2f;
+				value = 0.5f;
 				price = 2500;
 				break;
 

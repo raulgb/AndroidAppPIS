@@ -45,7 +45,8 @@ public class FragmentedGameActivity extends Activity {
 
 	PowerManager.WakeLock wakeLock;
 
-	public PlayerState playerState;
+	public static PlayerState playerState;
+
 	public StrikeComGLGame game;
 	public SidebarFragment sidebar;
 
@@ -85,7 +86,7 @@ public class FragmentedGameActivity extends Activity {
 		sidebar.setGame(game);
 
 		playerState = new PlayerState(playerName);
-		playerState.addScrap(2500);
+		playerState.addScrap(2000);
 		playerState.addFuel(100f);
 
 		// Thread updating sidebar once per second
