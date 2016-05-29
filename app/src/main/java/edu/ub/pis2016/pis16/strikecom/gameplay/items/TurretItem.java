@@ -1,57 +1,37 @@
 package edu.ub.pis2016.pis16.strikecom.gameplay.items;
 
-import edu.ub.pis2016.pis16.strikecom.engine.game.component.GraphicsComponent;
-import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.TurretConfig;
 
 public class TurretItem extends Item {
-	private String id;
+	private String model;
 
-	TurretConfig cfg = null;
+	public TurretConfig cfg = null;
 
 	// Builder
-	public TurretItem(String id, String name, String image, String model, String flavour, int price) {
-		super(name, image, model, flavour, price);
-		this.id = id;
+	public TurretItem(TurretConfig cfg, String name, String flavour) {
+		super(name, cfg.image, flavour, cfg.price);
+		this.model = cfg.sprite;
+		this.cfg = cfg;
 	}
 
 	// Returns a new TurretObject whose parameters are contained on a given string.
 	public static TurretItem parseTurretItem(String seq) {
-		int price;
-		String id;
-		TurretConfig cfg;
-		TurretItem item;
-
 		try {
-			// string must contain id, name, image, model, flavour, price
 			String param[] = seq.split(";"); // ; used as separator
-			price = Integer.parseInt(param[5]);
 
-			id = param[0];
-			if (id.equals("machinegun")) {
-				cfg = new TurretConfig(TurretConfig.Type.TURRET_MACHINEGUN);
-			} else if (id.contains("gatling")) {
-				cfg = new TurretConfig(TurretConfig.Type.TURRET_GATLING);
-			} else if (id.equals("battle_cannon")) {
-				cfg = new TurretConfig(TurretConfig.Type.TURRET_CANNON);
-			} else if (id.equals("howitzer")) {
-				cfg = new TurretConfig(TurretConfig.Type.TURRET_HOWITZER);
-			} else {
-				return null;
-			}
-
-			item = new TurretItem(id, param[1], param[2], param[3], param[4], price);
-			item.cfg = cfg;
+			TurretConfig cfg = new TurretConfig( TurretConfig.Type.valueOf(param[0]) );
+			return new TurretItem(cfg, param[1], param[2]);
 		} catch (Exception ex) {
 			return null;
 		}
-		return item;
 	}
+
+	public String getModel(){ return this.model; }
 
 	// Returns a string containing all relevant information of the object, using ";" as separator.
 	@Override
 	public String toString() {
-		return (this.id + ";" +this.name + ";" + this.image + ";" + this.model + ";" + this.flavour + Integer.toString(price));
+		return (cfg.toString() + ";" +this.name + ";" + this.flavour);
 	}
 
 	@Override
@@ -70,9 +50,4 @@ public class TurretItem extends Item {
 	public TurretConfig getConfig() {
 		return cfg;
 	}
-
-	public GraphicsComponent getGraphics() {
-		return new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion(this.image));
-	}
-
 }

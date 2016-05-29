@@ -1,4 +1,7 @@
-Composite armour;composite_64;composite;Increases your base endurance;ARMOUR_COMPOSITE;4000
-Advanced A.I.;ai_64;ai;Improves your turrets accuracy;AI;8000
-Plated armour;plate_64;plate;Slightly increases your base endurance;ARMOUR_PLATE;2000
-Advanced power cells;engine_64;engine;Reduces fuel consumption;ENGINE_EFFICIENCY;6000
+FUEL;250u fuel;250 units of hydrocarbon-based combustible used to power the base massive engine.
+ARMOUR_COMPOSITE;Composite armour;Highly increases your base endurance.
+ARMOUR_PLATE;Plated armour;Slightly increases your base endurance.
+ARMOUR_REACTIVE;Electric reactive armour;Reduces incoming damage.
+AI;Advanced A.I.;Makes your turrets quicker at aiming enemy vehicles.
+ENGINE_EFFICIENCY;Advanced power cells;Reduces fuel consumption.
+SCAVENGER;Scavenger;Increases the amount of scrap obtained by destroying enemy vehicles.

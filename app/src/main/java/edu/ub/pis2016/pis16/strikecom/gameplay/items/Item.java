@@ -6,30 +6,20 @@ import android.support.annotation.NonNull;
 public abstract class Item implements Comparable<Item> {
 	protected String name;    // object name
 	protected String image;    // item icon
-	protected String model;   // name of representative image on the screen
 	protected String flavour; //description, fluff
 	protected int price;    // price in game resources
 
-	protected boolean visible = true;
-
 	// Builders
-	public Item(String name, String image, String model, String flavour, int price) {
+	public Item(String name, String image, String flavour, int price) {
 		this.name = name;
 		this.image = image;
-		this.model = model;
 		this.flavour = flavour;
 		this.price = price;
 	}
 
-	public void setVisibility(boolean visible) { this.visible = visible; }
-
-	public boolean isVisible() { return this.visible; }
-
 	public String getName(){ return this.name; }
 
 	public String getImage(){ return this.image; }
-
-	public String getModel(){ return this.model; }
 
 	public String getFlavour(){ return this.flavour; }
 

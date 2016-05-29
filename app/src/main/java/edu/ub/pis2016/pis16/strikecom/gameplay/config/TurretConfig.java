@@ -45,6 +45,12 @@ public class TurretConfig {
 	/** Bullet Speed in tiles/second */
 	public float proj_speed = 2f * TILE_SIZE;
 
+	// GUI image
+	public String image;
+
+	// Price
+	public int price;
+
 	static public final TurretConfig DEFAULT = new TurretConfig(Type.TURRET_MACHINEGUN);
 
 	public TurretConfig(Type turretType) {
@@ -52,6 +58,8 @@ public class TurretConfig {
 		switch (turretType) {
 			case TURRET_MACHINEGUN:
 				sprite = "turret_machinegun";
+				image = "machinegun_64";
+				price = 100;
 
 				lerp_speed = 0.050f;
 				firerate = 0.4f;
@@ -67,6 +75,8 @@ public class TurretConfig {
 
 			case TURRET_GATLING:
 				sprite = "turret_gatling";
+				image = "gatling_64";
+				price = 250;
 
 				lerp_speed = 0.045f;
 				firerate = 0.15f;
@@ -83,6 +93,9 @@ public class TurretConfig {
 				sprite = "turret_cannon";
 				sprite_size = 0.85f;
 
+				image = "cannon_64";
+				price = 500;
+
 				lerp_speed = 0.020f;
 				firerate = 2f;
 				fire_cone = 10f;
@@ -97,6 +110,9 @@ public class TurretConfig {
 			case TURRET_HOWITZER:
 				sprite = "turret_howitzer";
 				sprite_size = 0.85f;
+
+				image = "howitzer_64";
+				price = 600;
 
 				lerp_speed = 0.005f;
 				firerate = 5f;

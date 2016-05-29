@@ -15,6 +15,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.physics.Rectangle;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.TurretBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
+import edu.ub.pis2016.pis16.strikecom.gameplay.config.UpgradeConfig;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.TurretItem;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.UpgradeItem;
 
@@ -317,50 +318,57 @@ public class StrikeBase extends Vehicle {
 	public void addUpgrade(UpgradeItem item, int slot) {
 		// TODO implement
 
-		switch (UpgradeItem.AVAILABLE_FUNCTIONS.valueOf(item.getFunction())) {
-			case AI:
-				// Smart turrets
+		switch (UpgradeConfig.Function.valueOf(item.cfg.toString())) {
+			case FUEL:
+				break;
+
+			case ARMOUR_PLATE:
+				// Increases endurance
+				this.hitpoints += MathUtils.round(item.cfg.value);
+				this.maxHitpoints += MathUtils.round(item.cfg.value);
 				break;
 
 			case ARMOUR_COMPOSITE:
 				// Increases endurance
-				this.hitpoints += 100;
-				this.maxHitpoints += 100;
-				hasCompositeArmor = true;
+				this.hitpoints += MathUtils.round(item.cfg.value);
+				this.maxHitpoints += MathUtils.round(item.cfg.value);
 				break;
 
-			case ARMOUR_PLATE:
-				// Slightly increases endurance
-				this.hitpoints += 25;
-				this.maxHitpoints += 25;
-				hasPlateArmor = true;
+			case ARMOUR_REACTIVE:
+				// Reduces incoming damage
+				break;
+
+			case AI:
+				// Smart turrets
 				break;
 
 			case ENGINE_EFFICIENCY:
 				// Reduces fuel consumption
-				cfg.fuel_usage_mult = 0.75f;
+				cfg.fuel_usage_mult = item.cfg.value;
 				break;
 
-			case FUEL:
-				break;
+			case SCAVENGER:
+				// Increases scrap income
 		}
+
 		equippedUpgrades.put(slot, item);
 	}
 
 	public void removeUpgrade(int slot) {
 		// TODO implement
 
-		switch (UpgradeItem.AVAILABLE_FUNCTIONS.valueOf(equippedUpgrades.get(slot).getFunction())) {
+		UpgradeItem item = equippedUpgrades.get(slot);
+		switch (UpgradeConfig.Function.valueOf( item.cfg.toString() )) {
 			case AI:
 				// Smart turrets
 				break;
 			case ARMOUR_COMPOSITE:
-				this.maxHitpoints -= 100;
+				this.maxHitpoints -= MathUtils.round(item.cfg.value);
 				this.hitpoints = MathUtils.min(this.hitpoints, this.maxHitpoints);
 				// Increases endurance
 				break;
 			case ARMOUR_PLATE:
-				this.maxHitpoints -= 25;
+				this.maxHitpoints -= MathUtils.round(item.cfg.value);
 				this.hitpoints = MathUtils.min(this.hitpoints, this.maxHitpoints);
 				// Slightly increases endurance
 				break;
@@ -371,6 +379,7 @@ public class StrikeBase extends Vehicle {
 			case FUEL:
 				break;
 		}
+
 		equippedUpgrades.remove(slot);
 	}
 

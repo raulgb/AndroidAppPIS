@@ -1,4 +1,4 @@
-machinegun;Machinegun;machinegun_64;turret_machinegun;High caliber machinegun.;50
-gatling;Gatling gun;gatling_64;turret_gatling;Multi-barreled machinegun with superior fire rate.;75
-battle_cannon;Battle cannon;cannon_64;turret_cannon;This cannon can punch a hole through most enemies.;200
-howitzer;Howitzer;howitzer_64;turret_howitzer;Bigger, slower cannon.;300
+TURRET_MACHINEGUN;Machinegun;High caliber machinegun.
+TURRET_GATLING;Gatling gun;Multi-barreled machinegun with superior fire rate.
+TURRET_CANNON;Battle cannon;This cannon can punch a hole through most enemies.
+TURRET_HOWITZER;Howitzer;Slow but extremely powerful siege cannon.
