@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import edu.ub.pis2016.pis16.strikecom.engine.android.AndroidMusic;
+import edu.ub.pis2016.pis16.strikecom.engine.game.GameMap;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Texture;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 import edu.ub.pis2016.pis16.strikecom.fragments.GameOverFragment;
@@ -39,7 +40,8 @@ import edu.ub.pis2016.pis16.strikecom.gameplay.items.Inventory;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.Item;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.TurretItem;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.UpgradeItem;
-import edu.ub.pis2016.pis16.strikecom.screens.DummyGLScreen;
+import edu.ub.pis2016.pis16.strikecom.screens.GameScreen;
+import edu.ub.pis2016.pis16.strikecom.screens.MinimapScreen;
 
 public class FragmentedGameActivity extends Activity {
 
@@ -65,7 +67,7 @@ public class FragmentedGameActivity extends Activity {
 		InventoryItemAdapter.strikeBaseModel = strikeBaseModel;
 		InventoryFragment.strikeBaseModel = strikeBaseModel;
 		SlotsFragment.strikeBaseModel = strikeBaseModel;
-		DummyGLScreen.strikeBaseModel = strikeBaseModel;
+		GameScreen.strikeBaseModel = strikeBaseModel;
 		GameOverFragment.strikeBaseModel = strikeBaseModel;
 
 		// Hide window decorations
@@ -151,8 +153,13 @@ public class FragmentedGameActivity extends Activity {
 		game.setSidebarListener(new SidebarEventListener(game) {
 			@Override
 			public void onClickMinimap() {
-				// TODO Push screen on the stack
-//				game.pushScreen(new MinimanScreen());
+//				if (game.getCurrentScreen() instanceof GameScreen) {
+//					MinimapScreen minimapScreen = new MinimapScreen(game);
+//					minimapScreen.setGameMap(game.getCurrentScreen().getGameObject("GameMap", GameMap.class));
+//					game.pushScreen(new MinimapScreen(game));
+//				} else {
+//					game.popScreen();
+//				}
 			}
 
 			@Override
@@ -195,7 +202,7 @@ public class FragmentedGameActivity extends Activity {
 		dialog.setContentView(R.layout.alert_dialog);
 		dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
-		Typeface myCustomFont= Typeface.createFromAsset(getAssets(), getString(R.string.game_font));
+		Typeface myCustomFont = Typeface.createFromAsset(getAssets(), getString(R.string.game_font));
 
 		((TextView) dialog.findViewById(R.id.alert_message)).setTypeface(myCustomFont);
 
@@ -243,7 +250,7 @@ public class FragmentedGameActivity extends Activity {
 	}
 
 	public void backToMainMenu(boolean modelUnlocked) {
-		if(modelUnlocked) {
+		if (modelUnlocked) {
 			Toast.makeText(getApplicationContext(), getString(R.string.gameover_news),
 					Toast.LENGTH_SHORT).show();
 		}
@@ -350,7 +357,7 @@ public class FragmentedGameActivity extends Activity {
 
 		shopInventory.removeItem(item);
 		playerState.inventory.addItem(item);
-		playerState.addScrap( -item.getPrice());
+		playerState.addScrap(-item.getPrice());
 	}
 
 	public void buyItem(String shopID, UpgradeItem item) {
@@ -363,7 +370,7 @@ public class FragmentedGameActivity extends Activity {
 		} else {
 			playerState.inventory.addItem(item);
 		}
-		playerState.addScrap( -item.getPrice());
+		playerState.addScrap(-item.getPrice());
 	}
 
 	private void retrieveTurret(int slot) {
@@ -382,7 +389,8 @@ public class FragmentedGameActivity extends Activity {
 
 		if (upgrade != null) {
 			strikeBase.removeUpgrade(slot);
-			playerState.inventory.addItem(upgrade);;
+			playerState.inventory.addItem(upgrade);
+			;
 		}
 	}
 
@@ -391,7 +399,7 @@ public class FragmentedGameActivity extends Activity {
 		String upgradesFile = getString(R.string.upgradesFile);
 		try {
 			InventoryManager im = new InventoryManager(this, turretsFile, upgradesFile);
-			playerState.inventory =  im.getStartingInventory();
+			playerState.inventory = im.getStartingInventory();
 
 			for (String key : shopMap.keySet()) {
 				shopMap.put(key, im.getShopInventory(20, 2));

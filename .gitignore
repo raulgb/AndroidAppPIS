@@ -8,6 +8,11 @@
 *.iml
 local.properties
 
+# temp files
+captures/
+*.capture
+*.hprof
+*.alloc
 *.log
 
 # Crashlytics configuations and log files

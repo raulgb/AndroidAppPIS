@@ -41,7 +41,7 @@ public class LoadingScreen extends Screen {
 			Log.i("LoadingScreen", "Switching screens");
 
 			// PUT YOUR TESTING SCREEN HERE
-			game.setScreen(new DummyGLScreen(game));
+			game.setScreen(new GameScreen(game));
 		}
 	}
 

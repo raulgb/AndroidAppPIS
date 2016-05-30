@@ -127,15 +127,7 @@ public abstract class GLGameFragment extends Fragment implements Game, GLSurface
 	}
 
 	public void newInstance(Bundle b) {
-		/*GLGameFragment fragment = new GLGameFragment() {
-			@Override
-			public Screen getStartScreen() {
-				return null;
-			}
-		};
-*/
 		setArguments(b);
-		/*return fragment;*/
 	}
 
 	@Override

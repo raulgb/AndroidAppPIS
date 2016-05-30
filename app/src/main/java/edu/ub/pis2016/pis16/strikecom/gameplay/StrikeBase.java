@@ -18,7 +18,7 @@ import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.TurretBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.TurretItem;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.UpgradeItem;
-import edu.ub.pis2016.pis16.strikecom.screens.DummyGLScreen;
+import edu.ub.pis2016.pis16.strikecom.screens.GameScreen;
 
 import static edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig.*;
 
@@ -438,7 +438,7 @@ public class StrikeBase extends Vehicle {
 			cfg.max_reverse_speed = 0;
 
 			try {
-				((DummyGLScreen)screen).outOfFuel();
+				((GameScreen)screen).outOfFuel();
 			} catch(Exception ex){}
 		}
 	}
