@@ -1,22 +1,22 @@
 package edu.ub.pis2016.pis16.strikecom.engine.game;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.os.Environment;
+
 import android.util.Log;
 
-import edu.ub.pis2016.pis16.strikecom.engine.framework.FileIO;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Game;
 import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.AnimatedSprite;
+import edu.ub.pis2016.pis16.strikecom.engine.opengl.GLGameFragment;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Sprite;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Physics2D;
@@ -246,7 +246,7 @@ public class GameMap {
 		else
 			return gray[0]; // equivalent of sand
 	}
-	//TODO add sprites for minimap (player pointer, shops, tiles - to avoid resize operations)
+
 
 	/**
 	 * draws minimap on GL screen centered on desired position - currently 2x2 pixels for  a tile, using gray tiles
@@ -290,8 +290,10 @@ public class GameMap {
 	 * creates a .png image of current map of the game, to be used in UI/map
 	 *
 	 * @param center current position of StrikeBase,
+	 * @param game link to the Game,
+	 * @param gameObjects link to all of the game objects,
 	 */
-	public void createMiniMap(Vector2 center, Game game) {
+	public void createMiniMap(Vector2 center, Game game,Array<GameObject> gameObjects) {
 
 		Color color = new Color();
 		Bitmap.Config conf = Bitmap.Config.ARGB_8888; // see other conf types
@@ -299,50 +301,74 @@ public class GameMap {
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
 				if (discoveredTable[y][x]) {
-					bmp.setPixel(x, y, calcColor(pTable[y][x]));
-					if (x == (int) (center.x) / tileSize && y == (int) (center.y) / tileSize) {//player position marker
-						bmp.setPixel(x, y, color.BLACK);
-					}
+					bmp.setPixel(y, x, calcColor(pTable[y][x]));
+
 				} else {
-					bmp.setPixel(x, y, color.WHITE);// undiscovered area
+					bmp.setPixel(y, x, 0xFF);// undiscovered area ALPHA VALUE
 				}
 			}
 
 		}
-
-
-		FileIO fio = game.getFileIO();
-		OutputStream out = null;
-
-		try {
-			//out = new FileOutputStream(getOutputMediaFile());
-			//game.getFileIO().writeFile();
-			bmp.compress(Bitmap.CompressFormat.PNG, 100, fio.writeFile("sprites/gameMap.png")); // bmp is your Bitmap instance
-			// PNG is a lossless format, the compression factor (100) is ignored
-		} catch (Exception e) {
-			e.printStackTrace();
-		} /*finally {
-			try {
-				if (out != null) {
-					out.close();
+		//player's marker
+		int sbX = (int) (center.x) / tileSize;
+		int sbY = (int) (center.y) / tileSize;
+		if (sbX>0&&sbY>0&&sbX<width&&sbY<height){//player position marker 3x3 pixels
+			for (int y = sbY-1; y < sbY+2; y++){
+				for (int x = sbX-1; x < sbX+2; x++) {
+					bmp.setPixel(y, x, Color.argb(255,4,190,255)); //LIGHT BLUE
 				}
-			} catch (IOException e) {
+			}
+
+		}
+		//lets draw shops and enemies
+		for (GameObject go : gameObjects){
+			if (go.getTag().matches("enemy_tank")){//ENEMIES
+				sbX = (int) (go.getPhysics().getPosition().x) / tileSize;
+				sbY = (int) (go.getPhysics().getPosition().y) / tileSize;
+				if (discoveredTable[sbY][sbX]) {
+					bmp.setPixel(sbY, sbX, Color.argb(255, 255, 0, 0)); //RED
+				}
+			}
+			else if (go.getTag().contains("shop")){ //shops
+				sbX = (int) (go.getPhysics().getPosition().x) / tileSize;
+				sbY = (int) (go.getPhysics().getPosition().y) / tileSize;
+				if (sbX>0&&sbY>0&&sbX<width&&sbY<height){//shop position marker 3x3 pixels
+					for (int y = sbY-1; y < sbY+2; y++){
+						for (int x = sbX-1; x < sbX+2; x++) {
+							bmp.setPixel(y, x, Color.argb(255,200,160,190)); //purple
+						}
+					}
+
+				}
+			}
+		}
+
+
+		//write in private storage procedure
+		try {
+			Activity act = ((GLGameFragment)game).getActivity();
+			OutputStream fout = act.openFileOutput("gameMap.png", Context.MODE_PRIVATE);
+			bmp.compress(Bitmap.CompressFormat.PNG, 100, fout); // bmp is your Bitmap instance
+			fout.close();
+			//Log.i("FILE CREATED", "hehe");
+			}catch (Exception e){
 				e.printStackTrace();
 			}
-		}*/
 
 
 	}
 
 	private int calcColor(float inValue) {
 		if (inValue > 0.6f)
-			return -16711936; //GREEN -grass
+			return Color.argb(255,39, 163, 30 );//-16711936; // -grass
 		else if (inValue > 0.5f)
-			return -3355444;//LTGRAY-  dry
-		else if (inValue > 0.4f)
+			return Color.argb(255,166, 166, 0 );//-3355444;// - dry
+		else
+			return Color.argb(255,255, 255, 128 );//-SAND
+		/*else if (inValue > 0.4f)
 			return -256; //YELLOW - sand
 		else
-			return -16776961; //BLUE - water
+			return -16776961; //BLUE - water*/
 
 	}
 

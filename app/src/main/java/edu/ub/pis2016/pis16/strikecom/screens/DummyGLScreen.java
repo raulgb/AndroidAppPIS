@@ -138,6 +138,7 @@ public class DummyGLScreen extends Screen {
 			System.gc();
 //			for (GameObject go : getGameObjects())
 //				System.out.println(go);
+			gameMap.createMiniMap(camera.position, game,this.getGameObjects()); // creates a .png of game map
 		}
 
 		secondsElapsed += delta;

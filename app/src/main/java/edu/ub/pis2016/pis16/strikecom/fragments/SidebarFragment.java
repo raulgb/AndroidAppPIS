@@ -1,8 +1,10 @@
 package edu.ub.pis2016.pis16.strikecom.fragments;
 
 import android.app.Fragment;
+
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,6 +60,7 @@ public class SidebarFragment extends Fragment {
 		/** Extract all UI elements */
 		btnInventory = (Button) view.findViewById(R.id.btnInventory);
 		btnMinimap = (Button) view.findViewById(R.id.btnMinimap);
+		btnMinimap.setRotation(-90); // to display minimap correctly - easiest solution ^^
 
 		scrapText = (TextView) view.findViewById(R.id.textScrap);
 		fuelText = (TextView) view.findViewById(R.id.textFuel);
@@ -361,6 +364,20 @@ public class SidebarFragment extends Fragment {
 	public void updateFuel(float fuel) {
 		fuelText.setText(Integer.toString(Math.round(fuel)));
 	}
+
+	public void updateMiniMap(){
+
+		try{
+			//btnMinimap.draw(new Canvas(bm.copy(Bitmap.Config.ARGB_8888, true)));
+			BitmapDrawable bm = new BitmapDrawable("/data/data/edu.ub.pis2016.pis16.strikecom/files/gameMap.png");
+			btnMinimap.setBackground(bm);
+			//btnMinimap.setRotation(-90);
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+
+	}
+
 
 	public void setInventoyText(String text) {
 		btnInventory.setText(text);
