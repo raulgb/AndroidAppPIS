@@ -30,7 +30,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.util.performance.Array;
  * Created by Alexander Bevzenko on 10/05/16.
  * supposed to contain everything related to map
  */
-public class GameMap {
+public class GameMap extends GameObject {
 
 	private Perlin2D perlin;
 	private float[][] pTable;
@@ -123,8 +123,8 @@ public class GameMap {
 		// Scale all sprites to same dimensions
 		for (Sprite sp : allSprites) {
 			sp.setSize(tileSize);
-			if (sp instanceof AnimatedSprite)
-				animatedTiles.add((AnimatedSprite) sp);
+//			if (sp instanceof AnimatedSprite)
+//				animatedTiles.add((AnimatedSprite) sp);
 //			float texSize = tp.getRegion().width;
 //			tp.setScale(1.1f * (tileSize / texSize));
 		}
@@ -197,33 +197,37 @@ public class GameMap {
 			return sand[MathUtils.random(0, 1)];
 	}
 
-	public float[][] getPTable() {
-		return this.pTable;
-	}
-
 	/** Update all animated tiles */
 	public void update(float delta) {
 		for (AnimatedSprite aSpr : animatedTiles)
 			aSpr.update(delta);
 	}
 
+	@Override
+	public void draw(SpriteBatch batch) {
+		// Disable default draw
+	}
+
+	private final Vector2 tmp = new Vector2();
+
 	/** Draw the map around the given position, by default 8 tiles in each direction */
 	public void draw(SpriteBatch batch, Vector2 center) {
 		int row, col;
-		// Change this to increase view distance
-		int squareRad = drawDistance * tileSize;
+		int squareRad = drawDistance;
+		tmp.set(center).scl(1f / tileSize);
+
+		int startCol = MathUtils.max(0, (int) tmp.x - squareRad);
+		int endCol = MathUtils.min(width, (int) tmp.x + squareRad);
+
+		int startRow = MathUtils.max(0, (int) tmp.y - squareRad);
+		int endRow = MathUtils.min(height, (int) tmp.y + squareRad);
 
 		// Test all map positions to draw a tile
-		// TODO optimize
-		for (row = 0; row < height; row++) {
-			for (col = 0; col < width; col++) {
-
+		for (row = startRow; row < endRow; row++) {
+			for (col = startCol; col < endCol; col++) {
 				// Calculate x,y coordinates
 				float x = tileSize / 2f + col * tileSize;
 				float y = tileSize / 2f + row * tileSize;
-
-				if (x < center.x - squareRad || x > center.x + squareRad || y < center.y - squareRad || y > center.y + squareRad)
-					continue;
 
 				discoveredTable[row][col] = true; // mark this point as visited
 				tTable[row][col].draw(batch, x, y);
@@ -334,15 +338,15 @@ public class GameMap {
 						GameObject go = iter.next();
 
 						if (go.faction == GameObject.Faction.RAIDERS) {//ENEMIES
-							sbX = (int) (go.getPhysics().getPosition().x) / tileSize;
-							sbY = (int) (go.getPhysics().getPosition().y) / tileSize;
+							sbX = (int) (go.getPosition().x) / tileSize;
+							sbY = (int) (go.getPosition().y) / tileSize;
 							if (discoveredTable[sbY][sbX]) {
 								bmp.setPixel(sbY, sbX, Color.argb(255, 255, 0, 0)); //RED
 							}
 
 						} else if (go.faction == GameObject.Faction.SHOP) { //shops
-							sbX = (int) (go.getPhysics().getPosition().x) / tileSize;
-							sbY = (int) (go.getPhysics().getPosition().y) / tileSize;
+							sbX = (int) (go.getPosition().x) / tileSize;
+							sbY = (int) (go.getPosition().y) / tileSize;
 							if (sbX > 0 && sbY > 0 && sbX < width && sbY < height) {//shop position marker 3x3 pixels
 								for (int y = sbY - 1; y < sbY + 2; y++) {
 									for (int x = sbX - 1; x < sbX + 2; x++) {
