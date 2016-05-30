@@ -106,7 +106,9 @@ public class DummyGLScreen extends Screen {
 		createGameObjects();
 		commitGameObjectChanges();
 
+		camera.setPosition(strikeBase.getPosition());
 		camera.getComponent(CameraBehavior.class).setTracking(strikeBase);
+		gameMap.resetDiscovered();
 
 		// Projectile CONTACT LISTENER
 		physics2D.addContactListener(new GameContactListener(this));
@@ -138,7 +140,7 @@ public class DummyGLScreen extends Screen {
 			System.gc();
 //			for (GameObject go : getGameObjects())
 //				System.out.println(go);
-			gameMap.createMiniMap(camera.position, game,this.getGameObjects()); // creates a .png of game map
+			gameMap.createMiniMap(camera.position, game, this.getGameObjects()); // creates a .png of game map
 		}
 
 		secondsElapsed += delta;

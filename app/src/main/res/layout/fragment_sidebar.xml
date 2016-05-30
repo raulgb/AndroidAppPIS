@@ -16,7 +16,9 @@
             android:layout_width="@dimen/minimap_size"
             android:layout_height="@dimen/minimap_size"
             android:background="#000000"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp">
 
             <Button
                 android:layout_width="@dimen/minimap_size"
@@ -25,8 +27,6 @@
                 android:id="@+id/btnMinimap"
                 style="?android:attr/borderlessButtonStyle"
                 android:background="@drawable/btn_retro_mk1"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp" />
         </LinearLayout>
 
@@ -45,12 +45,12 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginBottom="4dp"
-                android:layout_gravity="center_horizontal">
+                android:layout_gravity="center">
 
                 <ImageView
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:src="@drawable/scrap_64"
+                    android:src="@drawable/scrap_white_64"
                     android:id="@+id/scrap_icon"/>
                 <TextView
                     android:layout_width="wrap_content"
@@ -59,7 +59,9 @@
                     android:text="@string/res1_defVal"
                     android:layout_marginLeft="5dp"
                     android:textStyle="bold"
-                    android:textSize="18sp"/>
+                    android:textSize="18sp"
+                    android:textColor="#EEE"
+                    />
             </LinearLayout>
 
 
@@ -68,12 +70,12 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginTop="4dp"
-                android:layout_gravity="center_horizontal">
+                android:layout_gravity="center">
 
                 <ImageView
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:src="@drawable/fuel_64"
+                    android:src="@drawable/fuel_white_64"
                     android:id="@+id/fuel_icon"/>
                 <TextView
                     android:layout_width="wrap_content"
@@ -82,7 +84,9 @@
                     android:text="@string/res2_defVal"
                     android:textStyle="bold"
                     android:textSize="18sp"
-                    android:layout_marginLeft="5dp"/>
+                    android:layout_marginLeft="5dp"
+                    android:textColor="#EEE"
+                    />
             </LinearLayout>
 
         </LinearLayout>
@@ -241,5 +245,7 @@
         android:text="@string/inventory_button"
         android:id="@+id/btnInventory"
         android:background="@drawable/btn_retro_canv_mk1"
-        android:layout_margin="5dp" />
+        android:layout_margin="5dp"
+        android:textColor="#EEE"
+        />
 </LinearLayout>

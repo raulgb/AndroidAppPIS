@@ -6,6 +6,6 @@
     <dimen name="sidebar_horizontal_margin">5dp</dimen>
     <dimen name="sidebar_vertical_margin">5dp</dimen>
 
-    <dimen name="minimap_size">95dp</dimen>
+    <dimen name="minimap_size">80dp</dimen>
     <dimen name="grid_btn_size">54dp</dimen>
 </resources>

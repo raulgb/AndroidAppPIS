@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="fill_parent"
-    android:background="@drawable/select_bg"
-    android:baselineAligned="false">
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="fill_parent"
+              android:background="@drawable/select_bg"
+              android:baselineAligned="false"
+              android:padding="24dp">
 
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
         android:layout_weight="0.1"
-        android:layout_marginBottom="60dp">
+        >
         <TextView
             android:id="@+id/Options"
             android:layout_width="wrap_content"
@@ -24,7 +24,8 @@
             android:gravity="center"
             android:textSize="40sp"
             android:textStyle="bold"
-            android:textColor="#000"/>
+            android:textColor="#000"
+            android:layout_marginBottom="12dp"/>
     </LinearLayout>
 
     <LinearLayout
@@ -32,7 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.2"
-        android:layout_margin="5dp">
+        >
 
         <TextView
             android:id="@+id/Music"
@@ -76,7 +77,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.2"
-        android:layout_margin="5dp">
+        >
 
         <TextView
             android:id="@+id/Sound"
@@ -119,8 +120,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.5"
-        android:layout_marginRight="20dp"
-        android:layout_marginLeft="20dp">
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp">
 
         <Button
             android:layout_width="0dp"
@@ -132,8 +133,8 @@
             android:layout_gravity="center_vertical"
             style="?android:attr/borderlessButtonStyle"
             android:background="@drawable/btn_retro_canv_mk2"
-            android:layout_marginRight="10dp"
-            android:textColor="@color/black"/>
+            android:layout_marginRight="24dp"
+            android:textColor="#EEE"/>
 
         <Button
             android:layout_width="0dp"
@@ -146,7 +147,7 @@
             style="?android:attr/borderlessButtonStyle"
             android:background="@drawable/btn_retro_canv_mk2"
             android:layout_marginLeft="10dp"
-            android:textColor="@color/black"/>
+            android:textColor="#EEE"/>
     </LinearLayout>
 
 </LinearLayout>

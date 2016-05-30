@@ -3,6 +3,7 @@ package edu.ub.pis2016.pis16.strikecom.engine.game;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import android.app.Activity;
@@ -12,6 +13,7 @@ import android.graphics.Color;
 
 import android.util.Log;
 
+import edu.ub.pis2016.pis16.strikecom.FragmentedGameActivity;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Game;
 import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
@@ -286,85 +288,98 @@ public class GameMap {
 		}
 	}
 
+
 	/**
 	 * creates a .png image of current map of the game, to be used in UI/map
 	 *
-	 * @param center current position of StrikeBase,
-	 * @param game link to the Game,
+	 * @param center      current position of StrikeBase,
+	 * @param game        link to the Game,
 	 * @param gameObjects link to all of the game objects,
 	 */
-	public void createMiniMap(Vector2 center, Game game,Array<GameObject> gameObjects) {
+	public void createMiniMap(final Vector2 center, final Game game, final Array<GameObject> gameObjects) {
 
-		Color color = new Color();
-		Bitmap.Config conf = Bitmap.Config.ARGB_8888; // see other conf types
-		Bitmap bmp = Bitmap.createBitmap(width, height, conf); // this creates a MUTABLE bitmap
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
-				if (discoveredTable[y][x]) {
-					bmp.setPixel(y, x, calcColor(pTable[y][x]));
+		// Send job to a new Thread so we don't lag the game
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					//Color color = new Color();
+					Bitmap.Config conf = Bitmap.Config.ARGB_8888; // see other conf types
+					Bitmap bmp = Bitmap.createBitmap(width, height, conf); // this creates a MUTABLE bitmap
+					for (int y = 0; y < height; y++) {
+						for (int x = 0; x < width; x++) {
+							if (discoveredTable[y][x]) {
+								bmp.setPixel(y, x, calcColor(pTable[y][x]));
 
-				} else {
-					bmp.setPixel(y, x, 0xFF);// undiscovered area ALPHA VALUE
-				}
-			}
-
-		}
-		//player's marker
-		int sbX = (int) (center.x) / tileSize;
-		int sbY = (int) (center.y) / tileSize;
-		if (sbX>0&&sbY>0&&sbX<width&&sbY<height){//player position marker 3x3 pixels
-			for (int y = sbY-1; y < sbY+2; y++){
-				for (int x = sbX-1; x < sbX+2; x++) {
-					bmp.setPixel(y, x, Color.argb(255,4,190,255)); //LIGHT BLUE
-				}
-			}
-
-		}
-		//lets draw shops and enemies
-		for (GameObject go : gameObjects){
-			if (go.getTag().matches("enemy_tank")){//ENEMIES
-				sbX = (int) (go.getPhysics().getPosition().x) / tileSize;
-				sbY = (int) (go.getPhysics().getPosition().y) / tileSize;
-				if (discoveredTable[sbY][sbX]) {
-					bmp.setPixel(sbY, sbX, Color.argb(255, 255, 0, 0)); //RED
-				}
-			}
-			else if (go.getTag().contains("shop")){ //shops
-				sbX = (int) (go.getPhysics().getPosition().x) / tileSize;
-				sbY = (int) (go.getPhysics().getPosition().y) / tileSize;
-				if (sbX>0&&sbY>0&&sbX<width&&sbY<height){//shop position marker 3x3 pixels
-					for (int y = sbY-1; y < sbY+2; y++){
-						for (int x = sbX-1; x < sbX+2; x++) {
-							bmp.setPixel(y, x, Color.argb(255,200,160,190)); //purple
+							} else {
+								bmp.setPixel(y, x, 0xFF);// undiscovered area ALPHA VALUE
+							}
 						}
 					}
 
+					//player's marker
+					int sbX = (int) (center.x) / tileSize;
+					int sbY = (int) (center.y) / tileSize;
+					if (sbX > 0 && sbY > 0 && sbX < width && sbY < height) {//player position marker 3x3 pixels
+						for (int y = sbY - 1; y < sbY + 2; y++) {
+							for (int x = sbX - 1; x < sbX + 2; x++) {
+								bmp.setPixel(y, x, Color.argb(255, 4, 190, 255)); //LIGHT BLUE
+							}
+						}
+
+					}
+					//lets draw shops and enemies
+					Array.ArrayIterator<GameObject> iter = new Array.ArrayIterator<>(gameObjects);
+					while (iter.hasNext()) {
+						GameObject go = iter.next();
+
+						if (go.faction == GameObject.Faction.RAIDERS) {//ENEMIES
+							sbX = (int) (go.getPhysics().getPosition().x) / tileSize;
+							sbY = (int) (go.getPhysics().getPosition().y) / tileSize;
+							if (discoveredTable[sbY][sbX]) {
+								bmp.setPixel(sbY, sbX, Color.argb(255, 255, 0, 0)); //RED
+							}
+
+						} else if (go.faction == GameObject.Faction.SHOP) { //shops
+							sbX = (int) (go.getPhysics().getPosition().x) / tileSize;
+							sbY = (int) (go.getPhysics().getPosition().y) / tileSize;
+							if (sbX > 0 && sbY > 0 && sbX < width && sbY < height) {//shop position marker 3x3 pixels
+								for (int y = sbY - 1; y < sbY + 2; y++) {
+									for (int x = sbX - 1; x < sbX + 2; x++) {
+										bmp.setPixel(y, x, Color.argb(255, 200, 160, 190)); //purple
+									}
+								}
+
+							}
+						}
+					}
+
+
+					//write in private storage procedure
+					Activity act = ((GLGameFragment) game).getActivity();
+					OutputStream fout = act.openFileOutput("gameMap.png", Context.MODE_PRIVATE);
+					bmp.compress(Bitmap.CompressFormat.PNG, 100, fout); // bmp is your Bitmap instance
+					fout.close();
+
+					// Update minimap
+					((FragmentedGameActivity) act).sidebar.updateMiniMap();
+				} catch (Exception e) {
+					Log.e("GameMap", "Failed to create MiniMap");
 				}
-			}
-		}
 
-
-		//write in private storage procedure
-		try {
-			Activity act = ((GLGameFragment)game).getActivity();
-			OutputStream fout = act.openFileOutput("gameMap.png", Context.MODE_PRIVATE);
-			bmp.compress(Bitmap.CompressFormat.PNG, 100, fout); // bmp is your Bitmap instance
-			fout.close();
-			//Log.i("FILE CREATED", "hehe");
-			}catch (Exception e){
-				e.printStackTrace();
 			}
+		}).start();
 
 
 	}
 
 	private int calcColor(float inValue) {
 		if (inValue > 0.6f)
-			return Color.argb(255,39, 163, 30 );//-16711936; // -grass
+			return Color.argb(255, 39, 163, 30);//-16711936; // -grass
 		else if (inValue > 0.5f)
-			return Color.argb(255,166, 166, 0 );//-3355444;// - dry
+			return Color.argb(255, 166, 166, 0);//-3355444;// - dry
 		else
-			return Color.argb(255,255, 255, 128 );//-SAND
+			return Color.argb(255, 255, 255, 128);//-SAND
 		/*else if (inValue > 0.4f)
 			return -256; //YELLOW - sand
 		else
@@ -373,4 +388,9 @@ public class GameMap {
 	}
 
 
+	/** Sets all tiles as non visited */
+	public void resetDiscovered() {
+		for (int row = 0; row < physics2D.getWorldHeight(); row++)
+			Arrays.fill(discoveredTable[row], false);
+	}
 }//android drawables
