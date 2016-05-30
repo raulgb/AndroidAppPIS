@@ -1,0 +1,119 @@
+<resources>
+    <string name="app_name">StrikeCom</string>
+
+    <!-- Main Menu -->
+    <string name="play_button">Jugar</string>
+    <string name="options_button">Opciones</string>
+    <string name="exit_button">Salir</string>
+
+    <!-- Select Menu -->
+    <string name="sel_menu_description">Selecciona una Strike Base</string>
+    <string name="sel_menu_prev">&lt;</string>
+    <string name="sel_menu_next">&gt;</string>
+    <string name="sel_menu_testDesc">TEST</string>
+    <string name="sel_menu_nameLabel">Nombre:</string>
+    <string name="sel_menu_startButton">EMPEZAR</string>
+    <string name="sel_menu_mk1name">StrikeBase Mark. I</string>
+    <string name="sel_menu_mk2name">StrikeBase Mark. II</string>
+    <string name="sel_menu_mk3name">StrikeBase Mark. III</string>
+    <string name="sel_menu_mk4name">StrikeBase Mark. IV</string>
+    <string name="sel_menu_mk5name">StrikeBase Mark. V</string>
+    <string name="sel_menu_locked"></string>
+    <string name="enter_name_toast">&#161;Introduce un nombre por favor!</string>
+
+    <!-- Options -->
+    <string name="options_Options">Opciones</string>
+    <string name="options_Music">Música</string>
+    <string name="options_Sound">Sonido</string>
+    <string name="options_percentMusic">100%</string>
+    <string name="options_percentSound">100%</string>
+    <string name="options_Save">Guardar</string>
+    <string name="options_exit">Salir</string>
+
+    <!-- Sidebar -->
+    <string name="minimap">MINIMAP</string>
+    <string name="resource_1">Chatarra</string>
+    <string name="resource_2">Fuel</string>
+    <string name="res1_defVal">0000</string>
+    <string name="res2_defVal">0000</string>
+    <string name="inventory_button">Inventario</string>
+    <string name="shop_button">Almacén</string>
+
+    <!-- Inventory -->
+    <string name="equip_button">Equipar</string>
+    <string name="unequip_button">Desequipar</string>
+    <string name="use_item">Usar</string>
+    <string name="cancel_button">Cancelar</string>
+    <string name="inventory_description">Inventario</string>
+    <string name="turrets_selection">Torretas</string>
+    <string name="upgrades_selection">Mejoras</string>
+
+    <!-- Slots Dialog -->
+    <string name="equipToSlot_button">Equipar</string>
+    <string name="backToInventory_button">Atrás</string>
+    <string name="currentItem_label">Objeto actual</string>
+    <string name="newItem_label">Objeto nuevo</string>
+    <string name="slots_info">Selecciona un objeto para verlo</string>
+
+    <!-- Shop Dialog -->
+    <string name="buy_button">Comprar</string>
+    <string name="player_scrap">Chatarra: </string>
+
+    <!-- Quit Alert -->
+    <string name="quit_alert">&#191;Salir del juego?</string>
+    <string name="alert_positive">Si</string>
+    <string name="alert_negative">No</string>
+
+    <!-- Files -->
+    <string name="turretsFile">turrets</string>
+    <string name="upgradesFile">upgrades</string>
+
+    <!--AlertDialog-->
+    <string name="alertDialogText">&#191;Quieres salir del juego?</string>
+    <string name="alertYes">Si</string>
+    <string name="alertNo">No</string>
+
+    <!--Game Over-->
+    <string name="gameover_title">Game Over</string>
+    <string name="score_label">Tu puntuación:</string>
+    <string name="submit_button">Enviar</string>
+    <string name="gameover_news">Nuevo modelo de strikebase desbloqueado!</string>
+
+    <!-- Game Font-->
+    <string name="game_font">fonts/Minecraft.ttf</string>
+
+    <!-- Turret Items -->
+    <string-array
+        name="Turrets" >
+        <item
+            >TURRET_MACHINEGUN;Ametralladora;Ametralladora de gran calibre.</item>
+        <item
+            >TURRET_GATLING;Gatling;Ametralladora de cañones rotatorios con cadencia de fuego superior.</item>
+        <item
+            >TURRET_CANNON;Cañón de batalla;Puede agujerear la mayoría de blindajes.</item>
+        <item
+            >TURRET_HOWITZER;Obús;Lenta pero potente arma de asedio.</item>
+        <item
+            >TURRET_PLASMA;Cañón de plasma;No deja más que escoria derretida tras cada disparo.</item>
+    </string-array>
+
+    <!-- Upgrade Items -->
+    <string-array name="Upgrades" >
+        <item
+            >ARMOUR_COMPOSITE;Blindaje compuesto;Aumenta mucho la resistencia de tu base.</item>
+        <item
+            >ARMOUR_PLATE;Blindaje de placas;Aumenta un poco la resistencia de tu base.</item>
+        <item
+            >ARMOUR_REACTIVE;Blindaje reactivo eléctrico;Disminuye el daño recivido.</item>
+        <item
+            >AI;I.A avanzada.;Mejora el tiempo de respuesta de tus torretas.</item>
+        <item
+            >ENGINE_EFFICIENCY;Células energéticas;Reducen el consumo de fuel.</item>
+        <item
+            >SCAVENGER;Reciclador;Aumenta la cantidad de chatarra conseguida tras destruir vehículos enemigos.</item>
+    </string-array>
+
+    <!-- FUEL -->
+    <string name="FUEL">FUEL;250u fuel;250 unidades de hidrocarburo empleado en alimentar el immenso motor de tu base.</string>
+
+</resources>

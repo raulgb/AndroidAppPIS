@@ -126,13 +126,13 @@
                             android:id="@+id/itemDescImage"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:contentDescription="Detailed Image"/>
+                            android:contentDescription="@string/app_name"/>
 
                         <TextView
                             android:id="@+id/itemDesc"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:text="Select an item to display info"
+                            android:text="@string/slots_info"
                             android:textColor="#EEE"
                             android:textIsSelectable="false"
                             android:textSize="14sp"

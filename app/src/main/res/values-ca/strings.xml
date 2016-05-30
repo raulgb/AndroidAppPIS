@@ -1,0 +1,119 @@
+<resources>
+    <string name="app_name">StrikeCom</string>
+
+    <!-- Main Menu -->
+    <string name="play_button">Jugar</string>
+    <string name="options_button">Opcions</string>
+    <string name="exit_button">Sortir</string>
+
+    <!-- Select Menu -->
+    <string name="sel_menu_description">Tria una Strike Base</string>
+    <string name="sel_menu_prev">&lt;</string>
+    <string name="sel_menu_next">&gt;</string>
+    <string name="sel_menu_testDesc">TEST</string>
+    <string name="sel_menu_nameLabel">Nom:</string>
+    <string name="sel_menu_startButton">COMENÇAR</string>
+    <string name="sel_menu_mk1name">StrikeBase Mark. I</string>
+    <string name="sel_menu_mk2name">StrikeBase Mark. II</string>
+    <string name="sel_menu_mk3name">StrikeBase Mark. III</string>
+    <string name="sel_menu_mk4name">StrikeBase Mark. IV</string>
+    <string name="sel_menu_mk5name">StrikeBase Mark. V</string>
+    <string name="sel_menu_locked"></string>
+    <string name="enter_name_toast">Introdueix un nom!</string>
+
+    <!-- Options -->
+    <string name="options_Options">Opcions</string>
+    <string name="options_Music">Música</string>
+    <string name="options_Sound">So</string>
+    <string name="options_percentMusic">100%</string>
+    <string name="options_percentSound">100%</string>
+    <string name="options_Save">Guardar</string>
+    <string name="options_exit">Sortir</string>
+
+    <!-- Sidebar -->
+    <string name="minimap">MINIMAP</string>
+    <string name="resource_1">Ferralla</string>
+    <string name="resource_2">Fuel</string>
+    <string name="res1_defVal">0000</string>
+    <string name="res2_defVal">0000</string>
+    <string name="inventory_button">Inventari</string>
+    <string name="shop_button">Magatzem</string>
+
+    <!-- Inventory -->
+    <string name="equip_button">Equipar</string>
+    <string name="unequip_button">Desequipar</string>
+    <string name="use_item">Usar</string>
+    <string name="cancel_button">Cancelar</string>
+    <string name="inventory_description">Inventari</string>
+    <string name="turrets_selection">Torretes</string>
+    <string name="upgrades_selection">Millores</string>
+
+    <!-- Slots Dialog -->
+    <string name="equipToSlot_button">Equipar</string>
+    <string name="backToInventory_button">Enrere</string>
+    <string name="currentItem_label">Objete actual</string>
+    <string name="newItem_label">Objete nou</string>
+    <string name="slots_info">Tria un objecte per veure&#8216;l</string>
+
+    <!-- Shop Dialog -->
+    <string name="buy_button">Comprar</string>
+    <string name="player_scrap">Ferralla: </string>
+
+    <!-- Quit Alert -->
+    <string name="quit_alert">Sortir del joc?</string>
+    <string name="alert_positive">Sí</string>
+    <string name="alert_negative">No</string>
+
+    <!-- Files -->
+    <string name="turretsFile">turrets</string>
+    <string name="upgradesFile">upgrades</string>
+
+    <!--AlertDialog-->
+    <string name="alertDialogText">Vols sortir del joc?</string>
+    <string name="alertYes">Sí</string>
+    <string name="alertNo">No</string>
+
+    <!--Game Over-->
+    <string name="gameover_title">Game Over</string>
+    <string name="score_label">Puntuació:</string>
+    <string name="submit_button">Envia</string>
+    <string name="gameover_news">Has desbloquejat un nou model de strikebase!</string>
+
+    <!-- Game Font-->
+    <string name="game_font">fonts/Minecraft.ttf</string>
+
+    <!-- Turret Items -->
+    <string-array
+        name="Turrets" >
+        <item
+            >TURRET_MACHINEGUN;Metralladora;Metralladora de gran calibre.</item>
+        <item
+            >TURRET_GATLING;Gatling;Metralladora de canons rotatoris amb cadència de foc superior.</item>
+        <item
+            >TURRET_CANNON;Canó de batalla;Pot foradar la majoria de blindatges.</item>
+        <item
+            >TURRET_HOWITZER;Obús;Lenta però poderosa arma de setge.</item>
+        <item
+            >TURRET_PLASMA;Canó de plasma;No deixa més que escòria fosa rere cada tret.</item>
+    </string-array>
+
+    <!-- Upgrade Items -->
+    <string-array name="Upgrades" >
+        <item
+            >ARMOUR_COMPOSITE;Blindatge compost;Augmenta molt la resistència de la base.</item>
+        <item
+            >ARMOUR_PLATE;Blindatge de plaques;Aumenta una mica la resistència de la base.</item>
+        <item
+            >ARMOUR_REACTIVE;Blindaje reactivu elèctric;Disminueix els danys rebuts.</item>
+        <item
+            >AI;I.A avançada.;Millora el temps de resposta de les torretes.</item>
+        <item
+            >ENGINE_EFFICIENCY;Cèl&#183;lules energètiques;Redueixen el consum de fuel.</item>
+        <item
+            >SCAVENGER;Reciclador;Augmenta la quantitat de ferralla aconseguida al destruir vehicles enemics.</item>
+    </string-array>
+
+    <!-- FUEL -->
+    <string name="FUEL">FUEL;250u fuel;250 unitats d&#8216;hidrocarbur usat per alimentar el massiu motor de la base.</string>
+
+</resources>
