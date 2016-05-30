@@ -2,6 +2,7 @@ package edu.ub.pis2016.pis16.strikecom.gameplay;
 
 import java.util.HashMap;
 
+import edu.ub.pis2016.pis16.strikecom.FragmentedGameActivity;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
@@ -61,9 +62,14 @@ public class StrikeBase extends Vehicle {
 	private StrikeBaseConfig cfg;
 	private boolean hasPlateArmor = false;
 	private boolean hasCompositeArmor = false;
+	private boolean hasReactiveArmor = false;
+	private boolean hasAI = false;
+	private float lerpModifier = 1f;
+	private int dmgModifier = 0;
 
 	private HashMap<Integer, TurretItem> equippedTurrets = new HashMap<>();
 	private HashMap<Integer, UpgradeItem> equippedUpgrades = new HashMap<>();
+	private HashMap<String, Turret> equippedGameObjects = new HashMap<>();
 
 	public StrikeBase(StrikeBaseConfig cfg) {
 		// TODO Create FuelBehavior
@@ -90,13 +96,6 @@ public class StrikeBase extends Vehicle {
 
 		hull = new Sprite(sbmk1_hull[0]);
 		hull.setSize(cfg.size_tiles * TILE_SIZE);
-
-		/*
-		compositeArmor = new Sprite(Assets.SPRITE_ATLAS.getRegion("composite_" + model));
-		compositeArmor.setSize(cfg.size_tiles * TILE_SIZE);
-		plateArmor = new Sprite(Assets.SPRITE_ATLAS.getRegion("plate_" + model));
-		plateArmor.setSize(cfg.size_tiles * TILE_SIZE);
-		*/
 
 		// Thread setup
 		threadsLeft = new AnimatedSprite(Assets.SPRITE_ATLAS.getRegions(model + "_threads"), 0);
@@ -151,6 +150,8 @@ public class StrikeBase extends Vehicle {
 		threadsRight.setFrameSpeed(leftThreadVel * 1.5f);
 		threadsLeft.update(delta);
 		threadsRight.update(delta);
+
+		computeFuel(delta);
 	}
 
 	@Override
@@ -222,18 +223,6 @@ public class StrikeBase extends Vehicle {
 		threadsLeft.draw(batch);
 		threadsRight.draw(batch);
 		hull.draw(batch, pos.x, pos.y);
-
-		/*
-		if (hasPlateArmor) {
-			plateArmor.setRotation(rotation);
-			plateArmor.draw(batch, pos.x, pos.y);
-		}
-
-		if (hasCompositeArmor) {
-			compositeArmor.setRotation(rotation);
-			compositeArmor.draw(batch, pos.x, pos.y);
-		}
-		*/
 	}
 
 	@Override
@@ -302,10 +291,12 @@ public class StrikeBase extends Vehicle {
 		turret.putComponent(turretBehavior);
 		turret.putComponent(turretPhysics);
 		turret.cfg = item.getConfig();
-		//getComponent(GraphicsComponent.class).getSprite().setSize(GameConfig.TILE_SIZE *2);
+		if (hasAI)
+			turret.cfg.lerp_speed *= lerpModifier;
 
 		screen.addGameObject(tName, turret);
 		equippedTurrets.put(slot, item);
+		equippedGameObjects.put(tName, turret);
 	}
 
 	public void removeTurret(int slot) {
@@ -313,6 +304,7 @@ public class StrikeBase extends Vehicle {
 		screen.removeGameObject(screen.getGameObject(tName));
 
 		equippedTurrets.remove(slot);
+		equippedGameObjects.remove(tName);
 	}
 
 	public void addUpgrade(UpgradeItem item, int slot) {
@@ -324,22 +316,35 @@ public class StrikeBase extends Vehicle {
 
 			case ARMOUR_PLATE:
 				// Increases endurance
-				this.hitpoints += MathUtils.round(item.cfg.value);
-				this.maxHitpoints += MathUtils.round(item.cfg.value);
+				if (!hasPlateArmor) {
+					this.hitpoints += MathUtils.round(item.cfg.value);
+					this.maxHitpoints += MathUtils.round(item.cfg.value);
+					hasPlateArmor = true;
+				}
 				break;
 
 			case ARMOUR_COMPOSITE:
 				// Increases endurance
-				this.hitpoints += MathUtils.round(item.cfg.value);
-				this.maxHitpoints += MathUtils.round(item.cfg.value);
+				if (!hasCompositeArmor) {
+					this.hitpoints += MathUtils.round(item.cfg.value);
+					this.maxHitpoints += MathUtils.round(item.cfg.value);
+					hasCompositeArmor = true;
+				}
 				break;
 
 			case ARMOUR_REACTIVE:
 				// Reduces incoming damage
+				hasReactiveArmor = true;
+				dmgModifier = MathUtils.round(item.cfg.value);
 				break;
 
 			case AI:
 				// Smart turrets
+				if (!hasAI) {
+					lerpModifier = item.cfg.value;
+					hasAI = true;
+					setTurretAI();
+				}
 				break;
 
 			case ENGINE_EFFICIENCY:
@@ -349,6 +354,8 @@ public class StrikeBase extends Vehicle {
 
 			case SCAVENGER:
 				// Increases scrap income
+				FragmentedGameActivity.playerState.setScrapMultiplier(item.cfg.value);
+				break;
 		}
 
 		equippedUpgrades.put(slot, item);
@@ -360,21 +367,33 @@ public class StrikeBase extends Vehicle {
 		UpgradeItem item = equippedUpgrades.get(slot);
 		switch (UpgradeConfig.Function.valueOf( item.cfg.toString() )) {
 			case AI:
+				lerpModifier = 1f;
+				hasAI = false;
+				setTurretAI();
 				// Smart turrets
 				break;
 			case ARMOUR_COMPOSITE:
 				this.maxHitpoints -= MathUtils.round(item.cfg.value);
 				this.hitpoints = MathUtils.min(this.hitpoints, this.maxHitpoints);
+				hasPlateArmor = false;
 				// Increases endurance
 				break;
 			case ARMOUR_PLATE:
 				this.maxHitpoints -= MathUtils.round(item.cfg.value);
 				this.hitpoints = MathUtils.min(this.hitpoints, this.maxHitpoints);
+				hasCompositeArmor = false;
 				// Slightly increases endurance
+				break;
+			case ARMOUR_REACTIVE:
+				dmgModifier = 1;
+				hasReactiveArmor = false;
 				break;
 			case ENGINE_EFFICIENCY:
 				// Reduces fuel consumption
 				cfg.fuel_usage_mult = 1;
+				break;
+			case SCAVENGER:
+				FragmentedGameActivity.playerState.setScrapMultiplier(1f);
 				break;
 			case FUEL:
 				break;
@@ -399,4 +418,32 @@ public class StrikeBase extends Vehicle {
 		return this.equippedUpgrades;
 	}
 
+	private void setTurretAI() {
+		if (hasAI) {
+			for(String k : equippedGameObjects.keySet()) {
+				equippedGameObjects.get(k).cfg.lerp_speed *= lerpModifier;
+			}
+		} else {
+			for(String k : equippedGameObjects.keySet()) {
+				equippedGameObjects.get(k).cfg.lerp_speed /= lerpModifier;
+			}
+		}
+	}
+
+	private void computeFuel(float delta) {
+		FragmentedGameActivity.playerState.addFuel( -delta * cfg.fuel_usage * cfg.fuel_usage_mult);
+		if (FragmentedGameActivity.playerState.getFuel() == 0) {
+			cfg.max_speed = 0;
+			cfg.maneuverability = 0;
+			cfg.max_reverse_speed = 0;
+		}
+	}
+
+	@Override
+	public void takeHit(float dmg) {
+		if (hasReactiveArmor) {
+			dmg = MathUtils.max(1, dmg - dmgModifier);
+		}
+		super.takeHit(dmg);
+	}
 }

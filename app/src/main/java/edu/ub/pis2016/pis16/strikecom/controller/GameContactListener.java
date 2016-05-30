@@ -53,7 +53,7 @@ public class GameContactListener extends ContactListener {
 
 	private void handlePlayerContact(GameObject player, GameObject other) {
 		if (other.killable) {
-			player.hitpoints -= other.hitpoints / 2f;
+			player.takeHit( other.hitpoints / 2f );
 			camera.getComponent(CameraBehavior.class).cameraShake(2);
 			other.destroy();
 		}
@@ -69,14 +69,11 @@ public class GameContactListener extends ContactListener {
 		if (!other.killable)
 			return;
 
-		other.hitpoints = MathUtils.max(0, other.hitpoints - projectile.hitpoints);
+		other.takeHit(projectile.hitpoints);
 
 		// TODO Disabled
 //		if (other == strikeBase)
 //			camera.getComponent(CameraBehavior.class).cameraShake(1.5f);
-
-		if (other.hitpoints == 0)
-			other.destroy();
 		projectile.destroy();
 	}
 }

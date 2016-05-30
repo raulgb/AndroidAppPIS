@@ -1,5 +1,6 @@
 package edu.ub.pis2016.pis16.strikecom.gameplay;
 
+import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.Inventory;
 
 public class PlayerState {
@@ -8,6 +9,8 @@ public class PlayerState {
 	private float fuel;
 	private int score;
 	private int enemyCounter =  0; // number of defeated enemies
+
+	private float scrapMultiplier = 1f;
 
 	public Inventory inventory;
 
@@ -19,12 +22,16 @@ public class PlayerState {
 		inventory = new Inventory();
 	}
 
+	public  void setScrapMultiplier(float multiplier) {
+		this.scrapMultiplier = multiplier;
+	}
+
 	public void addScrap(int scrap) {
-		this.scrap += scrap;
+		this.scrap += scrap * scrapMultiplier;
 	}
 
 	public void addFuel(float fuel) {
-		this.fuel += fuel;
+		this.fuel = MathUtils.max(0, this.fuel + fuel);
 	}
 
 	public void increaseCounter(){

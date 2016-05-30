@@ -7,14 +7,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.HashMap;
 import java.util.Random;
 
 import edu.ub.pis2016.pis16.strikecom.R;
-import edu.ub.pis2016.pis16.strikecom.gameplay.items.Inventory;
-import edu.ub.pis2016.pis16.strikecom.gameplay.items.Item;
-import edu.ub.pis2016.pis16.strikecom.gameplay.items.TurretItem;
-import edu.ub.pis2016.pis16.strikecom.gameplay.items.UpgradeItem;
 
 // This class is to be used to generate shop inventories.
 public class InventoryManager {
@@ -25,12 +20,29 @@ public class InventoryManager {
 	public InventoryManager(Context context, String turretsFile, String upgradesFile) throws IOException {
 		this.master = new Inventory();
 		this.context = context;
-		loadTurrets(turretsFile);
-		loadUpgrades(upgradesFile);
+
+		loadTurrets();
+		loadUpgrades();
+	}
+
+	// Load all turrets from strings.xml
+	private void loadTurrets() {
+		String[] turrets = context.getResources().getStringArray(R.array.Turrets);
+		for (String turret : turrets) {
+			master.addItem(TurretItem.parseTurretItem(turret));
+		}
+	}
+
+	// Load all turrets from strings.xml
+	private void loadUpgrades() {
+		String[] upgrades = context.getResources().getStringArray(R.array.Upgrades);
+		for (String upgrade : upgrades) {
+			master.addItem(UpgradeItem.parseUpgradeItem(upgrade));
+		}
 	}
 
 	// Loads turret objects from assets to master inventory.
-	private void loadTurrets(String fileName) throws IOException {
+	public void loadTurretsFromFile(String fileName) throws IOException {
 		AssetManager am = context.getAssets();
 
 		InputStream is = am.open(fileName);
@@ -44,7 +56,7 @@ public class InventoryManager {
 	}
 
 	// Loads upgrade objects from assets to master inventory.
-	private void loadUpgrades(String fileName) throws IOException {
+	public void loadUpgradesFromFile(String fileName) throws IOException {
 		AssetManager am = context.getAssets();
 
 		InputStream is = am.open(fileName);
@@ -59,9 +71,8 @@ public class InventoryManager {
 
 	// Adds a given amount of fuel canisters to inventory. Fuel descriptor taken from strings.xml
 	private void addFuel(Inventory inventory, int num) {
-		String fuel = context.getString(R.string.fuel_canister);
 		for (int i = 0; i < num; i++) {
-			inventory.addItem(UpgradeItem.parseUpgradeItem(fuel));
+			inventory.addItem(UpgradeItem.parseUpgradeItem(context.getString(R.string.FUEL)));
 		}
 	}
 

@@ -18,7 +18,8 @@ public class ProjectileFactory {
 		PROJ_BULLET,             // Default machineguns
 		PROJ_GATTLING_BULLET,    // Gattling machinegun
 		PROJ_TANKSHELL,          // Enemy Tanks
-		PROJ_HE_ROUND            // Howitzer
+		PROJ_HE_ROUND ,          // Howitzer
+		PROJ_PLASMA				 // Plasma cannon
 	}
 
 	public static GameObject newProjectile(Type projType) {
@@ -56,6 +57,8 @@ public class ProjectileFactory {
 			case PROJ_HE_ROUND:
 				proj.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("proj_he_round")));
 				break;
+			case PROJ_PLASMA:
+				proj.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("proj_plasma")));
 		}
 
 		proj.getSprite().setScale(0.25f);

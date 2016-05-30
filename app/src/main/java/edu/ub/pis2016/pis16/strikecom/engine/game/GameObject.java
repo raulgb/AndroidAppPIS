@@ -242,4 +242,13 @@ public class GameObject {
 		return screen != null;
 	}
 
+	public void takeHit(float dmg) {
+		if (dmg > this.maxHitpoints) {
+			maxHitpoints = 0;
+			this.destroy();
+		} else {
+			this.hitpoints -= dmg;
+		}
+	}
+
 }
