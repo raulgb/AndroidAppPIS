@@ -22,6 +22,8 @@ public class TurretConfig {
 	/** Size of sprite IN TILES */
 	public float sprite_size = 1f;
 
+	public String typeName;
+
 	/** Anchor to use for attaching */
 	public String anchor = "turret";
 
@@ -62,6 +64,8 @@ public class TurretConfig {
 				image = "machinegun_64";
 				price = 100;
 
+				typeName = "machinegun";
+
 				lerp_speed = 0.050f;
 				firerate = 0.4f;
 				fire_cone = 5f;
@@ -79,6 +83,8 @@ public class TurretConfig {
 				image = "gatling_64";
 				price = 250;
 
+				typeName = "gatling";
+
 				lerp_speed = 0.045f;
 				firerate = 0.15f;
 				fire_cone = 10f;
@@ -93,6 +99,8 @@ public class TurretConfig {
 			case TURRET_CANNON:
 				sprite = "turret_cannon";
 				sprite_size = 0.85f;
+
+				typeName = "cannon";
 
 				image = "cannon_64";
 				price = 500;
@@ -112,6 +120,8 @@ public class TurretConfig {
 				sprite = "turret_howitzer";
 				sprite_size = 0.85f;
 
+				typeName = "howitzer";
+
 				image = "howitzer_64";
 				price = 600;
 
@@ -129,6 +139,8 @@ public class TurretConfig {
 			case TURRET_PLASMA:
 				sprite = "turret_plasma";
 				sprite_size = 0.9f;
+
+				typeName = "plasma";
 
 				image = "plasma_64";
 				price = 2000;

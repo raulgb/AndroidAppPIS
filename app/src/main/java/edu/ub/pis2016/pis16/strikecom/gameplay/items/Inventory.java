@@ -1,10 +1,7 @@
 package edu.ub.pis2016.pis16.strikecom.gameplay.items;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-
-import edu.ub.pis2016.pis16.strikecom.fragments.InventoryFragment;
 
 public class Inventory {
 	private ArrayList<Item> turretList;

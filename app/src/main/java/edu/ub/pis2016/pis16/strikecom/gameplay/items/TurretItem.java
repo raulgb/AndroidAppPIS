@@ -50,4 +50,8 @@ public class TurretItem extends Item {
 	public TurretConfig getConfig() {
 		return cfg;
 	}
+
+	public boolean isPlasmaCannon(){
+		return cfg.typeName.equals("plasma");
+	}
 }

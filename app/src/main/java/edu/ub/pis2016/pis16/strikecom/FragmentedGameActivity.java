@@ -31,6 +31,7 @@ import edu.ub.pis2016.pis16.strikecom.fragments.SidebarFragment;
 import edu.ub.pis2016.pis16.strikecom.controller.SidebarEventListener;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.fragments.SlotsFragment;
+import edu.ub.pis2016.pis16.strikecom.gameplay.Shop;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.InventoryItemAdapter;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.InventoryManager;
 import edu.ub.pis2016.pis16.strikecom.gameplay.PlayerState;
@@ -52,7 +53,7 @@ public class FragmentedGameActivity extends Activity {
 	public StrikeComGLGame game;
 	public SidebarFragment sidebar;
 
-	public HashMap<String, Inventory> shopMap = new HashMap<>();
+	public HashMap<String, Shop> shopMap = new HashMap<>();
 
 
 	@Override
@@ -88,7 +89,7 @@ public class FragmentedGameActivity extends Activity {
 		sidebar.setGame(game);
 
 		playerState = new PlayerState(playerName);
-		playerState.addScrap(250);
+		playerState.addScrap(2000);
 		playerState.addFuel(500f);
 
 		// Thread updating sidebar once per second
@@ -111,10 +112,6 @@ public class FragmentedGameActivity extends Activity {
 				}
 			}
 		}).start();
-
-		shopMap.put("shop_1", null);
-		generateInventories();
-
 	}
 
 	@Override
@@ -292,7 +289,7 @@ public class FragmentedGameActivity extends Activity {
 
 		ShopFragment shopFragment = new ShopFragment();
 		shopFragment.setId(shopID);
-		shopFragment.setInventory(shopMap.get(shopID));
+		shopFragment.setInventory(shopMap.get(shopID).inventory);
 		shopFragment.setPlayerScrap(playerState.getScrap());
 		shopFragment.setPlayerFuel(playerState.getFuel());
 		shopFragment.show(getFragmentManager(), "shop");
@@ -353,7 +350,7 @@ public class FragmentedGameActivity extends Activity {
 	}
 
 	public void buyItem(String shopID, TurretItem item) {
-		Inventory shopInventory = shopMap.get(shopID);
+		Inventory shopInventory = shopMap.get(shopID).inventory;
 
 		shopInventory.removeItem(item);
 		playerState.inventory.addItem(item);
@@ -361,7 +358,7 @@ public class FragmentedGameActivity extends Activity {
 	}
 
 	public void buyItem(String shopID, UpgradeItem item) {
-		Inventory shopInventory = shopMap.get(shopID);
+		Inventory shopInventory = shopMap.get(shopID).inventory;
 
 		shopInventory.removeItem(item);
 
@@ -390,22 +387,19 @@ public class FragmentedGameActivity extends Activity {
 		if (upgrade != null) {
 			strikeBase.removeUpgrade(slot);
 			playerState.inventory.addItem(upgrade);
-			;
 		}
 	}
 
 	public void generateInventories() {
-		String turretsFile = getString(R.string.turretsFile);
-		String upgradesFile = getString(R.string.upgradesFile);
-		try {
-			InventoryManager im = new InventoryManager(this, turretsFile, upgradesFile);
-			playerState.inventory = im.getStartingInventory();
+		InventoryManager im = new InventoryManager(this);
+		playerState.inventory = im.getStartingInventory();
 
-			for (String key : shopMap.keySet()) {
-				shopMap.put(key, im.getShopInventory(20, 2));
+		for (String key : shopMap.keySet()) {
+			if (shopMap.get(key).thisIsVault()) {
+				shopMap.get(key).inventory = im.getVaultInventory();
+			} else {
+				shopMap.get(key).inventory = im.getShopInventory(4, 1);
 			}
-
-		} catch (IOException ex) {
 		}
 	}
 

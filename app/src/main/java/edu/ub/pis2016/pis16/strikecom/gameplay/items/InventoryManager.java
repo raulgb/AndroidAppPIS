@@ -17,7 +17,7 @@ public class InventoryManager {
 	private Inventory master; //inventory containing every gameObject available to the player
 
 	// Builder.
-	public InventoryManager(Context context, String turretsFile, String upgradesFile) throws IOException {
+	public InventoryManager(Context context){
 		this.master = new Inventory();
 		this.context = context;
 
@@ -45,7 +45,7 @@ public class InventoryManager {
 	public void loadTurretsFromFile(String fileName) throws IOException {
 		AssetManager am = context.getAssets();
 
-		InputStream is = am.open(fileName);
+		InputStream is = am.open(context.getString(R.string.turretsFile));
 		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
 		String line;
 		while ((line = reader.readLine()) != null) {
@@ -59,7 +59,7 @@ public class InventoryManager {
 	public void loadUpgradesFromFile(String fileName) throws IOException {
 		AssetManager am = context.getAssets();
 
-		InputStream is = am.open(fileName);
+		InputStream is = am.open(context.getString(R.string.upgradesFile));
 		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
 		String line;
 		while ((line = reader.readLine()) != null) {
@@ -87,8 +87,11 @@ public class InventoryManager {
 		int i;
 		while (addedTurrets < numTurrets) {
 			i = random.nextInt(master.getTurretSize());
-			shop.addItem(master.getTurret(i));
-			addedTurrets++;
+			TurretItem turret = master.getTurret(i);
+			if (!turret.isPlasmaCannon()) {
+				shop.addItem(turret);
+				addedTurrets++;
+			}
 		}
 		while (addedUpgrades < numUpgrades) {
 			i = random.nextInt(master.getUpgradeSize());
@@ -96,6 +99,26 @@ public class InventoryManager {
 			addedUpgrades++;
 		}
 		addFuel(shop, random.nextInt(5) + 1);
+
+		return shop;
+	}
+
+	public Inventory getVaultInventory() {
+		Inventory shop = new Inventory();
+		Random random = new Random();
+
+		// 4 plasma cannons, 6 upgrades, 8 fuel canisters
+		for(int i=0; i< 4; i++){
+			shop.addItem(master.getTurret(master.getTurretSize() -1));
+		}
+		int i;
+		int addedUpgrades = 0;
+		while (addedUpgrades < 6) {
+			i = random.nextInt(master.getUpgradeSize());
+			shop.addItem(master.getUpgrade(i));
+			addedUpgrades++;
+		}
+		addFuel(shop, 8);
 
 		return shop;
 	}

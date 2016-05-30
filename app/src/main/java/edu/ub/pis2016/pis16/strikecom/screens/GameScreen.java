@@ -28,6 +28,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.physics.Physics2D;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Rectangle;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.StaticBody;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
+import edu.ub.pis2016.pis16.strikecom.gameplay.Shop;
 import edu.ub.pis2016.pis16.strikecom.gameplay.StrikeBase;
 import edu.ub.pis2016.pis16.strikecom.gameplay.ThreadVehicle;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.CameraBehavior;;
@@ -231,15 +232,13 @@ public class GameScreen extends Screen {
 
 	private void createGameObjects() {
 		// ------ SHOP -----------------
-		GameObject shop = new GameObject();
-		shop.putComponent(new PhysicsComponent(new StaticBody(new Rectangle(1.5f, 1.5f))));
-		shop.getPhysics().body.filter = Physics2D.Filter.SHOP;
-		shop.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("shop")));
+		Shop shop = new Shop(false);
 		shop.setTag("shop_1");
 		shop.setLayer(LAYER_BACKGROUND);
 		shop.setPosition((MAP_SIZE / 2f - 4) * TILE_SIZE, MAP_SIZE / 2f * TILE_SIZE);
-		shop.faction = GameObject.Faction.SHOP;
 		addGameObject("shop_1", shop);
+		activity.shopMap.put("shop_1", shop);
+		activity.generateInventories();
 
 		// ------ STRIKEBASE CONFIG ------------
 		strikeBase = new StrikeBase(new StrikeBaseConfig(strikeBaseModel));
