@@ -10,14 +10,16 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        >
 
         <LinearLayout
             android:layout_width="@dimen/minimap_size"
             android:layout_height="@dimen/minimap_size"
             android:id="@+id/minimapFrame"
             android:background="@drawable/frame_minimap_mk1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_margin="8dp">
 
             <Button
                 android:layout_width="@dimen/minimap_size"
@@ -26,18 +28,16 @@
                 android:id="@+id/btnMinimap"
                 style="?android:attr/borderlessButtonStyle"
                 android:background="@drawable/btn_retro_mk1"
-                android:layout_marginBottom="5dp" />
+                />
         </LinearLayout>
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="right"
             android:layout_marginRight="@dimen/sidebar_horizontal_margin"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="2dp">
+            >
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -49,8 +49,9 @@
                 <ImageView
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:src="@drawable/scrap_64"
-                    android:id="@+id/scrap_icon"/>
+                    android:src="@drawable/scrap_white_64"
+                    android:id="@+id/scrap_icon"
+                    />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -58,7 +59,9 @@
                     android:text="@string/res1_defVal"
                     android:layout_marginLeft="5dp"
                     android:textStyle="bold"
-                    android:textSize="18sp"/>
+                    android:textSize="18sp"
+                    android:textColor="#EEE"
+                    android:layout_marginTop="4dp"/>
             </LinearLayout>
 
 
@@ -83,7 +86,7 @@
                     android:textSize="18sp"
                     android:layout_marginLeft="5dp"
                     android:textColor="#EEE"
-                    />
+                    android:layout_marginTop="4dp"/>
             </LinearLayout>
 
         </LinearLayout>
