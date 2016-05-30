@@ -346,6 +346,7 @@ public class FragmentedGameActivity extends Activity {
 		playerState.inventory.removeItem(item);
 
 		Button slotBtn = (Button) sidebar.getUpgradeSlot(slot);
+
 		int imageID = getResources().getIdentifier(item.getImage(), "drawable", getPackageName());
 		Bitmap original = BitmapFactory.decodeResource(getResources(), imageID);
 		Bitmap b = Bitmap.createScaledBitmap(original, slotBtn.getWidth(), slotBtn.getHeight(), false);

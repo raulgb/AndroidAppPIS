@@ -3,6 +3,7 @@ package edu.ub.pis2016.pis16.strikecom.engine.game;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.GraphicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
+import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Sprite;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
@@ -243,11 +244,11 @@ public class GameObject {
 	}
 
 	public void takeHit(float dmg) {
-		if (dmg > this.maxHitpoints) {
-			maxHitpoints = 0;
-			this.destroy();
+		if (dmg > hitpoints) {
+			hitpoints = 0;
+			destroy();
 		} else {
-			this.hitpoints -= dmg;
+			hitpoints -= dmg;
 		}
 	}
 

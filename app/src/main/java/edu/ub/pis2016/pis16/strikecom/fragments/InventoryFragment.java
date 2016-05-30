@@ -16,8 +16,11 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.Locale;
+
 import edu.ub.pis2016.pis16.strikecom.FragmentedGameActivity;
 import edu.ub.pis2016.pis16.strikecom.R;;
+import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.InventoryItemAdapter;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.Inventory;
@@ -109,8 +112,8 @@ public class InventoryFragment extends DialogFragment {
 
 		scrapText = (TextView) view.findViewById(R.id.playerScrap);
 		fuelText = (TextView) view.findViewById(R.id.playerFuel);
-		scrapText.setText("" + playerScrap);
-		fuelText.setText("" + Math.round(playerFuel));
+		scrapText.setText(String.format("%04d", playerScrap));
+		fuelText.setText(String.format("%04d", MathUtils.round(playerFuel)));
 		/** FINISHED LOOKUP */
 
 		// Apply the same custom font to all UI elements

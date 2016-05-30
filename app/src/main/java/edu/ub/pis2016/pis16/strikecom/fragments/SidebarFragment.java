@@ -17,6 +17,7 @@ import java.util.HashMap;
 
 import edu.ub.pis2016.pis16.strikecom.R;
 import edu.ub.pis2016.pis16.strikecom.StrikeComGLGame;
+import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
 
 
@@ -358,15 +359,14 @@ public class SidebarFragment extends Fragment {
 	}
 
 	public void updateScrap(int scrap) {
-		scrapText.setText(Integer.toString(scrap));
+		scrapText.setText(String.format("%04d", scrap));
 	}
 
 	public void updateFuel(float fuel) {
-		fuelText.setText(Integer.toString(Math.round(fuel)));
+		fuelText.setText(String.format("%04d", MathUtils.round(fuel)));
 	}
 
 	public void updateMiniMap(){
-
 		try{
 			//btnMinimap.draw(new Canvas(bm.copy(Bitmap.Config.ARGB_8888, true)));
 			BitmapDrawable bm = new BitmapDrawable("/data/data/edu.ub.pis2016.pis16.strikecom/files/gameMap.png");
@@ -377,7 +377,6 @@ public class SidebarFragment extends Fragment {
 		}
 
 	}
-
 
 	public void setInventoyText(String text) {
 		btnInventory.setText(text);

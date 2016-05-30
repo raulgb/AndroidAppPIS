@@ -101,10 +101,10 @@ public class StrikeBaseConfig {
 				turret_offset[3] = new float[]{.625f, 0.3125f};    // hull-mounted
 
 				turret_angle_lim = new float[turret_num][2];
-				turret_angle_lim[0] = new float[]{-180, 0};		// left
-				turret_angle_lim[1] = new float[]{-180, 0};	// right
+				turret_angle_lim[0] = new float[]{-40, 180};		// left
+				turret_angle_lim[1] = new float[]{-180, 40};	// right
 				turret_angle_lim[2] = new float[]{-360, 360};		//main
-				turret_angle_lim[3] = new float[]{-20, 90};		// hull-mounted
+				turret_angle_lim[3] = new float[]{-20, 100};		// hull-mounted
 				break;
 
 			case MK2:

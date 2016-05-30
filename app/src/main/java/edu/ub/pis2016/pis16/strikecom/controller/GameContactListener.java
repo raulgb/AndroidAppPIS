@@ -56,6 +56,9 @@ public class GameContactListener extends ContactListener {
 			player.takeHit( other.hitpoints / 2f );
 			camera.getComponent(CameraBehavior.class).cameraShake(2);
 			other.destroy();
+
+			// heavy screen shaking when ramming an enemy vehicle
+			camera.getComponent(CameraBehavior.class).cameraShake(3f);
 		}
 	}
 
@@ -71,9 +74,6 @@ public class GameContactListener extends ContactListener {
 
 		other.takeHit(projectile.hitpoints);
 
-		// TODO Disabled
-//		if (other == strikeBase)
-//			camera.getComponent(CameraBehavior.class).cameraShake(1.5f);
 		projectile.destroy();
 	}
 }

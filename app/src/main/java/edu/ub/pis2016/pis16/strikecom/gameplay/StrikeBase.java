@@ -308,13 +308,9 @@ public class StrikeBase extends Vehicle {
 	}
 
 	public void addUpgrade(UpgradeItem item, int slot) {
-		// TODO implement
 
-		switch (UpgradeConfig.Function.valueOf(item.cfg.toString())) {
-			case FUEL:
-				break;
-
-			case ARMOUR_PLATE:
+		switch (item.cfg.functionName) {
+			case "armour_plate":
 				// Increases endurance
 				if (!hasPlateArmor) {
 					this.hitpoints += MathUtils.round(item.cfg.value);
@@ -323,7 +319,7 @@ public class StrikeBase extends Vehicle {
 				}
 				break;
 
-			case ARMOUR_COMPOSITE:
+			case "armour_composite":
 				// Increases endurance
 				if (!hasCompositeArmor) {
 					this.hitpoints += MathUtils.round(item.cfg.value);
@@ -332,13 +328,13 @@ public class StrikeBase extends Vehicle {
 				}
 				break;
 
-			case ARMOUR_REACTIVE:
+			case "armour_reactive":
 				// Reduces incoming damage
 				hasReactiveArmor = true;
 				dmgModifier = MathUtils.round(item.cfg.value);
 				break;
 
-			case AI:
+			case "ai":
 				// Smart turrets
 				if (!hasAI) {
 					lerpModifier = item.cfg.value;
@@ -347,14 +343,17 @@ public class StrikeBase extends Vehicle {
 				}
 				break;
 
-			case ENGINE_EFFICIENCY:
+			case "engine":
 				// Reduces fuel consumption
 				cfg.fuel_usage_mult = item.cfg.value;
 				break;
 
-			case SCAVENGER:
+			case "scavenger":
 				// Increases scrap income
 				FragmentedGameActivity.playerState.setScrapMultiplier(item.cfg.value);
+				break;
+
+			default:
 				break;
 		}
 
@@ -362,40 +361,39 @@ public class StrikeBase extends Vehicle {
 	}
 
 	public void removeUpgrade(int slot) {
-		// TODO implement
 
 		UpgradeItem item = equippedUpgrades.get(slot);
-		switch (UpgradeConfig.Function.valueOf( item.cfg.toString() )) {
-			case AI:
+		switch (item.cfg.functionName) {
+			case "ai":
 				lerpModifier = 1f;
 				hasAI = false;
 				setTurretAI();
 				// Smart turrets
 				break;
-			case ARMOUR_COMPOSITE:
+			case "armour_composite":
 				this.maxHitpoints -= MathUtils.round(item.cfg.value);
 				this.hitpoints = MathUtils.min(this.hitpoints, this.maxHitpoints);
 				hasPlateArmor = false;
 				// Increases endurance
 				break;
-			case ARMOUR_PLATE:
+			case "armour_plate":
 				this.maxHitpoints -= MathUtils.round(item.cfg.value);
 				this.hitpoints = MathUtils.min(this.hitpoints, this.maxHitpoints);
 				hasCompositeArmor = false;
 				// Slightly increases endurance
 				break;
-			case ARMOUR_REACTIVE:
+			case "armour_reactive":
 				dmgModifier = 1;
 				hasReactiveArmor = false;
 				break;
-			case ENGINE_EFFICIENCY:
+			case "engine":
 				// Reduces fuel consumption
 				cfg.fuel_usage_mult = 1;
 				break;
-			case SCAVENGER:
+			case "scavenger":
 				FragmentedGameActivity.playerState.setScrapMultiplier(1f);
 				break;
-			case FUEL:
+			default:
 				break;
 		}
 
