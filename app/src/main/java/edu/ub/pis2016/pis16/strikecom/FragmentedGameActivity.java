@@ -108,6 +108,25 @@ public class FragmentedGameActivity extends Activity {
 				}
 			}
 		}).start();
+		// Thread updating minimap once in 5 seconds
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				while (true) {
+					try {
+						Thread.sleep(5000);
+					} catch (InterruptedException e) {
+					}
+
+					runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							sidebar.updateMiniMap();
+						}
+					});
+				}
+			}
+		}).start();
 
 		shopMap.put("shop_1", null);
 		generateInventories();

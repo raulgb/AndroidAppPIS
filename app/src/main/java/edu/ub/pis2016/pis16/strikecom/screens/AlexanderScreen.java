@@ -219,7 +219,7 @@ public class AlexanderScreen extends Screen {
 			secondsCounter -= 5;
 			Log.i("FPS", "" + MathUtils.roundPositive(1f / fpsMean.getMean()));
 
-			gameMap.createMiniMap(camera.position, game);
+			gameMap.createMiniMap(camera.position, game,this.getGameObjects());
 		}
 
 		secondsElapsed += delta;
