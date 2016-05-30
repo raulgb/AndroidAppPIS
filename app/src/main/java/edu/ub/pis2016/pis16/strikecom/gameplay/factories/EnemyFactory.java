@@ -3,7 +3,6 @@ package edu.ub.pis2016.pis16.strikecom.gameplay.factories;
 import edu.ub.pis2016.pis16.strikecom.FragmentedGameActivity;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
-import edu.ub.pis2016.pis16.strikecom.engine.game.component.GraphicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.GLGameFragment;
@@ -14,7 +13,6 @@ import edu.ub.pis2016.pis16.strikecom.gameplay.Turret;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.TurretBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.VehicleFollowBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.EnemyConfig;
-import edu.ub.pis2016.pis16.strikecom.gameplay.config.TurretConfig;
 
 import static edu.ub.pis2016.pis16.strikecom.engine.framework.Screen.LAYER_VEHICLES;
 import static edu.ub.pis2016.pis16.strikecom.engine.framework.Screen.LAYER_VEHICLE_TURRET;
@@ -22,6 +20,7 @@ import static edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig.TILE_SIZ
 
 public class EnemyFactory {
 
+	public static boolean rangeLimited = true;
 	private static final Vector2 tmp = new Vector2();
 
 	static public GameObject createRandomEnemyTank(final Screen screen) {
@@ -55,7 +54,10 @@ public class EnemyFactory {
 		VehicleFollowBehavior vfb = new VehicleFollowBehavior();
 		vfb.setTarget(strikeBase);
 		vfb.setMinRange(5 * TILE_SIZE);
-		vfb.setMaxRange(16 * TILE_SIZE);
+
+		if (rangeLimited)
+			vfb.setMaxRange(16 * TILE_SIZE);
+
 		tank.putComponent(vfb);
 		screen.addGameObject(tank);
 

@@ -38,6 +38,7 @@
     <string name="res2_defVal">0000</string>
     <string name="inventory_button">Inventario</string>
     <string name="shop_button">Almacén</string>
+    <string name="fuelMessage">Has agotado las reservas de fuel!</string>
 
     <!-- Inventory -->
     <string name="equip_button">Equipar</string>

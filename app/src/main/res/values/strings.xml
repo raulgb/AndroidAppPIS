@@ -38,6 +38,7 @@
     <string name="res2_defVal">0000</string>
     <string name="inventory_button">Inventory</string>
     <string name="shop_button">Depot</string>
+    <string name="fuelMessage">You ran out of fuel!</string>
 
     <!-- Inventory -->
     <string name="equip_button">Equip</string>

@@ -72,6 +72,7 @@ public class SidebarFragment extends Fragment {
 		fuelText.setTypeface(myCustomFont);
 
 		LinearLayout outerFrame = (LinearLayout) view.findViewById(R.id.outerFrame);
+		LinearLayout mapFrame = (LinearLayout) view.findViewById(R.id.minimapFrame);
 
 		View btnT1 = view.findViewById(R.id.btnT1);
 		View btnT2 = view.findViewById(R.id.btnT2);
@@ -89,13 +90,14 @@ public class SidebarFragment extends Fragment {
 		String modeSuffix = strikeBaseModel.toString().toLowerCase();
 
 		int frameResID = getResources().getIdentifier("frame_retro_" + modeSuffix, "drawable", getActivity().getPackageName());
+		int mapFrameResID = getResources().getIdentifier("frame_minimap_" + modeSuffix, "drawable", getActivity().getPackageName());
 		int buttonResId = getResources().getIdentifier("btn_retro_" + modeSuffix, "drawable", getActivity().getPackageName());
 		int buttonFillResId = getResources().getIdentifier("btn_retro_fill_" + modeSuffix, "drawable", getActivity().getPackageName());
 		int buttonUpgradeResId = getResources().getIdentifier("btn_retro_canv_" + modeSuffix, "drawable", getActivity()
 				.getPackageName());
 
 		outerFrame.setBackgroundResource(frameResID);
-
+		mapFrame.setBackgroundResource(mapFrameResID);
 		btnT1.setBackgroundResource(buttonFillResId);
 		btnT2.setBackgroundResource(buttonFillResId);
 		btnT3.setBackgroundResource(buttonFillResId);

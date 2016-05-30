@@ -16,9 +16,9 @@ import edu.ub.pis2016.pis16.strikecom.engine.physics.Rectangle;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.TurretBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
-import edu.ub.pis2016.pis16.strikecom.gameplay.config.UpgradeConfig;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.TurretItem;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.UpgradeItem;
+import edu.ub.pis2016.pis16.strikecom.screens.DummyGLScreen;
 
 import static edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig.*;
 
@@ -60,6 +60,7 @@ public class StrikeBase extends Vehicle {
 
 	/** Config instance to modify this StrikeBase's properties */
 	private StrikeBaseConfig cfg;
+	private boolean hasFuel = true;
 	private boolean hasPlateArmor = false;
 	private boolean hasCompositeArmor = false;
 	private boolean hasReactiveArmor = false;
@@ -151,7 +152,8 @@ public class StrikeBase extends Vehicle {
 		threadsLeft.update(delta);
 		threadsRight.update(delta);
 
-		computeFuel(delta);
+		if (hasFuel)
+			computeFuel(delta);
 	}
 
 	@Override
@@ -286,7 +288,6 @@ public class StrikeBase extends Vehicle {
 
 		PhysicsComponent turretPhysics = new PhysicsComponent();
 		TurretBehavior turretBehavior = new TurretBehavior();
-		turretBehavior.setAngleLimit(cfg.turret_angle_lim[slot]);
 
 		turret.putComponent(turretBehavior);
 		turret.putComponent(turretPhysics);
@@ -430,10 +431,15 @@ public class StrikeBase extends Vehicle {
 
 	private void computeFuel(float delta) {
 		FragmentedGameActivity.playerState.addFuel( -delta * cfg.fuel_usage * cfg.fuel_usage_mult);
-		if (FragmentedGameActivity.playerState.getFuel() == 0) {
+		if (FragmentedGameActivity.playerState.isOutOfFuel()) {
+			hasFuel = false;
 			cfg.max_speed = 0;
 			cfg.maneuverability = 0;
 			cfg.max_reverse_speed = 0;
+
+			try {
+				((DummyGLScreen)screen).outOfFuel();
+			} catch(Exception ex){}
 		}
 	}
 

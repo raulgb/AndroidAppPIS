@@ -26,25 +26,11 @@ public class TurretBehavior extends BehaviorComponent {
 	private float counter = 0;
 
 	private float randomAngle = 0f;
-	private float minAngle = -360;
-	private float maxAngle = 360;
-
 	private enum State {
 		IDLE,
 		SEARCHING,
 		AIMING,
 	}
-
-	public void setAngleLimit(float minAngle, float maxAngle) {
-		this.minAngle = minAngle;
-		this.maxAngle = maxAngle;
-	}
-
-	public void setAngleLimit(float[] angleLimit) {
-		this.minAngle = angleLimit[0];
-		this.maxAngle = angleLimit[1];
-	}
-
 
 	@Override
 	public void update(float delta) {
@@ -53,13 +39,13 @@ public class TurretBehavior extends BehaviorComponent {
 		PhysicsComponent turretPhys = gameObject.getComponent(PhysicsComponent.class);
 		PhysicsComponent vehiclePhys = gameObject.getParent().getComponent(PhysicsComponent.class);
 
+		//turretPhys.setAngleLimits(minAngle + vehiclePhys.getRotation(), maxAngle + vehiclePhys.getRotation());
+
 		switch (state) {
 			case IDLE:
 				// If we're idling, just look forward
 				if (counter < cfg.idle_seconds) {
-					float angle = MathUtils.max(-180, vehiclePhys.getRotation() + randomAngle);
-					angle = MathUtils.min(angle, 180);
-					tmp.set(8, 0).rotate(angle).add(turretPhys.getPosition());
+					tmp.set(8, 0).rotate(vehiclePhys.getRotation() + randomAngle).add(turretPhys.getPosition());
 					turretPhys.lookAt(tmp, cfg.lerp_speed * .1f);
 
 				} else {
@@ -97,7 +83,7 @@ public class TurretBehavior extends BehaviorComponent {
 					// If none found, return to idle and move around
 					state = State.IDLE;
 					((Turret) gameObject).stopCannonAnimation();
-					randomAngle = MathUtils.random(minAngle, maxAngle);
+					randomAngle = MathUtils.random(-180, 180);
 				}
 				break;
 			case AIMING:
@@ -108,31 +94,12 @@ public class TurretBehavior extends BehaviorComponent {
 					float turretRot = turretPhys.getRotation();
 					float targetAngle = tmp.set(target.getPosition()).sub(turretPhys.getPosition()).angle();
 
-					// I don't know if doing this is necessary. It's supposed to limit angle to the [-180,180] range.
-					float min = MathUtils.max(-180, minAngle + vehiclePhys.getRotation());
-					float max = MathUtils.max(180, maxAngle + vehiclePhys.getRotation());
-					min = MathUtils.min(min, 180);
-					max = MathUtils.min(max, 180);
-
-					// check if target in visual range
-					if (targetAngle < min) {
-						// Move the turret to its minimum angle
-						tmp.set(8, 0).rotate(min).add(turretPhys.getPosition());
-						turretPhys.lookAt(tmp, cfg.lerp_speed * 10);
-
-					} else if (targetAngle > max) {
-						// Move the turret to its maximum angle
-						tmp.set(8, 0).rotate(max).add(turretPhys.getPosition());
-						turretPhys.lookAt(tmp, cfg.lerp_speed * 10);
-
-					} else {
-						// Move the turret towards the target position and check if it's within a 3 degree cone, shoot
-						// a projectile towards it
-						turretPhys.lookAt(target.getPosition(), cfg.lerp_speed);
-						if (Math.abs(Angle.angleDelta(turretRot, targetAngle)) < cfg.fire_cone && counter > cfg.firerate) {
-							shoot();
-							counter = 0;
-						}
+					// Move the turret towards the target position and check if it's within a 3 degree cone, shoot
+					// a projectile towards it
+					turretPhys.lookAt(target.getPosition(), cfg.lerp_speed);
+					if (Math.abs(Angle.angleDelta(turretRot, targetAngle)) < cfg.fire_cone && counter > cfg.firerate) {
+						shoot();
+						counter = 0;
 					}
 				}
 				break;

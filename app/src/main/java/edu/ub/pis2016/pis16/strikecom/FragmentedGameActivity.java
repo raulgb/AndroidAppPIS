@@ -87,7 +87,7 @@ public class FragmentedGameActivity extends Activity {
 
 		playerState = new PlayerState(playerName);
 		playerState.addScrap(2000);
-		playerState.addFuel(100f);
+		playerState.addFuel(50f);
 
 		// Thread updating sidebar once per second
 		new Thread(new Runnable() {
@@ -102,8 +102,8 @@ public class FragmentedGameActivity extends Activity {
 					runOnUiThread(new Runnable() {
 						@Override
 						public void run() {
-							sidebar.updateScrap((Integer) playerState.getScrap());
-							sidebar.updateFuel((Float) playerState.getFuel());
+							sidebar.updateScrap(playerState.getScrap());
+							sidebar.updateFuel(playerState.getFuel());
 						}
 					});
 				}
