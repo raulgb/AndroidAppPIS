@@ -12,16 +12,23 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
 
-        <Button
+        <LinearLayout
             android:layout_width="@dimen/minimap_size"
             android:layout_height="@dimen/minimap_size"
-            android:text=""
-            android:id="@+id/btnMinimap"
-            style="?android:attr/borderlessButtonStyle"
-            android:background="@drawable/btn_retro_mk1"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp" />
+            android:background="#000000"
+            android:orientation="vertical">
+
+            <Button
+                android:layout_width="@dimen/minimap_size"
+                android:layout_height="@dimen/minimap_size"
+                android:text=""
+                android:id="@+id/btnMinimap"
+                style="?android:attr/borderlessButtonStyle"
+                android:background="@drawable/btn_retro_mk1"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp" />
+        </LinearLayout>
 
         <LinearLayout
             android:orientation="vertical"
