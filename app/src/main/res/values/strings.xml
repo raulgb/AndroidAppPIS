@@ -18,10 +18,10 @@
     <string name="sel_menu_mk3name">StrikeBase Mark. III</string>
     <string name="sel_menu_mk4name">StrikeBase Mark. IV</string>
     <string name="sel_menu_mk5name">StrikeBase Mark. V</string>
-    <string name="sel_menu_locked">\?\?\?\?\?\?</string>
+    <string name="sel_menu_locked"></string>
     <string name="enter_name_toast">Please enter a name!</string>
 
-    <!-- Optins -->
+    <!-- Options -->
     <string name="options_Options">Options</string>
     <string name="options_Music">Music</string>
     <string name="options_Sound">Sound</string>
@@ -36,15 +36,6 @@
     <string name="resource_2">Fuel</string>
     <string name="res1_defVal">0000</string>
     <string name="res2_defVal">0000</string>
-    <string name="turret1_button"></string>
-    <string name="turret2_button"></string>
-    <string name="turret3_button"></string>
-    <string name="turret4_button"></string>
-    <string name="turret5_button"></string>
-    <string name="turret6_button"></string>
-    <string name="upgrade1_button"></string>
-    <string name="upgrade2_button"></string>
-    <string name="upgrade3_button"></string>
     <string name="inventory_button">Inventory</string>
     <string name="shop_button">Depot</string>
 
@@ -76,8 +67,6 @@
     <!-- Files -->
     <string name="turretsFile">turrets</string>
     <string name="upgradesFile">upgrades</string>
-    <string name="fuel_canister">250 fuel&#59;fuel_64&#59;dummy&#59;250 units of hydrocarbon-based combustible used to power the base
-        massive engine&#59;FUEL&#59;250</string>
 
     <!--AlertDialog-->
     <string name="alertDialogText">Do you want to exit the game?</string>
@@ -92,5 +81,39 @@
 
     <!-- Game Font-->
     <string name="game_font">fonts/Minecraft.ttf</string>
+
+    <!-- Turret Items -->
+    <string-array
+        name="Turrets" >
+        <item
+            >TURRET_MACHINEGUN;Machinegun;High caliber machinegun.</item>
+        <item
+            >TURRET_GATLING;Gatling gun;Multi-barreled machinegun with superior fire rate.</item>
+        <item
+            >TURRET_CANNON;Battle cannon;This cannon can punch a hole through most enemies.</item>
+        <item
+            >TURRET_HOWITZER;Howitzer;Slow but extremely powerful siege cannon.</item>
+        <item
+            >TURRET_PLASMA;Plasma cannon;It leaves nothing but molten slag with each shot.</item>
+    </string-array>
+
+    <!-- Upgrade Items -->
+    <string-array name="Upgrades" >
+        <item
+            >ARMOUR_COMPOSITE;Composite armour;Highly increases your base endurance.</item>
+        <item
+            >ARMOUR_PLATE;Plated armour;Slightly increases your base endurance.</item>
+        <item
+            >ARMOUR_REACTIVE;Electric reactive armour;Reduces incoming damage.</item>
+        <item
+            >AI;Advanced A.I.;Makes your turrets quicker at aiming enemy vehicles.</item>
+        <item
+            >ENGINE_EFFICIENCY;Advanced power cells;Reduces fuel consumption.</item>
+        <item
+            >SCAVENGER;Scavenger;Increases the amount of scrap obtained by destroying enemy vehicles.</item>
+    </string-array>
+
+    <!-- FUEL -->
+    <string name="FUEL">FUEL;250u fuel;250 units of hydrocarbon-based combustible used to power the base massive engine.</string>
 
 </resources>
