@@ -29,6 +29,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.physics.Rectangle;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.StaticBody;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 import edu.ub.pis2016.pis16.strikecom.gameplay.StrikeBase;
+import edu.ub.pis2016.pis16.strikecom.gameplay.ThreadVehicle;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.CameraBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.VehicleFollowBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig;
@@ -337,6 +338,13 @@ public class DummyGLScreen extends Screen {
 		});
 		// Add to Screen
 		addGameObject(healthBar);
+	}
+
+	public void outOfFuel() {
+		// TODO disable range limitation from existing enemies
+
+		// Disable range limitation from new enemies
+		EnemyFactory.rangeLimited = false;
 	}
 
 	@Deprecated
