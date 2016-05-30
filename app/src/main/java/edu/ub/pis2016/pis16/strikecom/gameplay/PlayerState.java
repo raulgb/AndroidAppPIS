@@ -1,6 +1,5 @@
 package edu.ub.pis2016.pis16.strikecom.gameplay;
 
-import edu.ub.pis2016.pis16.strikecom.FragmentedGameActivity;
 import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.Inventory;
 
@@ -56,9 +55,7 @@ public class PlayerState {
 	}
 
 	private int computeScore() {
-		score = scrap + enemyCounter * enemyCounter;
+		score = scrap + 2*enemyCounter*enemyCounter + MathUtils.round(fuel);
 		return score;
 	}
-
-
 }

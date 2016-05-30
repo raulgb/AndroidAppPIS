@@ -20,7 +20,6 @@ import static edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig.TILE_SIZ
 
 public class EnemyFactory {
 
-	public static boolean rangeLimited = true;
 	private static final Vector2 tmp = new Vector2();
 
 	static public GameObject createRandomEnemyTank(final Screen screen) {
@@ -31,11 +30,11 @@ public class EnemyFactory {
 		// RANDOM enemy config
 		EnemyConfig enemyConfig;
 		float rand = MathUtils.random();
-		if (rand > .9f)
+		if (rand > .95f)
 			enemyConfig = new EnemyConfig(EnemyConfig.Model.large);
-		else if (rand > .7f)
+		else if (rand > .75f)
 			enemyConfig = new EnemyConfig(EnemyConfig.Model.medium_2);
-		else if (rand > .5f)
+		else if (rand > .55f)
 			enemyConfig = new EnemyConfig(EnemyConfig.Model.medium_1);
 		else if (rand > .25f)
 			enemyConfig = new EnemyConfig(EnemyConfig.Model.small_2);
@@ -54,9 +53,7 @@ public class EnemyFactory {
 		VehicleFollowBehavior vfb = new VehicleFollowBehavior();
 		vfb.setTarget(strikeBase);
 		vfb.setMinRange(5 * TILE_SIZE);
-
-		if (rangeLimited)
-			vfb.setMaxRange(16 * TILE_SIZE);
+		vfb.setMaxRange(16 * TILE_SIZE);
 
 		tank.putComponent(vfb);
 		screen.addGameObject(tank);

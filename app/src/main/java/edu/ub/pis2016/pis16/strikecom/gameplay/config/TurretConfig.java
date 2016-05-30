@@ -134,7 +134,7 @@ public class TurretConfig {
 				price = 2000;
 
 				lerp_speed = 0.010f;
-				firerate = 2f;
+				firerate = 3f;
 				fire_cone = 5f;
 				fire_spread = 2f;
 				range = 7f * TILE_SIZE;

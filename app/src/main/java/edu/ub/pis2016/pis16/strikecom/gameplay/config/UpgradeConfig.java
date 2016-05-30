@@ -47,7 +47,7 @@ public class UpgradeConfig {
 			case ARMOUR_REACTIVE:
 				functionName = "armour_reactive";
 				image = "reactive_64";
-				value = 1;
+				value = 3;
 				price = 2000;
 				break;
 

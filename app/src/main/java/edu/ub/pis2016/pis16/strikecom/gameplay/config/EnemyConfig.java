@@ -37,7 +37,7 @@ public class EnemyConfig {
 				region = "enemy_small";
 				index = 0;
 				turretType = new TurretConfig(TurretConfig.Type.TURRET_MACHINEGUN);
-				size *= 1.2f;
+				size *= 0.9f;
 				break;
 			
 			case small_2:
@@ -45,7 +45,7 @@ public class EnemyConfig {
 				region = "enemy_small";
 				index = 1;
 				turretType = new TurretConfig(TurretConfig.Type.TURRET_GATLING);
-				size *= 1.2f;
+				size *= 1.1f;
 				break;
 			
 			case medium_1:
@@ -63,7 +63,7 @@ public class EnemyConfig {
 				maxHitpoints = 50;
 				index = 1;
 				turretType = new TurretConfig(TurretConfig.Type.TURRET_HOWITZER);
-				size *= 1.4f;
+				size *= 1.6f;
 				break;
 			
 			case large:
@@ -72,7 +72,7 @@ public class EnemyConfig {
 				index = -1;
 				maxHitpoints = 75;
 				turretType = new TurretConfig(TurretConfig.Type.TURRET_PLASMA);
-				size *= 1.6f;
+				size *= 1.8f;
 		}
 	}
 }
