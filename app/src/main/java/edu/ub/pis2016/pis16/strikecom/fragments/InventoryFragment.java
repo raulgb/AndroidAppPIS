@@ -220,8 +220,8 @@ public class InventoryFragment extends DialogFragment {
 						UpgradeItem upgrade = inventory.getUpgrade(selectedItem);
 						if (upgrade.isFuel()) { // use fuel if selected
 							callingActivity.useFuel(upgrade);
-						} else if (upgrade.isRepair()) {
-							//callingActivity.useRepair(upgrade);
+						} else if (upgrade.isRepair()) { // use repair if selected
+							callingActivity.useRepair(upgrade);
 						} else {
 							if (selectedSlot < 0) { // show slots dialog if no valid slot has been selected
 								callingActivity.showSlotsDialog(upgrade, false);

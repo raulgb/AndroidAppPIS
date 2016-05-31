@@ -1,4 +1,4 @@
-package edu.ub.pis2016.pis16.strikecom.engine.util;
+package edu.ub.pis2016.pis16.strikecom.engine.opengl;
 
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Texture;
@@ -7,15 +7,25 @@ import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureRegion;
 /**
  * Created by raul on 15/05/16.
  */
-public class font {
+public class Font {
 	public final Texture texture;
 	public final int glyphWidth;
 	public final int glyphHeight;
 	//Contains de ASCII glyphs,
 	// the first element corresponds to the ASCII character with the code 32
-	public final TextureRegion[] glyphs = new TextureRegion[96];
+	public final TextureRegion[] glyphs = new TextureRegion[64];
 
-	public font(Texture texture,
+	public Font(TextureRegion[] letters,  int glyphWidth, int glyphHeight){
+		for (int i = 0; i < 64; i++) {
+			glyphs[i] = letters[i];
+		}
+
+		this.glyphWidth = glyphWidth;
+		this.glyphHeight = glyphHeight;
+		texture = null;
+	}
+
+	public Font(Texture texture,
 				int offsetX, int offsetY,
 				int glyphsPerRow, int glyphWidth, int glyphHeight) {
 		this.texture = texture;
@@ -23,7 +33,7 @@ public class font {
 		this.glyphHeight = glyphHeight;
 		int x = offsetX;
 		int y = offsetY;
-		for (int i = 0; i < 96; i++) {
+		for (int i = 0; i < 64; i++) {
 			glyphs[i] = new TextureRegion(texture, x, y, glyphWidth, glyphHeight);
 			x += glyphWidth;
 			if (x == offsetX + glyphsPerRow * glyphWidth) {

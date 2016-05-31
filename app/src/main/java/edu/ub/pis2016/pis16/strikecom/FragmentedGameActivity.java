@@ -351,6 +351,12 @@ public class FragmentedGameActivity extends Activity {
 		resumeGame();
 	}
 
+	public void useRepair(UpgradeItem repair) {
+		Screen screen = game.getCurrentScreen();
+		StrikeBase strikeBase = screen.getGameObject("StrikeBase", StrikeBase.class);
+		strikeBase.addUpgrade(repair, -1);
+	}
+
 	public void buyItem(String shopID, TurretItem item) {
 		Inventory shopInventory = shopMap.get(shopID).inventory;
 
