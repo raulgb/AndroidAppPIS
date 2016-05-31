@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.1"
-        >
+        android:layout_marginBottom="24dp">
         <TextView
             android:id="@+id/Options"
             android:layout_width="wrap_content"
@@ -25,7 +25,19 @@
             android:textSize="40sp"
             android:textStyle="bold"
             android:textColor="#000"
-            android:layout_marginBottom="12dp"/>
+            />
+
+        <Switch
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dev Mode "
+            android:id="@+id/switchDevMode"
+            android:layout_gravity="center"
+            android:textSize="24dp"
+            android:checked="false"
+            android:clickable="true"
+            android:enabled="true"
+            android:background="#99ffffff"/>
     </LinearLayout>
 
     <LinearLayout

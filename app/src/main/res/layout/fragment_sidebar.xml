@@ -47,8 +47,8 @@
                 android:layout_gravity="center_horizontal">
 
                 <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:src="@drawable/scrap_white_64"
                     android:id="@+id/scrap_icon"
                     />
@@ -73,8 +73,8 @@
                 android:layout_gravity="center">
 
                 <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:src="@drawable/fuel_white_64"
                     android:id="@+id/fuel_icon"/>
                 <TextView

@@ -90,9 +90,16 @@ public class FragmentedGameActivity extends Activity {
 		// Give the sidebar fragment a reference to the game fragment.
 		sidebar.setGame(game);
 
+		boolean devMode = getSharedPreferences(getPackageName(), 0).getBoolean("dev_mode", false);
+
 		playerState = new PlayerState(playerName);
-		playerState.addScrap(GameConfig.STARTING_SCRAP);
-		playerState.addFuel(GameConfig.STARTING_FUEL);
+		if(devMode) {
+			playerState.addScrap(5000);
+			playerState.addFuel(5000);
+		}else {
+			playerState.addScrap(GameConfig.STARTING_SCRAP);
+			playerState.addFuel(GameConfig.STARTING_FUEL);
+		}
 
 		// Thread updating sidebar once per second
 		new Thread(new Runnable() {

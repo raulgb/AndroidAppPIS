@@ -28,6 +28,10 @@ public class TurretBehavior extends BehaviorComponent {
 
 	private float randomAngle = 0f;
 
+	public void setGOArray(Array<GameObject> gameObjects) {
+		goIterator = new Array.ArrayIterator<>(gameObject.getScreen().getGameObjects());
+	}
+
 	private enum State {
 		IDLE,
 		SEARCHING,

@@ -11,8 +11,11 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -23,25 +26,28 @@ import edu.ub.pis2016.pis16.strikecom.engine.opengl.GLGameFragment;
  * Created by root on 13/05/16.
  */
 public class OptionsActivity extends Activity {
-    Activity Options;
-    SeekBar seekBarMusic;
-    SeekBar seekBarSound;
-    TextView textViewMusic;
-    TextView textViewSound;
-    static int percentMusic=100;
-    static int percentSound=100;
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+	Activity Options;
+	SeekBar seekBarMusic;
+	SeekBar seekBarSound;
+	TextView textViewMusic;
+	TextView textViewSound;
+	Switch switchDevMode;
 
-        // Hide window decorations
-        hideSystemUI();
+	static int percentMusic = 100;
+	static int percentSound = 100;
 
-        setContentView(R.layout.activity_options);
-        Options= this;
+	@Override
+	protected void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-        final Typeface myCustomFont= Typeface.createFromAsset(getAssets(), getString(R.string.game_font));
+		// Hide window decorations
+		hideSystemUI();
+
+		setContentView(R.layout.activity_options);
+		Options = this;
+
+		final Typeface myCustomFont = Typeface.createFromAsset(getAssets(), getString(R.string.game_font));
 
 		TextView title = (TextView) findViewById(R.id.Options);
 		TextView musicLabel = (TextView) findViewById(R.id.Music);
@@ -50,59 +56,73 @@ public class OptionsActivity extends Activity {
 		musicLabel.setTypeface(myCustomFont);
 		soundLabel.setTypeface(myCustomFont);
 
-        seekBarMusic = (SeekBar) findViewById(R.id.seekBarMusic);
-        seekBarSound = (SeekBar) findViewById(R.id.seekBarSound);
-        textViewMusic = (TextView) findViewById(R.id.percentMusic);
-        textViewSound = (TextView) findViewById(R.id.percentSound);
-        seekBarMusic.setProgress(percentMusic);
-        seekBarSound.setProgress(percentSound);
-        textViewMusic.setText(percentMusic + "%");
-        textViewSound.setText(percentSound + "%");
+		seekBarMusic = (SeekBar) findViewById(R.id.seekBarMusic);
+		seekBarSound = (SeekBar) findViewById(R.id.seekBarSound);
+		textViewMusic = (TextView) findViewById(R.id.percentMusic);
+		textViewSound = (TextView) findViewById(R.id.percentSound);
+		seekBarMusic.setProgress(percentMusic);
+		seekBarSound.setProgress(percentSound);
+		textViewMusic.setText(percentMusic + "%");
+		textViewSound.setText(percentSound + "%");
 
 		textViewMusic.setTypeface(myCustomFont);
 		textViewSound.setTypeface(myCustomFont);
 
-        seekBarMusic.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            int seekBarPercent = 0;
+		switchDevMode = (Switch) findViewById(R.id.switchDevMode);
 
-            public void onProgressChanged(SeekBar seekBarMusic, int percent, boolean fromUser) {
-                seekBarPercent = percent;
-            }
+		// Toggle dev mode
+		switchDevMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				SharedPreferences prefs = getSharedPreferences(getPackageName(), MODE_PRIVATE);
+				prefs.edit().putBoolean("dev_mode", isChecked).apply();
 
-            public void onStartTrackingTouch(SeekBar seekBarMusic) {
+				if (isChecked) {
+					Toast.makeText(getApplicationContext(), getString(R.string.dev_mode_on), Toast.LENGTH_LONG).show();
+				}
+			}
+		});
 
-            }
+		seekBarMusic.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+			int seekBarPercent = 0;
 
-            public void onStopTrackingTouch(SeekBar seekBarMusic) {
-                textViewMusic.setText(seekBarPercent + "%");
-            }
-        });
-        seekBarSound.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
-            int seekBarPercent=0;
+			public void onProgressChanged(SeekBar seekBarMusic, int percent, boolean fromUser) {
+				seekBarPercent = percent;
+			}
 
-            public void onProgressChanged(SeekBar seekBarMusic, int percent, boolean fromUser){
-                seekBarPercent=percent;
+			public void onStartTrackingTouch(SeekBar seekBarMusic) {
+			}
 
-            }
+			public void onStopTrackingTouch(SeekBar seekBarMusic) {
+				textViewMusic.setText(seekBarPercent + "%");
+			}
+		});
+		seekBarSound.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+			int seekBarPercent = 0;
 
-            public void onStartTrackingTouch(SeekBar seekBarMusic) {
+			public void onProgressChanged(SeekBar seekBarMusic, int percent, boolean fromUser) {
+				seekBarPercent = percent;
 
-            }
+			}
 
-            public void onStopTrackingTouch(SeekBar seekBarMusic) {
-                textViewSound.setText(seekBarPercent + "%");
-            }
-        });
+			public void onStartTrackingTouch(SeekBar seekBarMusic) {
 
-        Button btnSave = (Button) findViewById(R.id.btnSave);
+			}
+
+			public void onStopTrackingTouch(SeekBar seekBarMusic) {
+				textViewSound.setText(seekBarPercent + "%");
+			}
+		});
+
+		Button btnSave = (Button) findViewById(R.id.btnSave);
 		btnSave.setTypeface(myCustomFont);
 
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v){
-                percentMusic=seekBarMusic.getProgress();
-                percentSound=seekBarSound.getProgress();/*
-                Bundle bundle = new Bundle();
+		btnSave.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				percentMusic = seekBarMusic.getProgress();
+				percentSound = seekBarSound.getProgress();/*
+				Bundle bundle = new Bundle();
                 bundle.putInt("percentMusic", percentMusic);
                 StrikeComGLGame fragObj = new StrikeComGLGame();
                 fragObj.newInstance(bundle);
@@ -110,59 +130,58 @@ public class OptionsActivity extends Activity {
                 transaction.replace(R.id.gameFragment, fragObj);
                 transaction.commit();*/
 
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Options);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putInt("percentMusic",percentMusic);
-                editor.commit();
-
-                finish();
+				SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Options);
+				SharedPreferences.Editor editor = sharedPreferences.edit();
+				editor.putInt("percentMusic", percentMusic);
+				editor.commit();
+				finish();
 
                 /*Intent changeToGame = new Intent(Options, MainMenuActivity.class);
-                startActivity(changeToGame);*/
-            }
-        });
+				startActivity(changeToGame);*/
+			}
+		});
 
-        Button btnExit = (Button) findViewById(R.id.btnExit2);
+		Button btnExit = (Button) findViewById(R.id.btnExit2);
 		btnExit.setTypeface(myCustomFont);
 
-        btnExit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                /*Intent changeToGame = new Intent(Options, MainMenuActivity.class);
-                startActivity(changeToGame);*/
-            }
-        });
+		btnExit.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				finish();
+				/*Intent changeToGame = new Intent(Options, MainMenuActivity.class);
+				startActivity(changeToGame);*/
+			}
+		});
 
 
-    }
+	}
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+	@Override
+	protected void onResume() {
+		super.onResume();
 
-        // Hide window decorations
-        hideSystemUI();
-    }
+		// Hide window decorations
+		hideSystemUI();
+	}
 
-    private void hideSystemUI() {
-        // Set the IMMERSIVE flag.
-        // Set the content to appear under the system bars so that the content
-        // doesn't resize when the system bars hide and show.
-        getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-    }
+	private void hideSystemUI() {
+		// Set the IMMERSIVE flag.
+		// Set the content to appear under the system bars so that the content
+		// doesn't resize when the system bars hide and show.
+		getWindow().getDecorView().setSystemUiVisibility(
+				View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+						| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+						| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+						| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+						| View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+						| View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+	}
 
-    public int getPercentMusic(){
-        return percentMusic;
-    }
+	public int getPercentMusic() {
+		return percentMusic;
+	}
 
-    public int getPercentSound(){
-        return percentSound;
-    }
+	public int getPercentSound() {
+		return percentSound;
+	}
 }

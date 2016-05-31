@@ -18,7 +18,7 @@
     <string name="sel_menu_mk3name">StrikeBase Mark. III</string>
     <string name="sel_menu_mk4name">StrikeBase Mark. IV</string>
     <string name="sel_menu_mk5name">StrikeBase Mark. V</string>
-    <string name="sel_menu_locked"></string>
+    <string name="sel_menu_locked">Bloqueado</string>
     <string name="enter_name_toast">&#161;Introduce un nombre por favor!</string>
 
     <!-- Options -->
@@ -38,7 +38,6 @@
     <string name="res2_defVal">0000</string>
     <string name="inventory_button">Inventario</string>
     <string name="shop_button">Almacén</string>
-    <string name="fuelMessage">Has agotado las reservas de fuel!</string>
 
     <!-- Inventory -->
     <string name="equip_button">Equipar</string>
@@ -122,5 +121,7 @@
 
     <!-- FUEL -->
     <string name="FUEL">FUEL;250u fuel;250 unidades de hidrocarburo empleado en alimentar el immenso motor de tu base.</string>
+    <string name="fuel_message">Te has quedado sin combustible!</string>
+    <string name="dev_mode_on">Modo desarrollador activado. Todo desbloqueado.</string>
 
 </resources>

@@ -68,12 +68,10 @@ public class StrikeBaseConfig {
 	/** Damage factor per turret. Range [0,-] */
 	public float[] turret_dmg_mult;
 
-	public int anim_thread_frames;
-	public int anim_hull_frames;
+	public int anim_thread_frames = 4;
+	public int anim_hull_frames = 3;
 
 	public StrikeBaseConfig(Model model) {
-		anim_thread_frames = 4;
-		anim_hull_frames = 3;
 		this.model = model;
 
 		switch (model) {

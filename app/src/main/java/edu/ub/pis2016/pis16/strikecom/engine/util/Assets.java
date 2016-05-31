@@ -70,7 +70,7 @@ public class Assets {
 
 				// Global sprite atlas
 				SPRITE_ATLAS = new TextureAtlas(game, "sprites/sprites.atlas");
-				FONT_ATLAS = new TextureAtlas(game, "sprites/font.atlas");
+				FONT_ATLAS = new TextureAtlas(game, "sprites/font.atlas", 64);
 				font = new Font(Assets.FONT_ATLAS.getRegions("char"), 32,32);
 
 				music_bg = game.getAudio().newMusic("music/waterflame-glorious_morning_2.mp3");
@@ -106,8 +106,20 @@ public class Assets {
 	/** Disposes of all managed assets */
 	public static void disposeAll() {
 		ready = false;
+
+		// Stop and dispose SFX
+		sfx_expl_heavy.dispose();
+		sfx_expl_light.dispose();
+		sfx_hit.dispose();
+		sfx_shoot.dispose();
+
 		music_bg.stop();
 		music_bg.dispose();
+		music_bg_2.stop();
+		music_bg_2.dispose();
+		music_tense.stop();
+		music_tense.dispose();
+
 		SPRITE_ATLAS.dispose();
 	}
 }

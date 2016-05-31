@@ -29,6 +29,7 @@ import edu.ub.pis2016.pis16.strikecom.gameplay.HealthBar;
 import edu.ub.pis2016.pis16.strikecom.gameplay.Shop;
 import edu.ub.pis2016.pis16.strikecom.gameplay.StrikeBase;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.CameraBehavior;
+import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.TurretBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.VehicleFollowBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
@@ -211,6 +212,14 @@ public class GameScreen extends Screen {
 		Texture.reloadManagedTextures();
 		GL10 gl = game.getGLGraphics().getGL();
 		gl.glClearColor(.25f, .75f, .25f, 1f);
+
+		// Refresh iterator for turrets
+		for (GameObject go : getGameObjects()) {
+			TurretBehavior tbh = go.getComponent(TurretBehavior.class);
+			if (tbh != null)
+				tbh.setGOArray(getGameObjects());
+		}
+
 	}
 
 	@Override
@@ -227,6 +236,13 @@ public class GameScreen extends Screen {
 	@Override
 	public void dispose() {
 		Log.i("GameScreen", "Disposed");
+
+		// Delete root gameobjects
+		for (GameObject go : getGameObjects())
+			if (go.getParent() == null)
+				removeGameObject(go);
+		commitGameObjectChanges();
+
 		Assets.disposeAll();
 	}
 

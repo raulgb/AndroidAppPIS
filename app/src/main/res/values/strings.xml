@@ -18,7 +18,7 @@
     <string name="sel_menu_mk3name">StrikeBase Mark. III</string>
     <string name="sel_menu_mk4name">StrikeBase Mark. IV</string>
     <string name="sel_menu_mk5name">StrikeBase Mark. V</string>
-    <string name="sel_menu_locked"></string>
+    <string name="sel_menu_locked">Locked</string>
     <string name="enter_name_toast">Please enter a name!</string>
 
     <!-- Options -->
@@ -38,7 +38,7 @@
     <string name="res2_defVal">0000</string>
     <string name="inventory_button">Inventory</string>
     <string name="shop_button">Depot</string>
-    <string name="fuelMessage">You ran out of fuel!</string>
+    <string name="fuel_message">You ran out of fuel!</string>
 
     <!-- Inventory -->
     <string name="equip_button">Equip</string>
@@ -79,6 +79,8 @@
     <string name="score_label">Your score:</string>
     <string name="submit_button">Submit</string>
     <string name="gameover_news">New Strikebase model unlocked!</string>
+
+    <string name="dev_mode_on">Dev Mode enabled, Everything unlocked.</string>
 
     <!-- Game Font-->
     <string name="game_font">fonts/Minecraft.ttf</string>

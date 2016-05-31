@@ -8,7 +8,9 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.v4.util.CircularArray;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,17 +18,27 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.gameplay.PlayerState;
+import edu.ub.pis2016.pis16.strikecom.gameplay.StrikeBase;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
 
-/**
- * Created by Akira on 2016-03-08.
- */
 public class SelectMenuActivity extends AppCompatActivity {
 
 	Activity selectMenu;
 
 	private int selectedConfig = 0;
+
+	private Typeface myCustomFont;
+	private SharedPreferences sharedPreferences;
+
+	private TextView modelName;
+	private Button btnNext;
+	private Button btnPrev;
+	private Button btnStart;
+
+	private TextView title;
+	private TextView label;
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,28 +51,32 @@ public class SelectMenuActivity extends AppCompatActivity {
 
 		selectMenu = this;
 
-		final Typeface myCustomFont= Typeface.createFromAsset(getAssets(), getString(R.string.game_font));
-		final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(selectMenu);
+		myCustomFont = Typeface.createFromAsset(getAssets(), getString(R.string.game_font));
+		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(selectMenu);
 
-		TextView title = (TextView) findViewById(R.id.textView);
-		TextView label = (TextView) findViewById(R.id.textView3);
+		sharedPreferences.edit().putBoolean("sbmk3", true).apply();
 
-		final TextView modelName = (TextView) findViewById(R.id.textView2);
-		final Button btnNext = (Button) findViewById(R.id.btnNext);
-		final Button btnPrev = (Button) findViewById(R.id.btnPrev);
-		final Button btnStart = (Button) findViewById(R.id.btnStart);
+		modelName = (TextView) findViewById(R.id.textView2);
+		btnNext = (Button) findViewById(R.id.btnNext);
+		btnPrev = (Button) findViewById(R.id.btnPrev);
+		btnStart = (Button) findViewById(R.id.btnStart);
 
+		title = (TextView) findViewById(R.id.textView);
+		label = (TextView) findViewById(R.id.textView3);
 		title.setTypeface(myCustomFont);
 		label.setTypeface(myCustomFont);
+
 		modelName.setTypeface(myCustomFont);
 		btnNext.setTypeface(myCustomFont);
 		btnPrev.setTypeface(myCustomFont);
 		btnStart.setTypeface(myCustomFont);
 
+		// Display the first Strikebase
+		showStrikeBaseSelection(StrikeBaseConfig.Model.MK3);
+
 		btnStart.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-
 				// cannot start gameFrag if a name has not been introduced
 				EditText textName = (EditText) findViewById(R.id.textName);
 				textName.setTypeface(myCustomFont);
@@ -80,193 +96,19 @@ public class SelectMenuActivity extends AppCompatActivity {
 			}
 		});
 
-
 		btnNext.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				selectedConfig += 1;
-				if (selectedConfig == StrikeBaseConfig.Model.values().length){
-					selectedConfig = 0;
-				}
-
-				// TODO Draw a cooler image for locked models
-				String model = "locked";
-				switch (StrikeBaseConfig.Model.values()[selectedConfig]){
-					case MK1:
-						model = "sbmk1";
-						if (sharedPreferences.getBoolean(model, false)) {
-							btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk1);
-							btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk1);
-							modelName.setText(getString(R.string.sel_menu_mk1name));
-							btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk1);
-							btnStart.setEnabled(true);
-							break;
-						}
-						modelName.setText(getString(R.string.sel_menu_locked));
-						btnStart.setBackgroundResource(R.drawable.btn_retro_act);
-						btnStart.setEnabled(false);
-						model = "locked";
-						break;
-
-					case MK2:
-						model = "sbmk2";
-						if (sharedPreferences.getBoolean(model, false)) {
-							btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk2);
-							btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk2);
-							modelName.setText(getString(R.string.sel_menu_mk2name));
-							btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk2);
-							btnStart.setEnabled(true);
-							break;
-						}
-						modelName.setText(getString(R.string.sel_menu_locked));
-						btnStart.setBackgroundResource(R.drawable.btn_retro_act);
-						btnStart.setEnabled(false);
-						model = "locked";
-						break;
-
-					case MK3:
-						model = "sbmk3";
-						if (sharedPreferences.getBoolean(model, true)) {
-							btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk3);
-							btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk3);
-							modelName.setText(getString(R.string.sel_menu_mk3name));
-							btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk3);
-							btnStart.setEnabled(true);
-							break;
-						}
-						modelName.setText(getString(R.string.sel_menu_locked));
-						btnStart.setBackgroundResource(R.drawable.btn_retro_act);
-						btnStart.setEnabled(false);
-						model = "locked";
-						break;
-
-					case MK4:
-						model = "sbmk4";
-						if (sharedPreferences.getBoolean(model, false)) {
-							btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk4);
-							btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk4);
-							modelName.setText(getString(R.string.sel_menu_mk4name));
-							btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk4);
-							btnStart.setEnabled(true);
-							break;
-						}
-						modelName.setText(getString(R.string.sel_menu_locked));
-						btnStart.setBackgroundResource(R.drawable.btn_retro_act);
-						btnStart.setEnabled(false);
-						model = "locked";
-						break;
-
-					case MK5:
-						model = "sbmk5";
-						if (sharedPreferences.getBoolean(model, false)) {
-							btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk5);
-							btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk5);
-							modelName.setText(getString(R.string.sel_menu_mk5name));
-							btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk5);
-							btnStart.setEnabled(true);
-							break;
-						}
-						modelName.setText(getString(R.string.sel_menu_locked));
-						btnStart.setBackgroundResource(R.drawable.btn_retro_act);
-						btnStart.setEnabled(false);
-						model = "locked";
-						break;
-				}
-				((ImageView) findViewById(R.id.imgSelectedBase)).setImageResource(getResources().getIdentifier(model, "drawable", getPackageName()));
+				selectedConfig = MathUtils.mod(selectedConfig + 1, StrikeBaseConfig.Model.values().length);
+				showStrikeBaseSelection(StrikeBaseConfig.Model.values()[selectedConfig]);
 			}
 		});
 
 		btnPrev.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				selectedConfig -= 1;
-				if (selectedConfig < 0){
-					selectedConfig = StrikeBaseConfig.Model.values().length -1;
-				}
-
-				String model = "locked";
-				switch (StrikeBaseConfig.Model.values()[selectedConfig]){
-					case MK1:
-						model = "sbmk1";
-						if (sharedPreferences.getBoolean(model, false)) {
-							btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk1);
-							btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk1);
-							modelName.setText(getString(R.string.sel_menu_mk1name));
-							btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk1);
-							btnStart.setEnabled(true);
-							break;
-						}
-						modelName.setText(getString(R.string.sel_menu_locked));
-						btnStart.setBackgroundResource(R.drawable.btn_retro_act);
-						btnStart.setEnabled(false);
-						model = "locked";
-						break;
-
-					case MK2:
-						model = "sbmk2";
-						if (sharedPreferences.getBoolean(model, false)) {
-							btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk2);
-							btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk2);
-							modelName.setText(getString(R.string.sel_menu_mk2name));
-							btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk2);
-							btnStart.setEnabled(true);
-							break;
-						}
-						modelName.setText(getString(R.string.sel_menu_locked));
-						btnStart.setBackgroundResource(R.drawable.btn_retro_act);
-						btnStart.setEnabled(false);
-						model = "locked";
-						break;
-
-					case MK3:
-						model = "sbmk3";
-						if (sharedPreferences.getBoolean(model, true)) {
-							btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk3);
-							btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk3);
-							modelName.setText(getString(R.string.sel_menu_mk3name));
-							btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk3);
-							btnStart.setEnabled(true);
-							break;
-						}
-						modelName.setText(getString(R.string.sel_menu_locked));
-						btnStart.setBackgroundResource(R.drawable.btn_retro_act);
-						btnStart.setEnabled(false);
-						model = "locked";
-						break;
-
-					case MK4:
-						model = "sbmk4";
-						if (sharedPreferences.getBoolean(model, false)) {
-							btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk4);
-							btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk4);
-							modelName.setText(getString(R.string.sel_menu_mk4name));
-							btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk4);
-							btnStart.setEnabled(true);
-							break;
-						}
-						modelName.setText(getString(R.string.sel_menu_locked));
-						btnStart.setBackgroundResource(R.drawable.btn_retro_act);
-						btnStart.setEnabled(false);
-						model = "locked";
-						break;
-
-					case MK5:
-						model = "sbmk5";
-						if (sharedPreferences.getBoolean(model, false)) {
-							btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk5);
-							btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk5);
-							modelName.setText(getString(R.string.sel_menu_mk5name));
-							btnStart.setBackgroundResource(R.drawable.btn_retro_canv_mk5);
-							btnStart.setEnabled(true);
-							break;
-						}
-						modelName.setText(getString(R.string.sel_menu_locked));
-						btnStart.setBackgroundResource(R.drawable.btn_retro_act);
-						btnStart.setEnabled(false);
-						model = "locked";
-						break;
-				}
-				((ImageView) findViewById(R.id.imgSelectedBase)).setImageResource(getResources().getIdentifier(model, "drawable", getPackageName()));
+				selectedConfig = MathUtils.mod(selectedConfig - 1, StrikeBaseConfig.Model.values().length);
+				showStrikeBaseSelection(StrikeBaseConfig.Model.values()[selectedConfig]);
 			}
 		});
 
@@ -276,6 +118,35 @@ public class SelectMenuActivity extends AppCompatActivity {
 		p.setAntiAlias(false);
 		findViewById(R.id.imgSelectedBase).setLayerPaint(p);
 	}
+
+	private void showStrikeBaseSelection(StrikeBaseConfig.Model model) {
+		String suffix = model.toString().toLowerCase();
+
+		Log.i("Select", model.toString());
+
+		boolean devMode = getSharedPreferences(getPackageName(), 0).getBoolean("dev_mode", false);
+
+		ImageView imageView = ((ImageView) findViewById(R.id.imgSelectedBase));
+		int btnResId = getResources().getIdentifier("btn_retro_canv_" + suffix, "drawable", getPackageName());
+		int sbNameResId = getResources().getIdentifier("sel_menu_" + suffix + "name", "string", getPackageName());
+
+		if (devMode || sharedPreferences.getBoolean("sb" + suffix, false)) {
+			btnNext.setBackgroundResource(btnResId);
+			btnPrev.setBackgroundResource(btnResId);
+			modelName.setText(getString(sbNameResId));
+			btnStart.setBackgroundResource(btnResId);
+			btnStart.setEnabled(true);
+
+			imageView.setImageResource(getResources().getIdentifier("sb" + suffix, "drawable", getPackageName()));
+			return;
+		}
+
+		imageView.setImageResource(R.drawable.locked);
+		modelName.setText(getString(R.string.sel_menu_locked));
+		btnStart.setBackgroundResource(R.drawable.btn_retro_act);
+		btnStart.setEnabled(false);
+	}
+
 
 	@Override
 	protected void onResume() {

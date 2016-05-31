@@ -26,7 +26,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.opengl.TextureRegion;
 public class TextureAtlas {
 
 	/** Configure the maxium number of indices per region name here. */
-	private static final int PAGE_SIZE = 16;
+	private int PAGE_SIZE = 8;
 
 	Game game;
 	Texture texture;
@@ -41,8 +41,14 @@ public class TextureAtlas {
 	 * @param filepath Path to the .atlas file.
 	 */
 	public TextureAtlas(Game game, String filepath) {
+		this(game, filepath, 16);
+	}
+
+	/** Define a page size for very deep Atlases */
+	public TextureAtlas(Game game, String filepath, int pageSize) {
 		this.game = game;
 		this.regions = new HashMap<>();
+		this.PAGE_SIZE = pageSize;
 
 		// Extract path
 		File filePath = new File(filepath);

@@ -18,7 +18,7 @@
     <string name="sel_menu_mk3name">StrikeBase Mark. III</string>
     <string name="sel_menu_mk4name">StrikeBase Mark. IV</string>
     <string name="sel_menu_mk5name">StrikeBase Mark. V</string>
-    <string name="sel_menu_locked"></string>
+    <string name="sel_menu_locked">Bloquejat</string>
     <string name="enter_name_toast">Introdueix un nom!</string>
 
     <!-- Options -->
@@ -38,7 +38,7 @@
     <string name="res2_defVal">0000</string>
     <string name="inventory_button">Inventari</string>
     <string name="shop_button">Magatzem</string>
-    <string name="fuelMessage">Has esgotat les reserves de fuel!</string>
+    <string name="fuel_message">Has esgotat les reserves de fuel!</string>
 
     <!-- Inventory -->
     <string name="equip_button">Equipar</string>
@@ -122,5 +122,6 @@
 
     <!-- FUEL -->
     <string name="FUEL">FUEL;250u fuel;250 unitats d&#8216;hidrocarbur usat per alimentar el massiu motor de la base.</string>
+    <string name="dev_mode_on">Mode de desarrollament activat. Totes les caracteristiques desbloquejades.</string>
 
 </resources>
