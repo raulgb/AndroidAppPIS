@@ -134,4 +134,10 @@ public class Texture implements Disposable {
 		managedTextures.clear();
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if(o instanceof Texture)
+			return this.fileName.equalsIgnoreCase(((Texture)o).fileName);
+		return false;
+	}
 }

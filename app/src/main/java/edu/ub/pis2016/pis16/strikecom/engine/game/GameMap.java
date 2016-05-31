@@ -26,6 +26,8 @@ import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Perlin2D;
 import edu.ub.pis2016.pis16.strikecom.engine.util.performance.Array;
 
+import static edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig.*;
+
 /**
  * Created by Alexander Bevzenko on 10/05/16.
  * supposed to contain everything related to map
@@ -312,6 +314,7 @@ public class GameMap extends GameObject {
 					for (int y = 0; y < height; y++) {
 						for (int x = 0; x < width; x++) {
 							if (discoveredTable[y][x]) {
+							//if (true) {
 								bmp.setPixel(y, x, calcColor(pTable[y][x]));
 
 							} else {
@@ -365,7 +368,7 @@ public class GameMap extends GameObject {
 					fout.close();
 
 					// Update minimap
-					((FragmentedGameActivity) act).sidebar.updateMiniMap();
+					((FragmentedGameActivity) act).sidebar.updateMiniMap(center, (int)(MAP_SIZE/4f));
 				} catch (Exception e) {
 					e.printStackTrace();
 					Log.e("GameMap", "Failed to create MiniMap");

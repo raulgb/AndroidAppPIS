@@ -2,7 +2,9 @@ package edu.ub.pis2016.pis16.strikecom.fragments;
 
 import android.app.Fragment;
 
+import android.graphics.BitmapRegionDecoder;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -18,6 +20,8 @@ import java.util.HashMap;
 import edu.ub.pis2016.pis16.strikecom.R;
 import edu.ub.pis2016.pis16.strikecom.StrikeComGLGame;
 import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
+import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
+import edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
 
 
@@ -368,13 +372,29 @@ public class SidebarFragment extends Fragment {
 		fuelText.setText(String.format("%04d", MathUtils.round(fuel)));
 	}
 
-	public void updateMiniMap() {
+	Vector2 tmp = new Vector2();
+
+	public void updateMiniMap(final Vector2 center, final int radius) {
 		getActivity().runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
 				try {
-					//btnMinimap.draw(new Canvas(bm.copy(Bitmap.Config.ARGB_8888, true)));
-					BitmapDrawable bm = new BitmapDrawable("/data/data/edu.ub.pis2016.pis16.strikecom/files/gameMap.png");
+
+					tmp.set(center).scl(1f/ GameConfig.TILE_SIZE);
+
+					int left = MathUtils.max(0, (int) tmp.x - radius);
+					int right = MathUtils.min(GameConfig.MAP_SIZE, (int) tmp.x + radius);
+
+					int bottom = MathUtils.min(GameConfig.MAP_SIZE, (int) tmp.y + radius);
+					int top = MathUtils.max(0, (int) tmp.y - radius);
+
+					BitmapRegionDecoder decoder = BitmapRegionDecoder.newInstance("/data/data/edu.ub.pis2016.pis16" +
+									".strikecom/files/gameMap.png",
+							true);
+					Rect decodeRect = new Rect(top, left, bottom, right);
+
+					BitmapDrawable bm = new BitmapDrawable(decoder.decodeRegion(decodeRect, null));
+					//BitmapDrawable bm = new BitmapDrawable("/data/data/edu.ub.pis2016.pis16.strikecom/files/gameMap.png");
 					btnMinimap.setBackground(bm);
 					//btnMinimap.setRotation(-90);
 				} catch (Exception e) {

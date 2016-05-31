@@ -189,7 +189,7 @@ public class SpriteBatch {
 
 	/** Checks if the texture is the same as was called in the begin() method. */
 	private void checkTexture(Texture texture) {
-		if (boundTexture != texture)
+		if (!boundTexture.equals(texture))
 			throw new IllegalArgumentException("Send a different texture since begin(): " + texture.fileName);
 	}
 }
