@@ -57,9 +57,8 @@
             android:background="@drawable/btn_retro_mk2"
             android:text="@string/exit_button"
             android:id="@+id/btnExit"
-            android:layout_weight="0.5"
+            android:layout_weight="1"
             android:layout_marginLeft="20dp"
-            android:layout_marginRight="40dp"
             android:textColor="#EEE"/>
 
         <Button
@@ -68,7 +67,7 @@
             android:background="@drawable/btn_retro_mk2"
             android:text="@string/submit_button"
             android:id="@+id/btnSubmit"
-            android:layout_weight="0.5"
+            android:layout_weight="0"
             android:layout_marginRight="20dp"
             android:textColor="#EEE"/>
     </LinearLayout>
