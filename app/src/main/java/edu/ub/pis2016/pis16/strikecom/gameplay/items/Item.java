@@ -1,9 +1,12 @@
 package edu.ub.pis2016.pis16.strikecom.gameplay.items;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 // Class represents in-game objects, containing all the information relevant to the inventory display.
 public abstract class Item implements Comparable<Item> {
+	public static Context context = null;
+
 	protected String name;    // object name
 	protected String image;    // item icon
 	protected String flavour; //description, fluff

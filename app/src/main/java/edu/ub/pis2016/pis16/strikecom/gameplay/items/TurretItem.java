@@ -1,10 +1,10 @@
 package edu.ub.pis2016.pis16.strikecom.gameplay.items;
 
+import edu.ub.pis2016.pis16.strikecom.R;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.TurretConfig;
 
 public class TurretItem extends Item {
 	private String model;
-
 	public TurretConfig cfg = null;
 
 	// Builder
@@ -43,8 +43,15 @@ public class TurretItem extends Item {
 		firerate = Math.round( 10f / cfg.firerate );
 		range = Math.round(cfg.range);
 
-		return (name + "\n\n\tattack: " + Integer.toString(attack) + "\n\tfirerate: " + Integer.toString(firerate) + "\n\trange: " + Integer
-				.toString(range) + "\n\tprice: " + Integer.toString(price));
+		if (context == null) {
+			return (name + "\n\n\tattack: " + Integer.toString(attack) + "\n\tfirerate: " + Integer.toString(firerate) + "\n\trange: " +
+					Integer
+					.toString(range) + "\n\tprice: " + Integer.toString(price));
+		} else {
+			return (name + "\n\n\t" + context.getString(R.string.stat_attack) + Integer.toString(attack) + "\n\t" + context.getString(R
+					.string.stat_rate) + Integer.toString(firerate) + "\n\t" + context.getString(R.string.stat_range) + Integer.toString
+					(range) + "\n\t" + context.getString(R.string.stat_price) + Integer.toString(price));
+		}
 	}
 
 	public TurretConfig getConfig() {

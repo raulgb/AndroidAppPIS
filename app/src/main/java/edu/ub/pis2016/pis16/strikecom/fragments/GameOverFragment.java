@@ -92,12 +92,14 @@ public class GameOverFragment extends DialogFragment{
 		SharedPreferences.Editor editor = sharedPreferences.edit();
 
 		boolean unlocked = false;
+		/*
 		if (score >= 1000) {
 			if (!sharedPreferences.getBoolean("sbmk2", false))
 				unlocked = true;
 			editor.putBoolean("sbmk2", true);
 		}
-		if (score >= 2500) {
+		*/
+		if (score >= 2000) {
 			if (!sharedPreferences.getBoolean("sbmk1", false))
 				unlocked = true;
 			editor.putBoolean("sbmk1", true);
