@@ -276,6 +276,7 @@ public class StrikeBase extends Vehicle {
 		accelerate(-power * 0.75f);
 	}
 
+	/** Add a TurretItem to this strikebase and to the Screen */
 	public void addTurret(TurretItem item, int slot) {
 		String tName = "turret_" + Integer.toString(slot);
 		Turret turret = new Turret(item.getModel(), this, tName);
@@ -284,7 +285,7 @@ public class StrikeBase extends Vehicle {
 		turret.setParent(this);
 		turret.setLayer(Screen.LAYER_STRIKEBASE_TURRETS);
 
-		turret.setTag(getTag() + "_" + tName);
+		turret.setTag(getTurretTag(slot));
 
 		PhysicsComponent turretPhysics = new PhysicsComponent();
 		TurretBehavior turretBehavior = new TurretBehavior();
@@ -295,23 +296,36 @@ public class StrikeBase extends Vehicle {
 		if (hasAI)
 			turret.cfg.lerp_speed *= lerpModifier;
 
-		screen.addGameObject(tName, turret);
+		// Player turrets are faster to track targets
+		turret.cfg.idle_seconds = 0.25f;
+
+		// Store in local arrays
 		equippedTurrets.put(slot, item);
-		equippedGameObjects.put(tName, turret);
+		equippedGameObjects.put(turret.getTag(), turret);
+
+		screen.addGameObject(turret.getTag(), turret);
 	}
 
+	/** Remove a Turret slot from this StrikeBase and the Screen */
 	public void removeTurret(int slot) {
-		String tName = "turret_" + Integer.toString(slot);
-		screen.removeGameObject(screen.getGameObject(tName));
+		screen.removeGameObject(getTurretTag(slot));
 
 		equippedTurrets.remove(slot);
-		equippedGameObjects.remove(tName);
+		equippedGameObjects.remove(getTurretTag(slot));
+	}
+
+	/** Generate a Turret tag for a given slot */
+	private String getTurretTag(int slot) {
+		return getTag() + "_turret_" + slot;
 	}
 
 	public void addUpgrade(UpgradeItem item, int slot) {
 
-		switch (item.cfg.functionName) {
-			case "armour_plate":
+		switch (item.cfg.function) {
+			case FUEL:
+				break;
+
+			case ARMOUR_PLATE:
 				// Increases endurance
 				if (!hasPlateArmor) {
 					this.hitpoints += MathUtils.round(item.cfg.value);
@@ -320,7 +334,7 @@ public class StrikeBase extends Vehicle {
 				}
 				break;
 
-			case "armour_composite":
+			case ARMOUR_COMPOSITE:
 				// Increases endurance
 				if (!hasCompositeArmor) {
 					this.hitpoints += MathUtils.round(item.cfg.value);
@@ -329,13 +343,13 @@ public class StrikeBase extends Vehicle {
 				}
 				break;
 
-			case "armour_reactive":
+			case ARMOUR_REACTIVE:
 				// Reduces incoming damage
 				hasReactiveArmor = true;
 				dmgModifier = MathUtils.round(item.cfg.value);
 				break;
 
-			case "ai":
+			case AI:
 				// Smart turrets
 				if (!hasAI) {
 					lerpModifier = item.cfg.value;
@@ -344,17 +358,14 @@ public class StrikeBase extends Vehicle {
 				}
 				break;
 
-			case "engine":
+			case ENGINE_EFFICIENCY:
 				// Reduces fuel consumption
 				cfg.fuel_usage_mult = item.cfg.value;
 				break;
 
-			case "scavenger":
+			case SCAVENGER:
 				// Increases scrap income
 				FragmentedGameActivity.playerState.setScrapMultiplier(item.cfg.value);
-				break;
-
-			default:
 				break;
 		}
 
@@ -364,37 +375,43 @@ public class StrikeBase extends Vehicle {
 	public void removeUpgrade(int slot) {
 
 		UpgradeItem item = equippedUpgrades.get(slot);
-		switch (item.cfg.functionName) {
-			case "ai":
+		switch (item.cfg.function) {
+			case FUEL:
+				break;
+
+			case AI:
 				lerpModifier = 1f;
 				hasAI = false;
 				setTurretAI();
 				// Smart turrets
 				break;
-			case "armour_composite":
+
+			case ARMOUR_COMPOSITE:
 				this.maxHitpoints -= MathUtils.round(item.cfg.value);
 				this.hitpoints = MathUtils.min(this.hitpoints, this.maxHitpoints);
 				hasPlateArmor = false;
 				// Increases endurance
 				break;
-			case "armour_plate":
+
+			case ARMOUR_PLATE:
 				this.maxHitpoints -= MathUtils.round(item.cfg.value);
 				this.hitpoints = MathUtils.min(this.hitpoints, this.maxHitpoints);
 				hasCompositeArmor = false;
 				// Slightly increases endurance
 				break;
-			case "armour_reactive":
-				dmgModifier = 1;
+
+			case ARMOUR_REACTIVE:
+				dmgModifier = 5;
 				hasReactiveArmor = false;
 				break;
-			case "engine":
+
+			case ENGINE_EFFICIENCY:
 				// Reduces fuel consumption
 				cfg.fuel_usage_mult = 1;
 				break;
-			case "scavenger":
+
+			case SCAVENGER:
 				FragmentedGameActivity.playerState.setScrapMultiplier(1f);
-				break;
-			default:
 				break;
 		}
 
@@ -419,27 +436,26 @@ public class StrikeBase extends Vehicle {
 
 	private void setTurretAI() {
 		if (hasAI) {
-			for(String k : equippedGameObjects.keySet()) {
+			for (String k : equippedGameObjects.keySet()) {
 				equippedGameObjects.get(k).cfg.lerp_speed *= lerpModifier;
 			}
 		} else {
-			for(String k : equippedGameObjects.keySet()) {
+			for (String k : equippedGameObjects.keySet()) {
 				equippedGameObjects.get(k).cfg.lerp_speed /= lerpModifier;
 			}
 		}
 	}
 
 	private void computeFuel(float delta) {
-		FragmentedGameActivity.playerState.addFuel( -delta * cfg.fuel_usage * cfg.fuel_usage_mult);
+		FragmentedGameActivity.playerState.addFuel(-delta * cfg.fuel_usage * cfg.fuel_usage_mult);
 		if (FragmentedGameActivity.playerState.isOutOfFuel()) {
 			hasFuel = false;
-			cfg.max_speed = 0;
-			cfg.maneuverability = 0;
-			cfg.max_reverse_speed = 0;
+			cfg.accel = 0;
 
-			try {
-				((GameScreen)screen).outOfFuel();
-			} catch(Exception ex){}
+			leftThreadDampening = 0.90f;
+			rightThreadDampening = 0.90f;
+
+			((GameScreen) screen).outOfFuel();
 		}
 	}
 

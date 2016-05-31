@@ -20,12 +20,14 @@ import edu.ub.pis2016.pis16.strikecom.gameplay.factories.ProjectileFactory;
 public class TurretBehavior extends BehaviorComponent {
 
 	private GameObject target = null;
-	private Vector2 tmp = new Vector2();
+	private static Vector2 tmp = new Vector2();
+	private static Array.ArrayIterator<GameObject> goIterator;
 
 	private State state = State.IDLE;
 	private float counter = 0;
 
 	private float randomAngle = 0f;
+
 	private enum State {
 		IDLE,
 		SEARCHING,
@@ -33,70 +35,70 @@ public class TurretBehavior extends BehaviorComponent {
 	}
 
 	@Override
+	protected void init() {
+		// Create iterator for the first time
+		if (goIterator == null)
+			goIterator = new Array.ArrayIterator<>(gameObject.getScreen().getGameObjects());
+	}
+
+	@Override
 	public void update(float delta) {
 		counter += delta;
 		TurretConfig cfg = ((Turret) gameObject).cfg;
 		PhysicsComponent turretPhys = gameObject.getComponent(PhysicsComponent.class);
-		PhysicsComponent vehiclePhys = gameObject.getParent().getComponent(PhysicsComponent.class);
 
+		//PhysicsComponent vehiclePhys = gameObject.getParent().getComponent(PhysicsComponent.class);
 		//turretPhys.setAngleLimits(minAngle + vehiclePhys.getRotation(), maxAngle + vehiclePhys.getRotation());
 
 		switch (state) {
 			case IDLE:
 				// If we're idling, just look forward
 				if (counter < cfg.idle_seconds) {
-					tmp.set(8, 0).rotate(vehiclePhys.getRotation() + randomAngle).add(turretPhys.getPosition());
-					turretPhys.lookAt(tmp, cfg.lerp_speed * .1f);
-
+					turretPhys.rotateTo(randomAngle, cfg.lerp_speed * .1f);
 				} else {
 					counter = 0;
 					state = State.SEARCHING;
 				}
 				break;
+
 			case SEARCHING:
 				// Look for the closest gameobject in view
-				GameObject.Faction faction = gameObject.faction;
-				float closestDistance = Float.MAX_VALUE;
-				GameObject closestGO = null;
+				GameObject.Faction selfFaction = gameObject.faction;
 
-				// It's fine to allocate a new Iterator here cause this will only be called once every second or so.
-				Array.ArrayIterator<GameObject> iter = new Array.ArrayIterator<>(gameObject.getScreen().getGameObjects());
-				while (iter.hasNext()) {
-					GameObject go = iter.next();
+				// Reset our iterator and begin iteration again
+				goIterator.reset();
+				while (goIterator.hasNext()) {
+					GameObject go = goIterator.next();
+					if (!go.killable || !selfFaction.isEnemy(go.faction))
+						continue;
+
 					// Target enemies with the target tag, who are not too far, and are killable
-					if (faction.isEnemy(go.faction) && go.killable && !isTooFar(go)) {
-						float distance = go.getPosition().dst2(turretPhys.getPosition());
-						if (distance < closestDistance) {
-							closestGO = go;
-							closestDistance = distance;
-							// TODO Separate this into two classes, one for Enemy Turrets with DUMB AI, and one for StrikeBase Turrets
-							break;
-						}
+					if (!isTooFar(go)) {
+						target = go;
+						state = State.AIMING;
+						break;
 					}
 				}
 
-				if (closestGO != null) {
-					// If a target is found, aim at it immediately
-					target = closestGO;
-					state = State.AIMING;
-				} else {
+				if (target == null) {
 					// If none found, return to idle and move around
 					state = State.IDLE;
-					((Turret) gameObject).stopCannonAnimation();
-					randomAngle = MathUtils.random(-180, 180);
+					randomAngle = MathUtils.random(0, 360);
 				}
 				break;
+
 			case AIMING:
 				if (!target.isValid() || isTooFar(target)) {
 					target = null;
 					state = State.SEARCHING;
+					((Turret) gameObject).stopCannonAnimation();
 				} else {
 					float turretRot = turretPhys.getRotation();
 					float targetAngle = tmp.set(target.getPosition()).sub(turretPhys.getPosition()).angle();
 
 					// Move the turret towards the target position and check if it's within a 3 degree cone, shoot
 					// a projectile towards it
-					turretPhys.lookAt(target.getPosition(), cfg.lerp_speed);
+					turretPhys.rotateTo(targetAngle, cfg.lerp_speed);
 					if (Math.abs(Angle.angleDelta(turretRot, targetAngle)) < cfg.fire_cone && counter > cfg.firerate) {
 						shoot();
 						counter = 0;

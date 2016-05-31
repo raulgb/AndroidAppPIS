@@ -213,14 +213,13 @@ public class GameMap extends GameObject {
 	/** Draw the map around the given position, by default 8 tiles in each direction */
 	public void draw(SpriteBatch batch, Vector2 center) {
 		int row, col;
-		int squareRad = drawDistance;
 		tmp.set(center).scl(1f / tileSize);
 
-		int startCol = MathUtils.max(0, (int) tmp.x - squareRad);
-		int endCol = MathUtils.min(width, (int) tmp.x + squareRad);
+		int startCol = MathUtils.max(0, (int) tmp.x - drawDistance);
+		int endCol = MathUtils.min(width, (int) tmp.x + drawDistance);
 
-		int startRow = MathUtils.max(0, (int) tmp.y - squareRad);
-		int endRow = MathUtils.min(height, (int) tmp.y + squareRad);
+		int startRow = MathUtils.max(0, (int) tmp.y - drawDistance);
+		int endRow = MathUtils.min(height, (int) tmp.y + drawDistance);
 
 		// Test all map positions to draw a tile
 		for (row = startRow; row < endRow; row++) {
@@ -368,6 +367,7 @@ public class GameMap extends GameObject {
 					// Update minimap
 					((FragmentedGameActivity) act).sidebar.updateMiniMap();
 				} catch (Exception e) {
+					e.printStackTrace();
 					Log.e("GameMap", "Failed to create MiniMap");
 				}
 
@@ -397,4 +397,4 @@ public class GameMap extends GameObject {
 		for (int row = 0; row < physics2D.getWorldHeight(); row++)
 			Arrays.fill(discoveredTable[row], false);
 	}
-}//android drawables
+}

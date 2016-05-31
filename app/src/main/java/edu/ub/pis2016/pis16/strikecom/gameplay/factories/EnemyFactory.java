@@ -22,6 +22,12 @@ public class EnemyFactory {
 
 	private static final Vector2 tmp = new Vector2();
 
+	/**
+	 * Creates a new random enemy and adds it to the given Screen.
+	 *
+	 * @param screen The Screen
+	 * @return The Enemy GameObject
+	 */
 	static public GameObject createRandomEnemyTank(final Screen screen) {
 		GameObject strikeBase = screen.getGameObject("StrikeBase");
 		if (strikeBase == null || !strikeBase.isValid())
@@ -88,75 +94,6 @@ public class EnemyFactory {
 
 		return tank;
 	}
-
-	/*
-	static public Vehicle createEnemyTank() {
-		// Create 2 new enemies on death
-		final ThreadVehicle enemyTank = new ThreadVehicle();
-
-		enemyTank.addOnDestroyAction(new Runnable() {
-			@Override
-			public void run() {
-				Screen thisScreen = enemyTank.getScreen();
-				Explosion explosion = new Explosion("explosion_tank");
-				explosion.setPosition(enemyTank.getPosition());
-				thisScreen.addGameObject(explosion);
-
-				// Add Scrap to Player
-				FragmentedGameActivity gameActivity =
-						(FragmentedGameActivity) ((GLGameFragment) thisScreen.getGame()).getActivity();
-
-				gameActivity.playerState.addScrap(enemyTank.maxHitpoints);
-			}
-		});
-
-		enemyTank.hitpoints = 20;
-		enemyTank.maxHitpoints = 20;
-		enemyTank.killable = true;
-		enemyTank.getPhysics().body.filter = Physics2D.Filter.ENEMY;
-		enemyTank.setTag("enemy_tank");
-
-		enemyTank.putComponent(new VehicleFollowBehavior());
-		enemyTank.getComponent(VehicleFollowBehavior.class).setMaxRange(16 * TILE_SIZE);
-		enemyTank.getComponent(VehicleFollowBehavior.class).setMinRange(4 * TILE_SIZE);
-
-		enemyTank.putComponent(new BehaviorComponent() {
-
-			private GameObject strikeBase;
-
-			@Override
-			public void init() {
-				strikeBase = gameObject.getScreen().getGameObject("StrikeBase");
-			}
-
-			@Override
-			public void update(float delta) {
-				if (!strikeBase.isValid())
-					return;
-				VehicleFollowBehavior vfb = gameObject.getComponent(VehicleFollowBehavior.class);
-				vfb.setTarget(strikeBase.getPosition());
-			}
-		});
-
-		enemyTank.cfg.maxSpeed = 8f;
-		enemyTank.cfg.accel = 4.5f;
-		return enemyTank;
-	}
-
-	public static GameObject createEnemyTankTurret(Vehicle parentTank) {
-		// ------ TANK TURRET -----
-		Turret turret = new Turret("enemy_turret", parentTank, "turret");
-		// Configure enemy damage and stuff here
-		turret.cfg = new TurretConfig(TurretConfig.Type.TURRET_CANNON);
-		turret.putComponent(new TurretBehavior());
-		// Bigger cannon
-		turret.getComponent(GraphicsComponent.class).getSprite().setSize(1.4f * GameConfig.TILE_SIZE);
-		turret.getComponent(TurretBehavior.class).setTargetTag("player");
-		turret.setLayer(Screen.LAYER_VEHICLE_TURRET);
-
-		return turret;
-	}
-	*/
 
 }
 

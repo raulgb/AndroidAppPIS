@@ -139,4 +139,8 @@ public class PhysicsComponent extends Component {
 		rotation += angleDelta * lerpSpeed;
 	}
 
+	public void rotateTo(float randomAngle, float lerpSpeed) {
+		float angleDelta = Angle.angleDelta(rotation, randomAngle);
+		rotation += angleDelta * lerpSpeed;
+	}
 }

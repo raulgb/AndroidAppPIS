@@ -6,7 +6,14 @@ public class Angle {
 
 	/** Returns the closest arc between two angles, rotates correctly around all 360 degrees */
 	public static float angleDelta(float from, float to) {
+		//return ((to - from + 360 + 180) % 360) - 180;
 		return ((((to - from) % 360) + 540) % 360) - 180;
+	}
+
+	public static boolean angleInsideArc(float angle, float start, float end) {
+		end = (end - start) < 0.0f ? end - start + 360.0f : end - start;
+		angle = (angle - start) < 0.0f ? angle - start + 360.0f : angle - start;
+		return (angle < end);
 	}
 
 	public static void unitTest() {
@@ -18,7 +25,9 @@ public class Angle {
 				Thread.sleep(1);
 				System.out.println(a + " to " + targetAngle + ": " + angleDelta(a, targetAngle));
 			}
-		} catch (InterruptedException e) { e.printStackTrace(); }
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 
 		System.exit(0);
 

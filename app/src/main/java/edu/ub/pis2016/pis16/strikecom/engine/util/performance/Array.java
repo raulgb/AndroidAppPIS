@@ -632,6 +632,7 @@ public class Array<T> implements Iterable<T> {
 			array.removeIndex(index);
 		}
 
+		/** Reset index to begin iteration again */
 		public void reset() {
 			index = 0;
 		}

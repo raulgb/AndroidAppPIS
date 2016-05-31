@@ -1,5 +1,6 @@
 package edu.ub.pis2016.pis16.strikecom.gameplay.config;
 
+import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.gameplay.factories.ProjectileFactory;
 
 import static edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig.*;
@@ -28,7 +29,7 @@ public class TurretConfig {
 	public String anchor = "turret";
 
 	/** Idle seconds after target not found */
-	public float idle_seconds = 1f;
+	public float idle_seconds = 1.5f;
 	/** Seconds between each shot */
 	public float firerate = 0.25f;
 	/** Moving rotational speed of the turret */
@@ -57,6 +58,10 @@ public class TurretConfig {
 	static public final TurretConfig DEFAULT = new TurretConfig(Type.TURRET_MACHINEGUN);
 
 	public TurretConfig(Type turretType) {
+
+		// Random idle so not all turrets begin searching at the same time (loadsalag)
+		idle_seconds = idle_seconds * MathUtils.random(0.90f, 1.10f);
+
 		// TODO Check balance
 		switch (turretType) {
 			case TURRET_MACHINEGUN:

@@ -5,16 +5,11 @@ public class GameConfig {
 	/** Size of tiles in pixels */
 	public static final int TILE_SIZE = 16;
 	/** Size of map in tiles */
-	public static final int MAP_SIZE = 512;
+	public static final int MAP_SIZE = 256;
 	/** Width of screen in tiles */
 	public static final int TILES_ON_SCREEN = 14;
 
-
-	// Groups for collision testing, collision should occur if A.group & B.group == 0
-	// TODO Implement this in place of Tag-testing
-	public static final int GROUP_NEUTRAL = 0x01;
-	public static final int GROUP_PLAYER = 0x02;
-	public static final int GROUP_RAIDERS = 0x04;
-	public static final int GROUP_MECHANICS = 0x08;
+	/** Number of shops per tile aprox */
+	public static final int SHOPS_FACTOR = 32;
 
 }

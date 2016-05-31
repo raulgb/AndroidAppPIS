@@ -15,12 +15,14 @@ public class UpgradeConfig {
 		SCAVENGER
 	}
 
+	public Function function = null;
 	public String functionName;
 	public String image;
 	public float value;
 	public int price;
 
 	public UpgradeConfig(Function function) {
+		this.function = function;
 
 		switch(function) {
 			case FUEL:

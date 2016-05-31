@@ -77,7 +77,7 @@ public final class WindowedMean {
 			}
 			return this.mean;
 		} else
-			return 0;
+			return getLatest();
 	}
 
 	/** @return the oldest value in the window */

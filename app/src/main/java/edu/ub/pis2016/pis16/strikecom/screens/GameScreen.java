@@ -13,11 +13,8 @@ import edu.ub.pis2016.pis16.strikecom.engine.framework.Game;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.engine.game.GameMap;
 import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
-import edu.ub.pis2016.pis16.strikecom.engine.game.component.BehaviorComponent;
-import edu.ub.pis2016.pis16.strikecom.engine.game.component.GraphicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
-import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.math.WindowedMean;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.GLGraphics;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.OrthoCamera;
@@ -26,20 +23,17 @@ import edu.ub.pis2016.pis16.strikecom.engine.opengl.SpriteBatch;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Texture;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Physics2D;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Rectangle;
-import edu.ub.pis2016.pis16.strikecom.engine.physics.StaticBody;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
+import edu.ub.pis2016.pis16.strikecom.gameplay.HealthBar;
 import edu.ub.pis2016.pis16.strikecom.gameplay.Shop;
 import edu.ub.pis2016.pis16.strikecom.gameplay.StrikeBase;
-import edu.ub.pis2016.pis16.strikecom.gameplay.ThreadVehicle;
-import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.CameraBehavior;;
+import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.CameraBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.behaviors.VehicleFollowBehavior;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
 import edu.ub.pis2016.pis16.strikecom.gameplay.factories.EnemyFactory;
 
-import static edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig.MAP_SIZE;
-import static edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig.TILES_ON_SCREEN;
-import static edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig.TILE_SIZE;
+import static edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig.*;
 
 /**
  * Dummy OpenGL screen.
@@ -65,19 +59,17 @@ public class GameScreen extends Screen {
 	private GLGraphics glGraphics;
 	private SpriteBatch batch;
 
-	OrthoCamera camera;
+	private OrthoCamera camera;
 
-	Physics2D physics2D;
-	GameMap gameMap;
-	Sprite healthBarSprite;
+	private Physics2D physics2D;
+	private GameMap gameMap;
+
+	private Sprite healthBlackBarSprite;
+	private Sprite healthBarSprite;
+
 	StrikeBase strikeBase;
 
 	FragmentedGameActivity activity;
-
-	public static int FRAME = 0;
-
-	private Vector2 targetPos = new Vector2();
-	private Vector2 tmp = new Vector2();
 
 	public GameScreen(final Game game) {
 		super(game);
@@ -87,7 +79,7 @@ public class GameScreen extends Screen {
 
 		activity = (FragmentedGameActivity) ((StrikeComGLGame) game).getActivity();
 
-		// Camera
+		// Create a new OpenGL orthographic projection camera. The constructor also sets up the glViewport()
 		camera = new OrthoCamera(glGraphics, glGraphics.getWidth(), glGraphics.getHeight());
 		camera.putComponent(new CameraBehavior());
 		// Set zoom to fit TILES_ON_SCREEN, rounding to nearest int
@@ -97,14 +89,19 @@ public class GameScreen extends Screen {
 		camera.setTag("ortho_camera");
 		addGameObject("OrthoCamera", camera);
 
-		physics2D = new Physics2D(MAP_SIZE, MAP_SIZE);
+		// Create highly efficient Sprite drawer, max num of sprites per frame 1024 = 61K sprites/second
 		batch = new SpriteBatch(game.getGLGraphics(), 1024);
-		gameMap = new GameMap(physics2D, TILE_SIZE, 0L, 16, 2, 0.5f);
-		gameMap.setDrawDistance(GameConfig.TILES_ON_SCREEN / 2 + 1);
+
+		// Create Physics2D world definition and linked Tiled Game Map
+		physics2D = new Physics2D(MAP_SIZE, MAP_SIZE);
+
+		gameMap = new GameMap(physics2D, TILE_SIZE, MathUtils.random(Long.MAX_VALUE), 16, 2, 0.5f);
+		gameMap.setDrawDistance(GameConfig.TILES_ON_SCREEN / 2 + 2);
 		gameMap.setLayer(LAYER_TERRAIN);
 		addGameObject("GameMap", gameMap);
 
-		healthBarSprite = new Sprite(Assets.SPRITE_ATLAS.getRegion("healthbar", 0));
+		healthBarSprite = new Sprite(Assets.SPRITE_ATLAS.getRegion("healthbar"));
+		healthBlackBarSprite = new Sprite(Assets.SPRITE_ATLAS.getRegion("healthbar_bar"));
 
 		createGameObjects();
 		commitGameObjectChanges();
@@ -120,35 +117,36 @@ public class GameScreen extends Screen {
 		addInputProcessor(new VehicleTouchController(this, strikeBase));
 	}
 
-	WindowedMean fpsMean = new WindowedMean(30);
-	float secondsCounter = 0;
+	/** Delta smoothed over 15 frames for dat buttery smooth 60FPS */
+	WindowedMean deltaMean = new WindowedMean(15);
+	float fiveSecondsCount = 0;
 
 	@Override
 	public void update(float delta) {
 		if (gamePaused)
 			return;
+		// Update all delta counters
+		deltaMean.addValue(delta);
+		secondsElapsed += delta;
+		fiveSecondsCount += delta;
 
-//		delta = 0.016f; // for debugging
-		delta = MathUtils.min(1, delta);
-		FRAME += 1;
+		// Get the delta mean over 15 frames
+		delta = deltaMean.getMean();
 
 		super.update(delta);
 
 		// FPS Counter
-		fpsMean.addValue(delta);
-		secondsCounter += delta;
-		if (secondsCounter > 5) {
+		if (fiveSecondsCount > 5) {
 			if (secondsElapsed < 7)
 				gameMap.resetDiscovered();
-			secondsCounter -= 5;
-			Log.i("FPS", "" + MathUtils.roundPositive(1f / fpsMean.getMean()));
+			fiveSecondsCount -= 5;
+			Log.i("FPS", "" + MathUtils.roundPositive(1f / deltaMean.getMean()));
 			System.gc();
 //			for (GameObject go : getGameObjects())
 //				System.out.println(go);
 			gameMap.createMiniMap(camera.position, game, this.getGameObjects()); // creates a .png of game map
 		}
 
-		secondsElapsed += delta;
 
 		// Step physics simulation
 		physics2D.update(delta);
@@ -165,6 +163,10 @@ public class GameScreen extends Screen {
 	public void present(float delta) {
 		GL10 gl = glGraphics.getGL();
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+
+		// Dank Rotations Dawg
+		//camera.rotation = strikeBase.getPhysics().getRotation() - 90;
+		camera.updateOrtho();
 
 		batch.begin(Assets.SPRITE_ATLAS.getTexture());
 
@@ -183,20 +185,21 @@ public class GameScreen extends Screen {
 			if (!go.hasComponent(PhysicsComponent.class) || clipBounds.contains(go.getPosition()))
 				go.draw(batch);
 
+		// Enable this line to draw hitboxes
 		//physics2D.debugDraw(batch);
-
 		batch.end();
 
 		// Draw healthbar
-		camera.GUIProjection();
-		batch.begin(Assets.SPRITE_ATLAS.getTexture());
 		float HBWidth = glGraphics.getWidth() * 0.8f * ((float) strikeBase.hitpoints / strikeBase.maxHitpoints);
 		healthBarSprite.setSize(HBWidth, 48);
+		healthBlackBarSprite.setSize(glGraphics.getWidth() * 0.8f, 48);
+
+		camera.GUIProjection();
+		batch.begin(Assets.SPRITE_ATLAS.getTexture());
 		healthBarSprite.draw(batch, glGraphics.getWidth() / 2f, glGraphics.getHeight() - 48);
+		healthBlackBarSprite.draw(batch, glGraphics.getWidth() / 2f, glGraphics.getHeight() - 48);
 		batch.end();
 
-//		camera.rotation = strikeBase.getPhysics().getRotation() - 90;
-		camera.updateOrtho();
 	}
 
 	@Override
@@ -232,13 +235,26 @@ public class GameScreen extends Screen {
 
 	private void createGameObjects() {
 		// ------ SHOP -----------------
-		Shop shop = new Shop(false);
-		shop.setTag("shop_1");
-		shop.setLayer(LAYER_BACKGROUND);
-		shop.setPosition((MAP_SIZE / 2f - 4) * TILE_SIZE, MAP_SIZE / 2f * TILE_SIZE);
-		addGameObject("shop_1", shop);
-		activity.shopMap.put("shop_1", shop);
+		int shopCount = MathUtils.max(1, MAP_SIZE / SHOPS_FACTOR);
+
+		for (int i = 0; i < shopCount; i++) {
+			// Vault one out of 10 shops
+			boolean isVault = MathUtils.random() > 0.9f;
+			String shopName = isVault ? "vault_" + i : "shop_" + i;
+
+			Shop shop = new Shop(false);
+			shop.setTag(shopName);
+			shop.setLayer(LAYER_BACKGROUND);
+			shop.setPosition(
+					MathUtils.randomTriangular(0, 1) * MAP_SIZE * TILE_SIZE,
+					MathUtils.randomTriangular(0, 1) * MAP_SIZE * TILE_SIZE
+			);
+			addGameObject(shopName, shop);
+			activity.shopMap.put(shopName, shop);
+		}
+		// After generating all shops, generate their inventories
 		activity.generateInventories();
+
 
 		// ------ STRIKEBASE CONFIG ------------
 		strikeBase = new StrikeBase(new StrikeBaseConfig(strikeBaseModel));
@@ -264,29 +280,17 @@ public class GameScreen extends Screen {
 
 		camera.setPosition(strikeBase.getPosition());
 
-		for (int i = 0; i < 50; i++)
-			createEnemy();
+		for (int i = 0; i < 96; i++)
+			createRandomEnemy();
 
 	}
 
 	/** Create a new tank enemy which spawns somewhere random on the map */
-	private void createEnemy() {
+	private void createRandomEnemy() {
 		if (!strikeBase.isValid())
 			return;
 
 		GameObject enemy = EnemyFactory.createRandomEnemyTank(this);
-//		if (enemy != null)
-//			enemy.addOnDestroyAction(new Runnable() {
-//				@Override
-//				public void run() {
-//					createEnemy();
-//					if (Math.random() > 0.5f)
-//						createEnemy();
-//				}
-//			});
-
-//		tmp.set(8 * TILE_SIZE, 0).rotate(MathUtils.random(360));
-//		enemy.getPhysics().setPosition(strikeBase.getPosition().add(tmp));
 
 		// Random pos
 		enemy.getPhysics().setPosition(
@@ -294,52 +298,7 @@ public class GameScreen extends Screen {
 				MathUtils.random(physics2D.getWorldHeight() * TILE_SIZE)
 		);
 		enemy.getPhysics().setRotation(MathUtils.random(360));
-
-		addHealthBar(enemy);
-	}
-
-	private void addHealthBar(final GameObject owner) {
-		final GameObject healthBar = new GameObject();
-		healthBar.putComponent(new PhysicsComponent());
-		healthBar.putComponent(new GraphicsComponent(Assets.SPRITE_ATLAS.getRegion("healthbar", 0)));
-		healthBar.setLayer(LAYER_GUI);
-
-		healthBar.putComponent(new BehaviorComponent() {
-			public void init() {
-				// Put parent adquisition here for delayed start, otherwise it would crash if we'd add
-				// one object after the other
-				gameObject.setParent(owner);
-			}
-
-			@Override
-			public void update(float delta) {
-				GameObject owner = gameObject.getParent();
-				if (!owner.hasComponent(GraphicsComponent.class))
-					return;
-
-				Sprite selfSprite = gameObject.getComponent(GraphicsComponent.class).getSprite();
-				Sprite ownerSprite = owner.getComponent(GraphicsComponent.class).getSprite();
-				gameObject.setPosition(owner.getPosition().add(0, ownerSprite.getSize() * 0.6f));
-
-				float healthPerc = 100 * (float) owner.hitpoints / owner.maxHitpoints;
-
-				if (healthPerc > 75)
-					selfSprite.setRegion(Assets.SPRITE_ATLAS.getRegion("healthbar", 0));
-				else if (healthPerc > 50)
-					selfSprite.setRegion(Assets.SPRITE_ATLAS.getRegion("healthbar", 1));
-				else if (healthPerc > 25)
-					selfSprite.setRegion(Assets.SPRITE_ATLAS.getRegion("healthbar", 2));
-				else
-					selfSprite.setRegion(Assets.SPRITE_ATLAS.getRegion("healthbar", 3));
-
-				healthPerc /= 100;
-
-				// Set the healthbar width to the parent's width * perc health
-				selfSprite.setSize(healthPerc * ownerSprite.getSize(), 0.15f * TILE_SIZE);
-			}
-		});
-		// Add to Screen
-		addGameObject(healthBar);
+		addGameObject(new HealthBar(enemy));
 	}
 
 	// Enemies swarm you when you run out of fuel.

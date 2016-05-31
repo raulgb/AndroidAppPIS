@@ -56,7 +56,7 @@ public class SidebarFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_sidebar, container, false);
 
-		final Typeface myCustomFont= Typeface.createFromAsset(getActivity().getAssets(), getString(R.string.game_font));
+		final Typeface myCustomFont = Typeface.createFromAsset(getActivity().getAssets(), getString(R.string.game_font));
 
 		/** Extract all UI elements */
 		btnInventory = (Button) view.findViewById(R.id.btnInventory);
@@ -368,16 +368,20 @@ public class SidebarFragment extends Fragment {
 		fuelText.setText(String.format("%04d", MathUtils.round(fuel)));
 	}
 
-	public void updateMiniMap(){
-		try{
-			//btnMinimap.draw(new Canvas(bm.copy(Bitmap.Config.ARGB_8888, true)));
-			BitmapDrawable bm = new BitmapDrawable("/data/data/edu.ub.pis2016.pis16.strikecom/files/gameMap.png");
-			btnMinimap.setBackground(bm);
-			//btnMinimap.setRotation(-90);
-		}catch (Exception e){
-			e.printStackTrace();
-		}
-
+	public void updateMiniMap() {
+		getActivity().runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					//btnMinimap.draw(new Canvas(bm.copy(Bitmap.Config.ARGB_8888, true)));
+					BitmapDrawable bm = new BitmapDrawable("/data/data/edu.ub.pis2016.pis16.strikecom/files/gameMap.png");
+					btnMinimap.setBackground(bm);
+					//btnMinimap.setRotation(-90);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 
 	public void setInventoyText(String text) {
