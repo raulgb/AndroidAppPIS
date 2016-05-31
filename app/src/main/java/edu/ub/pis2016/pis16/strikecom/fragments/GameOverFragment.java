@@ -15,9 +15,10 @@ import android.widget.TextView;
 
 import edu.ub.pis2016.pis16.strikecom.FragmentedGameActivity;
 import edu.ub.pis2016.pis16.strikecom.R;
+import edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig;
 import edu.ub.pis2016.pis16.strikecom.gameplay.config.StrikeBaseConfig;
 
-public class GameOverFragment extends DialogFragment{
+public class GameOverFragment extends DialogFragment {
 	public static StrikeBaseConfig.Model strikeBaseModel = StrikeBaseConfig.Model.MK2;
 
 	private int score;
@@ -31,10 +32,10 @@ public class GameOverFragment extends DialogFragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_gameover, container);
 
-		Typeface myCustomFont= Typeface.createFromAsset(getActivity().getAssets(), "fonts/Minecraft.ttf");
+		Typeface myCustomFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Minecraft.ttf");
 
-		Button btnExit  = (Button) view.findViewById(R.id.btnExit);
-		Button btnSubmit  = (Button) view.findViewById(R.id.btnSubmit);
+		Button btnExit = (Button) view.findViewById(R.id.btnExit);
+		Button btnSubmit = (Button) view.findViewById(R.id.btnSubmit);
 		TextView title = (TextView) view.findViewById(R.id.title);
 		TextView textScore = (TextView) view.findViewById(R.id.textScore);
 		TextView textLabel = (TextView) view.findViewById(R.id.textLabel);
@@ -79,7 +80,7 @@ public class GameOverFragment extends DialogFragment{
 		btnExit.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				((FragmentedGameActivity)getActivity()).backToMainMenu(modelUnlocked);
+				((FragmentedGameActivity) getActivity()).backToMainMenu(modelUnlocked);
 			}
 		});
 
@@ -92,24 +93,23 @@ public class GameOverFragment extends DialogFragment{
 		SharedPreferences.Editor editor = sharedPreferences.edit();
 
 		boolean unlocked = false;
-		/*
-		if (score >= 1000) {
+
+		if (score >= GameConfig.UNLOCK_MK2) {
 			if (!sharedPreferences.getBoolean("sbmk2", false))
 				unlocked = true;
 			editor.putBoolean("sbmk2", true);
 		}
-		*/
-		if (score >= 2000) {
+		if (score >= GameConfig.UNLOCK_MK1) {
 			if (!sharedPreferences.getBoolean("sbmk1", false))
 				unlocked = true;
 			editor.putBoolean("sbmk1", true);
 		}
-		if (score >= 5000) {
+		if (score >= GameConfig.UNLOCK_MK4) {
 			if (!sharedPreferences.getBoolean("sbmk4", false))
 				unlocked = true;
 			editor.putBoolean("sbmk4", true);
 		}
-		if (score >= 10000) {
+		if (score >= GameConfig.UNLOCK_MK5) {
 			if (!sharedPreferences.getBoolean("sbmk5", false))
 				unlocked = true;
 			editor.putBoolean("sbmk5", true);

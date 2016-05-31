@@ -12,4 +12,11 @@ public class GameConfig {
 	/** Number of shops per tile aprox */
 	public static final int SHOPS_FACTOR = 32;
 
+	public static final int STARTING_SCRAP = 200;
+	public static final float STARTING_FUEL = 200;
+
+	public static final int UNLOCK_MK1 = 200;
+	public static final int UNLOCK_MK2 = 1000;
+	public static final int UNLOCK_MK4 = 2000;
+	public static final int UNLOCK_MK5 = 5000;
 }

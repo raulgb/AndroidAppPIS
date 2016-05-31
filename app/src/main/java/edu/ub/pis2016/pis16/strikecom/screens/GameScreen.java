@@ -101,7 +101,8 @@ public class GameScreen extends Screen {
 		gameMap.setLayer(LAYER_TERRAIN);
 		addGameObject("GameMap", gameMap);
 
-		healthBarSprite = new Sprite(Assets.SPRITE_ATLAS.getRegion("healthbar"));
+		// Player health sprites
+		healthBarSprite = new Sprite(Assets.SPRITE_ATLAS.getRegion("healthbar", 3));
 		healthBlackBarSprite = new Sprite(Assets.SPRITE_ATLAS.getRegion("healthbar_bar"));
 
 		createGameObjects();
@@ -239,11 +240,11 @@ public class GameScreen extends Screen {
 		int shopCount = MathUtils.max(1, MAP_SIZE / SHOPS_FACTOR);
 
 		for (int i = 0; i < shopCount; i++) {
-			// Vault one out of 10 shops
-			boolean isVault = MathUtils.random() > 0.9f;
+			// Vault 2 out of 10 shops
+			boolean isVault = MathUtils.random() > 0.8f;
 			String shopName = isVault ? "vault_" + i : "shop_" + i;
 
-			Shop shop = new Shop(false);
+			Shop shop = new Shop(isVault);
 			shop.setTag(shopName);
 			shop.setLayer(LAYER_BACKGROUND);
 			shop.setPosition(
@@ -307,13 +308,17 @@ public class GameScreen extends Screen {
 			return;
 
 		GameObject enemy = EnemyFactory.createRandomEnemyTank(this);
-		Vector2 position = strikeBase.getPosition();
+		Vector2 strikePos = strikeBase.getPosition();
+		enemy.setPosition(strikePos);
 
 		// Random pos
-		enemy.getPhysics().setPosition(
-				position.x + MathUtils.random(-dist * TILE_SIZE, dist * TILE_SIZE),
-				position.y + MathUtils.random(-dist * TILE_SIZE, dist * TILE_SIZE)
-		);
+
+		while (enemy.getPosition().dst2(strikeBase.getPosition()) < TILES_ON_SCREEN) {
+			enemy.setPosition(
+					strikePos.x + MathUtils.random(-dist * TILE_SIZE, dist * TILE_SIZE),
+					strikePos.y + MathUtils.random(-dist * TILE_SIZE, dist * TILE_SIZE));
+		}
+
 		enemy.getPhysics().setRotation(MathUtils.random(360));
 		addGameObject(new HealthBar(enemy));
 
@@ -321,8 +326,9 @@ public class GameScreen extends Screen {
 
 	// Enemies swarm you when you run out of fuel.
 	public void outOfFuel() {
+
 		for (int i = 0; i < 16; i++)
-			createRandomStalker(12f);
+			createRandomStalker(24f);
 	}
 
 	@Deprecated

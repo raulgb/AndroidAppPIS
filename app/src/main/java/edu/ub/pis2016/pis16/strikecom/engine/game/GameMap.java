@@ -327,8 +327,8 @@ public class GameMap extends GameObject {
 					int sbX = (int) (center.x) / tileSize;
 					int sbY = (int) (center.y) / tileSize;
 					if (sbX > 0 && sbY > 0 && sbX < width && sbY < height) {//player position marker 3x3 pixels
-						for (int y = sbY - 1; y < sbY + 2; y++) {
-							for (int x = sbX - 1; x < sbX + 2; x++) {
+						for (int y = sbY - 2; y < sbY + 3; y++) {
+							for (int x = sbX - 2; x < sbX + 3; x++) {
 								bmp.setPixel(y, x, Color.argb(255, 4, 190, 255)); //LIGHT BLUE
 							}
 						}
@@ -342,8 +342,11 @@ public class GameMap extends GameObject {
 						if (go.faction == GameObject.Faction.RAIDERS) {//ENEMIES
 							sbX = (int) (go.getPosition().x) / tileSize;
 							sbY = (int) (go.getPosition().y) / tileSize;
-							if (discoveredTable[sbY][sbX]) {
+							if (sbX > 1 && sbY > 1 && sbX < width-1 && sbY < height-1) {//discoveredTable[sbY][sbX]
 								bmp.setPixel(sbY, sbX, Color.argb(255, 255, 0, 0)); //RED
+								bmp.setPixel(sbY, sbX+1, Color.argb(255, 255, 0, 0));
+								bmp.setPixel(sbY+1, sbX, Color.argb(255, 255, 0, 0));
+								bmp.setPixel(sbY+1, sbX+1, Color.argb(255, 255, 0, 0));
 							}
 
 						} else if (go.faction == GameObject.Faction.SHOP) { //shops
