@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import edu.ub.pis2016.pis16.strikecom.engine.android.AndroidMusic;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Game;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.audio.Sound;
+import edu.ub.pis2016.pis16.strikecom.engine.opengl.Font;
 
 /** Utility class for async resource loading */
 public class Assets {
@@ -18,6 +19,8 @@ public class Assets {
 
 	/** Contains all of the game's sprites */
 	public static TextureAtlas SPRITE_ATLAS;
+	public static TextureAtlas FONT_ATLAS;
+	public static Font font;
 
 
 	// Sounds and Music
@@ -67,6 +70,8 @@ public class Assets {
 
 				// Global sprite atlas
 				SPRITE_ATLAS = new TextureAtlas(game, "sprites/sprites.atlas");
+				FONT_ATLAS = new TextureAtlas(game, "sprites/font.atlas");
+				font = new Font(Assets.FONT_ATLAS.getRegions("char"), 32,32);
 
 				music_bg = game.getAudio().newMusic("music/waterflame-glorious_morning_2.mp3");
 				music_bg_2 = game.getAudio().newMusic("music/waterflame-final_battle.mp3");
