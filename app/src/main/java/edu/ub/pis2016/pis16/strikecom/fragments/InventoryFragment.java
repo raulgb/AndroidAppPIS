@@ -268,7 +268,7 @@ public class InventoryFragment extends DialogFragment {
 
 					} else {
 						itemDesc.setText(inventory.getUpgrade(selectedItem).getDisplayText());
-						if (inventory.getUpgrade(selectedItem).isFuel()) {
+						if (inventory.getUpgrade(selectedItem).isFuel() || inventory.getUpgrade(selectedItem).isRepair()) {
 							equipBtn.setText(getString(R.string.use_item));
 						}
 					}
