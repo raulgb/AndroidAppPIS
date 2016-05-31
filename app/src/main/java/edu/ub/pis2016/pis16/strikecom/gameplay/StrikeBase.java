@@ -322,7 +322,9 @@ public class StrikeBase extends Vehicle {
 	public void addUpgrade(UpgradeItem item, int slot) {
 
 		switch (item.cfg.function) {
-			case FUEL:
+			case REPAIR:
+				// restores some hp
+				this.hitpoints = MathUtils.min(maxHitpoints, hitpoints + MathUtils.round(item.cfg.value));
 				break;
 
 			case ARMOUR_PLATE:

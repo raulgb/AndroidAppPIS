@@ -7,6 +7,7 @@ public class UpgradeConfig {
 
 	public enum Function {
 		FUEL,
+		REPAIR,
 		ARMOUR_PLATE,
 		ARMOUR_COMPOSITE,
 		ARMOUR_REACTIVE,
@@ -30,6 +31,13 @@ public class UpgradeConfig {
 				image = "fuel_64";
 				value = 250f;
 				price = 250;
+				break;
+
+			case REPAIR:
+				functionName = "repair";
+				image = "scrap_64";
+				value = 20;
+				price = 200;
 				break;
 
 			case ARMOUR_PLATE:

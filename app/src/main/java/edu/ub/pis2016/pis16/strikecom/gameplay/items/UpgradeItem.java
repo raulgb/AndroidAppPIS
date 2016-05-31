@@ -17,6 +17,8 @@ public class UpgradeItem extends Item {
 		return cfg.functionName.equals("fuel");
 	}
 
+	public boolean isRepair() { return cfg.functionName.equals("repair"); }
+
 	public static UpgradeItem parseUpgradeItem(String seq) {
 		try {
 			String param[] = seq.split(";"); // ; used as separator

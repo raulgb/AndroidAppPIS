@@ -76,6 +76,12 @@ public class InventoryManager {
 		}
 	}
 
+	private void addRepair(Inventory inventory, int num) {
+		for (int i = 0; i < num; i++) {
+			inventory.addItem(UpgradeItem.parseUpgradeItem(context.getString(R.string.REPAIR)));
+		}
+	}
+
 	// Returns a new, freshly generated shop inventory. Each one of these contain a given number of random turrets, random number of
 	// upgrades and 1 to 5 fuel canisters.
 	public Inventory getShopInventory(int numTurrets, int numUpgrades) {
@@ -99,6 +105,7 @@ public class InventoryManager {
 			addedUpgrades++;
 		}
 		addFuel(shop, random.nextInt(5) + 1);
+		addRepair(shop, random.nextInt(5) + 1);
 
 		return shop;
 	}
@@ -119,6 +126,7 @@ public class InventoryManager {
 			addedUpgrades++;
 		}
 		addFuel(shop, 8);
+		addRepair(shop, 8);
 
 		return shop;
 	}

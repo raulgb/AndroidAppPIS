@@ -123,5 +123,7 @@
     <!-- FUEL -->
     <string name="FUEL">FUEL;250u fuel;250 unitats d&#8216;hidrocarbur usat per alimentar el massiu motor de la base.</string>
     <string name="dev_mode_on">Mode de desarrollament activat. Totes les caracteristiques desbloquejades.</string>
+    <!-- REPAIR -->
+    <string name="REPAIR">REPAIR;20 HP;Metall reciclat a partir d&#8216;enemics destruits. Material suficient per reparar 20HP.</string>
 
 </resources>
