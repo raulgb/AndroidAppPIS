@@ -32,6 +32,7 @@ import edu.ub.pis2016.pis16.strikecom.controller.SidebarEventListener;
 import edu.ub.pis2016.pis16.strikecom.engine.framework.Screen;
 import edu.ub.pis2016.pis16.strikecom.fragments.SlotsFragment;
 import edu.ub.pis2016.pis16.strikecom.gameplay.Shop;
+import edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.InventoryItemAdapter;
 import edu.ub.pis2016.pis16.strikecom.gameplay.items.InventoryManager;
 import edu.ub.pis2016.pis16.strikecom.gameplay.PlayerState;
@@ -90,8 +91,8 @@ public class FragmentedGameActivity extends Activity {
 		sidebar.setGame(game);
 
 		playerState = new PlayerState(playerName);
-		playerState.addScrap(2000);
-		playerState.addFuel(500f);
+		playerState.addScrap(GameConfig.STARTING_SCRAP);
+		playerState.addFuel(GameConfig.STARTING_FUEL);
 
 		// Thread updating sidebar once per second
 		new Thread(new Runnable() {

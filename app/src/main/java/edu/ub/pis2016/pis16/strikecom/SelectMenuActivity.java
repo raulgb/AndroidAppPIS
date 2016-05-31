@@ -110,7 +110,7 @@ public class SelectMenuActivity extends AppCompatActivity {
 
 					case MK2:
 						model = "sbmk2";
-						if (sharedPreferences.getBoolean(model, true)) {
+						if (sharedPreferences.getBoolean(model, false)) {
 							btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk2);
 							btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk2);
 							modelName.setText(getString(R.string.sel_menu_mk2name));
@@ -204,7 +204,7 @@ public class SelectMenuActivity extends AppCompatActivity {
 
 					case MK2:
 						model = "sbmk2";
-						if (sharedPreferences.getBoolean(model, true)) {
+						if (sharedPreferences.getBoolean(model, false)) {
 							btnNext.setBackgroundResource(R.drawable.btn_retro_canv_mk2);
 							btnPrev.setBackgroundResource(R.drawable.btn_retro_canv_mk2);
 							modelName.setText(getString(R.string.sel_menu_mk2name));
