@@ -47,7 +47,7 @@ public class ShopFragment extends InventoryFragment {
 							itemDesc.setText("");
 
 							if(item.isFuel()){
-								playerFuel += 250;
+								playerFuel += item.cfg.value;
 								fuelText.setText(Integer.toString(Math.round(playerFuel)));
 							}
 						}

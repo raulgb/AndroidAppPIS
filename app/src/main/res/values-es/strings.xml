@@ -122,5 +122,7 @@
 
     <!-- FUEL -->
     <string name="FUEL">FUEL;250u fuel;250 unidades de hidrocarburo empleado en alimentar el immenso motor de tu base.</string>
+    <!-- REPAIR -->
+    <string name="REPAIR">REPAIR;20 HP;Metal reciclado a partir de enemigos destruidos. Material suficiente para reparar 20HP.</string>
 
 </resources>
