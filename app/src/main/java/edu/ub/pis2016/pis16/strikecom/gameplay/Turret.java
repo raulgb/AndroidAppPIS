@@ -58,7 +58,7 @@ public class Turret extends GameObject {
 	}
 
 	public void fireCannon(boolean looping) {
-		Assets.sfx_shoot.play(1f);
+		cfg.sfx_shoot.play(1f);
 
 		sprite.setFrameTime(0.05f);
 		sprite.setLooping(looping);

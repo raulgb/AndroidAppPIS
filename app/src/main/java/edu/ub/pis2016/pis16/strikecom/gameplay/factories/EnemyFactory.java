@@ -7,6 +7,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
 import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.GLGameFragment;
 import edu.ub.pis2016.pis16.strikecom.engine.physics.Physics2D;
+import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 import edu.ub.pis2016.pis16.strikecom.gameplay.Explosion;
 import edu.ub.pis2016.pis16.strikecom.gameplay.ThreadVehicle;
 import edu.ub.pis2016.pis16.strikecom.gameplay.Turret;
@@ -70,6 +71,7 @@ public class EnemyFactory {
 				Explosion explosion = new Explosion("explosion_tank");
 				explosion.setPosition(tank.getPosition());
 				screen.addGameObject(explosion);
+				Assets.sfx_expl_heavy.play(1f);
 
 				// Add Scrap to Player
 				FragmentedGameActivity gameActivity =

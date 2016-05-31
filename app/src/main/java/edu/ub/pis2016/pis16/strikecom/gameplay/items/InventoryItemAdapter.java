@@ -1,6 +1,7 @@
 package edu.ub.pis2016.pis16.strikecom.gameplay.items;
 
 import java.util.List;
+
 import android.content.Context;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
@@ -43,10 +44,9 @@ public class InventoryItemAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-
 		View rowView = convertView;
 
-		final Typeface myCustomFont= Typeface.createFromAsset(context.getAssets(), context.getString(R.string.game_font));
+		final Typeface myCustomFont = Typeface.createFromAsset(context.getAssets(), context.getString(R.string.game_font));
 
 		if (convertView == null) {
 			// Create a new view into the list.
@@ -80,7 +80,7 @@ public class InventoryItemAdapter extends BaseAdapter {
 		itemName.setTypeface(myCustomFont);
 
 		Item item = this.items.get(position);
-		itemName.setText(item.getName());
+		itemName.setText(item.getName() + " : " + item.getPrice() + " scrap");
 
 		int imageID = context.getResources().getIdentifier(item.getImage(), "drawable", context.getPackageName());
 		if (imageID > 0) {

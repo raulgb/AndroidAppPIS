@@ -1,8 +1,5 @@
 package edu.ub.pis2016.pis16.strikecom.gameplay.config;
 
-/**
- * Created by sdp on 29/05/16.
- */
 public class UpgradeConfig {
 
 	public enum Function {
@@ -25,7 +22,7 @@ public class UpgradeConfig {
 	public UpgradeConfig(Function function) {
 		this.function = function;
 
-		switch(function) {
+		switch (function) {
 			case FUEL:
 				functionName = "fuel";
 				image = "fuel_64";

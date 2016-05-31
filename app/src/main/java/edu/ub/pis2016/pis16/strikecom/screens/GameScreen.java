@@ -298,8 +298,11 @@ public class GameScreen extends Screen {
 
 		camera.setPosition(strikeBase.getPosition());
 
-		for (int i = 0; i < 96; i++)
+		for (int i = 0; i < 32; i++)
 			createRandomEnemy();
+
+		for (int i = 0; i < 24; i++)
+			createRandomStalker(64f, 0.5f);
 
 	}
 
@@ -319,7 +322,8 @@ public class GameScreen extends Screen {
 		addGameObject(new HealthBar(enemy));
 	}
 
-	private void createRandomStalker(float dist) {
+	/** Create enemies which respawn near you */
+	private void createRandomStalker(final float maxTileDistance, final float chance2Enemies) {
 		if (!strikeBase.isValid())
 			return;
 
@@ -327,24 +331,31 @@ public class GameScreen extends Screen {
 		Vector2 strikePos = strikeBase.getPosition();
 		enemy.setPosition(strikePos);
 
-		// Random pos
-
-		while (enemy.getPosition().dst2(strikeBase.getPosition()) < TILES_ON_SCREEN) {
+		// Random pos, but not into view
+		while (enemy.getPosition().dst2(strikeBase.getPosition()) < TILES_ON_SCREEN + 1) {
 			enemy.setPosition(
-					strikePos.x + MathUtils.random(-dist * TILE_SIZE, dist * TILE_SIZE),
-					strikePos.y + MathUtils.random(-dist * TILE_SIZE, dist * TILE_SIZE));
+					strikePos.x + MathUtils.random(-maxTileDistance * TILE_SIZE, maxTileDistance * TILE_SIZE),
+					strikePos.y + MathUtils.random(-maxTileDistance * TILE_SIZE, maxTileDistance * TILE_SIZE));
 		}
 
 		enemy.getPhysics().setRotation(MathUtils.random(360));
-		addGameObject(new HealthBar(enemy));
 
+		enemy.addOnDestroyAction(new Runnable() {
+			@Override
+			public void run() {
+				createRandomStalker(maxTileDistance, chance2Enemies);
+				if (MathUtils.random() < chance2Enemies)
+					createRandomStalker(maxTileDistance, chance2Enemies);
+			}
+		});
+
+		addGameObject(new HealthBar(enemy));
 	}
 
 	// Enemies swarm you when you run out of fuel.
 	public void outOfFuel() {
-
 		for (int i = 0; i < 16; i++)
-			createRandomStalker(24f);
+			createRandomStalker(32f, 0f);
 	}
 
 	@Deprecated

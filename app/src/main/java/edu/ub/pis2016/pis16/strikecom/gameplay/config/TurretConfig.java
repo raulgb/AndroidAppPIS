@@ -1,6 +1,8 @@
 package edu.ub.pis2016.pis16.strikecom.gameplay.config;
 
+import edu.ub.pis2016.pis16.strikecom.engine.framework.audio.Sound;
 import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
+import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
 import edu.ub.pis2016.pis16.strikecom.gameplay.factories.ProjectileFactory;
 
 import static edu.ub.pis2016.pis16.strikecom.gameplay.config.GameConfig.*;
@@ -49,6 +51,9 @@ public class TurretConfig {
 	/** Bullet Speed in tiles/second */
 	public float proj_speed = 2f * TILE_SIZE;
 
+	public Sound sfx_shoot;
+	public float sfx_shoot_volume = 1f;
+
 	// GUI image
 	public String image;
 
@@ -61,6 +66,7 @@ public class TurretConfig {
 
 		// Random idle so not all turrets begin searching at the same time (loadsalag)
 		idle_seconds = idle_seconds * MathUtils.random(0.90f, 1.10f);
+		sfx_shoot = Assets.sfx_shoot;
 
 		// TODO Check balance
 		switch (turretType) {
@@ -69,6 +75,8 @@ public class TurretConfig {
 				image = "machinegun_64";
 				price = 100;
 
+				sfx_shoot = Assets.sfx_shoot;
+				sfx_shoot_volume = 0.75f;
 				typeName = "machinegun";
 
 				lerp_speed = 0.050f;
@@ -88,6 +96,9 @@ public class TurretConfig {
 				image = "gatling_64";
 				price = 250;
 
+				sfx_shoot = Assets.sfx_shoot_light;
+				sfx_shoot_volume = 0.80f;
+
 				typeName = "gatling";
 
 				lerp_speed = 0.045f;
@@ -105,8 +116,10 @@ public class TurretConfig {
 				sprite = "turret_cannon";
 				sprite_size = 0.85f;
 
-				typeName = "cannon";
+				sfx_shoot = Assets.sfx_expl_light;
+				sfx_shoot_volume = 3f;
 
+				typeName = "cannon";
 				image = "cannon_64";
 				price = 500;
 
@@ -124,6 +137,9 @@ public class TurretConfig {
 			case TURRET_HOWITZER:
 				sprite = "turret_howitzer";
 				sprite_size = 0.85f;
+
+				sfx_shoot = Assets.sfx_expl_light;
+				sfx_shoot_volume = 3f;
 
 				typeName = "howitzer";
 
@@ -145,6 +161,8 @@ public class TurretConfig {
 				sprite = "turret_plasma";
 				sprite_size = 0.9f;
 
+				sfx_shoot = Assets.sfx_shoot_laser;
+				sfx_shoot_volume = 5f;
 				typeName = "plasma";
 
 				image = "plasma_64";

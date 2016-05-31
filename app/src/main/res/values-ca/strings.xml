@@ -84,10 +84,10 @@
     <string name="game_font">fonts/Minecraft.ttf</string>
 
     <!-- Stats display -->
-    <string name="stat_attack">atac:  </string>
-    <string name="stat_rate">cadència:  </string>
-    <string name="stat_range">abast:  </string>
-    <string name="stat_price">preu:  </string>
+    <string name="stat_attack">Atac:</string>
+    <string name="stat_rate">Cadència:</string>
+    <string name="stat_range">Abast:</string>
+    <string name="stat_price">Preu:</string>
 
     <!-- Turret Items -->
     <string-array

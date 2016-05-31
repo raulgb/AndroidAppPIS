@@ -4,9 +4,9 @@ public class StrikeBaseConfig {
 
 
 	public enum Model {
-		MK3,	// 2-turrets model
-		MK2,	// 3-turrets model
-		MK1,	// 4-turrets model
+		MK3,    // 2-turrets model
+		MK2,    // 3-turrets model
+		MK1,    // 4-turrets model
 		MK4,    // 5-turrets model
 		MK5     // 6-turrets model
 	}
@@ -17,23 +17,23 @@ public class StrikeBaseConfig {
 
 	/**
 	 * TURRET ARRAY CONVENTIONS FOLLOW THIS ORDER FOR STRIKEBASES:
-	 *
-	 * 		1	2
-	 *
-	 * 	5	  7		6
-	 *
-	 * 		3	4
-	 *
-	 * 	DEPENDING ON TURRET ANCHOR POSITION ON THE SPRITE
-	 * 	IF ANY TURRET IS MISSING, DON'T SKIP INDICES
-	 * 	I.E. MODEL MK2 IS:
-	 *
-	 * 		1
-	 *
-	 * 		2	3
+	 * <p/>
+	 * 1	2
+	 * <p/>
+	 * 5	  7		6
+	 * <p/>
+	 * 3	4
+	 * <p/>
+	 * DEPENDING ON TURRET ANCHOR POSITION ON THE SPRITE
+	 * IF ANY TURRET IS MISSING, DON'T SKIP INDICES
+	 * I.E. MODEL MK2 IS:
+	 * <p/>
+	 * 1
+	 * <p/>
+	 * 2	3
 	 */
 
-	// Properties
+	/** Base heatlh of MK2 */
 	public int hitpoints = 500;
 
 	// Velocity Config
@@ -50,7 +50,7 @@ public class StrikeBaseConfig {
 	public float size_tiles = 2f;
 	/** Portion of the total sprite size to use for the hitbox. First is X axis second is Y axis */
 	public float[] hitbox_factor = {1, 1};
-	/** Where in the sprite are the threads. 1 means the outermost edge, 0 means in the center. [0-1]*/
+	/** Where in the sprite are the threads. 1 means the outermost edge, 0 means in the center. [0-1] */
 	public float thread_offsetY = 1f;
 	/** Ammount to move the thread origin forwards (positive) or backwards (negative) relative to the width. Range [-1,1] */
 	public float thread_offsetX = 0;
@@ -80,6 +80,8 @@ public class StrikeBaseConfig {
 				modelName = "sbmk1";
 				turret_num = 4;
 
+				hitpoints *= 1.25f;
+
 				maneuverability = 0.5f;
 
 				turret_dmg_mult = new float[]{1, 1, 1.1f, .9f};
@@ -99,16 +101,17 @@ public class StrikeBaseConfig {
 				turret_offset[3] = new float[]{.625f, 0.3125f};    // hull-mounted
 
 				turret_angle_lim = new float[turret_num][2];
-				turret_angle_lim[0] = new float[]{-40, 180};		// left
-				turret_angle_lim[1] = new float[]{-180, 40};	// right
-				turret_angle_lim[2] = new float[]{-360, 360};		//main
-				turret_angle_lim[3] = new float[]{-20, 100};		// hull-mounted
+				turret_angle_lim[0] = new float[]{-40, 180};        // left
+				turret_angle_lim[1] = new float[]{-180, 40};    // right
+				turret_angle_lim[2] = new float[]{-360, 360};        //main
+				turret_angle_lim[3] = new float[]{-20, 100};        // hull-mounted
 				break;
 
 			case MK2:
 				// StrikeBase Mark. II
 				modelName = "sbmk2";
 				turret_num = 3;
+
 
 				maneuverability = 0.6f;
 
@@ -136,6 +139,8 @@ public class StrikeBaseConfig {
 				modelName = "sbmk3";
 				turret_num = 2;
 
+				hitpoints *= 0.75f;
+
 				maneuverability = 0.75f;
 
 				turret_dmg_mult = new float[]{1.2f, 1.1f};
@@ -159,6 +164,7 @@ public class StrikeBaseConfig {
 				modelName = "sbmk4";
 				turret_num = 5;
 
+				hitpoints *= 2.5f;
 				maneuverability = 0.4f;
 
 				size_tiles = 3;
@@ -178,11 +184,11 @@ public class StrikeBaseConfig {
 				turret_offset[4] = new float[]{.7292f, -.375f};    // Front right
 
 				turret_angle_lim = new float[turret_num][2];
-				turret_angle_lim[0] = new float[]{-360, 360};		// Main
-				turret_angle_lim[1] = new float[]{0, 170};		// Left
-				turret_angle_lim[2] = new float[]{-50, 90};		// Front left
-				turret_angle_lim[3] = new float[]{-170, 0};	// Right
-				turret_angle_lim[4] = new float[]{-90, 50};		// Front right
+				turret_angle_lim[0] = new float[]{-360, 360};        // Main
+				turret_angle_lim[1] = new float[]{0, 170};        // Left
+				turret_angle_lim[2] = new float[]{-50, 90};        // Front left
+				turret_angle_lim[3] = new float[]{-170, 0};    // Right
+				turret_angle_lim[4] = new float[]{-90, 50};        // Front right
 				break;
 
 			case MK5:
@@ -191,6 +197,8 @@ public class StrikeBaseConfig {
 				turret_num = 6;
 
 				maneuverability = 0.25f;
+
+				hitpoints *= 4f;
 
 				size_tiles = 4;
 				turret_dmg_mult = new float[]{1, 1, 0.8f, 1.2f, 1, 1};
@@ -210,12 +218,12 @@ public class StrikeBaseConfig {
 				turret_offset[5] = new float[]{.2969f, -.5469f};    // Front right
 
 				turret_angle_lim = new float[turret_num][2];
-				turret_angle_lim[0] = new float[]{40, 180};		// Rear left
-				turret_angle_lim[1] = new float[]{0, 140};		// Front left
-				turret_angle_lim[2] = new float[]{-50, 50};		// Hull-mounted
-				turret_angle_lim[3] = new float[]{-360, 360};		// Main
-				turret_angle_lim[4] = new float[]{-180, -40};		// Rear right
-				turret_angle_lim[5] = new float[]{-140, 0};		// Front right
+				turret_angle_lim[0] = new float[]{40, 180};        // Rear left
+				turret_angle_lim[1] = new float[]{0, 140};        // Front left
+				turret_angle_lim[2] = new float[]{-50, 50};        // Hull-mounted
+				turret_angle_lim[3] = new float[]{-360, 360};        // Main
+				turret_angle_lim[4] = new float[]{-180, -40};        // Rear right
+				turret_angle_lim[5] = new float[]{-140, 0};        // Front right
 				break;
 		}
 	}

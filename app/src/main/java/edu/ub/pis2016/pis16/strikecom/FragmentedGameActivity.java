@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import edu.ub.pis2016.pis16.strikecom.engine.android.AndroidMusic;
+import edu.ub.pis2016.pis16.strikecom.engine.framework.audio.Music;
 import edu.ub.pis2016.pis16.strikecom.engine.game.GameMap;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.Texture;
 import edu.ub.pis2016.pis16.strikecom.engine.util.Assets;
@@ -129,7 +130,7 @@ public class FragmentedGameActivity extends Activity {
 
 		// Stop all music playback
 		try {
-			for (AndroidMusic mu : Assets.musicPlaying)
+			for (Music mu : Assets.musicPlaying)
 				mu.pause();
 		} catch (Exception e) {
 			// OK Bro
@@ -145,7 +146,7 @@ public class FragmentedGameActivity extends Activity {
 		// Reload textures and resume music
 		try {
 			Texture.reloadManagedTextures();
-			for (AndroidMusic mu : Assets.musicPlaying)
+			for (Music mu : Assets.musicPlaying)
 				mu.play();
 		} catch (Exception e) {
 			// OK Bro
