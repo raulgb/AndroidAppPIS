@@ -3,6 +3,7 @@ package edu.ub.pis2016.pis16.strikecom.fragments;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -83,6 +84,12 @@ public class GameOverFragment extends DialogFragment {
 				((FragmentedGameActivity) getActivity()).backToMainMenu(modelUnlocked);
 			}
 		});
+
+
+		// HIDE SUBMIT BUTTON
+		btnSubmit.setEnabled(false);
+		btnSubmit.setBackgroundColor(Color.TRANSPARENT);
+		btnSubmit.setText("");
 
 		getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 		return view;
