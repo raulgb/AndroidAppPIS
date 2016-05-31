@@ -15,6 +15,7 @@ import edu.ub.pis2016.pis16.strikecom.engine.game.GameMap;
 import edu.ub.pis2016.pis16.strikecom.engine.game.GameObject;
 import edu.ub.pis2016.pis16.strikecom.engine.game.component.PhysicsComponent;
 import edu.ub.pis2016.pis16.strikecom.engine.math.MathUtils;
+import edu.ub.pis2016.pis16.strikecom.engine.math.Vector2;
 import edu.ub.pis2016.pis16.strikecom.engine.math.WindowedMean;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.GLGraphics;
 import edu.ub.pis2016.pis16.strikecom.engine.opengl.OrthoCamera;
@@ -301,9 +302,27 @@ public class GameScreen extends Screen {
 		addGameObject(new HealthBar(enemy));
 	}
 
+	private void createRandomStalker(float dist) {
+		if (!strikeBase.isValid())
+			return;
+
+		GameObject enemy = EnemyFactory.createRandomEnemyTank(this);
+		Vector2 position = strikeBase.getPosition();
+
+		// Random pos
+		enemy.getPhysics().setPosition(
+				position.x + MathUtils.random(-dist * TILE_SIZE, dist * TILE_SIZE),
+				position.y + MathUtils.random(-dist * TILE_SIZE, dist * TILE_SIZE)
+		);
+		enemy.getPhysics().setRotation(MathUtils.random(360));
+		addGameObject(new HealthBar(enemy));
+
+	}
+
 	// Enemies swarm you when you run out of fuel.
 	public void outOfFuel() {
-
+		for (int i = 0; i < 16; i++)
+			createRandomStalker(12f);
 	}
 
 	@Deprecated

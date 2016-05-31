@@ -451,6 +451,8 @@ public class StrikeBase extends Vehicle {
 		if (FragmentedGameActivity.playerState.isOutOfFuel()) {
 			hasFuel = false;
 			cfg.accel = 0;
+			cfg.max_speed = 0;
+			cfg.max_reverse_speed = 0;
 
 			leftThreadDampening = 0.90f;
 			rightThreadDampening = 0.90f;

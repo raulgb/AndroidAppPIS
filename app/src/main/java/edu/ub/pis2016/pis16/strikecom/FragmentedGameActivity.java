@@ -70,6 +70,7 @@ public class FragmentedGameActivity extends Activity {
 		SlotsFragment.strikeBaseModel = strikeBaseModel;
 		GameScreen.strikeBaseModel = strikeBaseModel;
 		GameOverFragment.strikeBaseModel = strikeBaseModel;
+		Item.context = this;
 
 		// Hide window decorations
 		hideSystemUI();
