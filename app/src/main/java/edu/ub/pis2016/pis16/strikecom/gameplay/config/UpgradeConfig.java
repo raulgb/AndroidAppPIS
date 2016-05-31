@@ -36,8 +36,8 @@ public class UpgradeConfig {
 			case REPAIR:
 				functionName = "repair";
 				image = "scrap_64";
-				value = 20;
-				price = 200;
+				value = 100;
+				price = 250;
 				break;
 
 			case ARMOUR_PLATE:

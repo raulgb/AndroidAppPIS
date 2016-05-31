@@ -125,6 +125,6 @@
     <!-- FUEL -->
     <string name="FUEL">FUEL;250u fuel;250 units of hydrocarbon-based combustible used to power the base massive engine.</string>
     <!-- REPAIR -->
-    <string name="REPAIR">REPAIR;20 HP;Metal recycled from the enemies. Enough material to restore 20HP.</string>
+    <string name="REPAIR">REPAIR;100 HP;Metal recycled from the enemies. Enough material to restore 100 HP.</string>
 
 </resources>

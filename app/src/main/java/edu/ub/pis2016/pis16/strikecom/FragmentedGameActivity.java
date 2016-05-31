@@ -379,7 +379,10 @@ public class FragmentedGameActivity extends Activity {
 
 		if (item.isFuel()) {
 			playerState.addFuel(250f);
-		} else {
+		} else if (item.isRepair()) {
+			StrikeBase strikeBase = (game.getCurrentScreen()).getGameObject("StrikeBase", StrikeBase.class);
+			strikeBase.addUpgrade(item, -1);
+		}else {
 			playerState.inventory.addItem(item);
 		}
 		playerState.addScrap(-item.getPrice());
