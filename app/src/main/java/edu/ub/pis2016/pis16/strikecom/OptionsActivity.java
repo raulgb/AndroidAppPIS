@@ -147,6 +147,7 @@ public class OptionsActivity extends Activity {
 		btnExit.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+
 				finish();
 				/*Intent changeToGame = new Intent(Options, MainMenuActivity.class);
 				startActivity(changeToGame);*/
